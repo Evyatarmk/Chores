@@ -2,20 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, TextInput, TouchableOpacity, Text, Keyboard, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useGrocery } from "./Context/GroceryContext";
 
 const AddGroceryListScreen = () => {
   const [listName, setListName] = useState("");
   const [suggestions] = useState(["shopping", "מצרכים", "Supermarket", "Groceries", "ירקות", "Fruit"]);
   const inputRef = useRef(null);
   const router = useRouter();
+  const { addNewList } = useGrocery();
 
+  
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
 
   const handleSave = () => {
     if (listName.trim() === "") return;
-    console.log("רשימה חדשה:", listName);
+    addNewList(listName);
     Keyboard.dismiss();
     router.back();
   };
@@ -31,7 +34,7 @@ const AddGroceryListScreen = () => {
     >
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
+        keyboardShouldPersistTaps="always" 
       >
         {/* כותרת המסך */}
         <View style={styles.header}>

@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 
 const GroceryContext = createContext();
-
 export const useGrocery = () => useContext(GroceryContext);
-
 export const GroceryProvider = ({ children }) => {
   const [groceryData, setGroceryData] = useState([
     {
@@ -30,6 +28,26 @@ export const GroceryProvider = ({ children }) => {
     return list ? list.items : [];
   };
 
+  const addNewList= (listName) => {
+    let newList={
+      id: Date.now(),
+      name: listName,
+      items: [],
+    }
+    let newGroceryData=[...groceryData,newList]
+    setGroceryData(newGroceryData)
+  };
+  const deleteList= (listId) => {
+    let newGroceryData=groceryData.filter(list=>list.id!=listId)
+    setGroceryData(newGroceryData)
+  }; 
+  const updateListName = (listId, newName) => {
+    setGroceryData(prevData =>
+      prevData.map(list => 
+        list.id === listId ? { ...list, name: newName } : list
+      )
+    );
+  };
   // פונקציה לעדכון פריט ברשימה
   const updateItemStatus = (listId, itemId) => {
     const updatedGroceryData = groceryData.map((list) =>
@@ -48,7 +66,7 @@ export const GroceryProvider = ({ children }) => {
   };
 
   return (
-    <GroceryContext.Provider value={{ groceryData, setGroceryData, getItemsForList, updateItemStatus }}>
+    <GroceryContext.Provider value={{ groceryData, updateListName,setGroceryData,deleteList, getItemsForList, updateItemStatus,addNewList }}>
       {children}
     </GroceryContext.Provider>
   );

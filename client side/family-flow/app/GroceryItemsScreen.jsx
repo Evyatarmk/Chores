@@ -12,7 +12,6 @@ const GroceryItemsScreen = () => {
   const { getItemsForList } = useGrocery();
   const [groceryItems, setGroceryItems] = useState([]);
   const [editMode, setEditMode] = useState(false); // מצב עריכה
-
   useEffect(() => {
     const items = getItemsForList(listId);
     setGroceryItems(items);
