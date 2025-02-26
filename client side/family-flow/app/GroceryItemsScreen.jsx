@@ -2,89 +2,55 @@ import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useGrocery } from "./Context/GroceryContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { Button, Text, Icon, ListItem, CheckBox } from '@rneui/base';
+import { Button, Text, CheckBox } from '@rneui/base';
+import NormalHeader from "./Components/NormalHeader";
 
 const GroceryItemsScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const listId = JSON.parse(params.listId);
-  const { getItemsForList } = useGrocery();
+  const list = JSON.parse(params.list);
+
+  const { getItemsForList, updateItemStatus } = useGrocery();
   const [groceryItems, setGroceryItems] = useState([]);
   const [editMode, setEditMode] = useState(false); // מצב עריכה
+
   useEffect(() => {
-    const items = getItemsForList(listId);
-    setGroceryItems(items);
-  }, [listId]);
+    const items = getItemsForList(list.id);
+    const sortedItems = [...items].sort((a, b) => a.isTaken - b.isTaken);
+    setGroceryItems(sortedItems);
+  }, [list.id, getItemsForList]);
 
-  const sortedGroceryItems = [...groceryItems].sort((a, b) => a.isTaken - b.isTaken);
-
-  const deleteItem = (id) => {
-    setGroceryItems(groceryItems.filter((item) => item.id !== id));
-  };
-
-  const startEditing = (item) => {
-    router.push({ pathname: "./EditGroceryItemscreen", params: { item: JSON.stringify(item) } });
-  };
-
-  const viewDetails = (item) => {
-    router.push({ pathname: "./ItemDetailsScreen", params: { item: JSON.stringify(item) } });
-  };
-
-  const toggleTakenStatus = (id) => {
-    const updatedGroceryItems = groceryItems.map((item) =>
-      item.id === id ? { ...item, isTaken: !item.isTaken } : item
-    );
-    setGroceryItems(updatedGroceryItems);
-  };
 
   return (
     <View style={styles.container}>
-      {/* כפתור חזור */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Icon name="arrow-back" size={28} color="white" />
-      </TouchableOpacity>
-
-
-      {/* כפתור הפעלת מצב עריכה */}
-      <TouchableOpacity style={styles.editModeButton} onPress={() => setEditMode(!editMode)}>
-        <Icon name="edit" size={24} color="white" />
-      </TouchableOpacity>
-
+      <NormalHeader title={list.name} />
       <FlatList
-        data={sortedGroceryItems}
+        data={groceryItems}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <ListItem containerStyle={{ borderBottomWidth: 1, borderBottomColor: "#ccc" }} onPress={() => viewDetails(item)}>
-            <ListItem.Content>
-              <ListItem.Title style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
+          <View style={[styles.itemContainer, item.isTaken && styles.takenItem]} onPress={() => viewDetails(item)}>
+              <Text style={styles.GroceryItemsubtitle}>{item.quantity}</Text>
+            <View style={styles.ItemRightSide}>
+              <Text style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
                 {item.name}
-              </ListItem.Title>
-              <ListItem.Subtitle style={styles.GroceryItemsubtitle}>כמות: {item.quantity}</ListItem.Subtitle>
-            </ListItem.Content>
+              </Text>
             {!editMode && (
-              <CheckBox
-                checked={item.isTaken}
-                onPress={() => toggleTakenStatus(item.id)}
-                containerStyle={styles.checkboxContainer}
-              />
+              <TouchableOpacity
+                onPress={() => updateItemStatus(list.id, item.id)}
+                style={styles.checkboxContainer}>
+                <View
+                  style={[
+                    styles.checkboxCircle,
+                    item.isTaken && styles.checked,
+                  ]}>
+                  {item.isTaken && <Icon name="check" size={18} color="white" />}
+                </View>
+              </TouchableOpacity>
             )}
-
-            {editMode && (
-              <>
-                <Button
-                  icon={<Icon name="edit" size={18} color="white" />}
-                  buttonStyle={styles.editButton}
-                  onPress={() => startEditing(item)}
-                />
-                <Button
-                  icon={<Icon name="delete" size={18} color="white" />}
-                  buttonStyle={styles.deleteButton}
-                  onPress={() => deleteItem(item.id)}
-                />
-              </>
-            )}
-          </ListItem>
+            </View>
+          </View>
         )}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
@@ -92,7 +58,7 @@ const GroceryItemsScreen = () => {
             <Text style={styles.emptyText}>אין פריטים להצגה</Text>
           </View>
         }
-        contentContainerStyle={{ paddingBottom: 80, paddingTop: 80 }}
+        contentContainerStyle={{ paddingBottom: 80 }} // הקטנת ה-padding top
       />
 
       <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddGroceryItemscreen" })}>
@@ -103,43 +69,23 @@ const GroceryItemsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10, backgroundColor: "#f8f9fa" },
-  backButton: {
-    position: "absolute",
-    top: 20,
-    left: 20,
-    backgroundColor: "#007bff",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignGroceryItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 4,
-    zIndex: 10,
+  container: { flex: 1,  backgroundColor: "#f4f4f4" },
+  itemTitle: { fontSize: 18, fontWeight: "bold" }, 
+  itemContainer: { 
+    flexDirection: "row", 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    padding: 15, 
+    backgroundColor: "#ffffff",
+    marginBottom: 1,
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 4 }, 
+    shadowOpacity: 0.1, 
+    shadowRadius: 6, 
+    elevation: 5, 
   },
-  editModeButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    backgroundColor: "#6c757d",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignGroceryItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 4,
-    zIndex: 10,
-  },
-  itemTitle: { fontSize: 18, fontWeight: "bold" },
-  GroceryItemsubtitle: { fontSize: 14, color: "#666" },
+   ItemRightSide: { flexDirection: 'row' ,justifyContent: 'space-between',alignItems: 'center', },
+  GroceryItemsubtitle: { fontSize: 18, color: "#666" }, 
   editButton: {
     backgroundColor: "#007bff",
     borderRadius: 8,
@@ -156,21 +102,21 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#28a745",
+    backgroundColor: "#007bff",
     width: 60,
     height: 60,
     borderRadius: 30,
-    alignGroceryItems: "center",
+    alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 4,
+    shadowRadius: 5,
+    zIndex: 1000,
   },
   emptyContainer: {
     flex: 1,
-    alignGroceryItems: "center",
+    alignItems: "center",
     justifyContent: "center",
     padding: 20,
   },
@@ -180,10 +126,25 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   checkboxContainer: {
-    marginLeft: 10,
+    paddingLeft: 8
+  },
+  checkboxCircle: {
+    width: 25,
+    height: 25,
+    borderRadius: 15, // זה יוצר את המעגל
+    borderWidth: 2,
+    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+  checked: {
+    backgroundColor: '#28a745', // צבע ירוק כאשר נבחר
+    borderWidth: 0,
+
   },
   takenItem: {
-    textDecorationLine: "line-through",
+    backgroundColor: "#f4f4f4" ,
     color: "#888",
   },
 });

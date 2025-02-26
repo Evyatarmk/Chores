@@ -48,6 +48,7 @@ export const GroceryProvider = ({ children }) => {
       )
     );
   };
+  
   // פונקציה לעדכון פריט ברשימה
   const updateItemStatus = (listId, itemId) => {
     const updatedGroceryData = groceryData.map((list) =>

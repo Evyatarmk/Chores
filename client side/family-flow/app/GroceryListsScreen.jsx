@@ -5,9 +5,10 @@ import { useGrocery } from "./Context/GroceryContext";
 import { Icon } from '@rneui/base';
 import { Modalize } from 'react-native-modalize';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import NormalHeader from "./Components/NormalHeader"; // תלוי במיקום של תיקיית ה-Header
 
 const GroceryListsScreen = () => {
-  const { groceryData, deleteList, updateListName } = useGrocery();
+  const { groceryData, deleteList, updateListName, setGroceryData } = useGrocery();
   const router = useRouter();
   const optionsModalRef = useRef(null);
   const inputRef = useRef(null);
@@ -48,23 +49,33 @@ const GroceryListsScreen = () => {
 
   return (
     <GestureHandlerRootView style={styles.container}>
+      <NormalHeader title="הרשימות שלי" />
       <FlatList
         data={groceryData}
-        contentContainerStyle={{ paddingBottom: 80 }}
         keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ paddingBottom: 80 }}
         renderItem={({ item }) => (
-          <View style={styles.listItem}>
-            <TouchableOpacity onPress={() => router.push({ pathname: "./GroceryItemsScreen", params: { listId: JSON.stringify(item.id) } })} style={styles.innerItem}>
-              <Text style={styles.listTitle}>{item.name}</Text>
-              <Text style={styles.itemSubtitle}>
-                {item.items.filter(i => i.isTaken).length}/{item.items.length}
-              </Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.listItem}
+            onPress={() =>
+              router.push({
+                pathname: "./GroceryItemsScreen",
+                params: { list: JSON.stringify(item) },
+              })
+            }
+          >
+            <Text style={styles.listTitle}>{item.name}</Text>
+            <Text style={styles.itemSubtitle}>
+              {item.items.filter((i) => i.isTaken).length}/{item.items.length}
+            </Text>
 
-            <TouchableOpacity style={styles.optionsButton} onPress={() => openOptionsPanel(item)}>
+            <TouchableOpacity
+              style={styles.optionsButton}
+              onPress={() => openOptionsPanel(item)}
+            >
               <Icon name="more-vert" size={24} color="#888" />
             </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         )}
       />
 
@@ -133,7 +144,7 @@ const GroceryListsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10, backgroundColor: "#f4f4f4" },
+  container: { flex: 1,backgroundColor: "#f4f4f4" },
   listItem: {
     padding: 16,
     backgroundColor: "#fff",
@@ -143,7 +154,8 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 5
+    shadowRadius: 5,
+    margin:3
   },
   listTitle: { textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10 },
   itemSubtitle: { fontSize: 14, color: "#888", marginTop: 4 },
