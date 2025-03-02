@@ -6,9 +6,10 @@ import { Icon } from '@rneui/base';
 import { Modalize } from 'react-native-modalize';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import NormalHeader from "./Components/NormalHeader"; // תלוי במיקום של תיקיית ה-Header
+import ProgressBar from "./Components/ProgressBar";
 
 const GroceryListsScreen = () => {
-  const { groceryData, deleteList, updateListName, setGroceryData } = useGrocery();
+  const { groceryData, deleteList, updateListName } = useGrocery();
   const router = useRouter();
   const optionsModalRef = useRef(null);
   const inputRef = useRef(null);
@@ -65,9 +66,15 @@ const GroceryListsScreen = () => {
             }
           >
             <Text style={styles.listTitle}>{item.name}</Text>
-            <Text style={styles.itemSubtitle}>
-              {item.items.filter((i) => i.isTaken).length}/{item.items.length}
-            </Text>
+            <View style={styles.progressBarContainer}>
+              <ProgressBar
+                totalItems={item.items.length}
+                completedItems={item.items.filter((i) => i.isTaken).length}
+              />
+              <Text style={styles.itemSubtitle}>
+                {item.items.filter((i) => i.isTaken).length}/{item.items.length}
+              </Text>
+            </View>
 
             <TouchableOpacity
               style={styles.optionsButton}
@@ -144,7 +151,7 @@ const GroceryListsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1,backgroundColor: "#f4f4f4" },
+  container: { flex: 1, backgroundColor: "#f4f4f4" },
   listItem: {
     padding: 16,
     backgroundColor: "#fff",
@@ -155,10 +162,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    margin:3
+    margin: 3
   },
   listTitle: { textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10 },
-  itemSubtitle: { fontSize: 14, color: "#888", marginTop: 4 },
+  itemSubtitle: { fontSize: 14, color: "#888", },
+  progressBarContainer: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    gap:5,
+    justifyContent:"center"
+  },
   optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
   addButton: {
     position: "absolute",

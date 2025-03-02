@@ -65,9 +65,26 @@ export const GroceryProvider = ({ children }) => {
     );
     setGroceryData(updatedGroceryData);
   };
+  const updateItemField = (listId, updatedItem) => {
+    setGroceryData((prevData) =>
+      prevData.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              items: list.items.map((item) =>
+                item.id === updatedItem.id
+                  ? { ...item, ...updatedItem }
+                  : item
+              ),
+            }
+          : list
+      )
+    );
+  };
+  
 
   return (
-    <GroceryContext.Provider value={{ groceryData, updateListName,setGroceryData,deleteList, getItemsForList, updateItemStatus,addNewList }}>
+    <GroceryContext.Provider value={{ groceryData, updateListName,setGroceryData,updateItemField,deleteList, getItemsForList, updateItemStatus,addNewList }}>
       {children}
     </GroceryContext.Provider>
   );
