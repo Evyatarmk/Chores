@@ -8,6 +8,7 @@ import NormalHeader from "./Components/NormalHeader";
 import ProgressBar from "./Components/ProgressBar";
 import BottomSheetModal from "./Components/BottomSheetModal";
 import FloatingLabelInput from "./Components/FloatingLabelInput";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const GroceryItemsScreen = () => {
   const router = useRouter();
@@ -63,9 +64,9 @@ const GroceryItemsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <NormalHeader title={list.name} />
-      <View>
+      <View style={styles.ProgressBar}>
         <ProgressBar totalItems={groceryItems.length} completedItems={groceryItems.filter(item => item.isTaken).length} />
       </View>
 
@@ -74,29 +75,29 @@ const GroceryItemsScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={[styles.itemContainer, item.isTaken && styles.takenItem]} onPress={() => viewDetails(item)}>
-          <View style={styles.ItemTopSide}>
-            <Text style={styles.GroceryItemsubtitle}>{item.quantity}</Text>
-            <View style={styles.ItemRightSide}>
-              <Text style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
-                {item.name}
-              </Text>
-              <TouchableOpacity
-                onPress={() => updateItemStatus(list.id, item.id)}
-                style={styles.checkboxContainer}>
-                <View
-                  style={[
-                    styles.checkboxCircle,
-                    item.isTaken && styles.checked,
-                  ]}>
-                  {item.isTaken && <Icon name="check" size={18} color="white" />}
-                </View>
-              </TouchableOpacity>
+            <View style={styles.ItemTopSide}>
+              <Text style={styles.GroceryItemsubtitle}>{item.quantity}</Text>
+              <View style={styles.ItemRightSide}>
+                <Text style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
+                  {item.name}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => updateItemStatus(list.id, item.id)}
+                  style={styles.checkboxContainer}>
+                  <View
+                    style={[
+                      styles.checkboxCircle,
+                      item.isTaken && styles.checked,
+                    ]}>
+                    {item.isTaken && <Icon name="check" size={18} color="white" />}
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          {item.description && (
-            <Text style={styles.itemDescription}>{item.description}</Text>
-          )}
-        </TouchableOpacity>
+            {item.description && (
+              <Text style={styles.itemDescription}>{item.description}</Text>
+            )}
+          </TouchableOpacity>
         )}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
@@ -111,8 +112,8 @@ const GroceryItemsScreen = () => {
         <Icon name="add" size={30} color="white" />
       </TouchableOpacity>
 
-      <BottomSheetModal modalRef={editModalRef} onClose={closeModal}>
-        <View style={{ padding: 20 }}>
+      <BottomSheetModal title="עריכת פריט" modalRef={editModalRef} onClose={closeModal}>
+        <View style={{ padding: 10 }}>
           <TextInput
             value={currentItem?.name}
             style={styles.input}
@@ -121,7 +122,6 @@ const GroceryItemsScreen = () => {
           />
 
           <View style={styles.quantityContainer}>
-
             <TouchableOpacity
               onPress={() => updateQuantity('increment')}
               style={styles.iconButton}
@@ -135,10 +135,11 @@ const GroceryItemsScreen = () => {
               <Icon name="remove" size={24} color="white" />
             </TouchableOpacity>
             <TextInput
-              value={currentItem?.quantity}
+              value={currentItem?.quantity?.toString() || ""}
               style={styles.input}
               onChangeText={(text) => handleInputChange('quantity', text)}
               placeholder="כמות"
+              keyboardType="numeric"
             />
           </View>
           <TextInput
@@ -150,7 +151,7 @@ const GroceryItemsScreen = () => {
         </View>
 
       </BottomSheetModal>
-    </View>
+    </GestureHandlerRootView>
 
   );
 };
@@ -169,17 +170,20 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 5,
   },
+  ProgressBar: {
+    height: 8
+  },
   ItemTopSide: {
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  itemDescription:{
-    marginEnd:33,
-    textAlign:"right",
-    fontSize:12,
+  itemDescription: {
+    marginEnd: 33,
+    textAlign: "right",
+    fontSize: 12,
     color: "#666"
-    },
+  },
   ItemRightSide: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', },
   GroceryItemsubtitle: { fontSize: 18, color: "#666" },
   editButton: {
@@ -194,23 +198,8 @@ const styles = StyleSheet.create({
     padding: 8,
     marginHorizontal: 5,
   },
-  inputWrapper: {
-    position: 'relative',
-    marginBottom: 20,
-  },
-  inputWrapper: {
-    flexDirection: "column-reverse"
-  },
-  input: {
-    height: 40,
-    fontSize: 16,
-    textAlign: 'right', // הצבה בצד ימין
 
-  },
-  floatingLabel: {
-    fontSize: 10,
-    backgroundColor: '#fff',
-  },
+
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
