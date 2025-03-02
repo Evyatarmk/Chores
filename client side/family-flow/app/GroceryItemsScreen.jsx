@@ -15,7 +15,7 @@ const GroceryItemsScreen = () => {
   const list = JSON.parse(params.list);
   const editModalRef = useRef(null);
   const [currentItem, setCurrentItem] = useState(null);
-  const { getItemsForList, updateItemStatus, groceryData ,updateItemField} = useGrocery();
+  const { getItemsForList, updateItemStatus, groceryData, updateItemField } = useGrocery();
   const [groceryItems, setGroceryItems] = useState([]);
 
   useEffect(() => {
@@ -25,22 +25,42 @@ const GroceryItemsScreen = () => {
   }, [list.id, groceryData]);
 
   const viewDetails = (item) => {
-    console.log("fff")
     setCurrentItem(item)
     editModalRef.current?.open();
   }
   const closeModal = () => {
     editModalRef.current?.close();
-    updateItemField(list.id,currentItem)
-    setCurrentItem(null); 
+    updateItemField(list.id, currentItem)
+    setCurrentItem(null);
   };
+  const updateQuantity = (action) => {
+    setCurrentItem((prevItem) => {
+      if (!prevItem) return prevItem;
+
+      const currentQuantity = Number(prevItem.quantity) || 0; // מוודא שהכמות היא מספר
+
+      if (action === "increment") {
+        return { ...prevItem, quantity: currentQuantity + 1 };
+      } else {
+        return { ...prevItem, quantity: Math.max(currentQuantity - 1, 0) }; // מונע מספר שלילי
+      }
+    });
+  };
+
   const handleInputChange = (field, value) => {
     setCurrentItem((prevItem) => {
-      if (!prevItem) return prevItem; // מונע שגיאות אם currentItem הוא null
-      const updatedItem = { ...prevItem, [field]: value };
-      return updatedItem; // מחזיר את הערך החדש לסטייט)
-  })
-    }
+      if (!prevItem) return prevItem;
+
+      let updatedValue = value;
+
+      if (field === "quantity") {
+        updatedValue = Number(value); // הופך את הערך למספר
+        if (isNaN(updatedValue) || updatedValue < 0) updatedValue = 0; // מונע ערכים לא תקינים
+      }
+
+      return { ...prevItem, [field]: updatedValue };
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -54,6 +74,7 @@ const GroceryItemsScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={[styles.itemContainer, item.isTaken && styles.takenItem]} onPress={() => viewDetails(item)}>
+          <View style={styles.ItemTopSide}>
             <Text style={styles.GroceryItemsubtitle}>{item.quantity}</Text>
             <View style={styles.ItemRightSide}>
               <Text style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
@@ -70,9 +91,12 @@ const GroceryItemsScreen = () => {
                   {item.isTaken && <Icon name="check" size={18} color="white" />}
                 </View>
               </TouchableOpacity>
-
             </View>
-          </TouchableOpacity>
+          </View>
+          {item.description && (
+            <Text style={styles.itemDescription}>{item.description}</Text>
+          )}
+        </TouchableOpacity>
         )}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
@@ -88,44 +112,44 @@ const GroceryItemsScreen = () => {
       </TouchableOpacity>
 
       <BottomSheetModal modalRef={editModalRef} onClose={closeModal}>
-      <View style={{ padding: 20 }}>
-        <TextInput
-          value={currentItem?.name}
-          style={styles.input}
-          onChangeText={(text) => handleInputChange('name', text)}
-          placeholder="הזן שם חדש"
-        />
-
-        <View style={styles.quantityContainer}>
-         
-          <TouchableOpacity
-            onPress={() => updateQuantity('increment')}
-            style={styles.iconButton}
-          >
-            <Icon name="add" size={24} color="white" />
-          </TouchableOpacity> 
-          <TouchableOpacity
-            onPress={() => updateQuantity('decrement')}
-            style={styles.iconButton}
-          >
-            <Icon name="remove" size={24} color="white"  />
-          </TouchableOpacity>
+        <View style={{ padding: 20 }}>
           <TextInput
-          value={currentItem?.quantity}
-          style={styles.input}
-          onChangeText={(text) => handleInputChange('description', text)}
-          placeholder="הזן תיאור למוצר"
-        />
+            value={currentItem?.name}
+            style={styles.input}
+            onChangeText={(text) => handleInputChange('name', text)}
+            placeholder="הזן שם"
+          />
+
+          <View style={styles.quantityContainer}>
+
+            <TouchableOpacity
+              onPress={() => updateQuantity('increment')}
+              style={styles.iconButton}
+            >
+              <Icon name="add" size={24} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => updateQuantity('decrement')}
+              style={styles.iconButton}
+            >
+              <Icon name="remove" size={24} color="white" />
+            </TouchableOpacity>
+            <TextInput
+              value={currentItem?.quantity}
+              style={styles.input}
+              onChangeText={(text) => handleInputChange('quantity', text)}
+              placeholder="כמות"
+            />
+          </View>
+          <TextInput
+            value={currentItem?.description}
+            style={styles.input}
+            onChangeText={(text) => handleInputChange('description', text)}
+            placeholder="תיאור"
+          />
         </View>
-        <TextInput
-          value={currentItem?.name}
-          style={styles.input}
-          onChangeText={(text) => handleInputChange('name', text)}
-          placeholder="הזן שם חדש"
-        />
-      </View>
-    
-    </BottomSheetModal>
+
+      </BottomSheetModal>
     </View>
 
   );
@@ -135,9 +159,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f4f4f4" },
   itemTitle: { fontSize: 18, fontWeight: "bold" },
   itemContainer: {
-    flexDirection: "row",
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "column",
     padding: 15,
     backgroundColor: "#ffffff",
     marginBottom: 1,
@@ -147,6 +169,17 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 5,
   },
+  ItemTopSide: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  itemDescription:{
+    marginEnd:33,
+    textAlign:"right",
+    fontSize:12,
+    color: "#666"
+    },
   ItemRightSide: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', },
   GroceryItemsubtitle: { fontSize: 18, color: "#666" },
   editButton: {
@@ -166,13 +199,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputWrapper: {
-    flexDirection:"column-reverse"
+    flexDirection: "column-reverse"
   },
   input: {
     height: 40,
     fontSize: 16,
     textAlign: 'right', // הצבה בצד ימין
-    
+
   },
   floatingLabel: {
     fontSize: 10,
@@ -181,7 +214,7 @@ const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:"flex-end",
+    justifyContent: "flex-end",
   },
   label: {
     fontSize: 16,
@@ -189,9 +222,9 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 10,
-    borderRadius:50,
-    backgroundColor:"#007bff",
-    margin:5
+    borderRadius: 50,
+    backgroundColor: "#007bff",
+    margin: 5
   },
   quantity: {
     fontSize: 18,

@@ -8,19 +8,20 @@ export const GroceryProvider = ({ children }) => {
       id: 1,
       name: "רשימת מצרכים לפסח",
       items: [
-        { id: 1, name: "מצה", quantity: 2, isTaken: false },
-        { id: 2, name: "יין", quantity: 1, isTaken: false },
+        { id: 1, name: "מצה", quantity: 2, isTaken: false, description: "מצות שמורות ללא חשש קטניות" },
+        { id: 2, name: "יין", quantity: 1, isTaken: false, description:""},
       ],
     },
     {
       id: 2,
       name: "רשימת מצרכים לשבוע",
       items: [
-        { id: 3, name: "חלב", quantity: 1, isTaken: false },
-        { id: 4, name: "לחם", quantity: 3, isTaken: false },
+        { id: 3, name: "חלב", quantity: 1, isTaken: false, description: "חלב 3% טרי" },
+        { id: 4, name: "לחם", quantity: 3, isTaken: false, description: "לחם אחיד פרוס" },
       ],
     },
   ]);
+  
 
   // פונקציה לקבלת פריטים לפי listId
   const getItemsForList = (listId) => {
