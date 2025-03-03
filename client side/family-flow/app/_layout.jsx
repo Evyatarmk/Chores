@@ -18,6 +18,7 @@ return (
 <Stack.Screen name="GroceryListsScreen" />
 <Stack.Screen name="GroceryItemsScreen" />
 <Stack.Screen name="AddGroceryListScreen" />
+<Stack.Screen name="AddGroceryItemScreen" />
 </Stack>
 </GroceryProvider>
 );

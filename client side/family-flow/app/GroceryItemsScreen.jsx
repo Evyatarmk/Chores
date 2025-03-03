@@ -108,7 +108,14 @@ const GroceryItemsScreen = () => {
         contentContainerStyle={{ paddingBottom: 80 }} // הקטנת ה-padding top
       />
 
-      <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddGroceryItemscreen" })}>
+      <TouchableOpacity style={styles.addButton} 
+      onPress={() =>
+        router.push({
+          pathname: "./AddGroceryItemScreen",
+          params: { listId: JSON.stringify(list.id)},
+        })
+      }
+      >
         <Icon name="add" size={30} color="white" />
       </TouchableOpacity>
 
@@ -120,7 +127,12 @@ const GroceryItemsScreen = () => {
             onChangeText={(text) => handleInputChange('name', text)}
             placeholder="הזן שם"
           />
-
+          <TextInput
+            value={currentItem?.description}
+            style={styles.input}
+            onChangeText={(text) => handleInputChange('description', text)}
+            placeholder="להוסיף הערה"
+          />
           <View style={styles.quantityContainer}>
             <TouchableOpacity
               onPress={() => updateQuantity('increment')}
@@ -142,12 +154,7 @@ const GroceryItemsScreen = () => {
               keyboardType="numeric"
             />
           </View>
-          <TextInput
-            value={currentItem?.description}
-            style={styles.input}
-            onChangeText={(text) => handleInputChange('description', text)}
-            placeholder="תיאור"
-          />
+
         </View>
 
       </BottomSheetModal>
@@ -169,6 +176,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 5,
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f8f9fa", // רקע עדין לכמות
+    borderRadius: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "#ccc", // מסגרת עדינה
+  },
+  iconButton: {
+    backgroundColor: "#007bff", // צבע כחול יפה
+    padding: 8,
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  input: {
+    width: "100%", // רוחב קבוע שיתאים למספרים דו-ספרתיים
+    height: 40,
+    textAlign: "right",
+    fontSize: 18,
+    fontWeight: "bold",
+    backgroundColor: "#ededed",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ddd", // מסגרת עדינה
+    paddingHorizontal: 10,
+    marginBottom:5,
   },
   ProgressBar: {
     height: 8
