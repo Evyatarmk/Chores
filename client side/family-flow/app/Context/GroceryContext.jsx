@@ -82,10 +82,44 @@ export const GroceryProvider = ({ children }) => {
       )
     );
   };
+  const addItems = (listId, newItems) => {
+    setGroceryData((prevData) =>
+      prevData.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              items: newItems.reduce((updatedItems, newItem) => {
+                if (newItem.quantity === 0) {
+                  // אם הכמות היא 0, אל תוסיף את הפריט
+                  return updatedItems.filter(item => item.name !== newItem.name || item.description !== newItem.description);
+                }
+  
+                const existingItemIndex = updatedItems.findIndex(item => item.name === newItem.name && item.description === newItem.description);
+  
+                if (existingItemIndex !== -1) {
+                  // אם הפריט כבר קיים, עדכן את הכמות
+                  updatedItems[existingItemIndex] = {
+                    ...updatedItems[existingItemIndex],
+                    quantity: newItem.quantity,
+                  };
+                } else {
+                  // אם הפריט לא קיים, הוסף אותו
+                  updatedItems.push(newItem);
+                }
+  
+                return updatedItems;
+              }, [...list.items]), // שמור על הרשימה המקורית
+            }
+          : list
+      )
+    );
+  };
+  
+  
   
 
   return (
-    <GroceryContext.Provider value={{ groceryData, updateListName,setGroceryData,updateItemField,deleteList, getItemsForList, updateItemStatus,addNewList }}>
+    <GroceryContext.Provider value={{ groceryData, addItems,updateListName,updateItemField,deleteList, getItemsForList, updateItemStatus,addNewList }}>
       {children}
     </GroceryContext.Provider>
   );

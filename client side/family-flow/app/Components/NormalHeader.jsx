@@ -8,7 +8,6 @@ const NormalHeader = ({ title, onOptionPress }) => {
 
   return (
     <View style={styles.header}>
-
       {/* כפתור חזור */}
       <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
         <Icon name="arrow-back" size={24} color="#333" />
@@ -19,13 +18,15 @@ const NormalHeader = ({ title, onOptionPress }) => {
         {title}
       </Text>
 
-     
-      <TouchableOpacity
-        style={styles.optionsButton}
-        onPress={() => openOptionsPanel(item)}
-      >
-        <Icon name="more-vert" size={24} color="#888" />
-      </TouchableOpacity>
+      {/* כפתור אפשרויות - יוצג רק אם onOptionPress קיים */}
+      {onOptionPress && (
+        <TouchableOpacity
+          style={styles.optionsButton}
+          onPress={onOptionPress}
+        >
+          <Icon name="more-vert" size={24} color="#888" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -34,11 +35,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row-reverse",
     alignItems: 'center',
-    padding:10
-  },
-  optionButton: {
-    borderRadius: 20,
-    marginRight: 10, 
+    padding: 10,
   },
   backButton: {
     padding: 5,
@@ -49,13 +46,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: "#333",
     textAlign: 'right',
-    flex: 1, // הכותרת תתפוס את כל החלל המרכזי,
+    flex: 1, 
   },
-  placeholder: {
-    width: 40, // למילוי החלל בצד ימין
+  optionsButton: {
+    padding: 5,
   },
-  optionsButton: {},
-
 });
 
 export default NormalHeader;
