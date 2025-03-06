@@ -75,13 +75,16 @@ const GroceryItemsScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={[styles.itemContainer, item.isTaken && styles.takenItem]} onPress={() => viewDetails(item)}>
-            <View style={styles.ItemTopSide}>
               <Text style={styles.GroceryItemsubtitle}>{item.quantity}</Text>
-              <View style={styles.ItemRightSide}>
+              <View style={styles.ItemDetails}>
                 <Text style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
                   {item.name}
-                </Text>
-                <TouchableOpacity
+                </Text> 
+                {item.description && (
+              <Text style={styles.itemDescription}>{item.description}</Text>
+            )}  
+            </View>
+            <TouchableOpacity
                   onPress={() => updateItemStatus(list.id, item.id)}
                   style={styles.checkboxContainer}>
                   <View
@@ -91,12 +94,7 @@ const GroceryItemsScreen = () => {
                     ]}>
                     {item.isTaken && <Icon name="check" size={18} color="white" />}
                   </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-            {item.description && (
-              <Text style={styles.itemDescription}>{item.description}</Text>
-            )}
+            </TouchableOpacity>
           </TouchableOpacity>
         )}
         ListEmptyComponent={
@@ -165,9 +163,9 @@ const GroceryItemsScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f4f4f4" },
-  itemTitle: { fontSize: 18, fontWeight: "bold" },
+  itemTitle: {  textAlign: "right",fontSize: 18, fontWeight: "bold"},
   itemContainer: {
-    flexDirection: "column",
+    flexDirection: "row",
     padding: 15,
     backgroundColor: "#ffffff",
     marginBottom: 1,
@@ -177,17 +175,6 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 5,
   },
-  quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#f8f9fa", // רקע עדין לכמות
-    borderRadius: 8,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "#ccc", // מסגרת עדינה
-  },
   iconButton: {
     backgroundColor: "#007bff", // צבע כחול יפה
     padding: 8,
@@ -195,7 +182,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   input: {
-    width: "100%", // רוחב קבוע שיתאים למספרים דו-ספרתיים
     height: 40,
     textAlign: "right",
     fontSize: 18,
@@ -210,18 +196,13 @@ const styles = StyleSheet.create({
   ProgressBar: {
     height: 8
   },
-  ItemTopSide: {
-    flexDirection: "row",
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+ 
   itemDescription: {
-    marginEnd: 33,
     textAlign: "right",
     fontSize: 12,
     color: "#666"
   },
-  ItemRightSide: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', },
+  ItemDetails: { flexDirection: "column", alignItems: "flex-end",flex:1 },
   GroceryItemsubtitle: { fontSize: 18, color: "#666" },
   editButton: {
     backgroundColor: "#007bff",
