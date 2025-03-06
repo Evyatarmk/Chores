@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "family-flow",
-    "slug": "family-flow",
+    "name": "chores",
+    "slug": "chores",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
