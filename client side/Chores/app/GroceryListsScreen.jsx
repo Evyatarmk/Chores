@@ -20,7 +20,7 @@ const GroceryListsScreen = () => {
 
 
   const openOptionsPanel = (list) => {
-    setCurrentList(list);
+     setCurrentList(list);
     optionsModalRef.current?.open();
   };
 

@@ -21,10 +21,10 @@ export default function HomePage() {
     <View style={styles.container}>
       {/* Sidebar */}
       <Animated.View style={[styles.sidebar, { right: sidebarRight, display: sidebarOpen ? "flex" : "none" }]}>
-        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("./GroceryListsScreen")}>
+        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/GroceryListsScreen")}>
           <Text style={styles.sidebarText}>רשימת קניות</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/tasks")}>
+        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/TasksListScreen")}>
           <Text style={styles.sidebarText}>משימות</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/settings")}>
