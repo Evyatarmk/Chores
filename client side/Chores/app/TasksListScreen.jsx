@@ -6,6 +6,7 @@ import { Calendar } from "react-native-calendars";
 import NormalHeader from "./Components/NormalHeader";
 import BottomSheetModal from "./Components/BottomSheetModal";
 import { v4 as uuidv4 } from "uuid"; // For generating unique IDs
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const TasksListScreen = () => {
   const { tasks, getTasksForDate, editTask, removeTaskForDate, addTask } = useTasks();
@@ -50,7 +51,7 @@ const TasksListScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <NormalHeader title="המשימות שלי" />
       <Calendar onDayPress={handleDatePress} markedDates={markedDates} />
 
@@ -101,7 +102,7 @@ const TasksListScreen = () => {
                   </TouchableOpacity>
                 </View>
       </BottomSheetModal>
-    </View>
+    </GestureHandlerRootView>
   );
 };
 

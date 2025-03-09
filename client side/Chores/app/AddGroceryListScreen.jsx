@@ -26,7 +26,13 @@ const AddGroceryListScreen = () => {
   const handleClear = () => {
     setListName(""); // מנקה את ערך שדה הקלט
   };
-
+  const getFormattedDate = () => {
+    const timestamp = new Date();
+    const formattedDate = timestamp.getFullYear() + '-' + 
+                          (timestamp.getMonth() + 1).toString().padStart(2, '0') + '-' +
+                          timestamp.getDate().toString().padStart(2, '0');
+    return formattedDate;
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}

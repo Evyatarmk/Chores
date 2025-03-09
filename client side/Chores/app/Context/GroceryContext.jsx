@@ -35,7 +35,7 @@ export const GroceryProvider = ({ children }) => {
       name: listName,
       items: [],
     }
-    let newGroceryData=[...groceryData,newList]
+    let newGroceryData=[newList,...groceryData]
     setGroceryData(newGroceryData)
   };
   const deleteList= (listId) => {
@@ -130,15 +130,20 @@ export const GroceryProvider = ({ children }) => {
 const copyAllItems = (listId) => {
   const list = getList(listId);
   const allItems = list.items;
+ const Items = list.items
+    .map(item => ({
+      ...item,
+      isTaken: false, // שינוי ערך isTaken ל-false
+    }));
 
   // יצירת רשימה חדשה עם שם חדש
   const newList = {
     id: Date.now(),
     name: list.name + "-העתק",
-    items: [...allItems],
+    items: [...Items],
   };
-
-  setGroceryData((prevData) => [...prevData, newList]);
+ 
+  setGroceryData((prevData) => [ newList,...prevData]);
 };
 // פונקציה להעתקת פריטים שנרכשו והגדרת isTaken כ-false
 const copyPurchasedItems = (listId) => {
@@ -157,7 +162,7 @@ const copyPurchasedItems = (listId) => {
     items: [...purchasedItems],
   };
 
-  setGroceryData((prevData) => [...prevData, newList]);
+  setGroceryData((prevData) => [ newList,...prevData]);
 };
 
 // פונקציה להעתקת פריטים שלא נרכשו
@@ -172,7 +177,7 @@ const copyUnpurchasedItems = (listId) => {
     items: [...unpurchasedItems],
   };
 
-  setGroceryData((prevData) => [...prevData, newList]);
+  setGroceryData((prevData) => [ newList,...prevData]);
 };
 
   
