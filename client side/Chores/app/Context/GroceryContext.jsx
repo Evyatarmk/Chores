@@ -24,9 +24,9 @@ export const GroceryProvider = ({ children }) => {
   
 
   // פונקציה לקבלת פריטים לפי listId
-  const getItemsForList = (listId) => {
+  const getList = (listId) => {
     const list = groceryData.find((list) => list.id === listId);
-    return list ? list.items : [];
+    return list ;
   };
 
   const addNewList= (listName) => {
@@ -82,6 +82,18 @@ export const GroceryProvider = ({ children }) => {
       )
     );
   };
+  const deleteItem = (listId,ItemId) => {
+    setGroceryData((prevData) =>
+      prevData.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              items: list.items.filter((item) => item.id !== ItemId),
+            }
+          : list
+      )
+    );
+  };
   const addItems = (listId, newItems) => {
     setGroceryData((prevData) =>
       prevData.map((list) =>
@@ -114,12 +126,61 @@ export const GroceryProvider = ({ children }) => {
       )
     );
   };
+   // פונקציה להעתקת כל הפריטים
+const copyAllItems = (listId) => {
+  const list = getList(listId);
+  const allItems = list.items;
+
+  // יצירת רשימה חדשה עם שם חדש
+  const newList = {
+    id: Date.now(),
+    name: list.name + "-העתק",
+    items: [...allItems],
+  };
+
+  setGroceryData((prevData) => [...prevData, newList]);
+};
+// פונקציה להעתקת פריטים שנרכשו והגדרת isTaken כ-false
+const copyPurchasedItems = (listId) => {
+  const list = getList(listId);
+  const purchasedItems = list.items
+    .filter(item => item.isTaken)
+    .map(item => ({
+      ...item,
+      isTaken: false, // שינוי ערך isTaken ל-false
+    }));
+
+  // יצירת רשימה חדשה עם שם חדש
+  const newList = {
+    id: Date.now(),
+    name: list.name + "-העתק",
+    items: [...purchasedItems],
+  };
+
+  setGroceryData((prevData) => [...prevData, newList]);
+};
+
+// פונקציה להעתקת פריטים שלא נרכשו
+const copyUnpurchasedItems = (listId) => {
+  const list = getList(listId);
+  const unpurchasedItems = list.items.filter(item => !item.isTaken);
+
+  // יצירת רשימה חדשה עם שם חדש
+  const newList = {
+    id: Date.now(),
+    name: list.name + "-העתק",
+    items: [...unpurchasedItems],
+  };
+
+  setGroceryData((prevData) => [...prevData, newList]);
+};
+
   
   
   
 
   return (
-    <GroceryContext.Provider value={{ groceryData, addItems,updateListName,updateItemField,deleteList, getItemsForList, updateItemStatus,addNewList }}>
+    <GroceryContext.Provider value={{ groceryData, addItems,updateListName,updateItemField,deleteList,deleteItem, getList, updateItemStatus,addNewList,copyAllItems,copyPurchasedItems  ,copyUnpurchasedItems }}>
       {children}
     </GroceryContext.Provider>
   );

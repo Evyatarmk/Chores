@@ -9,21 +9,25 @@ import ProgressBar from "./Components/ProgressBar";
 import BottomSheetModal from "./Components/BottomSheetModal";
 import FloatingLabelInput from "./Components/FloatingLabelInput";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import AlertModal from "./Components/AlertModal";
 
 const GroceryItemsScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const list = JSON.parse(params.list);
+  const listId = JSON.parse(params.listId);
   const editModalRef = useRef(null);
   const [currentItem, setCurrentItem] = useState(null);
-  const { getItemsForList, updateItemStatus, groceryData, updateItemField } = useGrocery();
+  const { getList, updateItemStatus, groceryData, updateItemField ,deleteItem} = useGrocery();
   const [groceryItems, setGroceryItems] = useState([]);
+  const [list, setList] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    const items = getItemsForList(list.id);
-    const sortedItems = [...items].sort((a, b) => a.isTaken - b.isTaken);
+    const list = getList(listId);
+    setList(list)
+    const sortedItems = [...list.items].sort((a, b) => a.isTaken - b.isTaken);
     setGroceryItems(sortedItems);
-  }, [list.id, groceryData]);
+  }, [listId, groceryData]);
 
   const viewDetails = (item) => {
     setCurrentItem(item)
@@ -33,6 +37,14 @@ const GroceryItemsScreen = () => {
     editModalRef.current?.close();
     updateItemField(list.id, currentItem)
     setCurrentItem(null);
+  };
+  const handleDelete = () => {
+    editModalRef.current?.close();
+    deleteItem(listId,currentItem?.id);
+    setCurrentItem(null);
+  };
+  const handleDeletePress = () => {
+    setModalVisible(true)
   };
   const updateQuantity = (action) => {
     setCurrentItem((prevItem) => {
@@ -65,7 +77,7 @@ const GroceryItemsScreen = () => {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <NormalHeader title={list.name} />
+      <NormalHeader title={list?.name} />
       <View style={styles.ProgressBar}>
         <ProgressBar totalItems={groceryItems.length} completedItems={groceryItems.filter(item => item.isTaken).length} />
       </View>
@@ -146,16 +158,27 @@ const GroceryItemsScreen = () => {
             </TouchableOpacity>
             <TextInput
               value={currentItem?.quantity?.toString() || ""}
-              style={styles.input}
+              style={styles.inputQuantity}
               onChangeText={(text) => handleInputChange('quantity', text)}
               placeholder="כמות"
               keyboardType="numeric"
             />
           </View>
-
+           <TouchableOpacity onPress={handleDeletePress} style={styles.panelOption}>
+                      <Icon name="delete" size={20} color="#ff4444" style={styles.optionIcon} />
+                      <Text style={styles.panelOptionText}>מחיקה</Text>
+           </TouchableOpacity>
         </View>
 
       </BottomSheetModal>
+      <AlertModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        message="האם אתה בטוח שברצונך למחוק פריט זה?"
+        onConfirm={handleDelete}
+        confirmText="מחק"
+        cancelText="ביטול"
+      />
     </GestureHandlerRootView>
 
   );
@@ -182,7 +205,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   input: {
-    height: 40,
+    height: 50,
     textAlign: "right",
     fontSize: 18,
     fontWeight: "bold",
@@ -192,6 +215,17 @@ const styles = StyleSheet.create({
     borderColor: "#ddd", // מסגרת עדינה
     paddingHorizontal: 10,
     marginBottom:5,
+  },
+  inputQuantity:{
+    flex:1,
+    height: 50,
+    textAlign:"right" , 
+    fontSize: 18,
+    fontWeight: "bold",
+    backgroundColor: "#ededed",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   ProgressBar: {
     height: 8
@@ -219,10 +253,10 @@ const styles = StyleSheet.create({
 
 
   quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: "flex-end",
+    flexDirection: "row",
+    alignItems: "center",
   },
+  
   label: {
     fontSize: 16,
     marginRight: 10,
@@ -286,6 +320,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f4f4",
     color: "#888",
   },
+  panelOption: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    paddingVertical: 15,
+  },
+  panelOptionText: { fontSize: 16, color: "#333" },
+
 });
 
 export default GroceryItemsScreen;
