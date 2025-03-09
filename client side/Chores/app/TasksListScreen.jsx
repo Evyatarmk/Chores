@@ -91,8 +91,15 @@ const TasksListScreen = () => {
           value={currentItem.description}
           onChangeText={(text) => setCurrentItem({ ...currentItem, description: text })}
         />
-        <Button title="Add Task" onPress={handleAddTask} style={styles.addTaskButton} />
-        <Button title="Close" onPress={closeModal} style={styles.addTaskButton} />
+     
+       <View style={styles.editButtons}> 
+                  <TouchableOpacity onPress={handleAddTask} style={styles.addTaskButton}>
+                    <Text style={styles.addTaskButtonText}>הוסף משימה</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={closeModal} style={styles.cancelButton}>
+                    <Text style={styles.cancelButtonText}>ביטול</Text>
+                  </TouchableOpacity>
+                </View>
       </BottomSheetModal>
     </View>
   );
@@ -123,13 +130,11 @@ const styles = StyleSheet.create({
   },
   input: { borderWidth: 1, padding: 8, marginVertical: 5, borderRadius: 5, backgroundColor: "white" },
       
-      addTaskButton: {
-        marginVertical: 11,  // This creates a gap between buttons vertically
-        paddingVertical: 10, // Additional padding to create space inside the button
-        paddingHorizontal: 15, // Optional horizontal padding if needed
-        alignSelf: "center", // Center the button horizontally within the container
-      },
-
+  editButtons: { flexDirection: "row", justifyContent: "space-between", gap: 10 },
+  addTaskButton: { backgroundColor: "#007bff", padding: 10, borderRadius: 20, width: "50%", alignItems: "center" },
+  addTaskButtonText: { color: "white", fontWeight: "bold" },
+  cancelButton: { padding: 10, width: "50%", alignItems: "center", backgroundColor: "#ededed", borderRadius: 20 },
+  cancelButtonText: { color: "#888" },
 });
 
 export default TasksListScreen;
