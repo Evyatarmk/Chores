@@ -1,20 +1,31 @@
-import React, { useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
-import { useTasks } from "./Context/TaskContext"; 
+import React, { useState, useRef } from "react";
+import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity, TextInput } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { useTasks } from "./Context/TaskContext";
 import { Calendar } from "react-native-calendars";
-import NormalHeader from "./Components/NormalHeader"; 
+import NormalHeader from "./Components/NormalHeader";
+import BottomSheetModal from "./Components/BottomSheetModal";
+import { v4 as uuidv4 } from "uuid"; // For generating unique IDs
 
 const TasksListScreen = () => {
-  const { tasks, getTasksForDate } = useTasks();
+  const { tasks, getTasksForDate, editTask, removeTaskForDate, addTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(null);
+  const modalRef = useRef(null);
+
+  // Correct initialization for currentItem
+  const [currentItem, setCurrentItem] = useState({id:"",title:"",date: "", description: "", completed: false });
+
+  // Open and close modal functions
+  const openModal = () => modalRef.current?.open();
+  const closeModal = () => modalRef.current?.close();
 
   const handleDatePress = (day) => {
     setSelectedDate(day.dateString);
   };
 
-  // Convert tasks into `markedDates` format
+  // Marking selected dates for the calendar
   const markedDates = tasks.reduce((acc, task) => {
-    acc[task.date] = { marked: true, dotColor: "red" }; // Mark the date with a dot
+    acc[task.date] = { marked: true, dotColor: "red" };
     return acc;
   }, {});
 
@@ -22,27 +33,67 @@ const TasksListScreen = () => {
     markedDates[selectedDate] = { selected: true, selectedColor: "#007bff" };
   }
 
+  // Handle adding a new task
+  const handleAddTask = () => {
+    if (currentItem.name &&  selectedDate) {
+      addTask({
+        id: uuidv4(), // Generate a unique ID
+        title: currentItem.name,
+        date: selectedDate, // Use selectedDate directly
+        description:currentItem.description,
+        completed: currentItem.completed,
+      });
+      closeModal(); // Close modal after task is added
+    } else {
+      alert("Please fill out both name and description.");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <NormalHeader title="המשימות שלי" />
-      <Calendar 
-        onDayPress={handleDatePress}
-        markedDates={markedDates}
-      />
-      
+      <Calendar onDayPress={handleDatePress} markedDates={markedDates} />
+
       <Text style={styles.taskTitle}>
         Tasks for {selectedDate || "Select a Date"}
       </Text>
 
+      <TouchableOpacity style={styles.addButton} onPress={openModal}>
+        <Icon name="add" size={30} color="white" />
+      </TouchableOpacity>
+
       <FlatList
-        data={getTasksForDate(selectedDate)}
+        data={getTasksForDate(selectedDate) || []}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.taskItem}>
             <Text style={styles.taskText}>{item.title}</Text>
+            <Text style={styles.taskText}>{item.description}</Text>
+            <View style={styles.buttonContainer}>
+              <Button title="Edit" onPress={() => editTask(item.id, { title: "Updated Task" })} />
+              <Button title="Remove" color="red" onPress={() => removeTaskForDate(item.id)} />
+            </View>
           </View>
         )}
       />
+
+      {/* Bottom Sheet Modal */}
+      <BottomSheetModal modalRef={modalRef} onClose={closeModal} title="Add Task">
+        <TextInput
+          style={styles.input}
+          placeholder="Task Name"
+          value={currentItem.name}
+          onChangeText={(text) => setCurrentItem({ ...currentItem, name: text })}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Add a note"
+          value={currentItem.description}
+          onChangeText={(text) => setCurrentItem({ ...currentItem, description: text })}
+        />
+        <Button title="Add Task" onPress={handleAddTask} style={styles.addTaskButton} />
+        <Button title="Close" onPress={closeModal} style={styles.addTaskButton} />
+      </BottomSheetModal>
     </View>
   );
 };
@@ -52,6 +103,33 @@ const styles = StyleSheet.create({
   taskTitle: { fontSize: 18, fontWeight: "bold", marginVertical: 10 },
   taskItem: { padding: 10, backgroundColor: "white", borderRadius: 5, marginVertical: 5 },
   taskText: { fontSize: 16 },
+  buttonContainer: { flexDirection: "row", marginTop: 5, gap: 10 },
+  addButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007bff",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    zIndex: 1000,
+    padding: 10, // Adds internal space within the button
+  },
+  input: { borderWidth: 1, padding: 8, marginVertical: 5, borderRadius: 5, backgroundColor: "white" },
+      
+      addTaskButton: {
+        marginVertical: 11,  // This creates a gap between buttons vertically
+        paddingVertical: 10, // Additional padding to create space inside the button
+        paddingHorizontal: 15, // Optional horizontal padding if needed
+        alignSelf: "center", // Center the button horizontally within the container
+      },
+
 });
 
 export default TasksListScreen;

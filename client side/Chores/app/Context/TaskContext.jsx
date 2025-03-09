@@ -15,12 +15,20 @@ export const TaskProvider = ({ children }) => {
   };
 
   const getTasksForDate = (date) => {
-    console.log(date)
     return tasks.filter(task => task.date === date);
   };
 
+  const removeTaskForDate = (taskId) => {
+    console.log(taskId)
+    setTasks(tasks.filter(task => task.id !== taskId)); // Filter out the task with the specified ID
+  };
+
+  const editTask = (id, updatedTask) => {
+    setTasks(tasks.map(task => task.id === id ? { ...task, ...updatedTask } : task));
+  };
+
   return (
-    <TaskContext.Provider value={{ tasks, addTask, getTasksForDate }}>
+    <TaskContext.Provider value={{ tasks, addTask, getTasksForDate, removeTaskForDate, editTask }}>
       {children}
     </TaskContext.Provider>
   );
