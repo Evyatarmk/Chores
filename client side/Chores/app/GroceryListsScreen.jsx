@@ -7,18 +7,30 @@ import { Modalize } from 'react-native-modalize';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import NormalHeader from "./Components/NormalHeader"; // תלוי במיקום של תיקיית ה-Header
 import ProgressBar from "./Components/ProgressBar";
+import OptionsModal from "./Components/OptionsModal";
 
 const GroceryListsScreen = () => {
-  const { groceryData, deleteList, updateListName } = useGrocery();
+  const { groceryData, deleteList, updateListName ,copyAllItems ,copyUnpurchasedItems,copyPurchasedItems } = useGrocery();
   const router = useRouter();
   const optionsModalRef = useRef(null);
+  const optionsCopyModalRef = useRef(null);
   const inputRef = useRef(null);
   const editModalRef = useRef(null);
   const [currentList, setCurrentList] = useState(null);
   const [newName, setNewName] = useState("");
 
-
-
+  
+  const options = [
+    { icon: "edit", text: "שנה שם", action: "edit" },
+    { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
+    { icon: "content-copy", text: "העתק", action: "copy", iconColor: "#007bff" },
+    // אפשר להוסיף עוד אפשרויות עם אייקונים אחרים
+  ];
+  const optionsCopy = [
+    { icon: "view-list", text: "כל הפריטים", action: "allItems" },
+    { icon: "check-circle", text: "פרטים שנרכשו", action: "purchasedItems", iconColor: "#28a745" },
+    { icon: "cancel", text: "פריטים שלא נרכשו", action: "unpurchasedItems", iconColor: "#dc3545" },
+  ];
   const openOptionsPanel = (list) => {
      setCurrentList(list);
     optionsModalRef.current?.open();
@@ -31,11 +43,25 @@ const GroceryListsScreen = () => {
       setTimeout(() => {
         editModalRef.current?.open();
       }, 300);
-    } else if (option === "delete") {
+    }if (option === "delete") {
       handleDelete(currentList.id);
     }
+    else if (option === "copy") {
+      optionsCopyModalRef.current?.open();
+      optionsModalRef.current?.close();
+    } 
   };
-
+  const handleOptionCopySelect = (option) => {
+    if (option === "allItems") {
+      copyAllItems(currentList.id); 
+    } else if (option === "purchasedItems") {
+      copyPurchasedItems(currentList.id); 
+    } else if (option === "unpurchasedItems") {
+      copyUnpurchasedItems(currentList.id); 
+    }
+    
+    optionsCopyModalRef.current?.close();
+  };
   const handleDelete = (listId) => {
     deleteList(listId);
     optionsModalRef.current?.close();
@@ -61,7 +87,7 @@ const GroceryListsScreen = () => {
             onPress={() =>
               router.push({
                 pathname: "./GroceryItemsScreen",
-                params: { list: JSON.stringify(item) },
+                params: { listId: JSON.stringify(item.id) },
               })
             }
           >
@@ -91,26 +117,17 @@ const GroceryListsScreen = () => {
       </TouchableOpacity>
 
       {/* מודל אפשרויות */}
-      <Modalize ref={optionsModalRef} adjustToContentHeight handlePosition="inside">
-        <View style={styles.panelHeader}>
-          <Text style={styles.panelTitle}>אפשרויות</Text>
-          <TouchableOpacity onPress={() => optionsModalRef.current?.close()} style={styles.closeButton}>
-            <Icon name="close" size={20} color="#888" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.panelContent}>
-          <TouchableOpacity onPress={() => handleOptionSelect("edit")} style={styles.panelOption}>
-            <Icon name="edit" size={20} style={styles.optionIcon} />
-            <Text style={styles.panelOptionText}>שנה שם</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => handleOptionSelect("delete")} style={styles.panelOption}>
-            <Icon name="delete" size={20} color="#ff4444" style={styles.optionIcon} />
-            <Text style={styles.panelOptionText}>מחיקה</Text>
-          </TouchableOpacity>
-        </View>
-      </Modalize>
+      <OptionsModal
+        optionsModalRef={optionsModalRef}
+        handleOptionSelect={handleOptionSelect}
+        options={options}
+      /> 
+      {/* מודל אפשרויות העתקה */}
+      <OptionsModal
+        optionsModalRef={optionsCopyModalRef}
+        handleOptionSelect={handleOptionCopySelect}
+        options={optionsCopy}
+      /> 
 
       {/* מודל עריכת שם */}
       <Modalize

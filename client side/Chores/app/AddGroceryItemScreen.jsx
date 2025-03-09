@@ -12,7 +12,7 @@ const AddGroceryItemScreen = () => {
   const listId = JSON.parse(params.listId);
   const [inputTextItemName, setInputTextItemName] = useState("");
   const [newItem, setNewItem] = useState(null)
-  const { addItems,getItemsForList } = useGrocery();
+  const { addItems,getList } = useGrocery();
 
   const [itemsToShow, setItemsToShow] = useState([]);
   const [itemsToAdd, setItemsToAdd] = useState([]);
@@ -24,7 +24,7 @@ const AddGroceryItemScreen = () => {
       { id: 103, name: "מלח", description: "מלח שולחן רגיל", quantity: 0, isTaken: false },
     ];
   
-    const allItems = [ ...getItemsForList(listId),...tempItems];
+    const allItems = [ ...getList(listId).items,...tempItems];
   
     const uniqueItems = allItems.filter((item, index, self) => 
       index === self.findIndex((t) => (
