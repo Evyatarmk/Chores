@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   panelTitle: { fontSize: 18, fontWeight: "bold", color: "#333" },
   closeButton: { padding: 5, backgroundColor: "#ededed", borderRadius: 20 },
   panelContent: { padding: 20 },
+
 });
 
 export default BottomSheetModal;
