@@ -92,9 +92,9 @@ const GroceryItemsScreen = () => {
                 <Text style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
                   {item.name}
                 </Text> 
-                {item.description && (
+                {item.description ? (
               <Text style={styles.itemDescription}>{item.description}</Text>
-            )}  
+            ):null}  
             </View>
             <TouchableOpacity
                   onPress={() => updateItemStatus(list.id, item.id)}
@@ -112,8 +112,8 @@ const GroceryItemsScreen = () => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Icon name="inbox" size={50} color="#ccc" />
-            <Text style={styles.emptyText}>אין פריטים להצגה</Text>
-          </View>
+            {<Text style={styles.emptyText}>אין פריטים להצגה</Text>}       
+           </View>
         }
         contentContainerStyle={{ paddingBottom: 80 }} // הקטנת ה-padding top
       />

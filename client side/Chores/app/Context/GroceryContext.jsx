@@ -94,38 +94,38 @@ export const GroceryProvider = ({ children }) => {
       )
     );
   };
-  const addItems = (listId, newItems) => {
+  const updateOrAddItems = (listId, newItems) => {
     setGroceryData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
               ...list,
               items: newItems.reduce((updatedItems, newItem) => {
-                if (newItem.quantity === 0) {
-                  // אם הכמות היא 0, אל תוסיף את הפריט
-                  return updatedItems.filter(item => item.name !== newItem.name || item.description !== newItem.description);
-                }
-  
-                const existingItemIndex = updatedItems.findIndex(item => item.name === newItem.name && item.description === newItem.description);
+                const existingItemIndex = updatedItems.findIndex(item => item.id === newItem.id);
   
                 if (existingItemIndex !== -1) {
-                  // אם הפריט כבר קיים, עדכן את הכמות
-                  updatedItems[existingItemIndex] = {
-                    ...updatedItems[existingItemIndex],
-                    quantity: newItem.quantity,
-                  };
-                } else {
-                  // אם הפריט לא קיים, הוסף אותו
+                  // אם הפריט קיים, נעדכן את הכמות או נמחק אותו אם הכמות היא 0
+                  if (newItem.quantity === 0) {
+                    return updatedItems.filter(item => item.id !== newItem.id);
+                  } else {
+                    updatedItems[existingItemIndex] = {
+                      ...updatedItems[existingItemIndex],
+                      quantity: newItem.quantity,
+                    };
+                  }
+                } else if (newItem.quantity > 0) {
+                  // אם הפריט לא קיים וכמותו גדולה מאפס, נוסיף אותו
                   updatedItems.push(newItem);
                 }
   
                 return updatedItems;
-              }, [...list.items]), // שמור על הרשימה המקורית
+              }, [...list.items]), // שמירת הרשימה המקורית
             }
           : list
       )
     );
   };
+  
    // פונקציה להעתקת כל הפריטים
 const copyAllItems = (listId) => {
   const list = getList(listId);
@@ -185,7 +185,7 @@ const copyUnpurchasedItems = (listId) => {
   
 
   return (
-    <GroceryContext.Provider value={{ groceryData, addItems,updateListName,updateItemField,deleteList,deleteItem, getList, updateItemStatus,addNewList,copyAllItems,copyPurchasedItems  ,copyUnpurchasedItems }}>
+    <GroceryContext.Provider value={{ groceryData, updateOrAddItems,updateListName,updateItemField,deleteList,deleteItem, getList, updateItemStatus,addNewList,copyAllItems,copyPurchasedItems  ,copyUnpurchasedItems }}>
       {children}
     </GroceryContext.Provider>
   );

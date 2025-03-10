@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import ClearableInput from "./Components/ClearableInput";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useGrocery } from "./Context/GroceryContext";
+import { v4 as uuidv4 } from "uuid"; // נדרשת חבילה זו
 
 const AddGroceryItemScreen = () => {
   const router = useRouter();
@@ -12,47 +13,58 @@ const AddGroceryItemScreen = () => {
   const listId = JSON.parse(params.listId);
   const [inputTextItemName, setInputTextItemName] = useState("");
   const [newItem, setNewItem] = useState(null)
-  const { addItems,getList } = useGrocery();
+  const { updateOrAddItems,getList } = useGrocery();
 
   const [itemsToShow, setItemsToShow] = useState([]);
   const [itemsToAdd, setItemsToAdd] = useState([]);
 
   useEffect(() => {
     const tempItems = [
-      { id: 101, name: "ביצים", description: "", quantity: 0, isTaken: false },
-      { id: 102, name: "סוכר", description: "שקית 1 ג", quantity: 0, isTaken: false },
-      { id: 103, name: "מלח", description: "מלח שולחן רגיל", quantity: 0, isTaken: false },
+      { id: 101, name: "ביצים", description: ""},
+      { id: 102, name: "סוכר", description: "שקית 1 ג" },
+      { id: 103, name: "מלח", description: "מלח שולחן רגיל"},
     ];
-  
-    const allItems = [ ...getList(listId).items,...tempItems];
+    const tempItemsToShow = tempItems.map((item) => ({
+      id: uuidv4(),
+      name: item.name,
+      description: item.description,
+      quantity: 0,
+      isTaken: false,
+    }));
+        
+    const allItems = [ ...getList(listId).items,...tempItemsToShow];
   
     const uniqueItems = allItems.filter((item, index, self) => 
       index === self.findIndex((t) => (
         t.name === item.name && t.description === item.description
       ))
     );
-  
+    console.log(uniqueItems)
     setItemsToShow(uniqueItems);
   }, []);
 
-  const handleAddItem = (item) => {
+  const handleAddItem = (item) => {    
     setItemsToAdd((prevItems) => {
-      const existingItem = prevItems.find((i) => i.name === item.name && i.description === item.description);
-  
+      let existingItem = prevItems.find((i) => i.id === item.id);
+      
       if (existingItem) {
         return prevItems.map((i) =>
-          i.name === item.name && i.description === item.description
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
-        );
-      }
-  
-      let NewItem = { ...item, id: Date.now(), quantity:item.quantity+1 };
+          i.id === item.id 
+        ? { ...i, quantity: i.quantity + 1 }
+        : i
+      );
+    }
+      existingItem = itemsToShow.find((i) => i.id === item.id);
+      if (existingItem) {
+        let newExistingItem={...existingItem,quantity: existingItem.quantity + 1}
+        return [...prevItems,newExistingItem]
+    }
+      let NewItem = { ...item, quantity:item.quantity+1 };
       return [...prevItems, NewItem];
     });
   
     setItemsToShow((prevItems) => {
-      const existingItem = prevItems.find((i) => i.name === item.name && i.description === item.description);
+      const existingItem = prevItems.find((i) => i.id === item.id);
   
       if (existingItem) {
         return prevItems.map((i) =>
@@ -63,7 +75,7 @@ const AddGroceryItemScreen = () => {
       }
   
       setNewItem(null);
-      let NewItem = { ...item, id: Date.now(), quantity: 1 };
+      let NewItem = { ...item,quantity: 1 };
       return [...prevItems, NewItem];
     });
   };
@@ -71,7 +83,7 @@ const AddGroceryItemScreen = () => {
 
   const handleRemoveItem = (item) => {
     setItemsToAdd((prevItems) => {
-      const existingItem = prevItems.find((i) => i.name === item.name && i.description === item.description);
+      let existingItem = prevItems.find((i) => i.id === item.id);
   
       if (existingItem) {
         return prevItems.map((i) =>
@@ -80,9 +92,12 @@ const AddGroceryItemScreen = () => {
             : i
         );
       }
-  
-      let NewItem = { ...item, id: Date.now(), quantity:item.quantity-1 };
-      return [...prevItems, NewItem];
+      existingItem = itemsToShow.find((i) => i.id === item.id);
+      if (existingItem) {
+        let newExistingItem={...existingItem,quantity: existingItem.quantity - 1}
+        return [...prevItems,newExistingItem]
+    }
+
     });
   
     setItemsToShow((prevItems) => {
@@ -95,14 +110,13 @@ const AddGroceryItemScreen = () => {
             : i
         );
       }
-  
-     
       return prevItems.filter((i) => i.name !== item.name && i.description !== item.description);
     });
   };
   const handleConfirm = () => {
-    addItems(listId,itemsToAdd);
-    router.back()
+    updateOrAddItems(listId,itemsToAdd);
+     router.back()
+  
 
   };
   const handleInputTextItemChange = (text) => {
@@ -115,7 +129,7 @@ const AddGroceryItemScreen = () => {
       setNewItem(null);
     } else {
       setNewItem({
-        id: Date.now(), // יצירת מזהה ייחודי
+        id:uuidv4() , // יצירת מזהה ייחודי
         name: text,
         description: "",
         quantity: 0,
