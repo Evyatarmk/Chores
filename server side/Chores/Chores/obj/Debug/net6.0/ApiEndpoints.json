@@ -90,7 +90,7 @@
   {
     "ContainingType": "Chores.Controllers.GroceryListsController",
     "Method": "DeleteGroceryList",
-    "RelativePath": "api/GroceryLists/home/{homeId}/{id}",
+    "RelativePath": "api/GroceryLists/home/{homeId}/List/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -102,6 +102,32 @@
       },
       {
         "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "UpdateGroceryList",
+    "RelativePath": "api/GroceryLists/home/{homeId}/List/{listId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "name",
         "Type": "System.String",
         "IsRequired": true
       }

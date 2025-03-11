@@ -62,7 +62,7 @@ namespace Chores.Controllers
 
             return CreatedAtAction(nameof(GetGroceryListByHome), new { homeId = homeId, id = groceryList.Id }, groceryList);
         }
-
+       
         // 📌 הוספת פריט לרשימה מסוימת בבית ספציפי
         [HttpPost("home/{homeId}/lists/{listId}/items")]
         public async Task<ActionResult<GroceryItem>> AddItemToList(string homeId, string listId, GroceryItem item)
@@ -79,6 +79,22 @@ namespace Chores.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetGroceryListByHome), new { homeId = homeId, id = listId }, item);
+        }
+        // 📌 שינוי שם לרשימה קיימת
+        [HttpPut("home/{homeId}/List/{listId}")]
+        public async Task<IActionResult> UpdateGroceryList(string homeId, string listId, [FromBody] string name)
+        {
+            var groceryList = await _context.GroceryLists
+                .Where(g => g.HomeId == homeId)
+                .FirstOrDefaultAsync(g => g.Id == listId);
+
+            if (groceryList == null)
+                return NotFound("Grocery list not found.");
+
+            groceryList.Name = name;
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         // 📌 עדכון פריט (למשל שינוי סטטוס ל- isTaken) בבית ספציפי
@@ -118,15 +134,18 @@ namespace Chores.Controllers
         }
 
         // 📌 מחיקת רשימה לבית ספציפי
-        [HttpDelete("home/{homeId}/{id}")]
+        [HttpDelete("home/{homeId}/List/{id}")]
         public async Task<IActionResult> DeleteGroceryList(string homeId, string id)
         {
             var groceryList = await _context.GroceryLists
+                .Include(g => g.Items)
                 .Where(g => g.HomeId == homeId)
                 .FirstOrDefaultAsync(g => g.Id == id);
 
             if (groceryList == null)
                 return NotFound("Grocery list not found.");
+
+            _context.GroceryItems.RemoveRange(groceryList.Items);
 
             _context.GroceryLists.Remove(groceryList);
             await _context.SaveChangesAsync();

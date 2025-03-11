@@ -8,6 +8,7 @@ import { GestureHandlerRootView, RefreshControl } from 'react-native-gesture-han
 import NormalHeader from "./Components/NormalHeader"; // תלוי במיקום של תיקיית ה-Header
 import ProgressBar from "./Components/ProgressBar";
 import OptionsModal from "./Components/OptionsModal";
+import AlertModal from "./Components/AlertModal";
 
 const GroceryListsScreen = () => {
   const { groceryData, fetchGroceryData, deleteList, updateListName, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
@@ -19,6 +20,7 @@ const GroceryListsScreen = () => {
   const [currentList, setCurrentList] = useState(null);
   const [newName, setNewName] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const options = [
     { icon: "edit", text: "שנה שם", action: "edit" },
@@ -51,7 +53,7 @@ const GroceryListsScreen = () => {
         editModalRef.current?.open();
       }, 300);
     } if (option === "delete") {
-      handleDelete(currentList.id);
+      handleDeletePress()
     }
     else if (option === "copy") {
       optionsCopyModalRef.current?.open();
@@ -73,7 +75,9 @@ const GroceryListsScreen = () => {
     deleteList(listId);
     optionsModalRef.current?.close();
   };
-
+  const handleDeletePress = () => {
+    setModalVisible(true)
+  };
   const handleSaveNewName = () => {
     if (newName.trim() && currentList) {
       updateListName(currentList.id, newName);
@@ -179,6 +183,14 @@ const GroceryListsScreen = () => {
           </View>
         </View>
       </Modalize>
+      <AlertModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        message="האם אתה בטוח שברצונך למחוק פריט זה?"
+        onConfirm={()=>{ handleDelete(currentList.id);}}
+        confirmText="מחק"
+        cancelText="ביטול"
+      />
     </GestureHandlerRootView>
   );
 };
