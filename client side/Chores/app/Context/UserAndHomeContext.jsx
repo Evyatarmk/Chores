@@ -6,18 +6,20 @@ const UserAndHomeContext = createContext();
 const mockUser = {
   id:1,
   name: "אביתר",
-  email: "test@example.com",
-  password: "123456",
+  email: "t",
+  password: "1",
   homeId: 1,
+  role: "admin",
+  profilePicture: "https://example.com/profile.jpg",
 };
 const mockHome = {
   id: "123",
     name: "הבית של אביתר",
     code: "12345678",
     members: [
-      { id: "1", name: "אביתר" },
-      { id: "2", name: "דני" },
-    ],
+      { id: "1", name: "אביתר", role: "admin" }, // אביתר הוא המנהל
+      { id: "2", name: "דני", role: "user" }, // דני הוא חבר רגיל
+    ]
 };
 
 export const UserAndHomeProvider = ({ children }) => {

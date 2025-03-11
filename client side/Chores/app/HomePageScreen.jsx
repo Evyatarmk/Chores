@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     paddingTop: 80,
+    zIndex:2000,
   },
   sidebarItem: {
     padding: 15,
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
     top: 40,
     right: 20,
     padding: 10,
+    zIndex:2000,
   },
   title: {
     fontSize: 24,

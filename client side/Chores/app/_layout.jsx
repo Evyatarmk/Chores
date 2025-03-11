@@ -2,9 +2,11 @@ import { Stack } from "expo-router";
 import { GroceryProvider } from "./Context/GroceryContext";
 import { TaskProvider } from "./Context/TaskContext";
 import { UserAndHomeProvider } from "./Context/UserAndHomeContext";
+import { ApiUrlProvider } from "./Context/ApiUrlProvider";
 
 export default function RootLayout() {
   return (
+    <ApiUrlProvider>
     <UserAndHomeProvider>
         <TaskProvider>
           <GroceryProvider>
@@ -29,6 +31,7 @@ export default function RootLayout() {
           </GroceryProvider>
         </TaskProvider>
     </UserAndHomeProvider>
+    </ApiUrlProvider>
   );
 }
 
