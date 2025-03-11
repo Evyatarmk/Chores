@@ -27,6 +27,12 @@ export default function HomePage() {
         <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/TasksListScreen")}>
           <Text style={styles.sidebarText}>משימות</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/LoginScreen")}>
+          <Text style={styles.sidebarText}>התחברות</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/ProfileScreen")}>
+          <Text style={styles.sidebarText}>אזור אישי</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/settings")}>
           <Text style={styles.sidebarText}>הגדרות</Text>
         </TouchableOpacity>
