@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -35,11 +39,24 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Chores\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\User.cs",
+              "RelativeToolTip": "Chores\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-11T13:24:06.74Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Program.cs",
               "RelativeDocumentMoniker": "Chores\\Program.cs",
-              "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Program.cs*",
-              "RelativeToolTip": "Chores\\Program.cs*",
+              "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Program.cs",
+              "RelativeToolTip": "Chores\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-11T13:19:19.4Z",
@@ -47,12 +64,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\appsettings.json",
               "RelativeDocumentMoniker": "Chores\\appsettings.json",
-              "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\appsettings.json*",
-              "RelativeToolTip": "Chores\\appsettings.json*",
+              "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\appsettings.json",
+              "RelativeToolTip": "Chores\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-03-11T13:18:48.548Z",
@@ -60,7 +77,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\appsettings.Development.json",
               "RelativeDocumentMoniker": "Chores\\appsettings.Development.json",
@@ -73,7 +90,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "Chores\\Controllers\\UsersController.cs",
