@@ -1,24 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity, TextInput } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useTasks } from "./Context/TaskContext";
 import { Calendar } from "react-native-calendars";
 import NormalHeader from "./Components/NormalHeader";
-import BottomSheetModal from "./Components/BottomSheetModal";
-import { v4 as uuidv4 } from "uuid"; // For generating unique IDs
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useRouter } from "expo-router";
 
 const TasksListScreen = () => {
   const { tasks, getTasksForDate, editTask, removeTaskForDate, addTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(null);
-  const modalRef = useRef(null);
-
-  // Correct initialization for currentItem
-  const [currentItem, setCurrentItem] = useState({id:"",title:"",date: "", description: "", completed: false });
-
-  // Open and close modal functions
-  const openModal = () => modalRef.current?.open();
-  const closeModal = () => modalRef.current?.close();
+  const router = useRouter();
 
   const handleDatePress = (day) => {
     setSelectedDate(day.dateString);
@@ -34,21 +26,6 @@ const TasksListScreen = () => {
     markedDates[selectedDate] = { selected: true, selectedColor: "#007bff" };
   }
 
-  // Handle adding a new task
-  const handleAddTask = () => {
-    if (currentItem.name &&  selectedDate) {
-      addTask({
-        id: uuidv4(), // Generate a unique ID
-        title: currentItem.name,
-        date: selectedDate, // Use selectedDate directly
-        description:currentItem.description,
-        completed: currentItem.completed,
-      });
-      closeModal(); // Close modal after task is added
-    } else {
-      alert("Please fill out both name and description.");
-    }
-  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -59,12 +36,12 @@ const TasksListScreen = () => {
         Tasks for {selectedDate || "Select a Date"}
       </Text>
 
-      <TouchableOpacity style={styles.addButton} onPress={openModal}>
+      <TouchableOpacity style={styles.addButton}  onPress={() => router.push({ pathname: "./AddTaskScreen" ,  params: { day: selectedDate} })}>
         <Icon name="add" size={30} color="white" />
       </TouchableOpacity>
 
       <FlatList
-        data={getTasksForDate(selectedDate) || []}
+        data={getTasksForDate(selectedDate) || []}  // Ensured data is passed correctly
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.taskItem}>
@@ -78,33 +55,11 @@ const TasksListScreen = () => {
         )}
       />
 
-      {/* Bottom Sheet Modal */}
-      <BottomSheetModal modalRef={modalRef} onClose={closeModal} title="Add Task">
-        <TextInput
-          style={styles.input}
-          placeholder="Task Name"
-          value={currentItem.name}
-          onChangeText={(text) => setCurrentItem({ ...currentItem, name: text })}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Add a note"
-          value={currentItem.description}
-          onChangeText={(text) => setCurrentItem({ ...currentItem, description: text })}
-        />
-     
-       <View style={styles.editButtons}> 
-                  <TouchableOpacity onPress={handleAddTask} style={styles.addTaskButton}>
-                    <Text style={styles.addTaskButtonText}>הוסף משימה</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={closeModal} style={styles.cancelButton}>
-                    <Text style={styles.cancelButtonText}>ביטול</Text>
-                  </TouchableOpacity>
-                </View>
-      </BottomSheetModal>
+    
     </GestureHandlerRootView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f4f4f4" },

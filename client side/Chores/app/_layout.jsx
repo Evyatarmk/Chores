@@ -25,6 +25,7 @@ export default function RootLayout() {
               <Stack.Screen name="RegisterScreen" />
               <Stack.Screen name="LoginScreen" />
               <Stack.Screen name="ProfileScreen"/> 
+              <Stack.Screen name="AddTaskScreen"/> 
             </Stack>
           </GroceryProvider>
         </TaskProvider>
