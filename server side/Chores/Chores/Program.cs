@@ -1,4 +1,4 @@
-using famliy_flow.Data;
+using Chores.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

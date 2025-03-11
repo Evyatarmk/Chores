@@ -1,6 +1,208 @@
 [
   {
-    "ContainingType": "famliy_flow.Controllers.UsersController",
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "GetGroceryListsByHome",
+    "RelativePath": "api/GroceryLists/home/{homeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Chores.Models.GroceryList, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "CreateGroceryList",
+    "RelativePath": "api/GroceryLists/home/{homeId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Chores.Models.GroceryList",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "GetGroceryListByHome",
+    "RelativePath": "api/GroceryLists/home/{homeId}/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Chores.Models.GroceryList",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "DeleteGroceryList",
+    "RelativePath": "api/GroceryLists/home/{homeId}/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "AddItemToList",
+    "RelativePath": "api/GroceryLists/home/{homeId}/lists/{listId}/items",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "item",
+        "Type": "Chores.Models.GroceryItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Chores.Models.GroceryItem",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "UpdateItem",
+    "RelativePath": "api/GroceryLists/home/{homeId}/lists/{listId}/items/{itemId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedItem",
+        "Type": "Chores.Models.GroceryItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "DeleteItem",
+    "RelativePath": "api/GroceryLists/home/{homeId}/lists/{listId}/items/{itemId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "GetUsers",
     "RelativePath": "api/Users",
     "HttpMethod": "GET",
@@ -9,7 +211,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[famliy_flow.Models.User, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Chores.Models.User, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -20,7 +222,7 @@
     ]
   },
   {
-    "ContainingType": "famliy_flow.Controllers.UsersController",
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "PostUser",
     "RelativePath": "api/Users",
     "HttpMethod": "POST",
@@ -29,13 +231,13 @@
     "Parameters": [
       {
         "Name": "user",
-        "Type": "famliy_flow.Models.User",
+        "Type": "Chores.Models.User",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "famliy_flow.Models.User",
+        "Type": "Chores.Models.User",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -46,7 +248,7 @@
     ]
   },
   {
-    "ContainingType": "famliy_flow.Controllers.UsersController",
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "GetUser",
     "RelativePath": "api/Users/{id}",
     "HttpMethod": "GET",
@@ -55,13 +257,13 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "famliy_flow.Models.User",
+        "Type": "Chores.Models.User",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -72,7 +274,7 @@
     ]
   },
   {
-    "ContainingType": "famliy_flow.Controllers.UsersController",
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "PutUser",
     "RelativePath": "api/Users/{id}",
     "HttpMethod": "PUT",
@@ -81,19 +283,19 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       },
       {
         "Name": "user",
-        "Type": "famliy_flow.Models.User",
+        "Type": "Chores.Models.User",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "famliy_flow.Controllers.UsersController",
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "DeleteUser",
     "RelativePath": "api/Users/{id}",
     "HttpMethod": "DELETE",
@@ -102,14 +304,66 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "famliy_flow.Controllers.UsersController",
+    "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "Login",
+    "RelativePath": "api/Users/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginRequest",
+        "Type": "Chores.Models.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Chores.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "Register",
+    "RelativePath": "api/Users/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "Chores.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Chores.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "GetUsersByFirstLetter",
     "RelativePath": "api/Users/search/{letter}",
     "HttpMethod": "GET",
@@ -124,7 +378,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[famliy_flow.Models.User, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Chores.Models.User, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

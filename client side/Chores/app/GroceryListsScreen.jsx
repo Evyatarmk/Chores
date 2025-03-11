@@ -4,13 +4,13 @@ import { useRouter } from "expo-router";
 import { useGrocery } from "./Context/GroceryContext";
 import { Icon } from '@rneui/base';
 import { Modalize } from 'react-native-modalize';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, RefreshControl } from 'react-native-gesture-handler';
 import NormalHeader from "./Components/NormalHeader"; // תלוי במיקום של תיקיית ה-Header
 import ProgressBar from "./Components/ProgressBar";
 import OptionsModal from "./Components/OptionsModal";
 
 const GroceryListsScreen = () => {
-  const { groceryData, deleteList, updateListName ,copyAllItems ,copyUnpurchasedItems,copyPurchasedItems } = useGrocery();
+  const { groceryData, fetchGroceryData, deleteList, updateListName, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
   const router = useRouter();
   const optionsModalRef = useRef(null);
   const optionsCopyModalRef = useRef(null);
@@ -18,8 +18,8 @@ const GroceryListsScreen = () => {
   const editModalRef = useRef(null);
   const [currentList, setCurrentList] = useState(null);
   const [newName, setNewName] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
-  
   const options = [
     { icon: "edit", text: "שנה שם", action: "edit" },
     { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
@@ -31,8 +31,15 @@ const GroceryListsScreen = () => {
     { icon: "check-circle", text: "פרטים שנרכשו", action: "purchasedItems", iconColor: "#28a745" },
     { icon: "cancel", text: "פריטים שלא נרכשו", action: "unpurchasedItems", iconColor: "#dc3545" },
   ];
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchGroceryData();
+    setRefreshing(false);
+  };
+
+
   const openOptionsPanel = (list) => {
-     setCurrentList(list);
+    setCurrentList(list);
     optionsModalRef.current?.open();
   };
 
@@ -43,23 +50,23 @@ const GroceryListsScreen = () => {
       setTimeout(() => {
         editModalRef.current?.open();
       }, 300);
-    }if (option === "delete") {
+    } if (option === "delete") {
       handleDelete(currentList.id);
     }
     else if (option === "copy") {
       optionsCopyModalRef.current?.open();
       optionsModalRef.current?.close();
-    } 
+    }
   };
   const handleOptionCopySelect = (option) => {
     if (option === "allItems") {
-      copyAllItems(currentList.id); 
+      copyAllItems(currentList.id);
     } else if (option === "purchasedItems") {
-      copyPurchasedItems(currentList.id); 
+      copyPurchasedItems(currentList.id);
     } else if (option === "unpurchasedItems") {
-      copyUnpurchasedItems(currentList.id); 
+      copyUnpurchasedItems(currentList.id);
     }
-    
+
     optionsCopyModalRef.current?.close();
   };
   const handleDelete = (listId) => {
@@ -110,6 +117,15 @@ const GroceryListsScreen = () => {
             </TouchableOpacity>
           </TouchableOpacity>
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Icon name="inbox" size={50} color="#ccc" />
+            {<Text style={styles.emptyText}>אין פריטים להצגה</Text>}
+          </View>
+        }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#9Bd35A', '#689F38']} />
+        }
       />
 
       <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddGroceryListScreen" })}>
@@ -121,13 +137,13 @@ const GroceryListsScreen = () => {
         optionsModalRef={optionsModalRef}
         handleOptionSelect={handleOptionSelect}
         options={options}
-      /> 
+      />
       {/* מודל אפשרויות העתקה */}
       <OptionsModal
         optionsModalRef={optionsCopyModalRef}
         handleOptionSelect={handleOptionCopySelect}
         options={optionsCopy}
-      /> 
+      />
 
       {/* מודל עריכת שם */}
       <Modalize
@@ -186,8 +202,8 @@ const styles = StyleSheet.create({
   progressBarContainer: {
     flexDirection: "row-reverse",
     alignItems: "center",
-    gap:5,
-    justifyContent:"center"
+    gap: 5,
+    justifyContent: "center"
   },
   optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
   addButton: {
@@ -242,6 +258,17 @@ const styles = StyleSheet.create({
   saveButtonText: { color: "white", fontWeight: "bold" },
   cancelButton: { padding: 10, width: "50%", alignItems: "center", backgroundColor: "#ededed", borderRadius: 20 },
   cancelButtonText: { color: "#888" },
+  emptyContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: "#666",
+    marginTop: 10,
+  },
 });
 
 export default GroceryListsScreen;

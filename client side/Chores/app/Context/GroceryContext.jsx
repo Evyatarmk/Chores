@@ -1,27 +1,39 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useApiUrl } from "./ApiUrlProvider";
+import  ErrorNotification from "../Components/ErrorNotification";
 
 const GroceryContext = createContext();
 export const useGrocery = () => useContext(GroceryContext);
 export const GroceryProvider = ({ children }) => {
-  const [groceryData, setGroceryData] = useState([
-    {
-      id: 1,
-      name: "רשימת מצרכים לפסח",
-      items: [
-        { id: 1, name: "מצה", quantity: 2, isTaken: false, description: "מצות שמורות ללא חשש קטניות" },
-        { id: 2, name: "יין", quantity: 1, isTaken: false, description:""},
-      ],
-    },
-    {
-      id: 2,
-      name: "רשימת מצרכים לשבוע",
-      items: [
-        { id: 3, name: "חלב", quantity: 1, isTaken: false, description: "חלב 3% טרי" },
-        { id: 4, name: "לחם", quantity: 3, isTaken: false, description: "לחם אחיד פרוס" },
-      ],
-    },
-  ]);
-  
+  const {baseUrl} = useApiUrl();
+  const [groceryData, setGroceryData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
+  const handleCloseError = () => {
+    setErrorMessage("")
+    setErrorVisible(false)
+  };
+  const fetchGroceryData = async () => {
+    console.log("fff")
+    try {
+      const response = await fetch(baseUrl+"/GroceryLists/home/home1"); 
+      if (!response.ok) {
+        throw new Error("שגיאה בהורדת נתונים");
+      }
+      const data = await response.json();
+      setGroceryData(data);
+    } catch (error) {
+      setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר")
+      setErrorVisible(true)
+    } finally {
+      
+    }
+  };
+
+  useEffect(() => {
+    fetchGroceryData();
+  }, []);
+
 
   // פונקציה לקבלת פריטים לפי listId
   const getList = (listId) => {
@@ -29,15 +41,49 @@ export const GroceryProvider = ({ children }) => {
     return list ;
   };
 
-  const addNewList= (listName) => {
-    let newList={
-      id: Date.now(),
+  const addNewList = async (listName) => {
+    // יצירת רשימה חדשה בצד הלקוח ומייד עדכון ה-state
+    const newList = {
+      id: Date.now(),  // יצירת ID ייחודי לפי זמן
       name: listName,
       items: [],
+    };
+  
+    // עדכון ה-state של המצרכים מיד לאחר יצירת הרשימה
+    setGroceryData((prevData) => [newList, ...prevData]);
+    const homeId = "home1";
+    try {
+      // שליחה לשרת עם הבקשה ליצור רשימה חדשה
+      const response = await  fetch(`${baseUrl}/GroceryLists/home/${homeId}`,  {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body:JSON.stringify(listName)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create grocery list');
+      }
+  
+      // קבלת התשובה מהשרת (הנתונים של הרשימה החדשה)
+      const serverList = await response.json();
+  
+      // עדכון הרשימה עם ה-ID שנשלח מהשרת (אם ה-ID שונה מה-local ID)
+      setGroceryData((prevData) =>
+        prevData.map((list) =>
+          list.id === newList.id ? { ...list, id: serverList.id } : list
+        )
+      );
+    } catch (error) {
+      setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר")
+      setErrorVisible(true)
+      setGroceryData((prevData) => prevData.filter((list) => list.id !== newList.id));
     }
-    let newGroceryData=[newList,...groceryData]
-    setGroceryData(newGroceryData)
   };
+
+  
+
   const deleteList= (listId) => {
     let newGroceryData=groceryData.filter(list=>list.id!=listId)
     setGroceryData(newGroceryData)
@@ -185,8 +231,9 @@ const copyUnpurchasedItems = (listId) => {
   
 
   return (
-    <GroceryContext.Provider value={{ groceryData, updateOrAddItems,updateListName,updateItemField,deleteList,deleteItem, getList, updateItemStatus,addNewList,copyAllItems,copyPurchasedItems  ,copyUnpurchasedItems }}>
+    <GroceryContext.Provider value={{ groceryData,fetchGroceryData, updateOrAddItems,updateListName,updateItemField,deleteList,deleteItem, getList, updateItemStatus,addNewList,copyAllItems,copyPurchasedItems  ,copyUnpurchasedItems }}>
       {children}
+    <ErrorNotification message={errorMessage} visible={errorVisible} onClose ={handleCloseError}/>
     </GroceryContext.Provider>
   );
 };
