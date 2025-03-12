@@ -97,7 +97,7 @@ const GroceryItemsScreen = () => {
             ):null}  
             </View>
             <TouchableOpacity
-                  onPress={() => updateItemStatus(list.id, item.id)}
+                  onPress={() => updateItemStatus(list.id, item.id,item.isTaken)}
                   style={styles.checkboxContainer}>
                   <View
                     style={[
