@@ -1,72 +1,142 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet,Button,TouchableOpacity, FlatList} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useTasks } from "./Context/TaskContext";
-import { Calendar } from "react-native-calendars";
 import NormalHeader from "./Components/NormalHeader";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
+import { Agenda } from "react-native-calendars";
 
 const TasksListScreen = () => {
-  const { tasks, getTasksForDate, editTask, removeTaskForDate, addTask } = useTasks();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const { tasks, editTask, removeTaskForDate, getTasksForDate } = useTasks();
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const router = useRouter();
 
+  // Handle date press
   const handleDatePress = (day) => {
     setSelectedDate(day.dateString);
   };
 
-  // Marking selected dates for the calendar
-  const markedDates = tasks.reduce((acc, task) => {
-    acc[task.date] = { marked: true, dotColor: "red" };
+  // Prepare marked dates
+  const markedDates = Object.keys(tasks).reduce((acc, date) => {
+    acc[date] = { marked: true, dotColor: "blue" };
     return acc;
   }, {});
 
-  if (selectedDate) {
-    markedDates[selectedDate] = { selected: true, selectedColor: "#007bff" };
-  }
-
+  // Ensure selected date is highlighted
+  markedDates[selectedDate] = { selected: true, selectedColor: "#007bff" };
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <NormalHeader title="המשימות שלי" />
-      <Calendar onDayPress={handleDatePress} markedDates={markedDates} />
 
-      <Text style={styles.taskTitle}>
-        Tasks for {selectedDate || "Select a Date"}
-      </Text>
-
-      <TouchableOpacity style={styles.addButton}  onPress={() => router.push({ pathname: "./AddTaskScreen" ,  params: { day: selectedDate} })}>
-        <Icon name="add" size={30} color="white" />
-      </TouchableOpacity>
-
-      <FlatList
-        data={getTasksForDate(selectedDate) || []}  // Ensured data is passed correctly
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
+      <Agenda
+         items={{
+          [selectedDate]: getTasksForDate(selectedDate),
+        }}
+        onDayPress={handleDatePress}
+        markedDates={markedDates}
+        selected={selectedDate}
+        renderItem={( item ) => ( 
           <View style={styles.taskItem}>
-            <Text style={styles.taskText}>{item.title}</Text>
-            <Text style={styles.taskText}>{item.description}</Text>
+            <Text style={styles.taskTitle}>{item?.title}</Text>
+            <Text style={styles.taskDescription}>{item?.description}</Text>
             <View style={styles.buttonContainer}>
-              <Button title="Edit" onPress={() => editTask(item.id, { title: "Updated Task" })} />
-              <Button title="Remove" color="red" onPress={() => removeTaskForDate(item.id)} />
+              <TouchableOpacity
+                style={[styles.button, styles.editButton]}
+                onPress={() => console.log(item)}
+              >
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.removeButton]}
+                onPress ={() => removeTaskForDate(selectedDate,item.id)} 
+              >
+                <Text style={styles.buttonText}>Remove</Text>
+              </TouchableOpacity>
             </View>
+          </View>
+        )}
+        theme={{
+          selectedDayBackgroundColor: "#1E90FF",
+          todayTextColor: "#1E90FF",
+          agendaTodayColor: "#1E90FF",
+        }}
+        renderEmptyData={() => (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No tasks for this day</Text>
           </View>
         )}
       />
 
-    
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => {
+          if (selectedDate) {
+            router.push({
+              pathname: "./AddTaskScreen",
+              params: { day: selectedDate },
+            });
+          }
+        }}
+      >
+        <Icon name="add" size={30} color="white" />
+      </TouchableOpacity>
     </GestureHandlerRootView>
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#f4f4f4" },
-  taskTitle: { fontSize: 18, fontWeight: "bold", marginVertical: 10 },
-  taskItem: { padding: 10, backgroundColor: "white", borderRadius: 5, marginVertical: 5 },
-  taskText: { fontSize: 16 },
-  buttonContainer: { flexDirection: "row", marginTop: 5, gap: 10 },
+  container: {
+    flex: 1,
+    backgroundColor: "#F8F9FA",
+  },
+  taskItem: {
+    backgroundColor: "#FFFFFF",
+    marginVertical: 8,
+    marginHorizontal: 16,
+    padding: 15,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3, // For Android shadow
+  },
+  taskTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 5,
+  },
+  taskDescription: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  button: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  editButton: {
+    backgroundColor: "#007bff",
+  },
+  removeButton: {
+    backgroundColor: "#dc3545",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
   addButton: {
     position: "absolute",
     bottom: 20,
@@ -82,15 +152,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     zIndex: 1000,
-    padding: 10, // Adds internal space within the button
+    elevation: 4, // For Android shadow
   },
-  input: { borderWidth: 1, padding: 8, marginVertical: 5, borderRadius: 5, backgroundColor: "white" },
-      
-  editButtons: { flexDirection: "row", justifyContent: "space-between", gap: 10 },
-  addTaskButton: { backgroundColor: "#007bff", padding: 10, borderRadius: 20, width: "50%", alignItems: "center" },
-  addTaskButtonText: { color: "white", fontWeight: "bold" },
-  cancelButton: { padding: 10, width: "50%", alignItems: "center", backgroundColor: "#ededed", borderRadius: 20 },
-  cancelButtonText: { color: "#888" },
 });
 
 export default TasksListScreen;
