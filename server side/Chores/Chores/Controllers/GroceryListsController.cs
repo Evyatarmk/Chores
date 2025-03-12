@@ -97,7 +97,7 @@ namespace Chores.Controllers
             return Ok();
         }
 
-        // 📌 עדכון פריט (למשל שינוי סטטוס ל- isTaken) בבית ספציפי
+        // 📌 עדכון סטוטוס פריט 
         [HttpPut("home/{homeId}/list/{listId}/item/{itemId}/status/{newStatus}")]
         public async Task<IActionResult> UpdateItemStatus(string homeId, string listId, string itemId, bool newStatus)
         {
