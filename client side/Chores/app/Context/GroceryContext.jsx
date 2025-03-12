@@ -122,7 +122,7 @@ export const GroceryProvider = ({ children }) => {
 
     try {
       // שליחת הבקשה לשרת
-      const response = await fetch(`${baseUrl}/GroceryLists/home/${homeId}/List/${listId}`, {
+      const response = await fetch(`${baseUrl}/GroceryLists/home/${homeId}/list/${listId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newName),
@@ -145,23 +145,61 @@ export const GroceryProvider = ({ children }) => {
     }
   };
 
-
-  // פונקציה לעדכון פריט ברשימה
-  const updateItemStatus = (listId, itemId) => {
+  const updateItemStatus = async (listId, itemId, currentStatus) => {
+    const newStatus = !currentStatus; // היפוך הסטטוס
+  
+    // עדכון מקומי לשיפור חוויית המשתמש
     const updatedGroceryData = groceryData.map((list) =>
       list.id === listId
         ? {
-          ...list,
-          items: list.items.map((item) =>
-            item.id === itemId
-              ? { ...item, isTaken: !item.isTaken }
-              : item
-          ),
-        }
+            ...list,
+            items: list.items.map((item) =>
+              item.id === itemId ? { ...item, isTaken: newStatus } : item
+            ),
+          }
         : list
     );
+  
     setGroceryData(updatedGroceryData);
+    try {
+      // קריאה לשרת עם הסטטוס החדש ב-URL
+      const response = await fetch(
+        `${baseUrl}/GroceryLists/home/${homeId}/List/${listId}/Item/${itemId}/status/${newStatus}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to update item status");
+      }
+    } catch (error) {
+      console.error("Error updating item status:", error);
+  
+      // שחזור הנתונים במקרה של כישלון
+      setGroceryData((prevData) =>
+        prevData.map((list) =>
+          list.id === listId
+            ? {
+                ...list,
+                items: list.items.map((item) =>
+                  item.id === itemId ? { ...item, isTaken: currentStatus } : item
+                ),
+              }
+            : list
+        )
+      );
+  
+      // הצגת הודעת שגיאה
+      setErrorMessage("הייתה בעיה בעדכון הסטטוס, אנא נסה שוב");
+      setErrorVisible(true);
+    }
   };
+  
+  
 
 
   const updateItemField = (listId, updatedItem) => {

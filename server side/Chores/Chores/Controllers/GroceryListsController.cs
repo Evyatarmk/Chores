@@ -81,7 +81,7 @@ namespace Chores.Controllers
             return CreatedAtAction(nameof(GetGroceryListByHome), new { homeId = homeId, id = listId }, item);
         }
         // 📌 שינוי שם לרשימה קיימת
-        [HttpPut("home/{homeId}/List/{listId}")]
+        [HttpPut("home/{homeId}/list/{listId}")]
         public async Task<IActionResult> UpdateGroceryList(string homeId, string listId, [FromBody] string name)
         {
             var groceryList = await _context.GroceryLists
@@ -95,6 +95,38 @@ namespace Chores.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        // 📌 עדכון פריט (למשל שינוי סטטוס ל- isTaken) בבית ספציפי
+        [HttpPut("home/{homeId}/list/{listId}/item/{itemId}/status/{newStatus}")]
+        public async Task<IActionResult> UpdateItemStatus(string homeId, string listId, string itemId, bool newStatus)
+        {
+
+            // חיפוש הרשימה על פי homeId ו-listId
+            var groceryList = await _context.GroceryLists
+                .Where(g => g.HomeId == homeId && g.Id == listId)
+                .Include(g => g.Items)
+                .FirstOrDefaultAsync();
+
+            // אם הרשימה לא נמצאה
+            if (groceryList == null)
+                return NotFound("Grocery list not found.");
+
+            // חיפוש פריט מתוך הרשימה על פי itemId
+            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+
+            // אם הפריט לא נמצא
+            if (item == null)
+                return NotFound("Item not found.");
+
+           
+            item.IsTaken = newStatus;
+           
+
+            // שמירה על השינויים
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // 📌 עדכון פריט (למשל שינוי סטטוס ל- isTaken) בבית ספציפי

@@ -222,7 +222,7 @@
         }
       }
     },
-    "/api/GroceryLists/home/{homeId}/List/{listId}": {
+    "/api/GroceryLists/home/{homeId}/list/{listId}": {
       "put": {
         "tags": [
           "GroceryLists"
@@ -264,6 +264,52 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/GroceryLists/home/{homeId}/list/{listId}/item/{itemId}/status/{newStatus}": {
+      "put": {
+        "tags": [
+          "GroceryLists"
+        ],
+        "parameters": [
+          {
+            "name": "homeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newStatus",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"

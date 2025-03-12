@@ -111,7 +111,7 @@
   {
     "ContainingType": "Chores.Controllers.GroceryListsController",
     "Method": "UpdateGroceryList",
-    "RelativePath": "api/GroceryLists/home/{homeId}/List/{listId}",
+    "RelativePath": "api/GroceryLists/home/{homeId}/list/{listId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -129,6 +129,37 @@
       {
         "Name": "name",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.GroceryListsController",
+    "Method": "UpdateItemStatus",
+    "RelativePath": "api/GroceryLists/home/{homeId}/list/{listId}/item/{itemId}/status/{newStatus}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "newStatus",
+        "Type": "System.Boolean",
         "IsRequired": true
       }
     ],
