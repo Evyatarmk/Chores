@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingVi
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTasks } from "./Context/TaskContext";
+
 import { v4 as uuidv4 } from "uuid";  // Ensure you import uuid for generating unique IDs
 
 const AddTaskScreen = () => {
@@ -10,7 +11,7 @@ const AddTaskScreen = () => {
     const [description, setDescription] = useState("");
     const inputRef = useRef(null);
     const router = useRouter();
-    const { addTask } = useTasks();
+    const { addTaskForDate } = useTasks();
     const { day } = useLocalSearchParams(); // Get the selected date from params
   
     console.log("Selected Date:", day); // Debugging log
@@ -19,9 +20,7 @@ const AddTaskScreen = () => {
     const [currentItem, setCurrentItem] = useState({
       id: uuidv4(), // Generate a unique ID
       title: "",
-      date: day || "", // Use `day` if available
       description: "",
-      completed: false,
     });
   
     useEffect(() => {
@@ -33,21 +32,21 @@ const AddTaskScreen = () => {
         alert("Please enter a title for the task.");
         return;
       }
-  
-      addTask({
-        id: uuidv4(),
-        title,
-        date: day, 
-        description,
-        completed: false,
-      });
-  
-      router.back(); // Navigate back after adding task
+    
+      const newItem = { id: uuidv4(), title, description };
+      console.log("New Task to Add:", newItem); // Log here
+      
+      // Add task for the selected date
+      addTaskForDate(day, newItem);
+    
+      // Navigate back after adding the task
+      router.back();
     };
   
     const handleClear = () => {
       setTitle("");
       setDescription("");
+      router.back();
     };
   
     return (

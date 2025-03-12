@@ -4,31 +4,67 @@ const TaskContext = createContext();
 export const useTasks = () => useContext(TaskContext);
 
 export const TaskProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Meeting with team", date: "2025-03-10", completed: false },
-    { id: 2, title: "Grocery shopping", date: "2025-03-11", completed: false },
-    { id: 3, title: "Gym workout", date: "2025-03-10", completed: false },
-  ]);
+  const [tasks, setTasks] = useState({
+    "2025-03-12": [{ id: 1, title: "Meeting", description: "10 AM - Zoom Call" },{ id: 2, title: "Workout", description: "7 AM - Gym" }],
+    "2025-03-13": [{ id: 2, title: "Workout", description: "7 AM - Gym" }],
+    
+  });
 
-  const addTask = (newTask) => {
-    setTasks([...tasks, newTask]);
+ 
+  const addTaskForDate = (date, task) => {
+    setTasks(prevTasks => {
+      // Check if tasks already exist for the given date
+      const existingTasks = prevTasks[date] || [];
+  
+      // Add the new task to the existing tasks array
+      const updatedTasks = [...existingTasks, task];
+  
+      return {
+        ...prevTasks,
+        [date]: updatedTasks
+      };
+    });
   };
 
+  
   const getTasksForDate = (date) => {
-    return tasks.filter(task => task.date === date);
+    return tasks[date] || [];
   };
 
-  const removeTaskForDate = (taskId) => {
-    console.log(taskId)
-    setTasks(tasks.filter(task => task.id !== taskId)); // Filter out the task with the specified ID
+  
+  const removeTaskForDate = (date, taskId) => {
+    console.log('hi')
+    setTasks(prevTasks => {
+      if (!prevTasks[date]) return prevTasks;
+      const updatedTasks = prevTasks[date].filter(task => task.id !== taskId);
+      if (updatedTasks.length === 0) {
+        const { [date]: _, ...rest } = prevTasks; 
+        return rest;
+      }
+      return {
+        ...prevTasks,
+        [date]: updatedTasks
+      };
+    });
   };
+  
 
-  const editTask = (id, updatedTask) => {
-    setTasks(tasks.map(task => task.id === id ? { ...task, ...updatedTask } : task));
+  const editTask = (date, id, updatedTask) => {
+    setTasks(prevTasks => {
+      if (!prevTasks[date]) return prevTasks; // If date doesn't exist, return unchanged
+  
+      const updatedTasks = prevTasks[date].map(task =>
+        task.id === id ? { ...task, ...updatedTask } : task
+      );
+  
+      return {
+        ...prevTasks,
+        [date]: updatedTasks
+      };
+    });
   };
-
   return (
-    <TaskContext.Provider value={{ tasks, addTask, getTasksForDate, removeTaskForDate, editTask }}>
+    <TaskContext.Provider value={{ tasks, addTaskForDate, getTasksForDate, removeTaskForDate, editTask }}>
       {children}
     </TaskContext.Provider>
   );
