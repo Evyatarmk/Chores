@@ -1,48 +1,18 @@
 import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from "react-native";
 import { useRouter } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
+
+import Sidebar from "./Components/SideBar";
 
 export default function HomePage() {
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarRight = useRef(new Animated.Value(-200)).current; // Start hidden
+  
 
-  const toggleSidebar = () => {
-    Animated.timing(sidebarRight, {
-      toValue: sidebarOpen ? -200 : 0,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-    setSidebarOpen(!sidebarOpen);
-  };
+
 
   return (
     <View style={styles.container}>
-      {/* Sidebar */}
-      <Animated.View style={[styles.sidebar, { right: sidebarRight, display: sidebarOpen ? "flex" : "none" }]}>
-        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/GroceryListsScreen")}>
-          <Text style={styles.sidebarText}>רשימת קניות</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/TasksListScreen")}>
-          <Text style={styles.sidebarText}>משימות</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/LoginScreen")}>
-          <Text style={styles.sidebarText}>התחברות</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/ProfileScreen")}>
-          <Text style={styles.sidebarText}>אזור אישי</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sidebarItem} onPress={() => router.push("/settings")}>
-          <Text style={styles.sidebarText}>הגדרות</Text>
-        </TouchableOpacity>
-      </Animated.View>
-
-      {/* Menu Button */}
-      <TouchableOpacity style={styles.navButton} onPress={toggleSidebar}>
-        <MaterialIcons name="menu" size={24} color="black" />
-      </TouchableOpacity>
-
+      <Sidebar/>
       {/* Main Content */}
       <Text style={styles.title}>Welcome to Your Chores App</Text>
       <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
@@ -56,35 +26,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f8f9fa",
-  },
-  sidebar: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    width: 200,
-    backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-    paddingTop: 80,
-    zIndex:2000,
-  },
-  sidebarItem: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-  },
-  sidebarText: {
-    fontSize: 18,
-    color: "#333",
-  },
-  navButton: {
-    position: "absolute",
-    top: 40,
-    right: 20,
-    padding: 10,
-    zIndex:2000,
   },
   title: {
     fontSize: 24,

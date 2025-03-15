@@ -142,12 +142,14 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     padding: 15,
+
     fontSize: 18,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
     backgroundColor: "white",
     textAlign: "right",
+    marginBottom: 15,
   },
   clearButton: {
     position: "absolute",
