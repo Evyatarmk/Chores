@@ -9,6 +9,7 @@ import NormalHeader from "./Components/NormalHeader"; // תלוי במיקום �
 import ProgressBar from "./Components/ProgressBar";
 import OptionsModal from "./Components/OptionsModal";
 import AlertModal from "./Components/AlertModal";
+import CategorySelector from "./Components/CategorySelector";
 
 const GroceryListsScreen = () => {
   const { groceryData, fetchGroceryData, deleteList, updateListName, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
@@ -21,6 +22,7 @@ const GroceryListsScreen = () => {
   const [newName, setNewName] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [category, setCategory] = useState("");
 
   const options = [
     { icon: "edit", text: "שנה שם", action: "edit" },
@@ -88,6 +90,7 @@ const GroceryListsScreen = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <NormalHeader title="הרשימות שלי" />
+      <CategorySelector onSelectCategory={setCategory} />
       <FlatList
         data={groceryData}
         keyExtractor={(item) => item.id.toString()}
