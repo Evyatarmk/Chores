@@ -3,45 +3,36 @@ import { View, TextInput, TouchableOpacity, Text, Keyboard, StyleSheet, ScrollVi
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useGrocery } from "./Context/GroceryContext";
+import ItemSelector from "./Components/ItemSelector";
+import DatePicker from "./Components/DatePicker";
 
 const AddGroceryListScreen = () => {
   const [listName, setListName] = useState("");
-  const [suggestions] = useState(["shopping", "מצרכים", "Supermarket", "Groceries", "ירקות", "Fruit"]);
+  const [category, setCategory] = useState("קניות");
+  const [date, setDate] = useState("");
+  const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
+
+  const suggestions = ["קניות", "משימות", "טיולים", "אירועים"];
   const inputRef = useRef(null);
   const router = useRouter();
   const { addNewList } = useGrocery();
 
-  
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
 
   const handleSave = () => {
     if (listName.trim() === "") return;
-    addNewList(listName);
-    Keyboard.dismiss();
-    router.back();
   };
 
-  const handleClear = () => {
-    setListName(""); // מנקה את ערך שדה הקלט
-  };
-  const getFormattedDate = () => {
-    const timestamp = new Date();
-    const formattedDate = timestamp.getFullYear() + '-' + 
-                          (timestamp.getMonth() + 1).toString().padStart(2, '0') + '-' +
-                          timestamp.getDate().toString().padStart(2, '0');
-    return formattedDate;
+  const handleClear = () => setListName("");
+
+  // פונקציה שתעביר את התאריך שנבחר לקומפוננטה הראשית
+  const handleDateSelect = (selectedDate) => {
+    setDate(selectedDate)
   };
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="always" 
-      >
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
         {/* כותרת המסך */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()}>
@@ -62,7 +53,6 @@ const AddGroceryListScreen = () => {
             onSubmitEditing={handleSave}
             autoFocus
           />
-          {/* כפתור איקס למחיקת הטקסט */}
           {listName.length > 0 && (
             <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
               <Ionicons name="close-circle" size={24} color="gray" />
@@ -72,39 +62,36 @@ const AddGroceryListScreen = () => {
 
         {/* הצעות לשמות */}
         <Text style={styles.suggestionsTitle}>הצעות</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.suggestionsContainer}
-        >
-          {suggestions.map((suggestion, index) => (
-            <TouchableOpacity key={index} style={styles.suggestionItem} onPress={() => setListName(suggestion)}>
-              <Text style={styles.suggestionText}>{suggestion}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <ItemSelector items={suggestions} onSelect={setListName} />
+
+        {/* בחירת קטגוריה */}
+        <Text style={styles.suggestionsTitle}>בחר קטגוריה</Text>
+        <ItemSelector items={suggestions} onSelect={setCategory} defaultSelected={category} />
+      
+        <View style={styles.dateButtonContainer}>
+  <TouchableOpacity style={styles.dateButton} onPress={() => setShowDatePicker(!showDatePicker)}>
+    <Ionicons name="calendar" size={24} color="white" />
+    <Text style={styles.dateButtonText}>
+      {date === "" ? "ללא תאריך" : date}  {/* אם date ריק, תציג "ללא תאריך", אחרת תציג את התאריך */}
+    </Text>
+  </TouchableOpacity>
+</View>
+
+        {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
+        <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} />
+
 
         {/* כפתור יצירת הרשימה */}
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>צור</Text>
         </TouchableOpacity>
-      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: "flex-start",  // שינוי מ-center ל-flex-start
-    alignItems: "center",
-    padding: 20,
-    paddingBottom: 80, // להוסיף מרווח כדי שהכפתור יהיה מעל המקלדת
-  },
+  container: { flex: 1,    padding: 20,
+    backgroundColor: "#f4f4f4" },
   header: {
     flexDirection: "row",
     width: "100%",
@@ -142,21 +129,26 @@ const styles = StyleSheet.create({
     marginTop: 15,
     alignSelf: "flex-end",
   },
-  suggestionsContainer: {
-    marginTop: 10,
-    paddingRight: 20,
+  dateButtonContainer: {
+    flexDirection: "row", // שורה
+    justifyContent: "flex-end", // מיישר את האלמנטים בצד ימין
+    width: "100%", // זה גורם לכך שהכפתור יישאר בצד הימני של המסך
+    marginTop: 10, // מרחק מהחלק העליון של המסך
   },
-  suggestionItem: {
-    height: 35,
-    backgroundColor: "#ededed",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
+  
+  dateButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#007bff",
+    paddingVertical: 3,
+    paddingHorizontal: 3,
     borderRadius: 20,
-    marginHorizontal: 5,
+    justifyContent: "center",
   },
-  suggestionText: {
-    color: "#888",
+  dateButtonText: {
     fontSize: 12,
+    color: "white",
+    marginLeft: 5,
   },
   saveButton: {
     marginTop: 20,
@@ -165,14 +157,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 8,
     width: "100%",
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   saveButtonText: {
     fontSize: 18,
     color: "white",
-
   },
 });
 
