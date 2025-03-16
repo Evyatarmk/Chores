@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 
-const ItemSelector = ({ items = [], onSelect, defaultSelected = null }) => {
+const ItemSelector = ({ items = [], onSelect, defaultSelected = null ,firstItem }) => {
   const [selectedItem, setSelectedItem] = useState(defaultSelected);
   const flatListRef = useRef(null);
 
@@ -9,11 +9,13 @@ const ItemSelector = ({ items = [], onSelect, defaultSelected = null }) => {
     setSelectedItem(item);
     onSelect(item);
   };
-
-  return (
+  const filteredItems = Array.from(
+    new Set(defaultSelected ? [firstItem,defaultSelected , ...items] : items)
+  );
+    return (
     <View style={styles.container}>
       <FlatList
-        data={items}
+        data={filteredItems}
         horizontal
         ref={flatListRef}
         inverted

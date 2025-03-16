@@ -1,119 +1,101 @@
 import React, { useState, useCallback } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import { Calendar } from "react-native-calendars"; // חבילה שמספקת את הקומפוננטה של היומן
+import { Ionicons } from "@expo/vector-icons";
 
-const DatePicker = ({ onDateSelect, showModal, setShowModal }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [markedDates, setMarkedDates] = useState({});
+const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => {
+  const [markedDates, setMarkedDates] = useState(
+    selectedDate ? { [selectedDate]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } } : {}
+  );
 
-  // קבלת תאריך היום ומחר
-  const today = new Date().toISOString().split("T")[0]; // תאריך היום
+  const today = new Date().toISOString().split("T")[0];
   const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1); // תאריך מחר
+  tomorrow.setDate(tomorrow.getDate() + 1);
   const tomorrowDate = tomorrow.toISOString().split("T")[0];
 
-  // פונקציה שתפעיל כאשר התאריך משתנה
   const handleDayPress = useCallback((day) => {
-    const newMarkedDates = { [day.dateString]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } };
-    setSelectedDate(day.dateString); // עדכון התאריך הנבחר
-    setMarkedDates(newMarkedDates); // עדכון markedDates עם התאריך החדש
-  }, []);
+    setMarkedDates({ [day.dateString]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } });
+    onDateSelect(day.dateString);
+  }, [onDateSelect]);
 
   const handleQuickSelect = (date) => {
-    if (date === null) {
-      // אם נבחר "ללא תאריך", נעדכן את הסטייט לערך ריק
-      setSelectedDate(""); // איפוס התאריך הנבחר
-      setMarkedDates({}); // איפוס markedDates, כלומר, כל הסימונים יימחקו
-    } else {
-      // אחרת, נעדכן את התאריך הנבחר ונסמן אותו
-      const newMarkedDates = { [date]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } };
-      setSelectedDate(date); // עדכון התאריך הנבחר
-      setMarkedDates(newMarkedDates); // עדכון markedDates
-    }
-  };
-  
-  // פונקציה שתסגור את המודל בלי לבצע שום שינוי
-  const handleCancel = () => {
-    setSelectedDate(null); // איפוס התאריך הנבחר
-    setShowModal(false); // סגירת המודל
-  };
-
-  // פונקציה שתשמור את התאריך הנבחר ותסגור את המודל
-  const handleConfirm = () => {
-
-    if (selectedDate != null) {
-      onDateSelect(selectedDate); // מעביר את התאריך הנבחר להורה
-    }
-    setShowModal(false); // סוגר את המודל
+    setMarkedDates(date ? { [date]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } } : {});
+    onDateSelect(date || "");
   };
 
   return (
-    <Modal
-      transparent={true}
-      animationType="slide"
-      visible={showModal}
-      onRequestClose={handleCancel}
-    >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          <Calendar
-            onDayPress={handleDayPress} // כאשר נבחר תאריך
-            markedDates={markedDates} // סימון התאריכים הנבחרים
-            monthFormat={"yyyy MM"} // פורמט התצוגה של החודש
-            theme={{
-              selectedDayBackgroundColor: 'blue',
-              selectedDayTextColor: '#ffffff',
-              todayTextColor: '#00adf5',
-            }}
-            style={styles.calendar} // נוסיף את הסטייל שלנו לכאן
-            minDate={today} // הגבלת הבחירה לתאריכים החל מהיום
-          />
-
-          <View style={styles.quickSelectContainer}>
-            <TouchableOpacity
-              style={styles.quickSelectButton}
-              onPress={() => handleQuickSelect(today)} // בחירת "היום"
-            >
-              <Text style={styles.quickSelectButtonText}>היום</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.quickSelectButton}
-              onPress={() => handleQuickSelect(tomorrowDate)} // בחירת "מחר"
-            >
-              <Text style={styles.quickSelectButtonText}>מחר</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.quickSelectButton}
-              onPress={() => handleQuickSelect(null)} // בחירת "ללא תאריך"
-            >
-              <Text style={styles.quickSelectButtonText}>ללא תאריך</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={handleCancel} // סגירת המודל ללא ביצוע שינוי
-            >
-              <Text style={styles.cancelButtonText}>ביטול</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.confirmButton}
-              onPress={handleConfirm} // אישור הבחירה של התאריך
-            >
-              <Text style={styles.confirmButtonText}>אישור</Text>
-            </TouchableOpacity>
-          </View>
-
-        </View>
+    <>
+      <View style={styles.dateButtonContainer}>
+        <TouchableOpacity style={styles.dateButton} onPress={() => setShowModal(true)}>
+          <Ionicons name="calendar" size={24} color="white" />
+          <Text style={styles.dateButtonText}>{selectedDate === "" ? "ללא תאריך" : selectedDate}</Text>
+        </TouchableOpacity>
       </View>
-    </Modal>
+
+      <Modal transparent={true} animationType="slide" visible={showModal} onRequestClose={() => setShowModal(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Calendar
+              onDayPress={handleDayPress}
+              markedDates={markedDates}
+              monthFormat={"yyyy MM"}
+              theme={{
+                selectedDayBackgroundColor: 'blue',
+                selectedDayTextColor: '#ffffff',
+                todayTextColor: '#00adf5',
+              }}
+              style={styles.calendar}
+              minDate={today}
+            />
+
+            <View style={styles.quickSelectContainer}>
+              <TouchableOpacity style={styles.quickSelectButton} onPress={() => handleQuickSelect(today)}>
+                <Text style={styles.quickSelectButtonText}>היום</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.quickSelectButton} onPress={() => handleQuickSelect(tomorrowDate)}>
+                <Text style={styles.quickSelectButtonText}>מחר</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.quickSelectButton} onPress={() => handleQuickSelect(null)}>
+                <Text style={styles.quickSelectButtonText}>ללא תאריך</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity style={styles.cancelButton} onPress={() => setShowModal(false)}>
+                <Text style={styles.cancelButtonText}>ביטול</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.confirmButton} onPress={() => setShowModal(false)}>
+                <Text style={styles.confirmButtonText}>אישור</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  dateButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    width: "100%",
+    marginTop: 10,
+  },
+  dateButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#007bff",
+    paddingVertical: 3,
+    paddingHorizontal: 3,
+    borderRadius: 20,
+    justifyContent: "center",
+  },
+  dateButtonText: {
+    fontSize: 12,
+    color: "white",
+    marginLeft: 5,
+  },
   modalOverlay: {
     flex: 1,
     justifyContent: "center",
@@ -127,10 +109,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   calendar: {
-    height: 350, // גובה קבוע של 350 פיקסלים
-    width: "100%", // מותאם לרוחב המלא של המסך
+    height: 350,
+    width: "100%",
   },
- 
   buttonsContainer: {
     marginTop: 20,
     width: "100%",

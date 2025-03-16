@@ -11,6 +11,7 @@ import OptionsModal from "./Components/OptionsModal";
 import AlertModal from "./Components/AlertModal";
 import ItemSelector from "./Components/ItemSelector";
 import { useCategories } from "./Context/CategoryContext";
+import DatePicker from "./Components/DatePicker";
 
 const GroceryListsScreen = () => {
   const { groceryData, fetchGroceryData, deleteList, updateListName, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
@@ -21,11 +22,13 @@ const GroceryListsScreen = () => {
   const editModalRef = useRef(null);
   const [currentList, setCurrentList] = useState(null);
   const [newName, setNewName] = useState("");
+  const [newList, setNewList] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("הכל");
   const [groceryDataToShow, setGroceryDataToShow] = useState(null);
-    const { categories, addCategory } = useCategories();
+  const { categories, addCategory } = useCategories();
+  const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
   
   useEffect(() => {
     setGroceryDataToShow(groceryData)
@@ -39,12 +42,13 @@ const GroceryListsScreen = () => {
         groceryData.filter((item) => item.category === selectedCategory)
       );
     }
+    console.log(groceryData)
   }, [selectedCategory, groceryData]);
 
   const options = [
-    { icon: "edit", text: "שנה שם", action: "edit" },
-    { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
+    { icon: "edit", text: "ערוך", action: "edit" },
     { icon: "content-copy", text: "העתק", action: "copy", iconColor: "#007bff" },
+    { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
     // אפשר להוסיף עוד אפשרויות עם אייקונים אחרים
   ];
   const optionsCopy = [
@@ -90,6 +94,7 @@ const GroceryListsScreen = () => {
 
     optionsCopyModalRef.current?.close();
   };
+  
   const handleDelete = (listId) => {
     deleteList(listId);
     optionsModalRef.current?.close();
@@ -97,11 +102,15 @@ const GroceryListsScreen = () => {
   const handleDeletePress = () => {
     setModalVisible(true)
   };
-  const handleSaveNewName = () => {
+  const handleSave = () => {
     if (newName.trim() && currentList) {
       updateListName(currentList.id, newName);
     }
     setTimeout(() => editModalRef.current?.close(), 200);
+  };
+  const hendelCategorySelect = () => {
+  };
+  const handleDateSelect = () => {
   };
 
   return (
@@ -111,6 +120,7 @@ const GroceryListsScreen = () => {
         items={categories}
         onSelect={setSelectedCategory}
         defaultSelected="הכל"
+        firstItem="הכל"
       />
       <FlatList
         data={groceryDataToShow}
@@ -197,8 +207,19 @@ const GroceryListsScreen = () => {
             onChangeText={setNewName}
             placeholder="הזן שם חדש"
           />
+           {/* בחירת קטגוריה */}
+        <Text style={styles.suggestionsTitle}>בחר קטגוריה</Text>
+        <ItemSelector
+        items={categories}
+        onSelect={hendelCategorySelect}
+        defaultSelected={currentList?.category}
+        firstItem="ללא קטגוריה"
+      />
+       {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
+       <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} />
+
           <View style={styles.editButtons}>
-            <TouchableOpacity onPress={handleSaveNewName} style={styles.saveButton}>
+            <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
               <Text style={styles.saveButtonText}>שמור</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => editModalRef.current?.close()} style={styles.cancelButton}>
@@ -289,7 +310,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "right",
   },
-  editButtons: { flexDirection: "row", justifyContent: "space-between", gap: 10 },
+  editButtons: { flexDirection: "row", justifyContent: "space-between", gap: 10,padding:10 },
   saveButton: { backgroundColor: "#007bff", padding: 10, borderRadius: 20, width: "50%", alignItems: "center" },
   saveButtonText: { color: "white", fontWeight: "bold" },
   cancelButton: { padding: 10, width: "50%", alignItems: "center", backgroundColor: "#ededed", borderRadius: 20 },

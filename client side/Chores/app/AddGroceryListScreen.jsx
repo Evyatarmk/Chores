@@ -2,29 +2,42 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, TextInput, TouchableOpacity, Text, Keyboard, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useGrocery } from "./Context/GroceryContext";
 import ItemSelector from "./Components/ItemSelector";
 import DatePicker from "./Components/DatePicker";
+import { useCategories } from "./Context/CategoryContext";
+import { useGrocery } from "./Context/GroceryContext";
 
 const AddGroceryListScreen = () => {
   const [listName, setListName] = useState("");
-  const [category, setCategory] = useState("קניות");
+  const [category, setCategory] = useState("ללא קטגוריה");
   const [date, setDate] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
 
-  const suggestions = ["קניות", "משימות", "טיולים", "אירועים"];
+  const suggestions = ["משימות", "טיולים", "אירועים"];
   const inputRef = useRef(null);
   const router = useRouter();
-  const { addNewList } = useGrocery();
+  const {categories} = useCategories();
+  const {addNewList} = useGrocery();
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
 
   const handleSave = () => {
-    if (listName.trim() === "") return;
+    if (listName.trim() === "") return; // אם השם ריק, אל תאפשר יצירה
+  
+    const newList = {
+      id: Date.now().toString(),
+      name: listName,
+      date:date,
+      homeId:"home-123",
+      category:category,
+      items: [], 
+    };
+  
+    addNewList(newList); 
+    router.back(); 
   };
-
   const handleClear = () => setListName("");
 
   // פונקציה שתעביר את התאריך שנבחר לקומפוננטה הראשית
@@ -61,24 +74,20 @@ const AddGroceryListScreen = () => {
         </View>
 
         {/* הצעות לשמות */}
-        <Text style={styles.suggestionsTitle}>הצעות</Text>
+        <Text style={styles.suggestionsTitle}>הצעות לשם</Text>
         <ItemSelector items={suggestions} onSelect={setListName} />
 
         {/* בחירת קטגוריה */}
         <Text style={styles.suggestionsTitle}>בחר קטגוריה</Text>
-        <ItemSelector items={suggestions} onSelect={setCategory} defaultSelected={category} />
-      
-        <View style={styles.dateButtonContainer}>
-  <TouchableOpacity style={styles.dateButton} onPress={() => setShowDatePicker(!showDatePicker)}>
-    <Ionicons name="calendar" size={24} color="white" />
-    <Text style={styles.dateButtonText}>
-      {date === "" ? "ללא תאריך" : date}  {/* אם date ריק, תציג "ללא תאריך", אחרת תציג את התאריך */}
-    </Text>
-  </TouchableOpacity>
-</View>
-
+        <ItemSelector
+        items={categories}
+        onSelect={setCategory}
+        defaultSelected="ללא קטגוריה"
+        firstItem="ללא קטגוריה"
+      />
+   
         {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
-        <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} />
+        <DatePicker onDateSelect={setDate} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={date} />
 
 
         {/* כפתור יצירת הרשימה */}

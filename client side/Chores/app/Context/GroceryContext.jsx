@@ -12,6 +12,7 @@ export const GroceryProvider = ({ children }) => {
       name: "רשימת קניות לבית",
       homeId: "home-123",
       category: "קניות",
+      date: "", // אין תאריך
       items: [
         {
           id: "item-1",
@@ -36,6 +37,7 @@ export const GroceryProvider = ({ children }) => {
       name: "רשימת משימות יומיות",
       homeId: "home-123",
       category: "משימות יומיות",
+      date: "2025-03-20", // יש תאריך לדוגמה
       items: [
         {
           id: "task-1",
@@ -60,6 +62,7 @@ export const GroceryProvider = ({ children }) => {
       name: "רשימת ציוד לטיול",
       homeId: "home-456",
       category: "טיולים",
+      date: "2025-04-05", // יש תאריך לדוגמה
       items: [
         {
           id: "trip-item-1",
@@ -84,6 +87,7 @@ export const GroceryProvider = ({ children }) => {
       name: "רשימת תכנון אירוע",
       homeId: "home-789",
       category: "אירועים",
+      date: "", // אין תאריך
       items: [
         {
           id: "event-task-1",
@@ -143,14 +147,7 @@ export const GroceryProvider = ({ children }) => {
     return list;
   };
 
-  const addNewList = async (listName) => {
-    // יצירת רשימה חדשה בצד הלקוח ומייד עדכון ה-state
-    const newList = {
-      id: Date.now(),  // יצירת ID ייחודי לפי זמן
-      name: listName,
-      items: [],
-    };
-
+  const addNewList = async (newList) => {
     // עדכון ה-state של המצרכים מיד לאחר יצירת הרשימה
     setGroceryData((prevData) => [newList, ...prevData]);
     // try {
