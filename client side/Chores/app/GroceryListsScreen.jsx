@@ -9,7 +9,8 @@ import NormalHeader from "./Components/NormalHeader"; // תלוי במיקום �
 import ProgressBar from "./Components/ProgressBar";
 import OptionsModal from "./Components/OptionsModal";
 import AlertModal from "./Components/AlertModal";
-import CategorySelector from "./Components/CategorySelector";
+import ItemSelector from "./Components/ItemSelector";
+import { useCategories } from "./Context/CategoryContext";
 
 const GroceryListsScreen = () => {
   const { groceryData, fetchGroceryData, deleteList, updateListName, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
@@ -22,7 +23,23 @@ const GroceryListsScreen = () => {
   const [newName, setNewName] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [category, setCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("הכל");
+  const [groceryDataToShow, setGroceryDataToShow] = useState(null);
+    const { categories, addCategory } = useCategories();
+  
+  useEffect(() => {
+    setGroceryDataToShow(groceryData)
+  }, [])
+
+  useEffect(() => {
+    if (selectedCategory === "הכל") {
+      setGroceryDataToShow(groceryData);
+    } else {
+      setGroceryDataToShow(
+        groceryData.filter((item) => item.category === selectedCategory)
+      );
+    }
+  }, [selectedCategory, groceryData]);
 
   const options = [
     { icon: "edit", text: "שנה שם", action: "edit" },
@@ -90,9 +107,13 @@ const GroceryListsScreen = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <NormalHeader title="הרשימות שלי" />
-      <CategorySelector onSelectCategory={setCategory} />
+      <ItemSelector
+        items={categories}
+        onSelect={setSelectedCategory}
+        defaultSelected="הכל"
+      />
       <FlatList
-        data={groceryData}
+        data={groceryDataToShow}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ paddingBottom: 80 }}
         renderItem={({ item }) => (
@@ -190,7 +211,7 @@ const GroceryListsScreen = () => {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         message="האם אתה בטוח שברצונך למחוק פריט זה?"
-        onConfirm={()=>{ handleDelete(currentList.id);}}
+        onConfirm={() => { handleDelete(currentList.id); }}
         confirmText="מחק"
         cancelText="ביטול"
       />

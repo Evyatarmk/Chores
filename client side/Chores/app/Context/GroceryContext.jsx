@@ -6,107 +6,105 @@ const GroceryContext = createContext();
 export const useGrocery = () => useContext(GroceryContext);
 export const GroceryProvider = ({ children }) => {
   const { baseUrl } = useApiUrl();
-  const [groceryData, setGroceryData] = useState(
-[
-      {
-        id: "1",
-        name: "רשימת קניות לבית",
-        homeId: "home-123",
-        category: "shopping",
-        items: [
-          {
-            id: "item-1",
-            name: "חלב",
-            quantity: 2,
-            isTaken: false,
-            description: "חלב 3% שומן 2 ליטר",
-            groceryListId: "1",
-          },
-          {
-            id: "item-2",
-            name: "לחם",
-            quantity: 1,
-            isTaken: true,
-            description: "לחם מחיטה מלאה",
-            groceryListId: "1",
-          },
-        ],
-      },
-      {
-        id: "2",
-        name: "רשימת משימות יומיות",
-        homeId: "home-123",
-        category: "tasks",
-        items: [
-          {
-            id: "task-1",
-            name: "לנקות את הבית",
-            quantity: 1, // אפשר להתייחס לכמות כעדיפות או חשיבות
-            isTaken: false, // יכול לשמש במקום `isCompleted`
-            description: "לנקות את הסלון והמטבח",
-            groceryListId: "2", // מזהה כללי, גם אם זו לא רשימת קניות
-          },
-          {
-            id: "task-2",
-            name: "לשלם חשבונות",
-            quantity: 1,
-            isTaken: true,
-            description: "חשמל, מים וארנונה",
-            groceryListId: "2",
-          },
-        ],
-      },
-      {
-        id: "3",
-        name: "רשימת ציוד לטיול",
-        homeId: "home-456",
-        category: "trips",
-        items: [
-          {
-            id: "trip-item-1",
-            name: "אוהל",
-            quantity: 1,
-            isTaken: false,
-            description: "אוהל ל-4 אנשים",
-            groceryListId: "3",
-          },
-          {
-            id: "trip-item-2",
-            name: "פנס",
-            quantity: 2,
-            isTaken: true,
-            description: "פנס נטען עם סוללות נוספות",
-            groceryListId: "3",
-          },
-        ],
-      },
-      {
-        id: "4",
-        name: "רשימת תכנון אירוע",
-        homeId: "home-789",
-        category: "events",
-        items: [
-          {
-            id: "event-task-1",
-            name: "להזמין מקום",
-            quantity: 1,
-            isTaken: true,
-            description: "הזמנה למסעדה או אולם קטן",
-            groceryListId: "4",
-          },
-          {
-            id: "event-task-2",
-            name: "לקנות עוגה",
-            quantity: 1,
-            isTaken: false,
-            description: "עוגת שוקולד עם כיתוב אישי",
-            groceryListId: "4",
-          },
-        ],
-      },
-    ]
-    
-  );
+  const [groceryData, setGroceryData] = useState([
+    {
+      id: "1",
+      name: "רשימת קניות לבית",
+      homeId: "home-123",
+      category: "קניות",
+      items: [
+        {
+          id: "item-1",
+          name: "חלב",
+          quantity: 2,
+          isTaken: false,
+          description: "חלב 3% שומן 2 ליטר",
+          groceryListId: "1",
+        },
+        {
+          id: "item-2",
+          name: "לחם",
+          quantity: 1,
+          isTaken: true,
+          description: "לחם מחיטה מלאה",
+          groceryListId: "1",
+        },
+      ],
+    },
+    {
+      id: "2",
+      name: "רשימת משימות יומיות",
+      homeId: "home-123",
+      category: "משימות יומיות",
+      items: [
+        {
+          id: "task-1",
+          name: "לנקות את הבית",
+          quantity: 1,
+          isTaken: false,
+          description: "לנקות את הסלון והמטבח",
+          groceryListId: "2",
+        },
+        {
+          id: "task-2",
+          name: "לשלם חשבונות",
+          quantity: 1,
+          isTaken: true,
+          description: "חשמל, מים וארנונה",
+          groceryListId: "2",
+        },
+      ],
+    },
+    {
+      id: "3",
+      name: "רשימת ציוד לטיול",
+      homeId: "home-456",
+      category: "טיולים",
+      items: [
+        {
+          id: "trip-item-1",
+          name: "אוהל",
+          quantity: 1,
+          isTaken: false,
+          description: "אוהל ל-4 אנשים",
+          groceryListId: "3",
+        },
+        {
+          id: "trip-item-2",
+          name: "פנס",
+          quantity: 2,
+          isTaken: true,
+          description: "פנס נטען עם סוללות נוספות",
+          groceryListId: "3",
+        },
+      ],
+    },
+    {
+      id: "4",
+      name: "רשימת תכנון אירוע",
+      homeId: "home-789",
+      category: "אירועים",
+      items: [
+        {
+          id: "event-task-1",
+          name: "להזמין מקום",
+          quantity: 1,
+          isTaken: true,
+          description: "הזמנה למסעדה או אולם קטן",
+          groceryListId: "4",
+        },
+        {
+          id: "event-task-2",
+          name: "לקנות עוגה",
+          quantity: 1,
+          isTaken: false,
+          description: "עוגת שוקולד עם כיתוב אישי",
+          groceryListId: "4",
+        },
+      ],
+    },
+  ]);
+  
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
 
