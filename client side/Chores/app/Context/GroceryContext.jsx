@@ -207,39 +207,40 @@ export const GroceryProvider = ({ children }) => {
   };
 
 
-  const updateListName = async (listId, newName) => {
-    const oldName = groceryData.find(list => list.id === listId)?.name;
+  const updateList = async (listId, updatedList) => {
+    // שמירת הנתונים הישנים למקרה של שגיאה
+    const oldList = groceryData.find(list => list.id === listId);
+  
+    // עדכון הסטייט לנתונים החדשים באופן מיידי
     setGroceryData(prevData =>
       prevData.map(list =>
-        list.id === listId ? { ...list, name: newName } : list
+        list.id === listId ? { ...list, ...updatedList } : list
       )
     );
-
+  
     // try {
     //   // שליחת הבקשה לשרת
-    //   const response = await fetch(`${baseUrl}/GroceryLists/home/${homeId}/list/${listId}`, {
+    //   const response = await fetch(`${baseUrl}/home/${homeId}/lists/${listId}`, {
     //     method: 'PUT',
     //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(newName),
+    //     body: JSON.stringify(updatedList), // שולח את כל הנתונים המעודכנים
     //   });
-
+  
     //   if (!response.ok) {
-    //     throw new Error('Failed to update grocery list name');
+    //     throw new Error('Failed to update grocery list');
     //   }
-
     // } catch (error) {
-    //   setErrorMessage("הייתה בעיה בעדכון שם הרשימה");
+    //   setErrorMessage("הייתה בעיה בעדכון הרשימה");
     //   setErrorVisible(true);
-
-    //   // שחזור השם הישן במקרה של כישלון
+  
+    //   // שחזור הנתונים במקרה של כישלון
     //   setGroceryData(prevData =>
-    //     prevData.map(list =>
-    //       list.id === listId ? { ...list, name: oldName } : list
-    //     )
+    //     prevData.map(list => (list.id === listId ? oldList : list))
     //   );
     // }
   };
-
+  
+  
   const updateItemStatus = async (listId, itemId, currentStatus) => {
     const newStatus = !currentStatus; // היפוך הסטטוס
   
@@ -416,7 +417,7 @@ export const GroceryProvider = ({ children }) => {
 
 
   return (
-    <GroceryContext.Provider value={{ groceryData, fetchGroceryData, updateOrAddItems, updateListName, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList, copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
+    <GroceryContext.Provider value={{ groceryData, fetchGroceryData, updateOrAddItems, updateList, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList, copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </GroceryContext.Provider>

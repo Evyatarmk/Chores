@@ -13,8 +13,19 @@ const AddGroceryListScreen = () => {
   const [date, setDate] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
 
-  const suggestions = ["משימות", "טיולים", "אירועים"];
-  const inputRef = useRef(null);
+  const suggestions = [
+    "קניות ל",
+    "מצרכים למתכון",
+    "מצרכים ל",
+    "טיול ל",
+    "מסיבה",
+    "אירוע משפחתי",
+    "הכנות לחג",
+    "רשימת משימות",
+    "סידורים לשבוע",
+    "רשימת קניות דחופה",
+    "רשימה כללית"
+  ];  const inputRef = useRef(null);
   const router = useRouter();
   const {categories} = useCategories();
   const {addNewList} = useGrocery();

@@ -14,15 +14,13 @@ import { useCategories } from "./Context/CategoryContext";
 import DatePicker from "./Components/DatePicker";
 
 const GroceryListsScreen = () => {
-  const { groceryData, fetchGroceryData, deleteList, updateListName, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
+  const { groceryData, fetchGroceryData, deleteList, updateList, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
   const router = useRouter();
   const optionsModalRef = useRef(null);
   const optionsCopyModalRef = useRef(null);
   const inputRef = useRef(null);
   const editModalRef = useRef(null);
   const [currentList, setCurrentList] = useState(null);
-  const [newName, setNewName] = useState("");
-  const [newList, setNewList] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("הכל");
@@ -70,7 +68,6 @@ const GroceryListsScreen = () => {
 
   const handleOptionSelect = (option) => {
     if (option === "edit") {
-      setNewName(currentList.name);
       optionsModalRef.current?.close();
       setTimeout(() => {
         editModalRef.current?.open();
@@ -103,16 +100,23 @@ const GroceryListsScreen = () => {
     setModalVisible(true)
   };
   const handleSave = () => {
-    if (newName.trim() && currentList) {
-      updateListName(currentList.id, newName);
+    console.log(currentList)
+    if (currentList.name.trim() && currentList) {
+      updateList(currentList.id, currentList);
     }
     setTimeout(() => editModalRef.current?.close(), 200);
   };
-  const hendelCategorySelect = () => {
+  const handleCategorySelect = (category) => {
+    setCurrentList((prev) => prev ? { ...prev, category } : prev);
   };
-  const handleDateSelect = () => {
+  
+  const handleDateSelect = (date) => {
+    setCurrentList((prev) => prev ? { ...prev, date } : prev);
   };
-
+  
+  const handleNameChange = (name) => {
+    setCurrentList((prev) => prev ? { ...prev, name } : prev);
+  };
   return (
     <GestureHandlerRootView style={styles.container}>
       <NormalHeader title="הרשימות שלי" />
@@ -183,7 +187,7 @@ const GroceryListsScreen = () => {
         options={optionsCopy}
       />
 
-      {/* מודל עריכת שם */}
+      {/*מודל עריכת  */}
       <Modalize
         ref={editModalRef}
         adjustToContentHeight
@@ -203,20 +207,20 @@ const GroceryListsScreen = () => {
           <TextInput
             ref={inputRef}
             style={styles.input}
-            value={newName}
-            onChangeText={setNewName}
+            value={currentList?.name}
+            onChangeText={handleNameChange }
             placeholder="הזן שם חדש"
           />
            {/* בחירת קטגוריה */}
         <Text style={styles.suggestionsTitle}>בחר קטגוריה</Text>
         <ItemSelector
         items={categories}
-        onSelect={hendelCategorySelect}
+        onSelect={handleCategorySelect }
         defaultSelected={currentList?.category}
         firstItem="ללא קטגוריה"
       />
        {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
-       <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} />
+       <DatePicker onDateSelect={handleDateSelect } showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} />
 
           <View style={styles.editButtons}>
             <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
