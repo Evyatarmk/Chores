@@ -27,12 +27,10 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
 
   return (
     <>
-      <View style={styles.dateButtonContainer}>
         <TouchableOpacity style={styles.dateButton} onPress={() => setShowModal(true)}>
-          <Ionicons name="calendar" size={24} color="white" />
+          <Ionicons name="calendar" size={12} color="white" />
           <Text style={styles.dateButtonText}>{selectedDate === "" ? "ללא תאריך" : selectedDate}</Text>
         </TouchableOpacity>
-      </View>
 
       <Modal transparent={true} animationType="slide" visible={showModal} onRequestClose={() => setShowModal(false)}>
         <View style={styles.modalOverlay}>
@@ -78,20 +76,17 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
 };
 
 const styles = StyleSheet.create({
-  dateButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    width: "100%",
-    marginTop: 10,
-  },
+
   dateButton: {
+    height:30,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#007bff",
-    paddingVertical: 3,
-    paddingHorizontal: 3,
+    paddingVertical: 5, // יותר קטן
+    paddingHorizontal: 8, // יותר קטן
     borderRadius: 20,
     justifyContent: "center",
+    maxWidth: 100, // קובע מינימום רוחב אם תרצה, תוכל להתאים לפי הצורך
   },
   dateButtonText: {
     fontSize: 12,

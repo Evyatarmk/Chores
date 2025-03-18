@@ -12,6 +12,7 @@ import AlertModal from "./Components/AlertModal";
 import ItemSelector from "./Components/ItemSelector";
 import { useCategories } from "./Context/CategoryContext";
 import DatePicker from "./Components/DatePicker";
+import SelectableDropdown from "./Components/SelectableDropdown";
 
 const GroceryListsScreen = () => {
   const { groceryData, fetchGroceryData, deleteList, updateList, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
@@ -211,17 +212,19 @@ const GroceryListsScreen = () => {
             onChangeText={handleNameChange }
             placeholder="הזן שם חדש"
           />
-           {/* בחירת קטגוריה */}
-        <Text style={styles.suggestionsTitle}>בחר קטגוריה</Text>
-        <ItemSelector
-        items={categories}
-        onSelect={handleCategorySelect }
-        defaultSelected={currentList?.category}
-        firstItem="ללא קטגוריה"
-      />
-       {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
-       <DatePicker onDateSelect={handleDateSelect } showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} />
-
+          <View style={styles.row}>
+                  <SelectableDropdown
+                    label="קטגוריה"
+                    options={categories}
+                    selectedValue={currentList?.category}
+                    onSelect={handleCategorySelect}
+                    allowAdding={true}
+                    firstItem="ללא קטגוריה"
+                  />
+                  {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
+                  <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} />
+                </View>
+       
           <View style={styles.editButtons}>
             <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
               <Text style={styles.saveButtonText}>שמור</Text>
@@ -282,6 +285,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     zIndex: 1000,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",// מגדיר את המיקום של הרכיבים אחד ליד השני
+    justifyContent: "flex-end", // מוודא שהרכיבים יתפשטו באופן אחיד
+    width: "100%", // יבטיח שהרכיבים יתפשטו לאורך כל הרוחב
+    gap: 10
   },
   panelHeader: {
     flexDirection: "row-reverse",
