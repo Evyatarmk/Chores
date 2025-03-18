@@ -29,13 +29,15 @@ const AddGroceryListScreen = () => {
   ]; 
   const inputRef = useRef(null);
   const router = useRouter();
-  const { categories } = useCategories();
+  const { categories ,addCategory} = useCategories();
   const { addNewList } = useGrocery();
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
-
+  const handleAddingCategory = (newCategory) => {
+    addCategory(newCategory)
+  }
   const handleSave = () => {
     if (listName.trim() === "") return; // אם השם ריק, אל תאפשר יצירה
 
@@ -99,6 +101,7 @@ const AddGroceryListScreen = () => {
           selectedValue={category}
           onSelect={setCategory}
           allowAdding={true}
+          onAdding={handleAddingCategory}
           defaultSelected="ללא קטגוריה"
           firstItem="ללא קטגוריה"
         />

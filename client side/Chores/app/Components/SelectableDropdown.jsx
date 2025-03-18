@@ -9,6 +9,7 @@ const SelectableDropdown = ({
   label = "קטגוריה", 
   allowAdding = false,
   firstItem, 
+  onAdding,
   defaultSelected = "" 
 }) => {
   const [visible, setVisible] = useState(false);
@@ -27,6 +28,9 @@ const SelectableDropdown = ({
 
   const handleAddOption = () => {
     if (newOption.trim()) {
+      if (onAdding) {
+        onAdding(newOption.trim()); // קריאה לפונקציה על מנת לעדכן את הקונטקסט או הסטייט
+      }
       onSelect(newOption.trim());
       setNewOption("");
       setAddModalVisible(false); // Close the modal only after adding the option

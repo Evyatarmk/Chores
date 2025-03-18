@@ -60,7 +60,9 @@ const GroceryListsScreen = () => {
     await fetchGroceryData();
     setRefreshing(false);
   };
-
+  const handleAddingCategory = (newCategory) => {
+    addCategory(newCategory)
+  }
 
   const openOptionsPanel = (list) => {
     setCurrentList(list);
@@ -218,6 +220,7 @@ const GroceryListsScreen = () => {
                     options={categories}
                     selectedValue={currentList?.category}
                     onSelect={handleCategorySelect}
+                    onAdding={handleAddingCategory}
                     allowAdding={true}
                     firstItem="ללא קטגוריה"
                   />
