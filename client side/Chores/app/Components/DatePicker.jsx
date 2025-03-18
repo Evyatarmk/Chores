@@ -7,6 +7,8 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
   const [markedDates, setMarkedDates] = useState(
     selectedDate ? { [selectedDate]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } } : {}
   );
+  const [day, setDay] = useState(null)
+
 
   const today = new Date().toISOString().split("T")[0];
   const tomorrow = new Date();
@@ -14,13 +16,13 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
   const tomorrowDate = tomorrow.toISOString().split("T")[0];
 
   const handleDayPress = useCallback((day) => {
+    setDay(day.dateString);
     setMarkedDates({ [day.dateString]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } });
-    onDateSelect(day.dateString);
   }, [onDateSelect]);
 
   const handleQuickSelect = (date) => {
+    setDay(date? date: "");
     setMarkedDates(date ? { [date]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } } : {});
-    onDateSelect(date || "");
   };
 
   return (
@@ -64,7 +66,7 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
               <TouchableOpacity style={styles.cancelButton} onPress={() => setShowModal(false)}>
                 <Text style={styles.cancelButtonText}>ביטול</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmButton} onPress={() => setShowModal(false)}>
+              <TouchableOpacity style={styles.confirmButton} onPress={() =>{onDateSelect(day); setShowModal(false)}}>
                 <Text style={styles.confirmButtonText}>אישור</Text>
               </TouchableOpacity>
             </View>
