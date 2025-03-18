@@ -361,7 +361,6 @@ export const GroceryProvider = ({ children }) => {
   // פונקציה להעתקת כל הפריטים
   const copyAllItems = (listId) => {
     const list = getList(listId);
-    const allItems = list.items;
     const Items = list.items
       .map(item => ({
         ...item,
@@ -372,6 +371,8 @@ export const GroceryProvider = ({ children }) => {
     const newList = {
       id: Date.now(),
       name: list.name + "-העתק",
+      category: list.category,
+      date:list.date,
       items: [...Items],
     };
 
@@ -391,6 +392,8 @@ export const GroceryProvider = ({ children }) => {
     const newList = {
       id: Date.now(),
       name: list.name + "-העתק",
+      category: list.category,
+      date:list.date,
       items: [...purchasedItems],
     };
 
@@ -406,6 +409,8 @@ export const GroceryProvider = ({ children }) => {
     const newList = {
       id: Date.now(),
       name: list.name + "-העתק",
+      category: list.category,
+      date:list.date,
       items: [...unpurchasedItems],
     };
 
