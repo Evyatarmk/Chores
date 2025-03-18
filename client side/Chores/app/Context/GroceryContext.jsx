@@ -120,7 +120,6 @@ export const GroceryProvider = ({ children }) => {
     setErrorVisible(false)
   };
   const fetchGroceryData = async () => {
-    console.log("fff")
     try {
       const response = await fetch(`${baseUrl}/GroceryLists/home/${homeId}`);
       if (!response.ok) {
@@ -296,7 +295,9 @@ export const GroceryProvider = ({ children }) => {
   };
   
   
-
+  const setGrocery = (newData) => {
+    setGroceryData([...newData])
+  };
 
   const updateItemField = (listId, updatedItem) => {
     setGroceryData((prevData) =>
@@ -358,7 +359,31 @@ export const GroceryProvider = ({ children }) => {
     );
   };
 
-  // פונקציה להעתקת כל הפריטים
+  const clearCheckedItems = (listId) => {
+    setGroceryData((prevData) =>
+      prevData.map((list) =>
+        list.id === listId
+          ? {
+            ...list,
+            items: list.items.filter((item) => item.isTaken == false),
+          }
+          : list
+      )
+    );
+  }
+  const uncheckAllItems = (listId) => {
+    setGroceryData((prevData) =>
+      prevData.map((list) =>
+        list.id === listId
+          ? {
+            ...list,
+            items: list.items.map((item) => ({ ...item, isTaken: false })),
+          }
+          : list
+      )
+    );
+  }
+    // פונקציה להעתקת כל הפריטים
   const copyAllItems = (listId) => {
     const list = getList(listId);
     const Items = list.items
@@ -422,7 +447,7 @@ export const GroceryProvider = ({ children }) => {
 
 
   return (
-    <GroceryContext.Provider value={{ groceryData, fetchGroceryData, updateOrAddItems, updateList, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList, copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
+    <GroceryContext.Provider value={{ groceryData, setGrocery,fetchGroceryData, updateOrAddItems, updateList, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList,clearCheckedItems, uncheckAllItems,copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </GroceryContext.Provider>

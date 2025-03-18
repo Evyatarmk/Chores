@@ -14,6 +14,7 @@ const AddGroceryListScreen = () => {
   const [date, setDate] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
 
+  
   const suggestions = [
     "קניות ל",
     "מצרכים למתכון",

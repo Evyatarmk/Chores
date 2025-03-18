@@ -10,6 +10,7 @@ import BottomSheetModal from "./Components/BottomSheetModal";
 import FloatingLabelInput from "./Components/FloatingLabelInput";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AlertModal from "./Components/AlertModal";
+import OptionsModal from "./Components/OptionsModal";
 
 const GroceryItemsScreen = () => {
   const router = useRouter();
@@ -17,17 +18,32 @@ const GroceryItemsScreen = () => {
   const listId = JSON.parse(params.listId);
   const editModalRef = useRef(null);
   const [currentItem, setCurrentItem] = useState(null);
-  const { getList, updateItemStatus, groceryData, updateItemField ,deleteItem} = useGrocery();
+  const { getList, updateItemStatus, groceryData, updateItemField ,deleteItem,clearCheckedItems,uncheckAllItems} = useGrocery();
   const [groceryItems, setGroceryItems] = useState([]);
   const [list, setList] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [modalClearCheckedItemsVisible, setModalClearCheckedItemsVisible] = useState(false);
+  const optionsModalRef = useRef(null);
+  
   useEffect(() => {
     const list = getList(listId);
     setList(list)
     const sortedItems = [...list.items].sort((a, b) => a.isTaken - b.isTaken);
     setGroceryItems(sortedItems);
   }, [listId, groceryData]);
+
+  const options = [
+    { icon: "refresh", text: "ביטול סימון הכל", action: "uncheckAllItems", iconColor: "#ff8800" },
+    { icon: "delete", text: "מחיקת פריטים שנעשו", action: "delete", iconColor: "#ff4444" },
+  ];
+  const handleOptionSelect = (option) => {
+    if (option === "uncheckAllItems") {
+      uncheckAllItems(listId)
+      optionsModalRef.current?.close();
+    } if (option === "delete") {
+      setModalClearCheckedItemsVisible(true)
+    }
+  };
 
   const viewDetails = (item) => {
     setCurrentItem(item)
@@ -43,6 +59,11 @@ const GroceryItemsScreen = () => {
     deleteItem(listId,currentItem?.id);
     setCurrentItem(null);
   };
+  const handleClearCheckedItems = () => {
+    optionsModalRef.current?.close();
+    clearCheckedItems(listId);
+  };
+  
   const handleDeletePress = () => {
     setModalVisible(true)
   };
@@ -59,7 +80,7 @@ const GroceryItemsScreen = () => {
       }
     });
   };
-
+ 
   const handleInputChange = (field, value) => {
     setCurrentItem((prevItem) => {
       if (!prevItem) return prevItem;
@@ -77,11 +98,16 @@ const GroceryItemsScreen = () => {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <NormalHeader title={list?.name} />
+      <NormalHeader title={list?.name} onOptionPress={()=>{optionsModalRef.current?.open()}}/>
       <View style={styles.ProgressBar}>
         <ProgressBar totalItems={groceryItems.length} completedItems={groceryItems.filter(item => item.isTaken).length} />
       </View>
-
+{/* מודל אפשרויות */}
+<OptionsModal
+        optionsModalRef={optionsModalRef}
+        handleOptionSelect={handleOptionSelect}
+        options={options}
+      />
       <FlatList
         data={groceryItems}
         keyExtractor={(item) => item.id.toString()}
@@ -176,6 +202,14 @@ const GroceryItemsScreen = () => {
         onClose={() => setModalVisible(false)}
         message="האם אתה בטוח שברצונך למחוק פריט זה?"
         onConfirm={handleDelete}
+        confirmText="מחק"
+        cancelText="ביטול"
+      />
+       <AlertModal
+        visible={modalClearCheckedItemsVisible}
+        onClose={() => setModalClearCheckedItemsVisible(false)}
+        message="האם אתה בטוח שברצונך למחוק פריטים אלו?"
+        onConfirm={handleClearCheckedItems}
         confirmText="מחק"
         cancelText="ביטול"
       />

@@ -39,7 +39,6 @@ const AddGroceryItemScreen = () => {
         t.name === item.name && t.description === item.description
       ))
     );
-    console.log(uniqueItems)
     setItemsToShow(uniqueItems);
   }, []);
 

@@ -41,7 +41,6 @@ const GroceryListsScreen = () => {
         groceryData.filter((item) => item.category === selectedCategory)
       );
     }
-    console.log(groceryData)
   }, [selectedCategory, groceryData]);
 
   const options = [
@@ -103,7 +102,6 @@ const GroceryListsScreen = () => {
     setModalVisible(true)
   };
   const handleSave = () => {
-    console.log(currentList)
     if (currentList.name.trim() && currentList) {
       updateList(currentList.id, currentList);
     }

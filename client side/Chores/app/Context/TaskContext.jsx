@@ -33,7 +33,6 @@ export const TaskProvider = ({ children }) => {
 
   
   const removeTaskForDate = (date, taskId) => {
-    console.log('hi')
     setTasks(prevTasks => {
       if (!prevTasks[date]) return prevTasks;
       const updatedTasks = prevTasks[date].filter(task => task.id !== taskId);
