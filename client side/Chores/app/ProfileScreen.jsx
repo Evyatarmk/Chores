@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import { Avatar } from '@rneui/themed';
-import { useUserAndHome } from "./Context/UserAndHomeContext"; // ייבוא הקונטקסט שלך
+import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import NormalHeader from "./Components/NormalHeader";
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -14,7 +13,9 @@ const ProfileScreen = () => {
   const [newName, setNewName] = useState(user?.name || "");
 
   const handleEdit = () => {
-    setIsEditing(!isEditing);
+    router.push({
+      pathname: "./EditProfileScreen",
+    })
   };
 
   const handleLogout = () => {
@@ -29,149 +30,158 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <NormalHeader title="אזור אישי" />
-      <View style={styles.profileImage}>
+      <NormalHeader title="אזור אישי" targetScreen="./"/>
+
+      <View style={styles.profileCard}>
         <Avatar
-          source={{
-            uri: user?.profileImageUrl || {},
-          }}
+          source={{ uri: user?.profilePicture || "https://via.placeholder.com/150" }}
           size="large"
           rounded
-          showEditButton
-          onError={() => console.log("Error loading image")}
         />
+        <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
+          <Icon name="edit" size={18} color="#fff" />
+        </TouchableOpacity>
+
+        <Text style={styles.name}>{user?.name}</Text>
+        {isEditing && (
+          <TextInput
+            style={styles.input}
+            value={newName}
+            onChangeText={setNewName}
+            placeholder="שם חדש"
+          />
+        )}
+        <Text style={styles.code}>קוד הבית: {home?.code}</Text>
       </View>
 
-      {user ? (
-        <>
-          <Text style={styles.label}>שם: </Text>
-          {isEditing ? (
-            <TextInput
-              style={styles.input}
-              value={newName}
-              onChangeText={setNewName}
-            />
-          ) : (
-            <Text style={styles.value}>{user.name}</Text>
-          )}
+      <Text style={styles.subTitle}>חברי הבית</Text>
+      <View style={styles.membersList}>
+        {home?.members?.length > 0 ? (
+          home.members.map((member) => (
+            <View key={member.id} style={styles.memberItem}>
+              <Text style={styles.memberName}>{member.name}</Text>
+              <Text style={styles.memberRole}>
+                {member.id === user.id ? "אתה" : member.role === "admin" ? "מנהל" : "חבר"}
+              </Text>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.noMembers}>אין חברים בבית</Text>
+        )}
+      </View>
 
-          <Button
-            title={isEditing ? "שמור" : "ערוך"}
-            onPress={isEditing ? handleSave : handleEdit}
-          />
-
-
-          {/* רשימת חברי הבית */}
-          <Text style={styles.subTitle}>חברי הבית:</Text>
-          {home?.members ? (
-            home.members.map((item) => (
-              <View key={item.id} style={styles.memberItem}>
-                <Text style={styles.memberName}>{item.name}</Text>
-                <Text style={styles.memberRole}>
-                  {item.id === user.id ? "אתה" : item.role === "admin" ? "מנהל" : "חבר"}
-                </Text>
-              </View>
-            ))
-          ) : (
-            <Text>אין חברי בית</Text>
-          )}
-          <TouchableOpacity onPress={handleLogout} style={styles.panelOption}>
-            <Icon name="exit-to-app" size={20} color="#ff4444" style={styles.optionIcon} />
-            <Text style={styles.panelOptionText}>התנתקות</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <Text>אין משתמש מחובר</Text>
-      )}
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Icon name="exit-to-app" size={24} color="#fff" />
+        <Text style={styles.logoutText}>התנתקות</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f4f4f4" },
-  profileImage: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 50,
-    marginBottom: 20,
+  container: {
+    flex: 1,
+    backgroundColor: "#f4f4f4",
   },
-  panelOption: {
-    flexDirection: "row",
+  profileCard: {
+    padding: 20,
+    borderRadius: 15,
     alignItems: "center",
-    justifyContent:"center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    backgroundColor: "#f8d7da", // צבע רקע עדין לאופציה של מחיקה
-    marginBottom: 15,
-    shadowColor: "#000", // צל להדגשה
+    backgroundColor: "#fff",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
-  },
-  optionIcon: {
-    marginRight: 10,
-  },
-  panelOptionText: {
-    fontSize: 18,
-    color: "#ff4444", // צבע אדום כהה
-    fontWeight: "bold",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
     marginBottom: 20,
+    position: "relative",
   },
-  subTitle: {
-    fontSize: 20,
+  editIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "#4CAF50",
+    padding: 6,
+    borderRadius: 20,
+    elevation: 3,
+  },
+  name: {
+    fontSize: 22,
     fontWeight: "bold",
-    marginVertical: 20,
+    marginVertical: 10,
+    color: "#333",
   },
-  label: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  value: {
-    fontSize: 18,
-    marginBottom: 10,
+  code: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginVertical: 10,
+    color: "#333",
   },
   input: {
     fontSize: 18,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#ddd",
     padding: 10,
+    borderRadius: 8,
     width: "100%",
-    marginBottom: 10,
+    textAlign: "right",
+    backgroundColor: "#f9f9f9",
   },
   subTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
+    color: "#333",
     marginBottom: 10,
-    color: "#333", // צבע טקסט כהה עבור כותרות
   },
-  memberItem: {
-    flexDirection: "row-reverse",
-    justifyContent:"space-between",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    backgroundColor: "#f0f0f0", // צבע רקע עדין
-    borderRadius: 8,
-    marginBottom: 10,
+  membersList: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+  memberItem: {
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
   memberName: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#333", // צבע טקסט כהה לשם החבר
+    color: "#333",
   },
   memberRole: {
     fontSize: 16,
-    color: "#888", // צבע טקסט בהיר יותר עבור התפקיד
+    color: "#888",
+  },
+  noMembers: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+    paddingVertical: 10,
+  },
+  logoutButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#ff5555",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 25,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+  },
+  logoutText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
   },
 });
 

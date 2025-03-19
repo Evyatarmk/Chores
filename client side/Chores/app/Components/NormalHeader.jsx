@@ -3,8 +3,17 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from '@rneui/base';
 import { useRouter } from 'expo-router';
 
-const NormalHeader = ({ title, onOptionPress }) => {
+const NormalHeader = ({ title, onOptionPress, targetScreen }) => {
   const router = useRouter();
+
+  const handleNavigate = () => {
+    if (targetScreen) {
+      router.push(targetScreen); // ניווט לדף שצוין ב-targetScreen
+    }else{
+
+      router.back()
+    }
+  };
 
   return (
     <View style={styles.header}>
@@ -25,6 +34,13 @@ const NormalHeader = ({ title, onOptionPress }) => {
           onPress={onOptionPress}
         >
           <Icon name="more-vert" size={24} color="#888" />
+        </TouchableOpacity>
+      )}
+
+      {/* כפתור ניווט לדף אחר אם targetScreen קיים */}
+      {targetScreen && (
+        <TouchableOpacity onPress={handleNavigate} style={styles.navigateButton}>
+          <Icon name="arrow-forward" size={24} color="#333" />
         </TouchableOpacity>
       )}
     </View>
@@ -50,6 +66,10 @@ const styles = StyleSheet.create({
   },
   optionsButton: {
     padding: 5,
+  },
+  navigateButton: {
+    padding: 5,
+    borderRadius: 20,
   },
 });
 
