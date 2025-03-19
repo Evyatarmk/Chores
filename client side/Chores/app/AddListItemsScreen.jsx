@@ -4,16 +4,16 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import ClearableInput from "./Components/ClearableInput";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useGrocery } from "./Context/GroceryContext";
+import { useLists } from "./Context/ListsContext";
 import { v4 as uuidv4 } from "uuid"; // נדרשת חבילה זו
 
-const AddGroceryItemScreen = () => {
+const AddListItemsScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const listId = JSON.parse(params.listId);
   const [inputTextItemName, setInputTextItemName] = useState("");
   const [newItem, setNewItem] = useState(null)
-  const { updateOrAddItems,getList } = useGrocery();
+  const { updateOrAddItems,getList } = useLists();
 
   const [itemsToShow, setItemsToShow] = useState([]);
   const [itemsToAdd, setItemsToAdd] = useState([]);
@@ -30,6 +30,7 @@ const AddGroceryItemScreen = () => {
       description: item.description,
       quantity: 0,
       isTaken: false,
+      listId:listId,
     }));
         
     const allItems = [ ...getList(listId).items,...tempItemsToShow];
@@ -133,6 +134,7 @@ const AddGroceryItemScreen = () => {
         description: "",
         quantity: 0,
         isTaken: false,
+        listId:listId,
       });
     }
   };
@@ -301,4 +303,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddGroceryItemScreen;
+export default AddListItemsScreen;

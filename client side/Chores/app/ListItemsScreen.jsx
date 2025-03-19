@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, FlatList, StyleSheet, TouchableOpacity, TextInput } from "react-native";
-import { useGrocery } from "./Context/GroceryContext";
+import { useLists } from "./Context/ListsContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from '@rneui/base';
@@ -12,14 +12,14 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AlertModal from "./Components/AlertModal";
 import OptionsModal from "./Components/OptionsModal";
 
-const GroceryItemsScreen = () => {
+const ListItemsScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const listId = JSON.parse(params.listId);
   const editModalRef = useRef(null);
   const [currentItem, setCurrentItem] = useState(null);
-  const { getList, updateItemStatus, groceryData, updateItemField ,deleteItem,clearCheckedItems,uncheckAllItems} = useGrocery();
-  const [groceryItems, setGroceryItems] = useState([]);
+  const { getList, updateItemStatus, listsData, updateItemField ,deleteItem,clearCheckedItems,uncheckAllItems} = useLists();
+  const [listItems, setListsItems] = useState([]);
   const [list, setList] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalClearCheckedItemsVisible, setModalClearCheckedItemsVisible] = useState(false);
@@ -29,8 +29,8 @@ const GroceryItemsScreen = () => {
     const list = getList(listId);
     setList(list)
     const sortedItems = [...list.items].sort((a, b) => a.isTaken - b.isTaken);
-    setGroceryItems(sortedItems);
-  }, [listId, groceryData]);
+    setListsItems(sortedItems);
+  }, [listId, listsData]);
 
   const options = [
     { icon: "refresh", text: "ביטול סימון הכל", action: "uncheckAllItems", iconColor: "#ff8800" },
@@ -100,7 +100,7 @@ const GroceryItemsScreen = () => {
     <GestureHandlerRootView style={styles.container}>
       <NormalHeader title={list?.name} onOptionPress={()=>{optionsModalRef.current?.open()}}/>
       <View style={styles.ProgressBar}>
-        <ProgressBar totalItems={groceryItems.length} completedItems={groceryItems.filter(item => item.isTaken).length} />
+        <ProgressBar totalItems={listItems.length} completedItems={listItems.filter(item => item.isTaken).length} />
       </View>
 {/* מודל אפשרויות */}
 <OptionsModal
@@ -109,11 +109,11 @@ const GroceryItemsScreen = () => {
         options={options}
       />
       <FlatList
-        data={groceryItems}
+        data={listItems}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={[styles.itemContainer, item.isTaken && styles.takenItem]} onPress={() => viewDetails(item)}>
-              <Text style={styles.GroceryItemsubtitle}>{item.quantity}</Text>
+              <Text style={styles.ListsItemsubtitle}>{item.quantity}</Text>
               <View style={styles.ItemDetails}>
                 <Text style={[styles.itemTitle, item.isTaken && styles.takenItem]}>
                   {item.name}
@@ -147,7 +147,7 @@ const GroceryItemsScreen = () => {
       <TouchableOpacity style={styles.addButton} 
       onPress={() =>
         router.push({
-          pathname: "./AddGroceryItemScreen",
+          pathname: "./AddListItemsScreen",
           params: { listId: JSON.stringify(list.id)},
         })
       }
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     color: "#666"
   },
   ItemDetails: { flexDirection: "column", alignItems: "flex-end",flex:1 },
-  GroceryItemsubtitle: { fontSize: 18, color: "#666" },
+  ListsItemsubtitle: { fontSize: 18, color: "#666" },
   editButton: {
     backgroundColor: "#007bff",
     borderRadius: 8,
@@ -363,4 +363,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default GroceryItemsScreen;
+export default ListItemsScreen;

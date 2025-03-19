@@ -48,7 +48,7 @@ const Sidebar = () => {
 const menuItems = [
        
   { screen: "/HomePageScreen", label: "דף הבית "},
-  { screen: "/GroceryListsScreen", label: "רשימת קניות" },
+  { screen: "/ListsScreen", label: "רשימת קניות" },
   { screen: "/TasksListScreen", label: "משימות" },
   { screen: "/LoginScreen", label: "התחברות" },
   { screen: "/ProfileScreen", label: "אזור אישי" },

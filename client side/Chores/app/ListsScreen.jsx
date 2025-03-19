@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, FlatList, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { useGrocery } from "./Context/GroceryContext";
+import { useLists } from "./Context/ListsContext";
 import { Icon } from '@rneui/base';
 import { Modalize } from 'react-native-modalize';
 import { GestureHandlerRootView, RefreshControl } from 'react-native-gesture-handler';
@@ -14,8 +14,8 @@ import { useCategories } from "./Context/CategoryContext";
 import DatePicker from "./Components/DatePicker";
 import SelectableDropdown from "./Components/SelectableDropdown";
 
-const GroceryListsScreen = () => {
-  const { groceryData, fetchGroceryData, deleteList, updateList, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useGrocery();
+const ListsScreen = () => {
+  const { listsData, fetchListsData, deleteList, updateList, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useLists();
   const router = useRouter();
   const optionsModalRef = useRef(null);
   const optionsCopyModalRef = useRef(null);
@@ -25,23 +25,23 @@ const GroceryListsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("הכל");
-  const [groceryDataToShow, setGroceryDataToShow] = useState(null);
+  const [listsDataToShow, setListsDataToShow] = useState(null);
   const { categories, addCategory } = useCategories();
   const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
   
   useEffect(() => {
-    setGroceryDataToShow(groceryData)
+    setListsDataToShow(listsData)
   }, [])
 
   useEffect(() => {
     if (selectedCategory === "הכל") {
-      setGroceryDataToShow(groceryData);
+      setListsDataToShow(listsData);
     } else {
-      setGroceryDataToShow(
-        groceryData.filter((item) => item.category === selectedCategory)
+      setListsDataToShow(
+        listsData.filter((item) => item.category === selectedCategory)
       );
     }
-  }, [selectedCategory, groceryData]);
+  }, [selectedCategory, listsData]);
 
   const options = [
     { icon: "edit", text: "ערוך", action: "edit" },
@@ -56,7 +56,7 @@ const GroceryListsScreen = () => {
   ];
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchGroceryData();
+    await fetchListsData();
     setRefreshing(false);
   };
   const handleAddingCategory = (newCategory) => {
@@ -128,7 +128,7 @@ const GroceryListsScreen = () => {
         firstItem="הכל"
       />
       <FlatList
-        data={groceryDataToShow}
+        data={listsDataToShow}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ paddingBottom: 80 }}
         renderItem={({ item }) => (
@@ -136,7 +136,7 @@ const GroceryListsScreen = () => {
             style={styles.listItem}
             onPress={() =>
               router.push({
-                pathname: "./GroceryItemsScreen",
+                pathname: "./ListItemsScreen",
                 params: { listId: JSON.stringify(item.id) },
               })
             }
@@ -171,7 +171,7 @@ const GroceryListsScreen = () => {
         }
       />
 
-      <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddGroceryListScreen" })}>
+      <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddListScreen" })}>
         <Icon name="add" size={30} color="white" />
       </TouchableOpacity>
 
@@ -343,4 +343,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryListsScreen;
+export default ListsScreen;

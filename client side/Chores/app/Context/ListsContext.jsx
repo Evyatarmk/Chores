@@ -2,11 +2,11 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApiUrl } from "./ApiUrlProvider";
 import ErrorNotification from "../Components/ErrorNotification";
 
-const GroceryContext = createContext();
-export const useGrocery = () => useContext(GroceryContext);
-export const GroceryProvider = ({ children }) => {
+const ListsContext = createContext();
+export const useLists = () => useContext(ListsContext);
+export const ListsProvider = ({ children }) => {
   const { baseUrl } = useApiUrl();
-  const [groceryData, setGroceryData] = useState([
+  const [listsData, setListsData] = useState([
     {
       id: "1",
       name: "רשימת קניות לבית",
@@ -20,7 +20,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 2,
           isTaken: false,
           description: "חלב 3% שומן 2 ליטר",
-          groceryListId: "1",
+          listId: "1",
         },
         {
           id: "item-2",
@@ -28,7 +28,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 1,
           isTaken: true,
           description: "לחם מחיטה מלאה",
-          groceryListId: "1",
+          listId: "1",
         },
       ],
     },
@@ -45,7 +45,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 1,
           isTaken: false,
           description: "לנקות את הסלון והמטבח",
-          groceryListId: "2",
+          listId: "2",
         },
         {
           id: "task-2",
@@ -53,7 +53,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 1,
           isTaken: true,
           description: "חשמל, מים וארנונה",
-          groceryListId: "2",
+          listId: "2",
         },
       ],
     },
@@ -70,7 +70,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 1,
           isTaken: false,
           description: "אוהל ל-4 אנשים",
-          groceryListId: "3",
+          listId: "3",
         },
         {
           id: "trip-item-2",
@@ -78,7 +78,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 2,
           isTaken: true,
           description: "פנס נטען עם סוללות נוספות",
-          groceryListId: "3",
+          listId: "3",
         },
       ],
     },
@@ -95,7 +95,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 1,
           isTaken: true,
           description: "הזמנה למסעדה או אולם קטן",
-          groceryListId: "4",
+          listId: "4",
         },
         {
           id: "event-task-2",
@@ -103,7 +103,7 @@ export const GroceryProvider = ({ children }) => {
           quantity: 1,
           isTaken: false,
           description: "עוגת שוקולד עם כיתוב אישי",
-          groceryListId: "4",
+          listId: "4",
         },
       ],
     },
@@ -119,14 +119,14 @@ export const GroceryProvider = ({ children }) => {
     setErrorMessage("")
     setErrorVisible(false)
   };
-  const fetchGroceryData = async () => {
+  const fetchListsData = async () => {
     try {
-      const response = await fetch(`${baseUrl}/GroceryLists/home/${homeId}`);
+      const response = await fetch(`${baseUrl}/Lists/home/${homeId}`);
       if (!response.ok) {
         throw new Error("שגיאה בהורדת נתונים");
       }
       const data = await response.json();
-      setGroceryData(data);
+      setListsData(data);
     } catch (error) {
       setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר")
       setErrorVisible(true)
@@ -136,22 +136,22 @@ export const GroceryProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    //fetchGroceryData();
+    //fetchListsData();
   }, []);
 
 
   // פונקציה לקבלת פריטים לפי listId
   const getList = (listId) => {
-    const list = groceryData.find((list) => list.id === listId);
+    const list = listsData.find((list) => list.id === listId);
     return list;
   };
 
   const addNewList = async (newList) => {
     // עדכון ה-state של המצרכים מיד לאחר יצירת הרשימה
-    setGroceryData((prevData) => [newList, ...prevData]);
+    setListsData((prevData) => [newList, ...prevData]);
     // try {
     //   // שליחה לשרת עם הבקשה ליצור רשימה חדשה
-    //   const response = await fetch(`${baseUrl}/GroceryLists/home/${homeId}`, {
+    //   const response = await fetch(`${baseUrl}/Lists/home/${homeId}`, {
     //     method: 'POST',
     //     headers: {
     //       'Content-Type': 'application/json',
@@ -160,14 +160,14 @@ export const GroceryProvider = ({ children }) => {
     //   });
 
     //   if (!response.ok) {
-    //     throw new Error('Failed to create grocery list');
+    //     throw new Error('Failed to create list list');
     //   }
 
     //   // קבלת התשובה מהשרת (הנתונים של הרשימה החדשה)
     //   const serverList = await response.json();
 
     //   // עדכון הרשימה עם ה-ID שנשלח מהשרת (אם ה-ID שונה מה-local ID)
-    //   setGroceryData((prevData) =>
+    //   setListsData((prevData) =>
     //     prevData.map((list) =>
     //       list.id === newList.id ? { ...list, id: serverList.id } : list
     //     )
@@ -175,43 +175,43 @@ export const GroceryProvider = ({ children }) => {
     // } catch (error) {
     //   setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר")
     //   setErrorVisible(true)
-    //   setGroceryData((prevData) => prevData.filter((list) => list.id !== newList.id));
+    //   setListsData((prevData) => prevData.filter((list) => list.id !== newList.id));
     // }
   };
 
 
   const deleteList = async (listId) => {
     // שמירת מצב הרשימה לפני המחיקה (למקרה של שגיאה)
-    const previousGroceryData = [...groceryData];
+    const previousListsData = [...listsData];
 
     // עדכון הסטייט באופן מקומי כדי להרגיש שהמחיקה מהירה
-    setGroceryData(groceryData.filter(list => list.id !== listId));
+    setListsData(listsData.filter(list => list.id !== listId));
 
     // try {
     //   // שליחת בקשת מחיקה לשרת
-    //   const response = await fetch(`${baseUrl}/GroceryLists/home/${homeId}/List/${listId}`, {
+    //   const response = await fetch(`${baseUrl}/Lists/home/${homeId}/List/${listId}`, {
     //     method: 'DELETE',
     //     headers: { 'Content-Type': 'application/json' }
     //   });
 
     //   if (!response.ok) {
-    //     throw new Error('Failed to delete grocery list');
+    //     throw new Error('Failed to delete list list');
     //   }
 
     // } catch (error) {
     //   setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר");
     //   setErrorVisible(true);
-    //   setGroceryData(previousGroceryData);
+    //   setListsData(previousListsData);
     // }
   };
 
 
   const updateList = async (listId, updatedList) => {
     // שמירת הנתונים הישנים למקרה של שגיאה
-    const oldList = groceryData.find(list => list.id === listId);
+    const oldList = listsData.find(list => list.id === listId);
   
     // עדכון הסטייט לנתונים החדשים באופן מיידי
-    setGroceryData(prevData =>
+    setListsData(prevData =>
       prevData.map(list =>
         list.id === listId ? { ...list, ...updatedList } : list
       )
@@ -226,14 +226,14 @@ export const GroceryProvider = ({ children }) => {
     //   });
   
     //   if (!response.ok) {
-    //     throw new Error('Failed to update grocery list');
+    //     throw new Error('Failed to update list list');
     //   }
     // } catch (error) {
     //   setErrorMessage("הייתה בעיה בעדכון הרשימה");
     //   setErrorVisible(true);
   
     //   // שחזור הנתונים במקרה של כישלון
-    //   setGroceryData(prevData =>
+    //   setListsData(prevData =>
     //     prevData.map(list => (list.id === listId ? oldList : list))
     //   );
     // }
@@ -244,7 +244,7 @@ export const GroceryProvider = ({ children }) => {
     const newStatus = !currentStatus; // היפוך הסטטוס
   
     // עדכון מקומי לשיפור חוויית המשתמש
-    const updatedGroceryData = groceryData.map((list) =>
+    const updatedListsData = listsData.map((list) =>
       list.id === listId
         ? {
             ...list,
@@ -255,11 +255,11 @@ export const GroceryProvider = ({ children }) => {
         : list
     );
   
-    setGroceryData(updatedGroceryData);
+    setListsData(updatedListsData);
   // try {
   //     // קריאה לשרת עם הסטטוס החדש ב-URL
   //       const response = await fetch(
-  //       `${baseUrl}/GroceryLists/home/${homeId}/List/${listId}/Item/${itemId}/status/${newStatus}`,
+  //       `${baseUrl}/Lists/home/${homeId}/List/${listId}/Item/${itemId}/status/${newStatus}`,
   //       {
   //         method: "PUT",
   //         headers: {
@@ -275,7 +275,7 @@ export const GroceryProvider = ({ children }) => {
   //     console.error("Error updating item status:", error);
   
   //     // שחזור הנתונים במקרה של כישלון
-  //     setGroceryData((prevData) =>
+  //     setListsData((prevData) =>
   //       prevData.map((list) =>
   //         list.id === listId
   //           ? {
@@ -295,12 +295,12 @@ export const GroceryProvider = ({ children }) => {
   };
   
   
-  const setGrocery = (newData) => {
-    setGroceryData([...newData])
+  const setLists = (newData) => {
+    setListsData([...newData])
   };
 
   const updateItemField = (listId, updatedItem) => {
-    setGroceryData((prevData) =>
+    setListsData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
@@ -316,7 +316,7 @@ export const GroceryProvider = ({ children }) => {
     );
   };
   const deleteItem = (listId, ItemId) => {
-    setGroceryData((prevData) =>
+    setListsData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
@@ -328,7 +328,7 @@ export const GroceryProvider = ({ children }) => {
     );
   };
   const updateOrAddItems = (listId, newItems) => {
-    setGroceryData((prevData) =>
+    setListsData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
@@ -360,7 +360,7 @@ export const GroceryProvider = ({ children }) => {
   };
 
   const clearCheckedItems = (listId) => {
-    setGroceryData((prevData) =>
+    setListsData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
@@ -372,7 +372,7 @@ export const GroceryProvider = ({ children }) => {
     );
   }
   const uncheckAllItems = (listId) => {
-    setGroceryData((prevData) =>
+    setListsData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
@@ -401,7 +401,7 @@ export const GroceryProvider = ({ children }) => {
       items: [...Items],
     };
 
-    setGroceryData((prevData) => [newList, ...prevData]);
+    setListsData((prevData) => [newList, ...prevData]);
   };
   // פונקציה להעתקת פריטים שנרכשו והגדרת isTaken כ-false
   const copyPurchasedItems = (listId) => {
@@ -422,7 +422,7 @@ export const GroceryProvider = ({ children }) => {
       items: [...purchasedItems],
     };
 
-    setGroceryData((prevData) => [newList, ...prevData]);
+    setListsData((prevData) => [newList, ...prevData]);
   };
 
   // פונקציה להעתקת פריטים שלא נרכשו
@@ -439,7 +439,7 @@ export const GroceryProvider = ({ children }) => {
       items: [...unpurchasedItems],
     };
 
-    setGroceryData((prevData) => [newList, ...prevData]);
+    setListsData((prevData) => [newList, ...prevData]);
   };
 
 
@@ -447,9 +447,9 @@ export const GroceryProvider = ({ children }) => {
 
 
   return (
-    <GroceryContext.Provider value={{ groceryData, setGrocery,fetchGroceryData, updateOrAddItems, updateList, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList,clearCheckedItems, uncheckAllItems,copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
+    <ListsContext.Provider value={{ listsData, setLists,fetchListsData, updateOrAddItems, updateList, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList,clearCheckedItems, uncheckAllItems,copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
-    </GroceryContext.Provider>
+    </ListsContext.Provider>
   );
 };

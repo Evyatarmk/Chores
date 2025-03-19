@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { GroceryProvider } from "./Context/GroceryContext";
+import { ListsProvider } from "./Context/ListsContext";
 import { TaskProvider } from "./Context/TaskContext";
 import { UserAndHomeProvider } from "./Context/UserAndHomeContext";
 import { ApiUrlProvider } from "./Context/ApiUrlProvider";
@@ -11,7 +11,7 @@ export default function RootLayout() {
       <UserAndHomeProvider>
         <CategoryProvider>
           <TaskProvider>
-            <GroceryProvider>
+            <ListsProvider>
               <Stack
                 screenOptions={{
                   headerShown: false,
@@ -22,16 +22,16 @@ export default function RootLayout() {
               >
                 <Stack.Screen name="index" />
                 <Stack.Screen name="TasksListScreen" />
-                <Stack.Screen name="GroceryListsScreen" />
-                <Stack.Screen name="GroceryItemsScreen" />
-                <Stack.Screen name="AddGroceryListScreen" />
-                <Stack.Screen name="AddGroceryItemScreen" />
+                <Stack.Screen name="ListsScreen" />
+                <Stack.Screen name="ListItemsScreen" />
+                <Stack.Screen name="AddListScreen" />
+                <Stack.Screen name="AddListItemsScreen" />
                 <Stack.Screen name="RegisterScreen" />
                 <Stack.Screen name="LoginScreen" />
                 <Stack.Screen name="ProfileScreen" />
                 <Stack.Screen name="AddTaskScreen" />
               </Stack>
-            </GroceryProvider>
+            </ListsProvider>
           </TaskProvider>
         </CategoryProvider>
       </UserAndHomeProvider>

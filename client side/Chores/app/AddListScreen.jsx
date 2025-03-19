@@ -5,15 +5,15 @@ import { Ionicons } from "@expo/vector-icons";
 import ItemSelector from "./Components/ItemSelector";
 import DatePicker from "./Components/DatePicker";
 import { useCategories } from "./Context/CategoryContext";
-import { useGrocery } from "./Context/GroceryContext";
+import { useLists } from "./Context/ListsContext";
 import SelectableDropdown from "./Components/SelectableDropdown";
 
-const AddGroceryListScreen = () => {
+const AddListScreen = () => {
   const [listName, setListName] = useState("");
   const [category, setCategory] = useState("ללא קטגוריה");
   const [date, setDate] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
-
+  
   
   const suggestions = [
     "קניות ל",
@@ -31,7 +31,7 @@ const AddGroceryListScreen = () => {
   const inputRef = useRef(null);
   const router = useRouter();
   const { categories ,addCategory} = useCategories();
-  const { addNewList } = useGrocery();
+  const { addNewList } = useLists();
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
@@ -207,4 +207,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddGroceryListScreen;
+export default AddListScreen;
