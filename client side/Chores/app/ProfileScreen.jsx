@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { Avatar } from '@rneui/themed';
+import { BarChart } from "react-native-chart-kit";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import NormalHeader from "./Components/NormalHeader";
@@ -9,28 +10,56 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const ProfileScreen = () => {
   const router = useRouter();
   const { user, home, logout } = useUserAndHome();
-  const [isEditing, setIsEditing] = useState(false);
-  const [newName, setNewName] = useState(user?.name || "");
-
+  const screenWidth = Dimensions.get("window").width;
   const handleEdit = () => {
     router.push({
       pathname: "./EditProfileScreen",
     })
   };
+  // נתונים אמיתיים מהמשתמש, אם אין נרצה להחזיר נתונים ברירת מחדל
+  const taskStats = user?.tasksStats?.completedTasksByMonth || {};
 
-  const handleLogout = () => {
-    logout();
-    router.push("/LoginScreen");
+  // אם אין נתונים, נמלא בנתונים לדוגמה
+  const data = {
+    labels: Object.keys(taskStats).map((month) => {
+      // המרה מהמפתחות 1, 2, 3 לשמות חודשים
+      const monthNames = ["ינואר", "פברואר", "מרץ"];
+      return monthNames[parseInt(month) - 1] || `חודש ${month}`;
+    }),
+    datasets: [
+      {
+        data: Object.values(taskStats), // כמות המשימות שהושלמו לכל חודש
+        color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`, // צבע הבר
+        strokeWidth: 2, // עובי הקו של הבר
+        fill: true, // מילוי בר בעמודה
+      },
+    ],
   };
 
-  const handleSave = () => {
-    console.log("שם חדש: ", newName);
-    setIsEditing(false);
+  const chartConfig = {
+    backgroundColor: "#f4f4f4",
+    backgroundGradientFrom: "#f4f4f4",
+    backgroundGradientTo: "#f4f4f4",
+    decimalPlaces: 0,
+    color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`, // צבע הגרף
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // צבע התוויות
+    style: {
+      borderRadius: 10,
+    },
+    propsForDots: {
+      r: "6",
+      strokeWidth: "2",
+      stroke: "#ffa726",
+    },
+    propsForBackgroundLines: {
+      strokeWidth: 0.5,
+      stroke: "#D3D3D3", // צבע קווים לרקע
+    },
   };
 
   return (
     <View style={styles.container}>
-      <NormalHeader title="אזור אישי" targetScreen="./"/>
+      <NormalHeader title="אזור אישי" />
 
       <View style={styles.profileCard}>
         <Avatar
@@ -38,22 +67,27 @@ const ProfileScreen = () => {
           size="large"
           rounded
         />
+        <Text style={styles.name}>{user?.name}</Text>
+        <Text style={styles.code}>קוד הבית: {home?.code}</Text>
         <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
           <Icon name="edit" size={18} color="#fff" />
         </TouchableOpacity>
-
-        <Text style={styles.name}>{user?.name}</Text>
-        {isEditing && (
-          <TextInput
-            style={styles.input}
-            value={newName}
-            onChangeText={setNewName}
-            placeholder="שם חדש"
-          />
-        )}
-        <Text style={styles.code}>קוד הבית: {home?.code}</Text>
       </View>
+      
+        
 
+
+      <Text style={styles.subTitle}>משימות שבוצעו</Text>
+      <BarChart
+        data={data}
+        width={screenWidth - 40}
+        height={220}
+        yAxisLabel=""
+        chartConfig={chartConfig}
+        fromZero
+        showValuesOnTopOfBars
+        style={styles.chart}
+      />
       <Text style={styles.subTitle}>חברי הבית</Text>
       <View style={styles.membersList}>
         {home?.members?.length > 0 ? (
@@ -69,8 +103,7 @@ const ProfileScreen = () => {
           <Text style={styles.noMembers}>אין חברים בבית</Text>
         )}
       </View>
-
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+      <TouchableOpacity onPress={() => logout()} style={styles.logoutButton}>
         <Icon name="exit-to-app" size={24} color="#fff" />
         <Text style={styles.logoutText}>התנתקות</Text>
       </TouchableOpacity>
@@ -82,6 +115,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f4",
+    padding: 20,
   },
   profileCard: {
     padding: 20,
@@ -112,25 +146,20 @@ const styles = StyleSheet.create({
   },
   code: {
     fontSize: 12,
-    fontWeight: "bold",
-    marginVertical: 10,
-    color: "#333",
-  },
-  input: {
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    borderRadius: 8,
-    width: "100%",
-    textAlign: "right",
-    backgroundColor: "#f9f9f9",
+    color: "#555",
+    marginBottom: 10,
   },
   subTitle: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 10,
+    textAlign: "center",
+  },
+  chart: {
+    marginVertical: 10,
+    borderRadius: 10,
+    alignSelf: "center",
   },
   membersList: {
     backgroundColor: "#fff",
@@ -172,10 +201,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 25,
     marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
+    alignSelf: "center",
   },
   logoutText: {
     color: "#fff",

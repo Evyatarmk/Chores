@@ -1,16 +1,26 @@
 import React, { createContext, useState, useContext } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from "expo-router";
 
 
 const UserAndHomeContext = createContext();
 
 const mockUser = {
-  id:1,
+  id: 1,
   name: "אביתר",
   email: "t",
   password: "1",
   homeId: 1,
   role: "admin",
   profilePicture: "https://www.coaching-center.co.il/wp-content/uploads/2014/12/%D7%90%D7%99%D7%A9_%D7%9E%D7%9B%D7%99%D7%A8%D7%95%D7%AA_coaching_center.jpg",
+  tasksStats: {
+    completedTasksByMonth: {
+      1: 10, 
+      2: 8,   
+      3: 12,
+    },
+    totalCompletedTasks: 30,
+  },
 };
 const mockHome = {
   id: "123",
@@ -31,20 +41,41 @@ export const UserAndHomeProvider = ({ children }) => {
     console.log("נרשם בהצלחה:", newUser);
     setUser(newUser);
   };
+// פונקציה ליצירת token דמוי עם זמן תפוגה
+const generateMockToken = (userId) => {
+  const expirationTime = Date.now() + 3600 * 1000; // תוקף למשך שעה (3600 שניות)
+  
+  // יצירת ה-token שכולל את מזהה המשתמש וזמן תפוגה
+  const tokenPayload = {
+    userId,
+    exp: expirationTime,
+  };
 
-  const login = (email, password) => {
+  // המרה לאובייקט JSON ויצירת string מופרדת
+  const token = JSON.stringify(tokenPayload);
+  return token;
+};
+  const login = async (email, password) => {
     if (email === mockUser.email && password === mockUser.password) {
       setUser(mockUser);
       setHome(mockHome);
+  
+      const mockToken = generateMockToken(mockUser.id);
+  
+      await AsyncStorage.setItem('accessToken', mockToken);
+  
       return true;
     } else {
       return false;
     }
   };
 
-  const logout = () => {
-    setUser(null)
+  const logout = async() => {
+    await AsyncStorage.removeItem('accessToken');
+    await AsyncStorage.removeItem('refreshToken');
+    setUser(null);
     setHome(null);
+    router.push("/LoginScreen"); // העבר למסך התחברות
   };
 
   const setNewHome = (homeName) => {

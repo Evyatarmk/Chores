@@ -4,6 +4,7 @@ import { TaskProvider } from "./Context/TaskContext";
 import { UserAndHomeProvider } from "./Context/UserAndHomeContext";
 import { ApiUrlProvider } from "./Context/ApiUrlProvider";
 import { CategoryProvider } from "./Context/CategoryContext";
+import AutoLogin from "./AutoLogin";
 
 export default function RootLayout() {
   return (
@@ -12,6 +13,7 @@ export default function RootLayout() {
         <CategoryProvider>
           <TaskProvider>
             <ListsProvider>
+              {/*<AutoLogin/>*/}
               <Stack
                 screenOptions={{
                   headerShown: false,

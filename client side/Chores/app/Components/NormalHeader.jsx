@@ -18,7 +18,7 @@ const NormalHeader = ({ title, onOptionPress, targetScreen }) => {
   return (
     <View style={styles.header}>
       {/* כפתור חזור */}
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+      <TouchableOpacity onPress={() => handleNavigate()} style={styles.backButton}>
         <Icon name="arrow-back" size={24} color="#333" />
       </TouchableOpacity>
 
@@ -34,13 +34,6 @@ const NormalHeader = ({ title, onOptionPress, targetScreen }) => {
           onPress={onOptionPress}
         >
           <Icon name="more-vert" size={24} color="#888" />
-        </TouchableOpacity>
-      )}
-
-      {/* כפתור ניווט לדף אחר אם targetScreen קיים */}
-      {targetScreen && (
-        <TouchableOpacity onPress={handleNavigate} style={styles.navigateButton}>
-          <Icon name="arrow-forward" size={24} color="#333" />
         </TouchableOpacity>
       )}
     </View>
