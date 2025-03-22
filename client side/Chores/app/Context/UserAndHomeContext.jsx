@@ -8,7 +8,7 @@ const mockUser = {
   name: "אביתר",
   email: "t",
   password: "1",
-  homeId: 1,
+  homeId: "home1",
   role: "admin",
   profilePicture: "https://www.coaching-center.co.il/wp-content/uploads/2014/12/%D7%90%D7%99%D7%A9_%D7%9E%D7%9B%D7%99%D7%A8%D7%95%D7%AA_coaching_center.jpg",
 };
@@ -20,6 +20,7 @@ const mockHome = {
       { id: "1", name: "אביתר", role: "admin",publicId:1 }, // אביתר הוא המנהל
       { id: "2", name: "דני", role: "user",publicId:2 }, // דני הוא חבר רגיל
     ]
+   
 };
 
 export const UserAndHomeProvider = ({ children }) => {
