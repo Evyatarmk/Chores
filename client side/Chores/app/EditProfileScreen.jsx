@@ -18,7 +18,7 @@ const EditProfileScreen = () => {
       Alert.alert("שגיאה", "שם לא יכול להיות ריק");
       return;
     }
-    
+
     // Call updateUser function to save changes
     updateUser(newName, newProfilePicture);
     Alert.alert("הצלחה", "הפרופיל עודכן בהצלחה");
@@ -26,22 +26,23 @@ const EditProfileScreen = () => {
   };
 
   const handleImageChange = async () => {
-    // בקשה להרשאות לגישה לאלבום
+    // בקשה להרשאות לגישה לגלריה ולמצלמה
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const cameraPermissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-    if (permissionResult.granted === false) {
-      Alert.alert("שגיאה", "אין לך הרשאה לגשת לגלריה");
+    if (permissionResult.granted === false || cameraPermissionResult.granted === false) {
+      Alert.alert("שגיאה", "אין לך הרשאות לגישה לגלריה או למצלמה");
       return;
     }
 
-    // פתיחת גלריית תמונות
+    // אפשרות לבחור תמונה מהגלריה או לצלם תמונה
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
       allowsEditing: true,
       quality: 1,
     });
 
     if (!pickerResult.canceled) {
-      console.log(pickerResult.assets[0].uri);
       setNewProfilePicture(pickerResult.assets[0].uri); // עדכון התמונה שנבחרה
     }
   };
