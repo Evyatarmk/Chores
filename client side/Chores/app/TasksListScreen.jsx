@@ -71,6 +71,8 @@ const TasksListScreen = () => {
         )}
       />
 
+  
+
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => {

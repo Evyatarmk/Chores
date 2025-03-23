@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingVi
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTasks } from "./Context/TaskContext";
+import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 import { v4 as uuidv4 } from "uuid";  // Ensure you import uuid for generating unique IDs
 
@@ -13,6 +14,7 @@ const AddTaskScreen = () => {
     const router = useRouter();
     const { addTaskForDate } = useTasks();
     const { day } = useLocalSearchParams(); // Get the selected date from params
+    const { user } = useUserAndHome();
   
     console.log("Selected Date:", day); // Debugging log
   
@@ -21,6 +23,7 @@ const AddTaskScreen = () => {
       id: uuidv4(), // Generate a unique ID
       title: "",
       description: "",
+      homeId:""
     });
   
     useEffect(() => {
@@ -33,7 +36,7 @@ const AddTaskScreen = () => {
         return;
       }
     
-      const newItem = { id: uuidv4(), title, description };
+      const newItem = { id: uuidv4(), title, description, homeId:user.homeId };
       console.log("New Task to Add:", newItem); // Log here
       
       // Add task for the selected date

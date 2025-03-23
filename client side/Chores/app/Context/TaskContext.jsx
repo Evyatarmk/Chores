@@ -5,8 +5,15 @@ export const useTasks = () => useContext(TaskContext);
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState({
-    "2025-03-12": [{ id: 1, title: "Meeting", description: "10 AM - Zoom Call" },{ id: 2, title: "Workout", description: "7 AM - Gym" }],
-    "2025-03-13": [{ id: 2, title: "Workout", description: "7 AM - Gym" }],
+    
+      "2025-03-12": [
+        { id: 1, title: "Meeting", description: "10 AM - Zoom Call", homeId: "home1" },
+        { id: 2, title: "Workout", description: "7 AM - Gym", homeId: "home2" }
+      ],
+      "2025-03-13": [
+        { id: 3, title: "Workout", description: "7 AM - Gym", homeId: "home1" }
+      ]
+    
     
   });
 
@@ -62,8 +69,48 @@ export const TaskProvider = ({ children }) => {
       };
     });
   };
+
+
+ // Function to add a task (Only Admin can add)
+ const addTask = (adminId, date, title, description) => {
+  const isAdmin = mockHome.members.some(
+    (member) => member.id === adminId && member.role === "admin"
+  );
+
+  if (!isAdmin) {
+    console.log("Only the admin can add tasks.");
+    return;
+  }
+
+  const newTask = {
+    id: Date.now(), // Unique ID
+    title,
+    description,
+    assignedTo: null,
+  };
+
+  setTasks((prevTasks) => ({
+    ...prevTasks,
+    [date]: prevTasks[date] ? [...prevTasks[date], newTask] : [newTask],
+  }));
+};
+
+// Function to sign up for a task
+const signUpForTask = (username, date, taskId) => {
+  setTasks((prevTasks) => ({
+    ...prevTasks,
+    [date]: prevTasks[date].map((task) =>
+      task.id === taskId ? { ...task, assignedTo: username } : task
+    ),
+  }));
+};
+
+
+
+
+
   return (
-    <TaskContext.Provider value={{ tasks, addTaskForDate, getTasksForDate, removeTaskForDate, editTask }}>
+    <TaskContext.Provider value={{ tasks, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask }}>
       {children}
     </TaskContext.Provider>
   );
