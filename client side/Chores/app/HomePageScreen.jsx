@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useRouter } from "expo-router";
 import Sidebar from "./Components/SideBar";
+import StoryComponent from "./Components/StoryComponent";
 import { useTasks } from "./Context/TaskContext";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 
@@ -13,6 +14,7 @@ export default function HomePageScreen() {
   if (!user) {
     return (
       <View style={styles.container}>
+        <StoryComponent></StoryComponent>
         <Sidebar />
         <Text style={styles.title}>Welcome to Your Chores App</Text>
         <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
@@ -64,10 +66,7 @@ export default function HomePageScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#f8f9fa",
-    paddingHorizontal: 20,
   },
   title: {
     fontSize: 24,
