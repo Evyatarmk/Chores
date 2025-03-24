@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image, Modal, StyleSheet, FlatList, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Video from 'react-native-video';
 
 // כל משתמש יכיל גם תמונת פרופיל
 const storiesData = [
@@ -8,46 +9,47 @@ const storiesData = [
     id: 1,
     username: "Evyatar",
     profileImage: "https://randomuser.me/api/portraits/men/1.jpg",
-    images: [
-      { uri: "https://picsum.photos/id/1011/800/600", uploadDate: "2025-03-20", uploadTime: "10:30 AM" },
-      { uri: "https://picsum.photos/id/1025/800/600", uploadDate: "2025-03-19", uploadTime: "5:45 PM" },
-      { uri: "https://picsum.photos/id/1039/800/600", uploadDate: "2025-03-18", uploadTime: "3:15 PM" },
+    media: [
+      { type: "image", uri: "https://picsum.photos/id/1011/800/600", uploadDate: "2025-03-20", uploadTime: "10:30 AM" },
+      { type: "image", uri: "https://picsum.photos/id/1025/800/600", uploadDate: "2025-03-19", uploadTime: "5:45 PM" },
+      { type: "image", uri: "https://picsum.photos/id/1039/800/600", uploadDate: "2025-03-18", uploadTime: "3:15 PM" },
+      { type: "video", uri: 'https://www.w3schools.com/html/mov_bbb.mp4', uploadDate: "2025-03-18", uploadTime: "3:15 PM" },
     ],
+
   },
   {
     id: 5,
     username: "Dana",
     profileImage: "https://randomuser.me/api/portraits/women/2.jpg",
-    images: [
-    ],
+    media: [],
   },
   {
     id: 2,
     username: "Dana",
     profileImage: "https://randomuser.me/api/portraits/women/2.jpg",
-    images: [
-    ],
+    media: [],
   },
   {
     id: 3,
     username: "Yossi",
     profileImage: "https://randomuser.me/api/portraits/men/3.jpg",
-    images: [
-      { uri: "https://picsum.photos/id/1074/800/600", uploadDate: "2025-03-22", uploadTime: "11:00 AM" },
-      { uri: "https://picsum.photos/id/1084/800/600", uploadDate: "2025-03-18", uploadTime: "8:30 PM" },
-      { uri: "https://picsum.photos/id/109/800/600", uploadDate: "2025-03-17", uploadTime: "4:00 PM" },
+    media: [
+      { type: "image", uri: "https://picsum.photos/id/1074/800/600", uploadDate: "2025-03-22", uploadTime: "11:00 AM" },
+      { type: "image", uri: "https://picsum.photos/id/1084/800/600", uploadDate: "2025-03-18", uploadTime: "8:30 PM" },
+      { type: "image", uri: "https://picsum.photos/id/109/800/600", uploadDate: "2025-03-17", uploadTime: "4:00 PM" },
     ],
   },
   {
     id: 4,
     username: "Maya",
     profileImage: "https://randomuser.me/api/portraits/women/4.jpg",
-    images: [
-      { uri: "https://picsum.photos/id/110/800/600", uploadDate: "2025-03-22", uploadTime: "3:20 PM" },
-      { uri: "https://picsum.photos/id/111/800/600", uploadDate: "2025-03-16", uploadTime: "6:40 PM" },
+    media: [
+      { type: "image", uri: "https://picsum.photos/id/110/800/600", uploadDate: "2025-03-22", uploadTime: "3:20 PM" },
+      { type: "image", uri: "https://picsum.photos/id/111/800/600", uploadDate: "2025-03-16", uploadTime: "6:40 PM" },
     ],
   },
 ];
+
 
 // פונקציה לחישוב הזמן שחלף
 const timeAgo = (uploadDate, uploadTime) => {
@@ -73,8 +75,8 @@ const timeAgo = (uploadDate, uploadTime) => {
 
 // פונקציה למיין את התמונות של כל משתמש לפי תאריך ושעה העלאה
 storiesData.forEach((story) => {
-  if (story.images.length > 0) {
-    story.images.sort((a, b) => {
+  if (story.media.length > 0) {
+    story.media.sort((a, b) => {
       const dateA = new Date(a?.uploadDate + " " + a?.uploadTime);
       const dateB = new Date(b?.uploadDate + " " + b?.uploadTime);
       return dateB - dateA; // מיין לפי הזמן האחרון
@@ -84,12 +86,12 @@ storiesData.forEach((story) => {
 
 // מיון המשתמשים לפי התמונה הכי חדשה (לפי תאריך ושעה) והם ממויינים בסדר לפי מי שיש לו תמונות
 const sortedStoriesData = storiesData.sort((a, b) => {
-  if (a.images.length === 0 && b.images.length === 0) return 0;
-  if (a.images.length === 0) return 1;
-  if (b.images.length === 0) return -1;
+  if (a.media.length === 0 && b.media.length === 0) return 0;
+  if (a.media.length === 0) return 1;
+  if (b.media.length === 0) return -1;
 
-  const latestA = new Date(a.images[0].uploadDate + " " + a.images[0].uploadTime);
-  const latestB = new Date(b.images[0].uploadDate + " " + b.images[0].uploadTime);
+  const latestA = new Date(a.media[0].uploadDate + " " + a.media[0].uploadTime);
+  const latestB = new Date(b.media[0].uploadDate + " " + b.media[0].uploadTime);
   return latestB - latestA;
 });
 
@@ -99,7 +101,7 @@ const StoryComponent = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const openStory = (user) => {
-    if (user.images.length == 0) return;
+    if (user.media.length == 0) return;
     setCurrentUser(user);
     setCurrentImageIndex(0); // מתחילים מהתמונה הראשונה
     setVisible(true);
@@ -111,7 +113,7 @@ const StoryComponent = () => {
     setCurrentImageIndex(0); // מאפס את מיקום התמונה
   };
   const goToNextImage = () => {
-    if (currentUser && currentImageIndex < currentUser.images.length - 1) {
+    if (currentUser && currentImageIndex < currentUser.media.length - 1) {
       // יש עוד תמונות באותו משתמש
       setCurrentImageIndex(currentImageIndex + 1);
     } else {
@@ -119,7 +121,7 @@ const StoryComponent = () => {
       const currentIndex = sortedStoriesData.findIndex(user => user.id === currentUser.id);
 
       for (let i = currentIndex + 1; i < sortedStoriesData.length; i++) {
-        if (sortedStoriesData[i].images.length > 0) {
+        if (sortedStoriesData[i].media.length > 0) {
           setCurrentUser(sortedStoriesData[i]);
           setCurrentImageIndex(0); // מתחילים מהתמונה הראשונה של המשתמש הבא
           return;
@@ -139,9 +141,9 @@ const StoryComponent = () => {
       const currentIndex = sortedStoriesData.findIndex(user => user.id === currentUser.id);
 
       for (let i = currentIndex - 1; i >= 0; i--) {
-        if (sortedStoriesData[i].images.length > 0) {
+        if (sortedStoriesData[i].media.length > 0) {
           setCurrentUser(sortedStoriesData[i]);
-          setCurrentImageIndex(sortedStoriesData[i].images.length - 1); // עוברים לתמונה האחרונה של המשתמש הקודם
+          setCurrentImageIndex(sortedStoriesData[i].media.length - 1); // עוברים לתמונה האחרונה של המשתמש הקודם
           return;
         }
       }
@@ -151,19 +153,13 @@ const StoryComponent = () => {
     }
   };
 
-  const handleScroll = (event) => {
-    const contentOffsetY = event.nativeEvent.contentOffset.y;
-    if (contentOffsetY > 100) {
-      closeStory(); // אם הגלילה היא למטה מעל 100 פיקסלים, נסגור את המודל
-    }
-  };
   const renderStory = ({ item }) => (
     <TouchableOpacity onPress={() => openStory(item)} style={styles.storyContainer}>
       {/* תמונת פרופיל */}
       {item.profileImage ? (
         <View
           style={
-            item.images.length > 0
+            item.media.length > 0
               ? styles.profileImageWithStories
               : styles.profileImageWithoutStories
           }
@@ -201,16 +197,21 @@ const StoryComponent = () => {
                 <View style={styles.userDetailsContainer}>
                   <Text style={styles.username}>{currentUser.username}</Text>
                   <Text style={styles.uploadDetails}>
-                  {timeAgo(currentUser.images[currentImageIndex]?.uploadDate, currentUser.images[currentImageIndex]?.uploadTime)}
+                  {timeAgo(currentUser.media[currentImageIndex]?.uploadDate, currentUser.media[currentImageIndex]?.uploadTime)}
                   </Text>
                 </View>
               </View>
 
-              {/* תמונת הסיפור */}
-              <Image
-                source={{ uri: currentUser.images[currentImageIndex]?.uri }}
-                style={styles.fullStory}
+              {currentUser.media[currentImageIndex].type === "image" ? (
+              <Image source={{ uri: currentUser.media[currentImageIndex].uri }} style={styles.fullStory} />
+            ) : (
+              <Video
+                source={{ uri: currentUser.media[currentImageIndex].uri }}
+                style={styles.media}
+                resizeMode="cover"
+                controls
               />
+            )}
             </>
           )}
 
@@ -314,6 +315,7 @@ const styles = StyleSheet.create({
   fullStory: {
     width: "100%",
     height: "100%",
+    resizeMode: 'contain'
   },
 
   navButtonLeft: {
