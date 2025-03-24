@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image, Modal, StyleSheet, FlatList, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Video from 'react-native-video';
+import { Video } from "expo-av";
+import * as ImagePicker from 'expo-image-picker';
 
-// כל משתמש יכיל גם תמונת פרופיל
 const storiesData = [
   {
+    
     id: 1,
     username: "Evyatar",
     profileImage: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -51,27 +52,45 @@ const storiesData = [
 ];
 
 
-// פונקציה לחישוב הזמן שחלף
 const timeAgo = (uploadDate, uploadTime) => {
   const now = new Date();
-  const uploadDateTime = new Date(uploadDate + " " + uploadTime);
+
+  // מפצלים את התאריך והשעה לחלקים
+  const [year, month, day] = uploadDate.split("-"); // תאריך בפורמט YYYY-MM-DD
+  const [hours, minutes, period] = uploadTime.split(/[: ]/); // שעה בפורמט HH:MM AM/PM
+
+  // מתאם את השעה לפי AM/PM
+  let hour = parseInt(hours);
+  if (period === "PM" && hour < 12) hour += 12;
+  if (period === "AM" && hour === 12) hour = 0;
+
+  // בונים את התאריך והשעה בתור אובייקט Date
+  const uploadDateTime = new Date(year, month - 1, day, hour, minutes);
+
+  // אם התאריך לא חוקי
+  if (isNaN(uploadDateTime)) {
+    console.error("תאריך או שעה לא תקינים", uploadDate, uploadTime);
+    return "תאריך לא תקין";
+  }
+
   const diffInMs = now - uploadDateTime;
-
   const seconds = Math.floor(diffInMs / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
+  const minutesDiff = Math.floor(seconds / 60);
+  const hoursDiff = Math.floor(minutesDiff / 60);
+  const daysDiff = Math.floor(hoursDiff / 24);
 
-  if (days > 0) {
-    return `${days} ימים`;
-  } else if (hours > 0) {
-    return `${hours} שעות`;
-  } else if (minutes > 0) {
-    return `${minutes} דקות`;
+  if (daysDiff > 0) {
+    return `${daysDiff} ימים`;
+  } else if (hoursDiff > 0) {
+    return `${hoursDiff} שעות`;
+  } else if (minutesDiff > 0) {
+    return `${minutesDiff} דקות`;
   } else {
     return `${seconds} שניות`;
   }
 };
+
+
 
 // פונקציה למיין את התמונות של כל משתמש לפי תאריך ושעה העלאה
 storiesData.forEach((story) => {
@@ -99,6 +118,9 @@ const StoryComponent = () => {
   const [visible, setVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isLongPress, setIsLongPress] = useState(false);
+  const [newMediaUri, setNewMediaUri] = useState(null);
 
   const openStory = (user) => {
     if (user.media.length == 0) return;
@@ -113,6 +135,9 @@ const StoryComponent = () => {
     setCurrentImageIndex(0); // מאפס את מיקום התמונה
   };
   const goToNextImage = () => {
+    if (isLongPress) {
+      return;  // אם יש לחיצה ארוכה, אל תעבור לתמונה הבאה
+    }
     if (currentUser && currentImageIndex < currentUser.media.length - 1) {
       // יש עוד תמונות באותו משתמש
       setCurrentImageIndex(currentImageIndex + 1);
@@ -133,6 +158,9 @@ const StoryComponent = () => {
 
 
   const goToPreviousImage = () => {
+    if (isLongPress) {
+      return;  // אם יש לחיצה ארוכה, אל תעבור לתמונה הבאה
+    }
     if (currentImageIndex > 0) {
       // אם יש תמונות קודמות אצל המשתמש הנוכחי
       setCurrentImageIndex(currentImageIndex - 1);
@@ -152,11 +180,43 @@ const StoryComponent = () => {
       closeStory();
     }
   };
+  const handleLongPress = () => {
+    setIsLongPress(true);  // סימן שיש לחיצה ארוכה
+    setIsVideoPlaying(false);  // עצירת הוידאו
+  };
+  
+  const handlePressOut = () => {
+    setIsLongPress(false);  // ביטול הלחיצה הארוכה
+    setIsVideoPlaying(true);  // המשך הוידאו
+  };
+  const handlePlaybackStatusUpdate = (status) => {
+    // אם הסרטון סיים לנגן (status.isLoaded ו-status.didJustFinish)
+    if (status.didJustFinish) {
+      goToNextImage(); // מעבר לתמונה הבאה
+    }
+  };
+  const handleAddMedia = async () => {
+    // בחירת מדיה חדשה (תמונה או וידאו)
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
+    if (!result.cancelled) {
+      setNewMediaUri(result.uri); // שומר את ה-URI של המדיה שנבחרה
+      Alert.alert("המדיה נוספה בהצלחה!");
+    }
+  };
   const renderStory = ({ item }) => (
     <TouchableOpacity onPress={() => openStory(item)} style={styles.storyContainer}>
       {/* תמונת פרופיל */}
-      {item.profileImage ? (
+      {item.isAddButton ? (
+      <TouchableOpacity onPress={handleAddMedia} style={styles.addMediaButton}>
+      <Icon name="add" size={30} color="white" />
+    </TouchableOpacity>
+      ) : (
         <View
           style={
             item.media.length > 0
@@ -166,8 +226,6 @@ const StoryComponent = () => {
         >
           <Image source={{ uri: item.profileImage }} style={styles.profileImage} />
         </View>
-      ) : (
-        <View style={styles.noProfileImage} />
       )}
       <Text style={styles.username}>{item.username}</Text>
     </TouchableOpacity>
@@ -176,7 +234,13 @@ const StoryComponent = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={sortedStoriesData}
+        data={[  {
+          id: 0,
+          username: "Add New Story",
+          profileImage: null,
+          media: [],
+          isAddButton: true, // מציין שזה כפתור פלוס
+        },...sortedStoriesData]}
         renderItem={renderStory}
         keyExtractor={(item) => item.id.toString()}
         horizontal
@@ -184,7 +248,7 @@ const StoryComponent = () => {
         contentContainerStyle={styles.flatListContainer}
       />
 
-<Modal visible={visible} transparent={true} animationType="slide">
+      <Modal visible={visible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           {currentUser && (
             <>
@@ -197,27 +261,40 @@ const StoryComponent = () => {
                 <View style={styles.userDetailsContainer}>
                   <Text style={styles.username}>{currentUser.username}</Text>
                   <Text style={styles.uploadDetails}>
-                  {timeAgo(currentUser.media[currentImageIndex]?.uploadDate, currentUser.media[currentImageIndex]?.uploadTime)}
+                    {timeAgo(currentUser.media[currentImageIndex]?.uploadDate, currentUser.media[currentImageIndex]?.uploadTime)}
                   </Text>
                 </View>
               </View>
 
               {currentUser.media[currentImageIndex].type === "image" ? (
-              <Image source={{ uri: currentUser.media[currentImageIndex].uri }} style={styles.fullStory} />
-            ) : (
-              <Video
-                source={{ uri: currentUser.media[currentImageIndex].uri }}
-                style={styles.media}
-                resizeMode="cover"
-                controls
-              />
-            )}
+                <Image source={{ uri: currentUser.media[currentImageIndex].uri }} style={styles.fullStory} />
+              ) : (
+                  <Video
+                    source={{ uri: currentUser.media[currentImageIndex].uri }}
+                    style={styles.fullStory}
+                    resizeMode="contain"
+                    shouldPlay={isVideoPlaying}
+                    useNativeControl
+                    onPlaybackStatusUpdate={handlePlaybackStatusUpdate} 
+                    onError={(error) => console.log("Video Error: ", error)}
+                  />
+              )}
             </>
           )}
 
           {/* כפתורים למעבר בין תמונות */}
-          <TouchableOpacity onPress={goToPreviousImage} style={styles.navButtonLeft} />
-          <TouchableOpacity onPress={goToNextImage} style={styles.navButtonRight} />
+          <TouchableOpacity 
+  onLongPress={handleLongPress} 
+  onPressOut={handlePressOut} 
+  onPress={goToPreviousImage} 
+  style={styles.navButtonLeft} 
+/>
+<TouchableOpacity 
+  onLongPress={handleLongPress} 
+  onPressOut={handlePressOut} 
+  onPress={goToNextImage} 
+  style={styles.navButtonRight} 
+/>
 
           {/* כפתור לסגירת התצוגה */}
           <TouchableOpacity onPress={closeStory} style={styles.closeButton}>
@@ -231,13 +308,21 @@ const StoryComponent = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 20,
     backgroundColor: "#fff",
+    flexDirection:"row"
+    },
+  addMediaButton: {
+    backgroundColor: "#ff006e",
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    flexDirection:"row",
+    justifyContent:"center",
+    alignItems:"center"
   },
-
   storyContainer: {
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 5,
   },
 
   profileImageWithStories: {
