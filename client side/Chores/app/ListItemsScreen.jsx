@@ -11,6 +11,7 @@ import FloatingLabelInput from "./Components/FloatingLabelInput";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AlertModal from "./Components/AlertModal";
 import OptionsModal from "./Components/OptionsModal";
+import PageWithMenu from "./Components/PageWithMenu";
 
 const ListItemsScreen = () => {
   const router = useRouter();
@@ -97,7 +98,8 @@ const ListItemsScreen = () => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <PageWithMenu>
+      <GestureHandlerRootView>
       <NormalHeader title={list?.name} onOptionPress={()=>{optionsModalRef.current?.open()}}/>
       <View style={styles.ProgressBar}>
         <ProgressBar totalItems={listItems.length} completedItems={listItems.filter(item => item.isTaken).length} />
@@ -213,7 +215,8 @@ const ListItemsScreen = () => {
         confirmText="מחק"
         cancelText="ביטול"
       />
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </PageWithMenu>
 
   );
 };
@@ -307,7 +310,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 20,
+    bottom: 0,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

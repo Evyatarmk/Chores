@@ -13,11 +13,11 @@ const ClearableInput = ({ value, onChangeText, placeholder }) => {
         value={value}
         placeholder={placeholder}
       />
-      {value?.length > 0 && (
+      {value?.length > 0 ? (
         <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
           <Ionicons name="close-circle" size={24} color="gray" />
         </TouchableOpacity>
-      )}
+      ):null}
     </View>
   );
 };

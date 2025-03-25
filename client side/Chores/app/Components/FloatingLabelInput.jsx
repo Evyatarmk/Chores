@@ -17,14 +17,14 @@ const FloatingLabelInput = ({ value, onChangeText, label }) => {
   return (
     <View style={styles.inputWrapper}>
       {/* תווית תמידית */}
-      {(!value || value === '') && !focus && (
+      {(!value || value === '') && !focus ? (
         <TouchableOpacity onPress={handleLabelPress}>
           <Text style={styles.placeholder}>{label}</Text>
         </TouchableOpacity>
-      )}
+      ):null}
 
       {/* שדה קלט */}
-      {(value || focus) && (
+      {(value || focus) ? (
         <TextInput
           ref={inputRef}
           value={value}
@@ -35,12 +35,12 @@ const FloatingLabelInput = ({ value, onChangeText, label }) => {
           onFocus={() => setFocus(true)}
           onBlur={() => value === '' && setFocus(false)}
         />
-      )}
+      ):null}
 
       {/* תווית צפה */}
-      {((value || value === '') || focus) && (
+      {((value || value === '') || focus) ? (
         <Text style={styles.floatingLabel}>{label}</Text>
-      )}
+      ):null}
     </View>
   );
 };

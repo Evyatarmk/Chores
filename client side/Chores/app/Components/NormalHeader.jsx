@@ -28,14 +28,14 @@ const NormalHeader = ({ title, onOptionPress, targetScreen }) => {
       </Text>
 
       {/* כפתור אפשרויות - יוצג רק אם onOptionPress קיים */}
-      {onOptionPress && (
+      {onOptionPress ? (
         <TouchableOpacity
           style={styles.optionsButton}
           onPress={onOptionPress}
         >
           <Icon name="more-vert" size={24} color="#888" />
         </TouchableOpacity>
-      )}
+      ):null}
     </View>
   );
 };

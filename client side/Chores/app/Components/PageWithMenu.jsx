@@ -3,7 +3,7 @@ import { View, Animated, TouchableOpacity, Text, StyleSheet, TouchableWithoutFee
 import { useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-const PageWithMenu = ({ children }) => {
+const PageWithMenu = (props) => {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerRight] = useState(new Animated.Value(-250)); // מתחיל מחוץ לתצוגה בצד ימין
@@ -25,15 +25,14 @@ const PageWithMenu = ({ children }) => {
     }).start();
     setDrawerOpen(false);
   };
-
   return (
     <View style={styles.container}>
       {/* Close Drawer on TouchableWithoutFeedback */}
-      {drawerOpen && (
+      {drawerOpen ? (
         <TouchableWithoutFeedback onPress={closeDrawer}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
-      )}
+      ):null}
 
       {/* Drawer */}
       <Animated.View
@@ -57,8 +56,8 @@ const PageWithMenu = ({ children }) => {
 
       {/* Main Content */}
       <View style={styles.mainContent}>
-        {children} {/* כאן נציג את התוכן של הילד שיתווסף לרכיב */}
-      </View>
+        {props.children}
+        </View>
 
       {/* Bottom Menu Bar */}
       <View style={styles.bottomMenu}>
@@ -142,6 +141,7 @@ const styles = StyleSheet.create({
   },
   mainContent: {
    flex:1,
+   marginBottom:80 
   },
   title: {
     fontSize: 24,

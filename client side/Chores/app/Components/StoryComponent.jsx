@@ -195,7 +195,7 @@ const StoryComponent = () => {
 
       <Modal visible={visible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
-          {currentUser && (
+          {currentUser ? (
             <>
               {/* פרטי המשתמש בראש המודל */}
               <View style={styles.modalHeader}>
@@ -225,7 +225,7 @@ const StoryComponent = () => {
                   />
               )}
             </>
-          )}
+          ):null}
 
           {/* כפתורים למעבר בין תמונות */}
           <TouchableOpacity 

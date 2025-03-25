@@ -31,7 +31,7 @@ export default function HomePageScreen() {
     console.log(homeTasks);
   return (
     <PageWithMenu>
-              <StoryComponent></StoryComponent>
+      <StoryComponent></StoryComponent>
 
       <Text style={styles.title}>Welcome to Your Chores App</Text>
       <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
@@ -47,12 +47,12 @@ export default function HomePageScreen() {
               </Text>
               <Text>Date: {task.date}</Text>
               <Text>Assigned to: {task.assignedTo || "None"}</Text>
-              {!task.assignedTo && (
+              {!task.assignedTo ? (
                 <Button
                   title="Sign Up"
                   onPress={() => signUpForTask(user.name, task.date, task.id)}
                 />
-              )}
+              ):null}
             </View>
           ))
         ) : (

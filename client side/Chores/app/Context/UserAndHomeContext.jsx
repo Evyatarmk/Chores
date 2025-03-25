@@ -71,12 +71,17 @@ const generateMockToken = (userId) => {
     }
   };
 
-  const logout = async() => {
+  const logout = async () => {
+    // מחיקת כל הטוקנים שנשמרו
     await AsyncStorage.removeItem('accessToken');
     await AsyncStorage.removeItem('refreshToken');
+    
+    // אפס את המידע בקונטקסטים או בסטייט
     setUser(null);
     setHome(null);
-    router.push("/LoginScreen"); // העבר למסך התחברות
+    
+    // נווט לעמוד ההתחברות ומחק את ההיסטוריה כך שלא יוכל לחזור אחורה
+    router.replace("/LoginScreen"); // replace ימחק את ההיסטוריה של הניווט
   };
 
   const setNewHome = (homeName) => {

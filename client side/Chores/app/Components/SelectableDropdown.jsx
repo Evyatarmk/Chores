@@ -73,7 +73,7 @@ const SelectableDropdown = ({
                 </TouchableOpacity>
               )}
             />
-            {allowAdding && (
+            {allowAdding ? (
               <TouchableOpacity 
                 style={styles.addOption} 
                 onPress={() => { 
@@ -84,7 +84,7 @@ const SelectableDropdown = ({
                 <Icon name="add" size={20} color="#007bff" />
                 <Text style={styles.addOptionText}>הוספת {label}</Text>
               </TouchableOpacity>
-            )}
+            ):null}
           </View>
         </Pressable>
       </Modal>

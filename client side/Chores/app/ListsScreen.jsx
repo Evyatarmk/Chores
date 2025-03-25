@@ -173,11 +173,6 @@ const ListsScreen = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#9Bd35A', '#689F38']} />
         }
       />
-
-      <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddListScreen" })}>
-        <Icon name="add" size={30} color="white" />
-      </TouchableOpacity>
-
       {/* מודל אפשרויות */}
       <OptionsModal
         optionsModalRef={optionsModalRef}
@@ -248,12 +243,15 @@ const ListsScreen = () => {
         cancelText="ביטול"
       />
     </GestureHandlerRootView>
+    <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddListScreen" })}>
+        <Icon name="add" size={30} color="white" />
+      </TouchableOpacity>
     </PageWithMenu>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f4f4f4",marginBottom:80 },
+  container: { flex: 1, backgroundColor: "#f4f4f4"},
   listItem: {
     padding: 16,
     backgroundColor: "#fff",
@@ -277,7 +275,7 @@ const styles = StyleSheet.create({
   optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
   addButton: {
     position: "absolute",
-    bottom: 10,
+    bottom: 0,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

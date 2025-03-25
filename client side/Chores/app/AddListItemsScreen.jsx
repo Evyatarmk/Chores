@@ -13,16 +13,16 @@ const AddListItemsScreen = () => {
   const listId = JSON.parse(params.listId);
   const [inputTextItemName, setInputTextItemName] = useState("");
   const [newItem, setNewItem] = useState(null)
-  const { updateOrAddItems,getList } = useLists();
+  const { updateOrAddItems, getList } = useLists();
 
   const [itemsToShow, setItemsToShow] = useState([]);
   const [itemsToAdd, setItemsToAdd] = useState([]);
 
   useEffect(() => {
     const tempItems = [
-      { id: 101, name: "ביצים", description: ""},
+      { id: 101, name: "ביצים", description: "" },
       { id: 102, name: "סוכר", description: "שקית 1 ג" },
-      { id: 103, name: "מלח", description: "מלח שולחן רגיל"},
+      { id: 103, name: "מלח", description: "מלח שולחן רגיל" },
     ];
     const tempItemsToShow = tempItems.map((item) => ({
       id: uuidv4(),
@@ -30,12 +30,12 @@ const AddListItemsScreen = () => {
       description: item.description,
       quantity: 0,
       isTaken: false,
-      listId:listId,
+      listId: listId,
     }));
-        
-    const allItems = [ ...getList(listId).items,...tempItemsToShow];
-  
-    const uniqueItems = allItems.filter((item, index, self) => 
+
+    const allItems = [...getList(listId).items, ...tempItemsToShow];
+
+    const uniqueItems = allItems.filter((item, index, self) =>
       index === self.findIndex((t) => (
         t.name === item.name && t.description === item.description
       ))
@@ -43,29 +43,29 @@ const AddListItemsScreen = () => {
     setItemsToShow(uniqueItems);
   }, []);
 
-  const handleAddItem = (item) => {    
+  const handleAddItem = (item) => {
     setItemsToAdd((prevItems) => {
       let existingItem = prevItems.find((i) => i.id === item.id);
-      
+
       if (existingItem) {
         return prevItems.map((i) =>
-          i.id === item.id 
-        ? { ...i, quantity: i.quantity + 1 }
-        : i
-      );
-    }
+          i.id === item.id
+            ? { ...i, quantity: i.quantity + 1 }
+            : i
+        );
+      }
       existingItem = itemsToShow.find((i) => i.id === item.id);
       if (existingItem) {
-        let newExistingItem={...existingItem,quantity: existingItem.quantity + 1}
-        return [...prevItems,newExistingItem]
-    }
-      let NewItem = { ...item, quantity:item.quantity+1 };
+        let newExistingItem = { ...existingItem, quantity: existingItem.quantity + 1 }
+        return [...prevItems, newExistingItem]
+      }
+      let NewItem = { ...item, quantity: item.quantity + 1 };
       return [...prevItems, NewItem];
     });
-  
+
     setItemsToShow((prevItems) => {
       const existingItem = prevItems.find((i) => i.id === item.id);
-  
+
       if (existingItem) {
         return prevItems.map((i) =>
           i.name === item.name && i.description === item.description
@@ -73,18 +73,18 @@ const AddListItemsScreen = () => {
             : i
         );
       }
-  
+
       setNewItem(null);
-      let NewItem = { ...item,quantity: 1 };
+      let NewItem = { ...item, quantity: 1 };
       return [...prevItems, NewItem];
     });
   };
-  
+
 
   const handleRemoveItem = (item) => {
     setItemsToAdd((prevItems) => {
       let existingItem = prevItems.find((i) => i.id === item.id);
-  
+
       if (existingItem) {
         return prevItems.map((i) =>
           i.name === item.name && i.description === item.description
@@ -94,15 +94,15 @@ const AddListItemsScreen = () => {
       }
       existingItem = itemsToShow.find((i) => i.id === item.id);
       if (existingItem) {
-        let newExistingItem={...existingItem,quantity: existingItem.quantity - 1}
-        return [...prevItems,newExistingItem]
-    }
+        let newExistingItem = { ...existingItem, quantity: existingItem.quantity - 1 }
+        return [...prevItems, newExistingItem]
+      }
 
     });
-  
+
     setItemsToShow((prevItems) => {
       const existingItem = prevItems.find((i) => i.name === item.name && i.description === item.description);
-  
+
       if (existingItem) {
         return prevItems.map((i) =>
           i.name === item.name && i.description === item.description
@@ -114,14 +114,14 @@ const AddListItemsScreen = () => {
     });
   };
   const handleConfirm = () => {
-    updateOrAddItems(listId,itemsToAdd);
-     router.back()
-  
+    updateOrAddItems(listId, itemsToAdd);
+    router.back()
+
 
   };
   const handleInputTextItemChange = (text) => {
     setInputTextItemName(text);
-    if(text==""){
+    if (text == "") {
       setNewItem(null);
     }
     const existingItem = itemsToShow.find((item) => item.name === text && !item.description);
@@ -129,12 +129,12 @@ const AddListItemsScreen = () => {
       setNewItem(null);
     } else {
       setNewItem({
-        id:uuidv4() , // יצירת מזהה ייחודי
+        id: uuidv4(), // יצירת מזהה ייחודי
         name: text,
         description: "",
         quantity: 0,
         isTaken: false,
-        listId:listId,
+        listId: listId,
       });
     }
   };
@@ -154,10 +154,10 @@ const AddListItemsScreen = () => {
       </View>
 
       <TouchableOpacity
-      style={styles.confirmButton}
-      onPress={handleConfirm}
+        style={styles.confirmButton}
+        onPress={handleConfirm}
       >
-      <Icon name="check" size={30} color="white" />
+        <Icon name="check" size={30} color="white" />
       </TouchableOpacity>
 
       {/* שדה קלט */}
@@ -168,35 +168,32 @@ const AddListItemsScreen = () => {
       />
 
       {/* הצגת פריט חדש אם השם לא ריק */}
-      {newItem && newItem.name.trim() !== ""&&(
+      {newItem?.name?.trim() ? (
         <View style={styles.itemContainer}>
           <TouchableOpacity
             onPress={() => handleRemoveItem(newItem)}
             style={styles.removeButton}
           >
-            {newItem.quantity > 0 && (
-              <Ionicons
-                name="remove-circle"
-                size={28}
-                color="#d9534f"
-              />
-            )}
+            {newItem.quantity > 0 ? (
+              <Ionicons name="remove-circle" size={28} color="#d9534f" />
+            ) : null}
           </TouchableOpacity>
           <View style={styles.itemDetails}>
-            <Text style={styles.itemTitle}>{newItem?.name}</Text>
-            {newItem?.description ? (
-              <Text style={styles.itemDescription}>{newItem?.description}</Text>
+            <Text style={styles.itemTitle}>{newItem.name}</Text>
+            {newItem.description ? (
+              <Text style={styles.itemDescription}>{newItem.description}</Text>
             ) : null}
           </View>
           <TouchableOpacity onPress={() => handleAddItem(newItem)} style={styles.addButton}>
             <Ionicons
               name="add-circle"
               size={28}
-              color={newItem.quantity === 0 ? "#d3d3d3" : "#4CAF50"} // צבע אפור בהיר אם הכמות 0, אחרת ירוק
+              color={newItem.quantity === 0 ? "#d3d3d3" : "#4CAF50"}
             />
           </TouchableOpacity>
         </View>
-      )}
+      ) : null}
+
 
       {/* רשימת פריטים */}
       <FlatList
@@ -204,18 +201,18 @@ const AddListItemsScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            {item.quantity > 0 && (
-            <TouchableOpacity
-              onPress={() => handleRemoveItem(item)}
-              style={styles.removeButton}
-            >
+            {item.quantity ? (
+              <TouchableOpacity
+                onPress={() => handleRemoveItem(item)}
+                style={styles.removeButton}
+              >
                 <Ionicons
                   name="remove-circle"
                   size={28}
                   color="#d9534f"
                 />
-              
-            </TouchableOpacity>)}
+              </TouchableOpacity>
+            ) : null}
             {item.quantity ? <Text style={styles.itemDescription}>{item.quantity}</Text> : null}
 
             <View style={styles.itemDetails}>
@@ -231,8 +228,7 @@ const AddListItemsScreen = () => {
             </TouchableOpacity>
           </View>
         )}
-        contentContainerStyle={{ paddingBottom: 80 }} // הקטנת ה-padding top
-
+        contentContainerStyle={{ paddingBottom: 80 }}
       />
     </View>
   );
@@ -287,7 +283,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
-    textAlign:"right"
+    textAlign: "right"
   },
   itemDescription: {
     fontSize: 12,

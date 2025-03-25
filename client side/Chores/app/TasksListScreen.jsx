@@ -6,6 +6,7 @@ import NormalHeader from "./Components/NormalHeader";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import { Agenda } from "react-native-calendars";
+import PageWithMenu from "./Components/PageWithMenu";
 
 const TasksListScreen = () => {
   const { tasks, editTask, removeTaskForDate, getTasksForDate } = useTasks();
@@ -29,6 +30,7 @@ const TasksListScreen = () => {
   markedDates[selectedDate] = { selected: true, selectedColor: "#007bff" };
 
   return (
+    <PageWithMenu>
     <GestureHandlerRootView style={styles.container}>
       <NormalHeader title="המשימות שלי" />
 
@@ -87,14 +89,11 @@ const TasksListScreen = () => {
         <Icon name="add" size={30} color="white" />
       </TouchableOpacity>
     </GestureHandlerRootView>
+    </PageWithMenu>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F9FA",
-  },
   taskItem: {
     backgroundColor: "#FFFFFF",
     marginVertical: 8,
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 20,
+    bottom: 0,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,
@@ -154,7 +153,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     zIndex: 1000,
-    elevation: 4, // For Android shadow
   },
 });
 

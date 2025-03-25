@@ -6,7 +6,7 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import NormalHeader from "./Components/NormalHeader";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Menu from "./Components/PageWithMenu";
+import PageWithMenu from "./Components/PageWithMenu";
 
 const ProfileScreen = () => {
   const router = useRouter();
@@ -59,9 +59,8 @@ const ProfileScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <PageWithMenu>
       <NormalHeader title="אזור אישי" />
-      <Menu></Menu>
       <View style={styles.profileCard}>
         <Avatar
           source={{ uri: user?.profilePicture || "https://via.placeholder.com/150" }}
@@ -108,7 +107,7 @@ const ProfileScreen = () => {
         <Icon name="exit-to-app" size={24} color="#fff" />
         <Text style={styles.logoutText}>התנתקות</Text>
       </TouchableOpacity>
-    </View>
+    </PageWithMenu>
   );
 };
 
