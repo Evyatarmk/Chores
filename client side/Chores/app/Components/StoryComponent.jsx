@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, Image, Modal, StyleSheet, FlatList, Scrol
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Video } from "expo-av";
 import * as ImagePicker from 'expo-image-picker';
-import {useStories} from "../Context/StoriesContext"
+import { useStories } from "../Context/StoriesContext"
+import { useUserAndHome } from "../Context/UserAndHomeContext"
 
 const timeAgo = (uploadDate, uploadTime) => {
   const now = new Date();
@@ -49,8 +50,8 @@ const StoryComponent = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isLongPress, setIsLongPress] = useState(false);
-  const [newMediaUri, setNewMediaUri] = useState(null);
-  const { stories, addStory } = useStories();
+  const { stories, addStory,deleteStory } = useStories();
+  const { user } = useUserAndHome();
 
   const openStory = (user) => {
     if (user.media.length == 0) return;
@@ -114,7 +115,7 @@ const StoryComponent = () => {
     setIsLongPress(true);  // סימן שיש לחיצה ארוכה
     setIsVideoPlaying(false);  // עצירת הוידאו
   };
-  
+
   const handlePressOut = () => {
     setIsLongPress(false);  // ביטול הלחיצה הארוכה
     setIsVideoPlaying(true);  // המשך הוידאו
@@ -124,6 +125,10 @@ const StoryComponent = () => {
     if (status.didJustFinish) {
       goToNextImage(); // מעבר לתמונה הבאה
     }
+  };
+  const handleDeleteStory = (storyId) => {
+    deleteStory(storyId)
+    closeStory()
   };
   const handleAddMedia = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -135,32 +140,32 @@ const StoryComponent = () => {
 
     // בחירת מדיה חדשה (תמונה או וידאו)
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images","videos"],
+      mediaTypes: ["images", "videos"],
       allowsEditing: true,
       quality: 1,
     });
 
     if (!result.canceled) {
-       // יצירת מזהה מדיה ייחודי
-    const mediaId = `media${Date.now()}`; // הוספתי את מזהה הזמן הנוכחי
+      // יצירת מזהה מדיה ייחודי
+      const mediaId = `media${Date.now()}`; // הוספתי את מזהה הזמן הנוכחי
 
-    let newMedia = {
-      mediaId: mediaId,  // הוספתי מזהה ייחודי לכל מדיה
-      type: result.assets[0].type,  // סוג המדיה (תמונה או וידאו)
-      uri: result.assets[0].uri,
-      uploadDate: new Date().toISOString().split("T")[0],  // תאריך העלאה
-      uploadTime: new Date().toLocaleTimeString(),  // זמן העלאה
-    };
-    addStory(newMedia)
+      let newMedia = {
+        mediaId: mediaId,  // הוספתי מזהה ייחודי לכל מדיה
+        type: result.assets[0].type,  // סוג המדיה (תמונה או וידאו)
+        uri: result.assets[0].uri,
+        uploadDate: new Date().toISOString().split("T")[0],  // תאריך העלאה
+        uploadTime: new Date().toLocaleTimeString(),  // זמן העלאה
+      };
+      addStory(newMedia)
     }
   };
   const renderStory = ({ item }) => (
     <TouchableOpacity onPress={() => openStory(item)} style={styles.storyContainer}>
       {/* תמונת פרופיל */}
       {item.isAddButton ? (
-      <TouchableOpacity onPress={handleAddMedia} style={styles.addMediaButton}>
-      <Icon name="add" size={30} color="white" />
-    </TouchableOpacity>
+        <TouchableOpacity onPress={handleAddMedia} style={styles.addMediaButton}>
+          <Icon name="add" size={30} color="white" />
+        </TouchableOpacity>
       ) : (
         <View
           style={
@@ -172,20 +177,22 @@ const StoryComponent = () => {
           <Image source={{ uri: item.profileImage }} style={styles.profileImage} />
         </View>
       )}
-      <Text style={styles.username}>{item.username}</Text>
+
+      <Text style={styles.username}>
+        {item.username}
+      </Text>
     </TouchableOpacity>
   );
-
   return (
     <View style={styles.container}>
       <FlatList
-        data={[  {
+        data={[{
           userId: 0,
-          username: "Add New Story",
+          username: " ",
           profileImage: null,
           media: [],
           isAddButton: true, // מציין שזה כפתור פלוס
-        },...stories]}
+        }, ...stories]}
         renderItem={renderStory}
         keyExtractor={(item) => item.userId.toString()}
         horizontal
@@ -199,52 +206,59 @@ const StoryComponent = () => {
             <>
               {/* פרטי המשתמש בראש המודל */}
               <View style={styles.modalHeader}>
-                <Image
-                  source={{ uri: currentUser.profileImage }}
-                  style={styles.modalProfileImage}
-                />
                 <View style={styles.userDetailsContainer}>
+                  <Image
+                    source={{ uri: currentUser.profileImage }}
+                    style={styles.modalProfileImage}
+                  />
+                   <View style={styles.userDetails}>
                   <Text style={styles.username}>{currentUser.username}</Text>
                   <Text style={styles.uploadDetails}>
                     {timeAgo(currentUser.media[currentImageIndex]?.uploadDate, currentUser.media[currentImageIndex]?.uploadTime)}
                   </Text>
+                  </View>
                 </View>
+                {currentUser.userId === user?.id && (
+                  <TouchableOpacity onPress={() => handleDeleteStory(currentUser.media[currentImageIndex]?.mediaId)} style={styles.deleteButton}>
+                    <Icon name="delete" size={30} color="red" />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity onPress={closeStory} style={styles.closeButton}>
+                  <Icon name="close" size={24} color="#888" />
+                </TouchableOpacity>
               </View>
 
               {currentUser.media[currentImageIndex].type === "image" ? (
                 <Image source={{ uri: currentUser.media[currentImageIndex].uri }} style={styles.fullStory} />
               ) : (
-                  <Video
-                    source={{ uri: currentUser.media[currentImageIndex].uri }}
-                    style={styles.fullStory}
-                    resizeMode="contain"
-                    shouldPlay={isVideoPlaying}
-                    useNativeControl
-                    onPlaybackStatusUpdate={handlePlaybackStatusUpdate} 
-                    onError={(error) => console.log("Video Error: ", error)}
-                  />
+                <Video
+                  source={{ uri: currentUser.media[currentImageIndex].uri }}
+                  style={styles.fullStory}
+                  resizeMode="contain"
+                  shouldPlay={isVideoPlaying}
+                  useNativeControl
+                  onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
+                  onError={(error) => console.log("Video Error: ", error)}
+                />
               )}
             </>
-          ):null}
+          ) : null}
 
           {/* כפתורים למעבר בין תמונות */}
-          <TouchableOpacity 
-  onLongPress={handleLongPress} 
-  onPressOut={handlePressOut} 
-  onPress={goToPreviousImage} 
-  style={styles.navButtonLeft} 
-/>
-<TouchableOpacity 
-  onLongPress={handleLongPress} 
-  onPressOut={handlePressOut} 
-  onPress={goToNextImage} 
-  style={styles.navButtonRight} 
-/>
+          <TouchableOpacity
+            onLongPress={handleLongPress}
+            onPressOut={handlePressOut}
+            onPress={goToPreviousImage}
+            style={styles.navButtonLeft}
+          />
+          <TouchableOpacity
+            onLongPress={handleLongPress}
+            onPressOut={handlePressOut}
+            onPress={goToNextImage}
+            style={styles.navButtonRight}
+          />
 
-          {/* כפתור לסגירת התצוגה */}
-          <TouchableOpacity onPress={closeStory} style={styles.closeButton}>
-            <Icon name="close" size={24} color="#888" />
-          </TouchableOpacity>
+         
         </View>
       </Modal>
 
@@ -254,19 +268,20 @@ const StoryComponent = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    flexDirection:"row"
-    },
+    flexDirection: "row",
+  },
   addMediaButton: {
     backgroundColor: "#ff006e",
     width: 70,
     height: 70,
     borderRadius: 35,
-    flexDirection:"row",
-    justifyContent:"center",
-    alignItems:"center"
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   },
   storyContainer: {
     alignItems: "center",
+    justifyContent: "center"
   },
 
   profileImageWithStories: {
@@ -277,9 +292,7 @@ const styles = StyleSheet.create({
     borderColor: "#ff006e",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 5,
-    marginHorizontal: 5,
-
+    margin: 5,
   },
 
   profileImageWithoutStories: {
@@ -308,7 +321,6 @@ const styles = StyleSheet.create({
 
   username: {
     fontSize: 14,
-    color: "white",
   },
 
   modalContainer: {
@@ -320,11 +332,13 @@ const styles = StyleSheet.create({
 
   modalHeader: {
     position: "absolute",
-    top: 20,
-    left: 20,
+    top: 10,
+    left: 0,
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    zIndex: 100,
+    zIndex: 101,
+    padding:5
   },
 
   modalProfileImage: {
@@ -335,7 +349,12 @@ const styles = StyleSheet.create({
   },
 
   userDetailsContainer: {
-    alignItems: "flex-start",
+    flex:1,
+    alignItems: "center",
+    flexDirection: "row"
+  },
+  userDetails:{
+flexDirection:"column"
   },
 
   uploadDetails: {
@@ -366,11 +385,13 @@ const styles = StyleSheet.create({
     width: "50%",
     zIndex: 100,
   },
-
+  deleteButton: {
+    marginLeft: 10,
+    padding: 5,
+    borderRadius: 20,
+    zIndex: 100
+  },
   closeButton: {
-    position: "absolute",
-    top: 25,
-    right: 20,
     padding: 5,
     backgroundColor: "#ededed",
     borderRadius: 20,

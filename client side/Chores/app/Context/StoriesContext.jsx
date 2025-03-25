@@ -1,6 +1,5 @@
-// StoriesContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
-import {useUserAndHome} from "../Context/UserAndHomeContext"
+import { useUserAndHome } from "../Context/UserAndHomeContext";
 
 const StoriesContext = createContext();
 
@@ -101,10 +100,14 @@ export const StoriesProvider = ({ children }) => {
         ],
       },
     ];
-    
 
-    // מיון המדיה לפי תאריך ושעה
-    storiesData.forEach((story) => {
+    setStories(sortStories(storiesData));
+  }, []);
+
+  // Function to sort stories based on the latest media
+  const sortStories = (storiesToSort) => {
+     // מיון המדיה לפי תאריך ושעה
+     storiesToSort.forEach((story) => {
       if (story.media.length > 0) {
         story.media.sort((a, b) => {
           const dateA = new Date(`${a.uploadDate} ${a.uploadTime}`);
@@ -113,79 +116,65 @@ export const StoriesProvider = ({ children }) => {
         });
       }
     });
-
-    // מיון המשתמשים לפי התמונה הכי חדשה אם קיימת
-    const sortedStories = storiesData.sort((a, b) => {
+    return storiesToSort.sort((a, b) => {
       if (a.media.length === 0 && b.media.length === 0) return 0;
       if (a.media.length === 0) return 1;
       if (b.media.length === 0) return -1;
 
-      const latestA = new Date(
-        `${a.media[0].uploadDate} ${a.media[0].uploadTime}`
-      );
-      const latestB = new Date(
-        `${b.media[0].uploadDate} ${b.media[0].uploadTime}`
-      );
-
-      return latestB - latestA;
-    });
-
-    setStories(sortedStories);
-  }, []);
-
-  const addStory = (newStory) => {
-    // אם למשתמש אין סיפור קודם, צור סיפור חדש
-    const userHasStory = stories.some((story) => story.userId === user?.id);
-  
-    let updatedStories;
-  
-    if (!userHasStory) {
-      // אם אין סיפור קודם, צור סיפור חדש עם המדיה
-      const newStoryData = {
-        userId: user?.id,
-        username: user?.name || "Unknown",  // שם המשתמש אם קיים
-        profileImage: user?.profileImage || "",  // תמונת פרופיל אם קיים
-        media: [newStory],  // הוסף את המדיה החדשה כמדיה הראשונה
-      };
-  
-      updatedStories = [newStoryData, ...stories];  // הוסף את הסיפור החדש למערך
-    } else {
-      // אם יש סיפור, עדכן את המערך
-      updatedStories = stories.map((story) => {
-        if (story.userId === user?.id) {
-          // הוסף את הסיפור החדש למערך המדיה של המשתמש המתאים
-          const updatedMedia = [newStory,...story.media];
-          return { ...story, media: updatedMedia };
-        }
-        return story; // לא משנה את המשתמשים האחרים
-      });
-    }
-  
-    // מיין את כל הסיפורים לפי התמונה הכי חדשה
-    updatedStories.sort((a, b) => {
-      if (a.media.length === 0 && b.media.length === 0) return 0;
-      if (a.media.length === 0) return 1;
-      if (b.media.length === 0) return -1;
-  
       const latestA = new Date(`${a.media[0].uploadDate} ${a.media[0].uploadTime}`);
       const latestB = new Date(`${b.media[0].uploadDate} ${b.media[0].uploadTime}`);
-  
+
       return latestB - latestA;
     });
-    console.log(updatedStories);
+  };
 
-    // עדכן את המערך עם הסיפורים הממוינים
+  const addStory = (newStory) => {
+    const userHasStory = stories.some((story) => story.userId === user?.id);
+
+    let updatedStories;
+
+    if (!userHasStory) {
+      const newStoryData = {
+        userId: user?.id,
+        username: user?.name || "Unknown",
+        profileImage: user?.profileImage || "",
+        media: [newStory],
+      };
+
+      updatedStories = [newStoryData, ...stories];
+    } else {
+      updatedStories = stories.map((story) => {
+        if (story.userId === user?.id) {
+          const updatedMedia = [newStory, ...story.media];
+          return { ...story, media: updatedMedia };
+        }
+        return story;
+      });
+    }
+
+    // Sort the stories after adding the new story
+    updatedStories = sortStories(updatedStories);
+
     setStories(updatedStories);
   };
-  
-  
 
-  const clearStories = () => {
-    setStories([]);
+  const deleteStory = (mediaId) => {
+    setStories((prevStories) => {
+      const updatedStories = prevStories.map((story) => {
+        if (story.userId === user?.id) {
+          const updatedMedia = story.media.filter((media) => media.mediaId !== mediaId);
+          return { ...story, media: updatedMedia };
+        }
+        return story;
+      });
+
+      // Sort the stories after deleting a media item
+      return sortStories(updatedStories);
+    });
   };
 
   return (
-    <StoriesContext.Provider value={{ stories, addStory, clearStories }}>
+    <StoriesContext.Provider value={{ stories, addStory, deleteStory }}>
       {children}
     </StoriesContext.Provider>
   );

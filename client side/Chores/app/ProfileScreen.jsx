@@ -60,7 +60,7 @@ const ProfileScreen = () => {
 
   return (
     <PageWithMenu>
-      <NormalHeader title="אזור אישי" />
+      <NormalHeader title="אזור אישי" targetScreen="/"/>
       <View style={styles.profileCard}>
         <Avatar
           source={{ uri: user?.profilePicture || "https://via.placeholder.com/150" }}

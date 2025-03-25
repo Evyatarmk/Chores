@@ -30,7 +30,6 @@ const mockHome = {
       { id: "1", name: "אביתר", role: "admin",publicId:1 }, // אביתר הוא המנהל
       { id: "2", name: "דני", role: "user",publicId:2 }, // דני הוא חבר רגיל
     ]
-   
 };
 
 export const UserAndHomeProvider = ({ children }) => {
@@ -70,7 +69,20 @@ const generateMockToken = (userId) => {
       return false;
     }
   };
-
+  const Autologin = async (email, password) => {
+    if (email === mockUser.email && password === mockUser.password) {
+      setUser(mockUser);
+      setHome(mockHome);
+  
+      const mockToken = generateMockToken(mockUser.id);
+  
+      await AsyncStorage.setItem('accessToken', mockToken);
+  
+      return true;
+    } else {
+      return false;
+    }
+  };
   const logout = async () => {
     // מחיקת כל הטוקנים שנשמרו
     await AsyncStorage.removeItem('accessToken');
@@ -115,6 +127,8 @@ const generateMockToken = (userId) => {
       value={{
         user,
         home,
+        setHome,
+        setUser,
         register,
         login,
         logout,
