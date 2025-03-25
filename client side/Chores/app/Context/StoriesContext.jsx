@@ -101,13 +101,8 @@ export const StoriesProvider = ({ children }) => {
       },
     ];
 
-    setStories(sortStories(storiesData));
-  }, []);
-
-  // Function to sort stories based on the latest media
-  const sortStories = (storiesToSort) => {
-     // מיון המדיה לפי תאריך ושעה
-     storiesToSort.forEach((story) => {
+    // מיון המדיה לפי תאריך ושעה
+    storiesData.forEach((story) => {
       if (story.media.length > 0) {
         story.media.sort((a, b) => {
           const dateA = new Date(`${a.uploadDate} ${a.uploadTime}`);
@@ -116,6 +111,29 @@ export const StoriesProvider = ({ children }) => {
         });
       }
     });
+
+    // מיון המשתמשים לפי התמונה הכי חדשה אם קיימת
+    const sortedStories = storiesData.sort((a, b) => {
+      if (a.media.length === 0 && b.media.length === 0) return 0;
+      if (a.media.length === 0) return 1;
+      if (b.media.length === 0) return -1;
+
+      const latestA = new Date(
+        `${a.media[0].uploadDate} ${a.media[0].uploadTime}`
+      );
+      const latestB = new Date(
+        `${b.media[0].uploadDate} ${b.media[0].uploadTime}`
+      );
+
+      return latestB - latestA;
+    });
+    sortStories(storiesData)
+    setStories( sortStories(storiesData));
+  }, []);
+
+  // Function to sort stories based on the latest media
+  const sortStories = (storiesToSort) => {
+ 
     return storiesToSort.sort((a, b) => {
       if (a.media.length === 0 && b.media.length === 0) return 0;
       if (a.media.length === 0) return 1;

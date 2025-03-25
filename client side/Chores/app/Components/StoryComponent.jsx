@@ -5,6 +5,7 @@ import { Video } from "expo-av";
 import * as ImagePicker from 'expo-image-picker';
 import { useStories } from "../Context/StoriesContext"
 import { useUserAndHome } from "../Context/UserAndHomeContext"
+import AlertModal from "../Components/AlertModal";
 
 const timeAgo = (uploadDate, uploadTime) => {
   const now = new Date();
@@ -52,6 +53,7 @@ const StoryComponent = () => {
   const [isLongPress, setIsLongPress] = useState(false);
   const { stories, addStory,deleteStory } = useStories();
   const { user } = useUserAndHome();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const openStory = (user) => {
     if (user.media.length == 0) return;
@@ -127,7 +129,7 @@ const StoryComponent = () => {
     }
   };
   const handleDeleteStory = (storyId) => {
-    deleteStory(storyId)
+   deleteStory(currentUser.media[currentImageIndex]?.mediaId)
     closeStory()
   };
   const handleAddMedia = async () => {
@@ -219,7 +221,7 @@ const StoryComponent = () => {
                   </View>
                 </View>
                 {currentUser.userId === user?.id && (
-                  <TouchableOpacity onPress={() => handleDeleteStory(currentUser.media[currentImageIndex]?.mediaId)} style={styles.deleteButton}>
+                  <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.deleteButton}>
                     <Icon name="delete" size={30} color="red" />
                   </TouchableOpacity>
                 )}
@@ -257,7 +259,14 @@ const StoryComponent = () => {
             onPress={goToNextImage}
             style={styles.navButtonRight}
           />
-
+      <AlertModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        message="האם אתה בטוח שברצונך למחוק פריט זה?"
+        onConfirm={handleDeleteStory}
+        confirmText="מחק"
+        cancelText="ביטול"
+      />
          
         </View>
       </Modal>
