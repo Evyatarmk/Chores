@@ -3,54 +3,7 @@ import { View, Text, TouchableOpacity, Image, Modal, StyleSheet, FlatList, Scrol
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Video } from "expo-av";
 import * as ImagePicker from 'expo-image-picker';
-
-const storiesData = [
-  {
-    
-    id: 1,
-    username: "Evyatar",
-    profileImage: "https://randomuser.me/api/portraits/men/1.jpg",
-    media: [
-      { type: "image", uri: "https://picsum.photos/id/1011/800/600", uploadDate: "2025-03-20", uploadTime: "10:30 AM" },
-      { type: "image", uri: "https://picsum.photos/id/1025/800/600", uploadDate: "2025-03-19", uploadTime: "5:45 PM" },
-      { type: "image", uri: "https://picsum.photos/id/1039/800/600", uploadDate: "2025-03-18", uploadTime: "3:15 PM" },
-      { type: "video", uri: 'https://www.w3schools.com/html/mov_bbb.mp4', uploadDate: "2025-03-18", uploadTime: "3:15 PM" },
-    ],
-
-  },
-  {
-    id: 5,
-    username: "Dana",
-    profileImage: "https://randomuser.me/api/portraits/women/2.jpg",
-    media: [],
-  },
-  {
-    id: 2,
-    username: "Dana",
-    profileImage: "https://randomuser.me/api/portraits/women/2.jpg",
-    media: [],
-  },
-  {
-    id: 3,
-    username: "Yossi",
-    profileImage: "https://randomuser.me/api/portraits/men/3.jpg",
-    media: [
-      { type: "image", uri: "https://picsum.photos/id/1074/800/600", uploadDate: "2025-03-22", uploadTime: "11:00 AM" },
-      { type: "image", uri: "https://picsum.photos/id/1084/800/600", uploadDate: "2025-03-18", uploadTime: "8:30 PM" },
-      { type: "image", uri: "https://picsum.photos/id/109/800/600", uploadDate: "2025-03-17", uploadTime: "4:00 PM" },
-    ],
-  },
-  {
-    id: 4,
-    username: "Maya",
-    profileImage: "https://randomuser.me/api/portraits/women/4.jpg",
-    media: [
-      { type: "image", uri: "https://picsum.photos/id/110/800/600", uploadDate: "2025-03-22", uploadTime: "3:20 PM" },
-      { type: "image", uri: "https://picsum.photos/id/111/800/600", uploadDate: "2025-03-16", uploadTime: "6:40 PM" },
-    ],
-  },
-];
-
+import {useStories} from "../Context/StoriesContext"
 
 const timeAgo = (uploadDate, uploadTime) => {
   const now = new Date();
@@ -90,30 +43,6 @@ const timeAgo = (uploadDate, uploadTime) => {
   }
 };
 
-
-
-// פונקציה למיין את התמונות של כל משתמש לפי תאריך ושעה העלאה
-storiesData.forEach((story) => {
-  if (story.media.length > 0) {
-    story.media.sort((a, b) => {
-      const dateA = new Date(a?.uploadDate + " " + a?.uploadTime);
-      const dateB = new Date(b?.uploadDate + " " + b?.uploadTime);
-      return dateB - dateA; // מיין לפי הזמן האחרון
-    });
-  }
-});
-
-// מיון המשתמשים לפי התמונה הכי חדשה (לפי תאריך ושעה) והם ממויינים בסדר לפי מי שיש לו תמונות
-const sortedStoriesData = storiesData.sort((a, b) => {
-  if (a.media.length === 0 && b.media.length === 0) return 0;
-  if (a.media.length === 0) return 1;
-  if (b.media.length === 0) return -1;
-
-  const latestA = new Date(a.media[0].uploadDate + " " + a.media[0].uploadTime);
-  const latestB = new Date(b.media[0].uploadDate + " " + b.media[0].uploadTime);
-  return latestB - latestA;
-});
-
 const StoryComponent = () => {
   const [visible, setVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -121,6 +50,7 @@ const StoryComponent = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isLongPress, setIsLongPress] = useState(false);
   const [newMediaUri, setNewMediaUri] = useState(null);
+  const { stories, addStory } = useStories();
 
   const openStory = (user) => {
     if (user.media.length == 0) return;
@@ -143,11 +73,11 @@ const StoryComponent = () => {
       setCurrentImageIndex(currentImageIndex + 1);
     } else {
       // חיפוש המשתמש הבא עם תמונות
-      const currentIndex = sortedStoriesData.findIndex(user => user.id === currentUser.id);
+      const currentIndex = stories.findIndex(user => user.userId === currentUser.userId);
 
-      for (let i = currentIndex + 1; i < sortedStoriesData.length; i++) {
-        if (sortedStoriesData[i].media.length > 0) {
-          setCurrentUser(sortedStoriesData[i]);
+      for (let i = currentIndex + 1; i < stories.length; i++) {
+        if (stories[i].media.length > 0) {
+          setCurrentUser(stories[i]);
           setCurrentImageIndex(0); // מתחילים מהתמונה הראשונה של המשתמש הבא
           return;
         }
@@ -166,12 +96,12 @@ const StoryComponent = () => {
       setCurrentImageIndex(currentImageIndex - 1);
     } else {
       // חיפוש המשתמש הקודם שיש לו תמונות להציג
-      const currentIndex = sortedStoriesData.findIndex(user => user.id === currentUser.id);
+      const currentIndex = stories.findIndex(user => user.userId === currentUser.userId);
 
       for (let i = currentIndex - 1; i >= 0; i--) {
-        if (sortedStoriesData[i].media.length > 0) {
-          setCurrentUser(sortedStoriesData[i]);
-          setCurrentImageIndex(sortedStoriesData[i].media.length - 1); // עוברים לתמונה האחרונה של המשתמש הקודם
+        if (stories[i].media.length > 0) {
+          setCurrentUser(stories[i]);
+          setCurrentImageIndex(stories[i].media.length - 1); // עוברים לתמונה האחרונה של המשתמש הקודם
           return;
         }
       }
@@ -196,17 +126,32 @@ const StoryComponent = () => {
     }
   };
   const handleAddMedia = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const cameraPermissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false || cameraPermissionResult.granted === false) {
+      return;
+    }
+
     // בחירת מדיה חדשה (תמונה או וידאו)
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ["images","videos"],
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setNewMediaUri(result.uri); // שומר את ה-URI של המדיה שנבחרה
-      Alert.alert("המדיה נוספה בהצלחה!");
+    if (!result.canceled) {
+       // יצירת מזהה מדיה ייחודי
+    const mediaId = `media${Date.now()}`; // הוספתי את מזהה הזמן הנוכחי
+
+    let newMedia = {
+      mediaId: mediaId,  // הוספתי מזהה ייחודי לכל מדיה
+      type: result.assets[0].type,  // סוג המדיה (תמונה או וידאו)
+      uri: result.assets[0].uri,
+      uploadDate: new Date().toISOString().split("T")[0],  // תאריך העלאה
+      uploadTime: new Date().toLocaleTimeString(),  // זמן העלאה
+    };
+    addStory(newMedia)
     }
   };
   const renderStory = ({ item }) => (
@@ -235,14 +180,14 @@ const StoryComponent = () => {
     <View style={styles.container}>
       <FlatList
         data={[  {
-          id: 0,
+          userId: 0,
           username: "Add New Story",
           profileImage: null,
           media: [],
           isAddButton: true, // מציין שזה כפתור פלוס
-        },...sortedStoriesData]}
+        },...stories]}
         renderItem={renderStory}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.userId.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.flatListContainer}
@@ -322,7 +267,6 @@ const styles = StyleSheet.create({
   },
   storyContainer: {
     alignItems: "center",
-    marginHorizontal: 5,
   },
 
   profileImageWithStories: {
@@ -334,6 +278,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
+    marginHorizontal: 5,
+
   },
 
   profileImageWithoutStories: {

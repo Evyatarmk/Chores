@@ -13,6 +13,7 @@ import ItemSelector from "./Components/ItemSelector";
 import { useCategories } from "./Context/CategoryContext";
 import DatePicker from "./Components/DatePicker";
 import SelectableDropdown from "./Components/SelectableDropdown";
+import PageWithMenu from "./Components/PageWithMenu";
 
 const ListsScreen = () => {
   const { listsData, fetchListsData, deleteList, updateList, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useLists();
@@ -119,8 +120,10 @@ const ListsScreen = () => {
     setCurrentList((prev) => prev ? { ...prev, name } : prev);
   };
   return (
+   <PageWithMenu>
     <GestureHandlerRootView style={styles.container}>
       <NormalHeader title="הרשימות שלי" />
+      
       <ItemSelector
         items={categories}
         onSelect={setSelectedCategory}
@@ -130,7 +133,7 @@ const ListsScreen = () => {
       <FlatList
         data={listsDataToShow}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ paddingBottom: 80 }}
+        contentContainerStyle={{ paddingBottom: 110 }}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.listItem}
@@ -245,11 +248,12 @@ const ListsScreen = () => {
         cancelText="ביטול"
       />
     </GestureHandlerRootView>
+    </PageWithMenu>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f4f4f4" },
+  container: { flex: 1, backgroundColor: "#f4f4f4",marginBottom:80 },
   listItem: {
     padding: 16,
     backgroundColor: "#fff",
@@ -273,7 +277,7 @@ const styles = StyleSheet.create({
   optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
   addButton: {
     position: "absolute",
-    bottom: 20,
+    bottom: 10,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

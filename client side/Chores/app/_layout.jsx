@@ -4,12 +4,14 @@ import { TaskProvider } from "./Context/TaskContext";
 import { UserAndHomeProvider } from "./Context/UserAndHomeContext";
 import { ApiUrlProvider } from "./Context/ApiUrlProvider";
 import { CategoryProvider } from "./Context/CategoryContext";
+import { StoriesProvider } from "./Context/StoriesContext";
 import AutoLogin from "./AutoLogin";
 
 export default function RootLayout() {
   return (
     <ApiUrlProvider>
       <UserAndHomeProvider>
+      <StoriesProvider>
         <CategoryProvider>
           <TaskProvider>
             <ListsProvider>
@@ -38,6 +40,7 @@ export default function RootLayout() {
             </ListsProvider>
           </TaskProvider>
         </CategoryProvider>
+      </StoriesProvider>
       </UserAndHomeProvider>
     </ApiUrlProvider>
   );

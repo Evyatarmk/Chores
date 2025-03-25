@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useRouter } from "expo-router";
-import Sidebar from "./Components/SideBar";
+import PageWithMenu from "./Components/PageWithMenu";
 import StoryComponent from "./Components/StoryComponent";
 import { useTasks } from "./Context/TaskContext";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
@@ -13,12 +13,11 @@ export default function HomePageScreen() {
 
   if (!user) {
     return (
-      <View style={styles.container}>
+      <PageWithMenu >
         <StoryComponent></StoryComponent>
-        <Sidebar />
         <Text style={styles.title}>Welcome to Your Chores App</Text>
         <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
-      </View>
+      </PageWithMenu>
     );
   }
 
@@ -31,8 +30,9 @@ export default function HomePageScreen() {
     );
     console.log(homeTasks);
   return (
-    <View style={styles.container}>
-      <Sidebar />
+    <PageWithMenu>
+              <StoryComponent></StoryComponent>
+
       <Text style={styles.title}>Welcome to Your Chores App</Text>
       <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
 
@@ -59,7 +59,7 @@ export default function HomePageScreen() {
           <Text style={styles.noTaskText}>No tasks available for your home.</Text>
         )}
       </View>
-    </View>
+    </PageWithMenu>
   );
 }
 

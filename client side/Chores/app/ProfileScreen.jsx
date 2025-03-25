@@ -6,6 +6,7 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import NormalHeader from "./Components/NormalHeader";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Menu from "./Components/PageWithMenu";
 
 const ProfileScreen = () => {
   const router = useRouter();
@@ -60,7 +61,7 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <NormalHeader title="אזור אישי" />
-
+      <Menu></Menu>
       <View style={styles.profileCard}>
         <Avatar
           source={{ uri: user?.profilePicture || "https://via.placeholder.com/150" }}
@@ -115,7 +116,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f4",
-    padding: 20,
   },
   profileCard: {
     padding: 20,

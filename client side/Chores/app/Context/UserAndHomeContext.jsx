@@ -6,7 +6,7 @@ import { router } from "expo-router";
 const UserAndHomeContext = createContext();
 
 const mockUser = {
-  id: 1,
+  id: "t",
   name: "אביתר",
   email: "t",
   password: "1",

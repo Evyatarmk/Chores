@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
-import Sidebar from "./Components/SideBar";
+import Menu from "./Components/PageWithMenu";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -27,7 +27,6 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Sidebar />
       <Text style={styles.title}>התחברות</Text>
       <TextInput style={styles.input} placeholder="אימייל" value={email} onChangeText={setEmail} />
       <TextInput style={styles.input} placeholder="סיסמה" value={password} onChangeText={setPassword} secureTextEntry />
