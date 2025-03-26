@@ -8,7 +8,7 @@ export const TaskProvider = ({ children }) => {
     
       "2025-03-12": [
         { id: 1, title: "Meeting", description: "10 AM - Zoom Call", homeId: "home1" },
-        { id: 2, title: "Workout", description: "7 AM - Gym", homeId: "home2" }
+        { id: 2, title: "Workout", description: "7 AM - Gym", homeId: "home1" }
       ],
       "2025-03-13": [
         { id: 3, title: "Workout", description: "7 AM - Gym", homeId: "home1" }

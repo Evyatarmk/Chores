@@ -1,99 +1,85 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet,Button,TouchableOpacity, FlatList} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useTasks } from "./Context/TaskContext";
 import NormalHeader from "./Components/NormalHeader";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
-import { Agenda } from "react-native-calendars";
+import { Calendar } from "react-native-calendars";
 import PageWithMenu from "./Components/PageWithMenu";
 
 const TasksListScreen = () => {
-  const { tasks, editTask, removeTaskForDate, getTasksForDate } = useTasks();
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const { tasks, removeTaskForDate, getTasksForDate } = useTasks();
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const router = useRouter();
 
-  // Handle date press
-  const handleDatePress = (day) => {
-    setSelectedDate(day.dateString);
-  };
-
-  // Prepare marked dates
+  // תאריכים מסומנים ביומן
   const markedDates = Object.keys(tasks).reduce((acc, date) => {
     acc[date] = { marked: true, dotColor: "blue" };
     return acc;
   }, {});
-
-  // Ensure selected date is highlighted
-  markedDates[selectedDate] = { selected: true, selectedColor: "#007bff" };
+  markedDates[selectedDate] = { selected: true, selectedColor: "#1E90FF" };
 
   return (
     <PageWithMenu>
-    <GestureHandlerRootView style={styles.container}>
-      <NormalHeader title="המשימות שלי" />
+      <GestureHandlerRootView style={styles.container}>
+        <NormalHeader title="המשימות שלי" />
 
-      <Agenda
-         items={{
-          [selectedDate]: getTasksForDate(selectedDate),
-        }}
-        onDayPress={handleDatePress}
-        markedDates={markedDates}
-        selected={selectedDate}
-        renderItem={( item ) => ( 
-          <View style={styles.taskItem}>
-            <Text style={styles.taskTitle}>{item?.title}</Text>
-            <Text style={styles.taskDescription}>{item?.description}</Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.editButton]}
-                onPress={() => console.log(item)}
-              >
-                <Text style={styles.buttonText}>Edit</Text>
-              </TouchableOpacity>
+        {/* יומן להצגת התאריכים */}
+        <Calendar
+          markedDates={markedDates}
+          onDayPress={(day) => setSelectedDate(day.dateString)}
+          theme={{
+            selectedDayBackgroundColor: "#1E90FF",
+            todayTextColor: "#1E90FF",
+            arrowColor: "#1E90FF",
+          }}
+        />
+
+        {/* רשימת משימות לתאריך שנבחר */}
+        <FlatList
+          data={getTasksForDate(selectedDate)}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.taskItem}>
+              <Text style={styles.taskTitle}>{item.title}</Text>
+              <Text style={styles.taskDescription}>{item.description}</Text>
               <TouchableOpacity
                 style={[styles.button, styles.removeButton]}
-                onPress ={() => removeTaskForDate(selectedDate,item.id)} 
+                onPress={() => removeTaskForDate(selectedDate, item.id)}
               >
                 <Text style={styles.buttonText}>Remove</Text>
               </TouchableOpacity>
             </View>
-          </View>
-        )}
-        theme={{
-          selectedDayBackgroundColor: "#1E90FF",
-          todayTextColor: "#1E90FF",
-          agendaTodayColor: "#1E90FF",
-        }}
-        renderEmptyData={() => (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No tasks for this day</Text>
-          </View>
-        )}
-      />
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>אין משימות ליום זה</Text>
+            </View>
+          }
+        />
 
-  
-
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          if (selectedDate) {
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() =>
             router.push({
               pathname: "./AddTaskScreen",
               params: { day: selectedDate },
-            });
+            })
           }
-        }}
-      >
-        <Icon name="add" size={30} color="white" />
-      </TouchableOpacity>
-    </GestureHandlerRootView>
+        >
+          <Icon name="add" size={30} color="white" />
+        </TouchableOpacity>
+      </GestureHandlerRootView>
     </PageWithMenu>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f0f0f0",
+  },
   taskItem: {
     backgroundColor: "#FFFFFF",
     marginVertical: 8,
@@ -104,7 +90,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 3, // For Android shadow
+    elevation: 3,
   },
   taskTitle: {
     fontSize: 18,
@@ -117,30 +103,28 @@ const styles = StyleSheet.create({
     color: "#666",
     marginBottom: 10,
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
   button: {
-    flex: 1,
     padding: 10,
-    marginHorizontal: 5,
+    backgroundColor: "#dc3545",
     borderRadius: 5,
     alignItems: "center",
-  },
-  editButton: {
-    backgroundColor: "#007bff",
-  },
-  removeButton: {
-    backgroundColor: "#dc3545",
+    marginTop: 10,
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
   },
+  emptyContainer: {
+    alignItems: "center",
+    marginVertical: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+  },
   addButton: {
     position: "absolute",
-    bottom: 0,
+    bottom: 20,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

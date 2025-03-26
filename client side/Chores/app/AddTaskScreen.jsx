@@ -6,114 +6,125 @@ import { useTasks } from "./Context/TaskContext";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 import { v4 as uuidv4 } from "uuid";  // Ensure you import uuid for generating unique IDs
+import DatePicker from "./Components/DatePicker";
+import SelectableDropdown from "./Components/SelectableDropdown";
+import ItemSelector from "./Components/ItemSelector";
 
 const AddTaskScreen = () => {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const inputRef = useRef(null);
-    const router = useRouter();
-    const { addTaskForDate } = useTasks();
-    const { day } = useLocalSearchParams(); // Get the selected date from params
-    const { user } = useUserAndHome();
-  
-    console.log("Selected Date:", day); // Debugging log
-  
-    // Initialize task item
-    const [currentItem, setCurrentItem] = useState({
-      id: uuidv4(), // Generate a unique ID
-      title: "",
-      description: "",
-      homeId:""
-    });
-  
-    useEffect(() => {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }, []);
-  
-    const handleAddTask = () => {
-      if (!title) {
-        alert("Please enter a title for the task.");
-        return;
-      }
-    
-      const newItem = { id: uuidv4(), title, description, homeId:user.homeId };
-      console.log("New Task to Add:", newItem); // Log here
-      
-      // Add task for the selected date
-      addTaskForDate(day, newItem);
-    
-      // Navigate back after adding the task
-      router.back();
-    };
-  
-    const handleClear = () => {
-      setTitle("");
-      setDescription("");
-      router.back();
-    };
-  
-    return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="always">
-          {/* Header */}
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name="close" size={28} color="black" />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>הוסף משימה</Text>
-          </View>
-  
-          {/* Task Title */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={inputRef}
-              style={styles.input}
-              placeholder="כותרת המשימה"
-              value={title}
-              onChangeText={setTitle}
-              returnKeyType="done"
-              onSubmitEditing={handleAddTask}
-              autoFocus
-            />
-            {title.length > 0? (
-              <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
-                <Ionicons name="close-circle" size={24} color="gray" />
-              </TouchableOpacity>
-            ):null}
-          </View>
-  
-          {/* Task Description */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="הוסף תיאור"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-            />
-          </View>
-  
-          {/* Selected Date */}
-          <Text style={styles.selectedDateText}>
-            תאריך נבחר: {day || "לא נבחר תאריך"}
-          </Text>
-  
-          {/* Buttons */}
-          <View style={styles.editButtons}>
-            <TouchableOpacity onPress={handleAddTask} style={styles.saveButton}>
-              <Text style={styles.saveButtonText}>הוסף משימה</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleClear} style={styles.cancelButton}>
-              <Text style={styles.cancelButtonText}>ביטול</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    );
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const inputRef = useRef(null);
+  const router = useRouter();
+  const { addTaskForDate } = useTasks();
+  const { day } = useLocalSearchParams(); // Get the selected date from params
+  const { user } = useUserAndHome();
+  const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
+  const [selectedDate, setSelectedDate] = useState(day); // כאן מוגדרת הפונקציה
+
+  // Initialize task item
+  const [currentItem, setCurrentItem] = useState({
+    id: uuidv4(), // Generate a unique ID
+    title: "",
+    description: "",
+    homeId: ""
+  });
+  const categories=["משימה","אירוע"];
+
+  useEffect(() => {
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, []);
+
+  const handleAddTask = () => {
+    if (!title) {
+      alert("Please enter a title for the task.");
+      return;
+    }
+
+    const newItem = { id: uuidv4(), title, description, homeId: user.homeId };
+    console.log("New Task to Add:", newItem); // Log here
+
+    // Add task for the selected date
+    addTaskForDate(day, newItem);
+
+    // Navigate back after adding the task
+    router.back();
   };
+
+  const handleClear = () => {
+    setTitle("");
+    setDescription("");
+    router.back();
+  };
+  const handleCategorySelect=(category)=>{
+   console.log(category)
+  }
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="always">
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="close" size={28} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>הוסף משימה</Text>
+        </View>
+
+        {/* Task Title */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={inputRef}
+            style={styles.input}
+            placeholder="כותרת המשימה"
+            value={title}
+            onChangeText={setTitle}
+            returnKeyType="done"
+            onSubmitEditing={handleAddTask}
+            autoFocus
+          />
+          {title.length > 0 ? (
+            <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
+              <Ionicons name="close-circle" size={24} color="gray" />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+
+        {/* Task Description */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="הוסף תיאור"
+            value={description}
+            onChangeText={setDescription}
+            multiline
+          />
+        </View>
+        <View style={styles.column}>
+           <ItemSelector items={categories} onSelect={handleCategorySelect} defaultSelected = "משימה" firstItem= "משימה"/>
+        <DatePicker
+        onDateSelect={setSelectedDate}
+        showModal={showDatePicker}
+        setShowModal={setShowDatePicker}
+        selectedDate={selectedDate}
+        minDate={null}
+      />
+        </View>
+       
+
+        {/* Buttons */}
+        <View style={styles.editButtons}>
+          <TouchableOpacity onPress={handleAddTask} style={styles.saveButton}>
+            <Text style={styles.saveButtonText}>הוסף משימה</Text>
+          </TouchableOpacity>
+         
+        </View>
+      </ScrollView>
+      
+    </KeyboardAvoidingView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -142,6 +153,12 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "relative",
   },
+  column:{
+    flexDirection:"column",
+    alignItems:"flex-end",
+    width:"100%",
+    gap:10
+  },
   input: {
     width: "100%",
     padding: 15,
@@ -153,6 +170,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     textAlign: "right",
     marginBottom: 15,
+  },
+  editButtons:{
+   flexDirection:"row",
+   width:"100%"
   },
   clearButton: {
     position: "absolute",

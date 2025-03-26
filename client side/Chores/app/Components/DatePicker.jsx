@@ -1,36 +1,38 @@
 import React, { useState, useCallback } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
-import { Calendar } from "react-native-calendars"; // חבילה שמספקת את הקומפוננטה של היומן
+import { Calendar } from "react-native-calendars";
 import { Ionicons } from "@expo/vector-icons";
 
-const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => {
+const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate, TodayMinDate=false }) => {
+  const today = new Date().toISOString().split("T")[0];
   const [markedDates, setMarkedDates] = useState(
     selectedDate ? { [selectedDate]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } } : {}
   );
-  const [day, setDay] = useState(null)
+  const [day, setDay] = useState(selectedDate || "");
 
-
-  const today = new Date().toISOString().split("T")[0];
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const tomorrowDate = tomorrow.toISOString().split("T")[0];
 
-  const handleDayPress = useCallback((day) => {
-    setDay(day.dateString);
-    setMarkedDates({ [day.dateString]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } });
-  }, [onDateSelect]);
+  const handleDayPress = useCallback(
+    (day) => {
+      setDay(day.dateString);
+      setMarkedDates({ [day.dateString]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } });
+    },
+    []
+  );
 
   const handleQuickSelect = (date) => {
-    setDay(date? date: "");
+    setDay(date || "");
     setMarkedDates(date ? { [date]: { selected: true, selectedColor: "blue", selectedTextColor: "white" } } : {});
   };
 
   return (
     <>
-        <TouchableOpacity style={styles.dateButton} onPress={() => setShowModal(true)}>
-          <Ionicons name="calendar" size={12} color="white" />
-          <Text style={styles.dateButtonText}>{selectedDate === "" ? "ללא תאריך" : selectedDate}</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.dateButton} onPress={() => setShowModal(true)}>
+        <Ionicons name="calendar" size={12} color="white" />
+        <Text style={styles.dateButtonText}>{selectedDate || "ללא תאריך"}</Text>
+      </TouchableOpacity>
 
       <Modal transparent={true} animationType="slide" visible={showModal} onRequestClose={() => setShowModal(false)}>
         <View style={styles.modalOverlay}>
@@ -40,12 +42,12 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
               markedDates={markedDates}
               monthFormat={"yyyy MM"}
               theme={{
-                selectedDayBackgroundColor: 'blue',
-                selectedDayTextColor: '#ffffff',
-                todayTextColor: '#00adf5',
+                selectedDayBackgroundColor: "blue",
+                selectedDayTextColor: "#ffffff",
+                todayTextColor: "#00adf5",
               }}
               style={styles.calendar}
-              minDate={today}
+              minDate={TodayMinDate?today:null}
             />
 
             <View style={styles.quickSelectContainer}>
@@ -64,7 +66,13 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
               <TouchableOpacity style={styles.cancelButton} onPress={() => setShowModal(false)}>
                 <Text style={styles.cancelButtonText}>ביטול</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmButton} onPress={() =>{onDateSelect(day); setShowModal(false)}}>
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={() => {
+                  onDateSelect(day);
+                  setShowModal(false);
+                }}
+              >
                 <Text style={styles.confirmButtonText}>אישור</Text>
               </TouchableOpacity>
             </View>
@@ -76,17 +84,16 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate }) => 
 };
 
 const styles = StyleSheet.create({
-
   dateButton: {
-    height:30,
+    height: 30,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#007bff",
-    paddingVertical: 5, // יותר קטן
-    paddingHorizontal: 8, // יותר קטן
+    paddingVertical: 5,
+    paddingHorizontal: 8,
     borderRadius: 20,
     justifyContent: "center",
-    maxWidth: 100, // קובע מינימום רוחב אם תרצה, תוכל להתאים לפי הצורך
+    maxWidth: 120,
   },
   dateButtonText: {
     fontSize: 12,
@@ -108,6 +115,24 @@ const styles = StyleSheet.create({
   calendar: {
     height: 350,
     width: "100%",
+  },
+  quickSelectContainer: {
+    marginTop: 20,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  quickSelectButton: {
+    backgroundColor: "#eeeeee",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginVertical: 5,
+  },
+  quickSelectButtonText: {
+    color: "#007bff",
+    fontSize: 14,
+    textAlign: "center",
   },
   buttonsContainer: {
     marginTop: 20,
@@ -137,25 +162,6 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     color: "white",
     fontSize: 16,
-    textAlign: "center",
-  },
-  quickSelectContainer: {
-    marginTop: 20,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  quickSelectButton: {
-    backgroundColor: "#eeeeee",
-    paddingVertical: 2,
-    paddingHorizontal: 2,
-    borderRadius: 8,
-    width: "30%",
-    marginVertical: 5,
-  },
-  quickSelectButtonText: {
-    color: "#007bff",
-    fontSize: 12,
     textAlign: "center",
   },
 });

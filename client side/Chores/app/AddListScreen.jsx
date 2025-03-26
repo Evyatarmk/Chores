@@ -107,8 +107,13 @@ const AddListScreen = () => {
           firstItem="ללא קטגוריה"
         />
         {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
-        <DatePicker onDateSelect={setDate} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={date} />
-      </View>
+        <DatePicker
+        onDateSelect={setDate}
+        showModal={showDatePicker}
+        setShowModal={setShowDatePicker}
+        selectedDate={date}
+        TodayMinDate={true} // שימוש בפרופס להגדרת היום כתאריך מינימלי
+      />      </View>
 
 
       {/* כפתור יצירת הרשימה */}

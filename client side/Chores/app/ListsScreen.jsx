@@ -221,7 +221,7 @@ const ListsScreen = () => {
                     firstItem="ללא קטגוריה"
                   />
                   {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
-                  <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} />
+                  <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} TodayMinDate={true} />
                 </View>
        
           <View style={styles.editButtons}>

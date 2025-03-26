@@ -45,7 +45,7 @@ const ItemSelector = ({ items = [], onSelect, defaultSelected = null ,firstItem 
 };
 
 const styles = StyleSheet.create({
-  container: { paddingVertical: 10 },
+  container: { paddingVertical: 10,flexDirection:"row",alignItems:"center",justifyContent:"center" },
   itemButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
