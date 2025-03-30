@@ -11,7 +11,7 @@ import OptionsModal from "./Components/OptionsModal";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 const TasksListScreen = () => {
-  const { tasks, removeTaskForDate, getTasksForDate, signUpForTask } = useTasks();
+  const { tasks, removeTaskForDate, getTasksForDate, signUpForTask,signOutOfTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const router = useRouter();
   const optionsModalRef = useRef(null);
@@ -82,11 +82,11 @@ const TasksListScreen = () => {
 
         {/* אם המשתמש רשום */}
         {isUserRegistered ? (
-          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)}>
+          <TouchableOpacity onPress={() => signOutOfTask(item.date, item.id)}>
             <Text style={styles.editButton}>רשום - לצאת</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)}>
+          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id,item.maxParticipants)}>
             <Text style={styles.editButton}>הירשם למשימה</Text>
           </TouchableOpacity>
         )}

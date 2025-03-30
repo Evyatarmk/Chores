@@ -8,7 +8,7 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState({
     "2025-03-30": [
       { 
-        id: 1, 
+        id: '1', 
         date: "2025-03-30",
         time: "10:00 AM",  // Added time here
         title: "Meeting", 
@@ -21,7 +21,7 @@ export const TaskProvider = ({ children }) => {
         ] 
       },
       { 
-        id: 2, 
+        id: '2', 
         title: "Workout",
         date: "2025-03-30", 
         time: "7:00 AM",  // Added time here
@@ -34,7 +34,7 @@ export const TaskProvider = ({ children }) => {
     ],
     "2025-04-01": [
       { 
-        id: 3, 
+        id: '3', 
         date: "2025-04-01",
         time: "7:00 AM",  // Added time here
         title: "Workout", 
@@ -74,7 +74,7 @@ export const TaskProvider = ({ children }) => {
     return tasks[date] || [];
   };
 
-  const signUpForTask = (date, taskId) => {
+  const signUpForTask = (date, taskId, maxParticipants) => {
     setTasks((prevTasks) => ({
       ...prevTasks,
       [date]: prevTasks[date].map((task) =>
@@ -82,13 +82,30 @@ export const TaskProvider = ({ children }) => {
           ? {
               ...task,
               participants: task.participants.some(participant => participant.id === user.id)
-                ? task.participants // אם המשתמש כבר רשום, אל תוסיף אותו שוב
-                : [...task.participants, { id: user.id, name: user.name }] // הוסף את המשתמש אם הוא לא נמצא
+                ? task.participants // If the user is already signed up, don't add them again
+                : task.participants.length < maxParticipants // Check if the number of participants is less than the max limit
+                ? [...task.participants, { id: user.id, name: user.name }] // Add the user if the limit is not reached
+                : task.participants // If the limit is reached, don't add the user
             }
           : task
       ),
     }));
   };
+
+  const signOutOfTask = (date, taskId) => {
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [date]: prevTasks[date].map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              participants: task.participants.filter(participant => participant.id !== user.id) // הסר את המשתמש אם הוא נמצא
+            }
+          : task
+      ),
+    }));
+  };
+  
   
   const removeTaskForDate = (date, taskId) => {
     setTasks(prevTasks => {
@@ -105,37 +122,29 @@ export const TaskProvider = ({ children }) => {
     });
   };
   
-const getTask = (date, taskId) => {
-
+  const getTask = (date, taskId) => {
     if (!tasks) {
       console.log("Tasks are not loaded yet.");
       return null;
     }
-
-
-    // המרת date למחרוזת בפורמט הנכון
-    const formattedDate = typeof date === "string" ? date.trim() : new Date(date).toISOString().split("T")[0];
-
-    
+  
+    const formattedDate =
+      typeof date === "string" ? date.trim() : new Date(date).toISOString().split("T")[0];
+  
     const tasksForDate = tasks[formattedDate];
     console.log("Tasks for this date:", tasksForDate);
-
-    if (!tasksForDate) {
+  
+    if (!tasksForDate || tasksForDate.length === 0) {
       console.log("No tasks found for this date:", formattedDate);
       return null;
     }
-
-    // הפיכת taskId למספר
-    const task = tasksForDate.find((task) => task.id === Number(taskId));
-    console.log("Found task:", task);
-
-    if (!task) {
-      console.log("No task found with taskId:", taskId);
-      return null;
-    }
-
-    return task;
-};
+  console.log(taskId)
+    // Find the specific task by taskId
+    const foundTask = tasksForDate.find(task => task.id ===  taskId);
+    console.log("Found Task:", foundTask);
+  
+    return foundTask || null;
+  };
 
   
   
@@ -180,7 +189,7 @@ const getTask = (date, taskId) => {
 
 
   return (
-    <TaskContext.Provider value={{ tasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask }}>
+    <TaskContext.Provider value={{ tasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask}}>
       {children}
     </TaskContext.Provider>
   );

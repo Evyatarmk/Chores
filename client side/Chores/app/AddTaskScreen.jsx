@@ -17,7 +17,7 @@ const AddTaskScreen = () => {
     homeId: "",
     category: "משימה", // Default to "Task"
     participants: [], // Default to empty array
-    maxParticipants: 0, // Default max participants
+    maxParticipants: 1, // Default max participants
     selectedDate: "", // Default date (will be set later)
   });
   const inputRef = useRef(null);
@@ -125,6 +125,24 @@ const AddTaskScreen = () => {
             multiline
           />
         </View>
+
+        <View style={styles.inputContainer}>
+        <TextInput
+        style={styles.input}
+         placeholder="מספר מקסימלי של משתתפים"
+         value={taskData.maxParticipants === 0 || taskData.maxParticipants === '' ? '' : taskData.maxParticipants.toString()}
+         onChangeText={(text) => {
+           // Check if the input is empty or a valid number
+          const numericValue = parseInt(text, 10);
+            if (text === '' || !isNaN(numericValue)) {
+          setTaskData({ ...taskData, maxParticipants: text === '' ? '' : numericValue });
+          }
+          }}
+        keyboardType="numeric"
+           multiline={false}
+         />
+          </View>
+
 
         <View style={styles.column}>
           {/* Category Selector */}

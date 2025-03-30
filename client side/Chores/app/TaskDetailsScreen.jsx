@@ -6,19 +6,23 @@ import { useTasks } from "./Context/TaskContext";
 
 const TaskDetailsScreen = () => {
   const router = useRouter();
-  const params = useLocalSearchParams();  // מקבלים את הפרמטרים
+  const params = useLocalSearchParams(); 
   const { taskId, date } = params;
   const { getTask } = useTasks();
-  
-  const [taskData,setTaskData]=useState(null);
+
+  const [taskData, setTaskData] = useState(null);
+
   useEffect(() => {
     if (date && taskId) {
-      console.log(String(date))
+      console.log("Fetching task with date:", String(date), "and taskId:", taskId);
       const fetchedTask = getTask(date, taskId);
+      console.log("Fetched task:", fetchedTask);
+      
+      // Ensure taskData is always an object and participants is an array
       setTaskData(fetchedTask);
     }
-  }, [date, taskId]); // הוספת תלות כדי לקרוא שוב כאשר הפרמטרים משתנים
-  
+  }, [date, taskId, getTask]); // Added `getTask` as a dependency to ensure it updates correctly
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -31,37 +35,37 @@ const TaskDetailsScreen = () => {
 
       {/* Task Title */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>כותרת: {taskData?.title}</Text>
+        <Text style={styles.title}>כותרת: {taskData?.title || "לא צוינה"}</Text>
       </View>
 
       {/* Task Description */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.description}>תיאור: {taskData?.description}</Text>
+        <Text style={styles.description}>תיאור: {taskData?.description || "אין תיאור"}</Text>
       </View>
 
       {/* Task Category */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.category}>קטגוריה: {taskData?.category}</Text>
+        <Text style={styles.category}>קטגוריה: {taskData?.category || "לא צוינה קטגוריה"}</Text>
       </View>
 
       {/* Task Date */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.date}>תאריך: {taskData?.date}</Text>
+        <Text style={styles.date}>תאריך: {taskData?.date || "תאריך לא זמין"}</Text>
       </View>
 
-{/* Task Participants */}
-<View style={styles.detailsContainer}>
-  <Text style={styles.participants}>
-    משתתפים: {taskData?.participants.length > 0
-      ? taskData?.participants.map(participant => participant.name).join(", ")
-      : "אין משתתפים"}
-  </Text>
-</View>
+     
+      <View style={styles.detailsContainer}>
+        <Text style={styles.participants}>
+          משתתפים: {taskData?.participants && taskData?.participants.length > 0
+            ? taskData?.participants.map(participant => participant.name).join(", ")
+            : "אין משתתפים"}
+        </Text>
+      </View>
 
       {/* Task Max Participants */}
       <View style={styles.detailsContainer}>
         <Text style={styles.maxParticipants}>
-          מגבלת משתתפים: {taskData?.maxParticipants > 0 ? taskData?.maxParticipants : "לא קיימת מגבלה"}
+          מגבלת משתתפים: {taskData?.maxParticipants > 0 ? taskData.maxParticipants : "לא קיימת מגבלה"}
         </Text>
       </View>
 
