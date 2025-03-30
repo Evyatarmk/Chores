@@ -62,9 +62,9 @@ const PageWithMenu = (props) => {
       {/* Bottom Menu Bar */}
       <View style={styles.bottomMenu}>
         {/* 4 buttons at the bottom with icons */}
-        <TouchableOpacity style={styles.navButton} onPress={() => router.push("/HomePageScreen")}>
-          <Icon name="home" size={24} color="black" />
-          <Text style={styles.navText}>דף הבית</Text>
+        <TouchableOpacity style={styles.navButton} onPress={() => router.push("/ChatScreen")}>
+          <Icon name="chat" size={24} color="black" />
+          <Text style={styles.navText}>צ'אט משפחתי</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => router.push("/ListsScreen")}>
           <Icon name="list" size={24} color="black" />
@@ -77,6 +77,10 @@ const PageWithMenu = (props) => {
         <TouchableOpacity style={styles.navButton} onPress={() => router.push("/ProfileScreen")}>
           <Icon name="person" size={24} color="black" />
           <Text style={styles.navText}>אזור אישי</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navButton} onPress={() => router.push("/HomePageScreen")}>
+          <Icon name="home" size={24} color="black" />
+          <Text style={styles.navText}>דף הבית</Text>
         </TouchableOpacity>
         {/* Menu Button for opening the drawer */}
         <TouchableOpacity style={styles.navButton} onPress={toggleDrawer}>
@@ -94,6 +98,8 @@ const menuItems = [
   { screen: "/LoginScreen", label: "התחברות" },
   { screen: "/ProfileScreen", label: "אזור אישי" },
   { screen: "/settings", label: "הגדרות" },
+  { screen: "/ChatScreen", label: "צ'אט משפחתי" },
+
 ];
 
 const styles = StyleSheet.create({
