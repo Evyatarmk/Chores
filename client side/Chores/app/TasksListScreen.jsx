@@ -41,16 +41,24 @@ const TasksListScreen = () => {
           data={getTasksForDate(selectedDate)}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.taskItem}>
+            <TouchableOpacity
+              style={styles.taskItem}
+              onPress={() =>
+                router.push({
+                  pathname: "./TaskDetailsScreen",
+                  params: { taskId: JSON.stringify(item.id),date: JSON.stringify(selectedDate)},
+                })
+              }
+            >
               <Text style={styles.taskTitle}>{item.title}</Text>
               <Text style={styles.taskDescription}>{item.description}</Text>
               <TouchableOpacity
-                style={[styles.button, styles.removeButton]}
-                onPress={() => removeTaskForDate(selectedDate, item.id)}
+                style={styles.optionsButton}
+                onPress={() => openOptionsPanel(item)}
               >
-                <Text style={styles.buttonText}>Remove</Text>
+                <Icon name="more-vert" size={24} color="#888" />
               </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           )}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
@@ -81,28 +89,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   taskItem: {
-    backgroundColor: "#FFFFFF",
-    marginVertical: 8,
-    marginHorizontal: 16,
-    padding: 15,
-    borderRadius: 10,
+    padding: 16,
+    backgroundColor: "#fff",
+    marginBottom: 12,
+    borderRadius: 8,
+    elevation: 3,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    margin: 3
   },
   taskTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 5,
+    textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10 
   },
-  taskDescription: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 10,
-  },
+  optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
+  taskDescription: { textAlign: "right",fontSize: 14, color: "#888", },
   button: {
     padding: 10,
     backgroundColor: "#dc3545",
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 20,
+    bottom: 0,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

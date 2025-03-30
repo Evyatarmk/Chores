@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Keyboard, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTasks } from "./Context/TaskContext";
@@ -7,57 +7,81 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 import { v4 as uuidv4 } from "uuid";  // Ensure you import uuid for generating unique IDs
 import DatePicker from "./Components/DatePicker";
-import SelectableDropdown from "./Components/SelectableDropdown";
 import ItemSelector from "./Components/ItemSelector";
 
 const AddTaskScreen = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [taskData, setTaskData] = useState({
+    id: uuidv4(),
+    title: "",
+    description: "",
+    homeId: "",
+    category: "משימה", // Default to "Task"
+    participants: [], // Default to empty array
+    maxParticipants: 0, // Default max participants
+    selectedDate: "", // Default date (will be set later)
+  });
   const inputRef = useRef(null);
   const router = useRouter();
   const { addTaskForDate } = useTasks();
   const { day } = useLocalSearchParams(); // Get the selected date from params
   const { user } = useUserAndHome();
-  const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
-  const [selectedDate, setSelectedDate] = useState(day); // כאן מוגדרת הפונקציה
-
-  // Initialize task item
-  const [currentItem, setCurrentItem] = useState({
-    id: uuidv4(), // Generate a unique ID
-    title: "",
-    description: "",
-    homeId: ""
-  });
-  const categories=["משימה","אירוע"];
-
+  const [showDatePicker, setShowDatePicker] = useState(false); // Function to toggle date picker
+  
+  // Update homeId when user changes
   useEffect(() => {
+    setTaskData((prevState) => ({
+      ...prevState,
+      homeId: user.homeId,
+      selectedDate: day || "", // Initialize with the selected date
+    }));
     setTimeout(() => inputRef.current?.focus(), 100);
-  }, []);
+  }, [user, day]);
+
+  const categories = ["משימה", "אירוע"]; // Available categories
 
   const handleAddTask = () => {
-    if (!title) {
+    if (!taskData.title) {
       alert("Please enter a title for the task.");
       return;
     }
 
-    const newItem = { id: uuidv4(), title, description, homeId: user.homeId };
-    console.log("New Task to Add:", newItem); // Log here
-
+    const newItem = { ...taskData, id: uuidv4() }; // Copy taskData and generate a new ID
+    
     // Add task for the selected date
-    addTaskForDate(day, newItem);
+    addTaskForDate(taskData.selectedDate, newItem);
 
     // Navigate back after adding the task
     router.back();
   };
 
   const handleClear = () => {
-    setTitle("");
-    setDescription("");
+    setTaskData({
+      id: uuidv4(),
+      title: "",
+      description: "",
+      homeId: user.homeId,
+      category: "משימה",
+      participants: [],
+      maxParticipants: 0,
+      selectedDate: day || "", // reset to the original date
+    });
     router.back();
   };
-  const handleCategorySelect=(category)=>{
-   console.log(category)
-  }
+
+  const handleCategorySelect = (category) => {
+    setTaskData((prevState) => ({
+      ...prevState,
+      category, // Update the category in the state
+    }));
+  };
+
+  const handleDateSelect = (date) => {
+    setTaskData((prevState) => ({
+      ...prevState,
+      selectedDate: date, // Update the selected date
+    }));
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -78,13 +102,13 @@ const AddTaskScreen = () => {
             ref={inputRef}
             style={styles.input}
             placeholder="כותרת המשימה"
-            value={title}
-            onChangeText={setTitle}
+            value={taskData.title}
+            onChangeText={(text) => setTaskData({ ...taskData, title: text })}
             returnKeyType="done"
             onSubmitEditing={handleAddTask}
             autoFocus
           />
-          {title.length > 0 ? (
+          {taskData.title.length > 0 ? (
             <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
               <Ionicons name="close-circle" size={24} color="gray" />
             </TouchableOpacity>
@@ -96,32 +120,38 @@ const AddTaskScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="הוסף תיאור"
-            value={description}
-            onChangeText={setDescription}
+            value={taskData.description}
+            onChangeText={(text) => setTaskData({ ...taskData, description: text })}
             multiline
           />
         </View>
+
         <View style={styles.column}>
-           <ItemSelector items={categories} onSelect={handleCategorySelect} defaultSelected = "משימה" firstItem= "משימה"/>
-        <DatePicker
-        onDateSelect={setSelectedDate}
-        showModal={showDatePicker}
-        setShowModal={setShowDatePicker}
-        selectedDate={selectedDate}
-        minDate={null}
-      />
+          {/* Category Selector */}
+          <ItemSelector
+            items={categories}
+            onSelect={handleCategorySelect}
+            defaultSelected={taskData.category}
+            firstItem="משימה"
+          />
+
+          {/* Date Picker */}
+          <DatePicker
+            onDateSelect={handleDateSelect}
+            showModal={showDatePicker}
+            setShowModal={setShowDatePicker}
+            selectedDate={taskData.selectedDate}
+            minDate={null}
+          />
         </View>
-       
 
         {/* Buttons */}
         <View style={styles.editButtons}>
           <TouchableOpacity onPress={handleAddTask} style={styles.saveButton}>
             <Text style={styles.saveButtonText}>הוסף משימה</Text>
           </TouchableOpacity>
-         
         </View>
       </ScrollView>
-      
     </KeyboardAvoidingView>
   );
 };
@@ -133,7 +163,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: "flex-start",  // Change from center to flex-start
+    justifyContent: "flex-start",
     alignItems: "center",
     padding: 20,
     paddingBottom: 80, // Add padding for the button to be above the keyboard
@@ -153,16 +183,15 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "relative",
   },
-  column:{
-    flexDirection:"column",
-    alignItems:"flex-end",
-    width:"100%",
-    gap:10
+  column: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    width: "100%",
+    gap: 10,
   },
   input: {
     width: "100%",
     padding: 15,
-
     fontSize: 18,
     borderWidth: 1,
     borderColor: "#ccc",
@@ -171,9 +200,9 @@ const styles = StyleSheet.create({
     textAlign: "right",
     marginBottom: 15,
   },
-  editButtons:{
-   flexDirection:"row",
-   width:"100%"
+  editButtons: {
+    flexDirection: "row",
+    width: "100%",
   },
   clearButton: {
     position: "absolute",
@@ -193,21 +222,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   saveButtonText: {
-    fontSize: 18,
-    color: "white",
-  },
-  cancelButton: {
-    marginTop: 10,
-    backgroundColor: "#ccc",
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 8,
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  cancelButtonText: {
     fontSize: 18,
     color: "white",
   },
