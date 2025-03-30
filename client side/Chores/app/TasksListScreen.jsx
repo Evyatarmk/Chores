@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useTasks } from "./Context/TaskContext";
@@ -7,12 +7,35 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import { Calendar } from "react-native-calendars";
 import PageWithMenu from "./Components/PageWithMenu";
+import OptionsModal from "./Components/OptionsModal";
+import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 const TasksListScreen = () => {
-  const { tasks, removeTaskForDate, getTasksForDate } = useTasks();
+  const { tasks, removeTaskForDate, getTasksForDate, signUpForTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const router = useRouter();
-
+  const optionsModalRef = useRef(null);
+  const [currentList, setCurrentList] = useState(null);
+  const {user}=useUserAndHome()
+  const options = [
+    { icon: "edit", text: "ערוך", action: "edit" },
+    { icon: "content-copy", text: "העתק", action: "copy", iconColor: "#007bff" },
+    { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
+  ];
+  const handleOptionSelect = (option) => {
+    if (option === "edit") {
+      optionsModalRef.current?.close();
+      setTimeout(() => {
+        editModalRef.current?.open();
+      }, 300);
+    } if (option === "delete") {
+      removeTaskForDate(selectedDate, currentList.id)
+    }
+  };
+  const openOptionsPanel = (list) => {
+    setCurrentList(list);
+    optionsModalRef.current?.open();
+  };
   // תאריכים מסומנים ביומן
   const markedDates = Object.keys(tasks).reduce((acc, date) => {
     acc[date] = { marked: true, dotColor: "blue" };
@@ -37,35 +60,53 @@ const TasksListScreen = () => {
         />
 
         {/* רשימת משימות לתאריך שנבחר */}
-        <FlatList
-          data={getTasksForDate(selectedDate)}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.taskItem}
-              onPress={() =>
-                router.push({
-                  pathname: "./TaskDetailsScreen",
-                  params: { taskId: JSON.stringify(item.id),date: JSON.stringify(selectedDate)},
-                })
-              }
-            >
-              <Text style={styles.taskTitle}>{item.title}</Text>
-              <Text style={styles.taskDescription}>{item.description}</Text>
-              <TouchableOpacity
-                style={styles.optionsButton}
-                onPress={() => openOptionsPanel(item)}
-              >
-                <Icon name="more-vert" size={24} color="#888" />
-              </TouchableOpacity>
-            </TouchableOpacity>
-          )}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>אין משימות ליום זה</Text>
-            </View>
-          }
-        />
+        {/* רשימת משימות לתאריך שנבחר */}
+<FlatList
+  data={getTasksForDate(selectedDate)}
+  keyExtractor={(item) => item.id.toString()}
+  renderItem={({ item }) => {
+    const isUserRegistered = item.participants.some(participant => participant.id === user?.id); // כאן אתה בודק אם המשתמש רשום, תחליף ב-id של המשתמש שלך
+
+    return (
+      <TouchableOpacity
+        style={styles.taskItem}
+        onPress={() =>
+          router.push({
+            pathname: "./TaskDetailsScreen",
+            params: { taskId: item.id, date: selectedDate },
+          })
+        }
+      >
+        <Text style={styles.taskTitle}>{item.title}</Text>
+        <Text style={styles.taskDescription}>{item.description}</Text>
+
+        {/* אם המשתמש רשום */}
+        {isUserRegistered ? (
+          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)}>
+            <Text style={styles.editButton}>רשום - לצאת</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)}>
+            <Text style={styles.editButton}>הירשם למשימה</Text>
+          </TouchableOpacity>
+        )}
+
+        <TouchableOpacity
+          style={styles.optionsButton}
+          onPress={() => openOptionsPanel(item)}
+        >
+          <Icon name="more-vert" size={24} color="#888" />
+        </TouchableOpacity>
+      </TouchableOpacity>
+    );
+  }}
+  ListEmptyComponent={
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>אין משימות ליום זה</Text>
+    </View>
+  }
+/>
+
 
         <TouchableOpacity
           style={styles.addButton}
@@ -78,6 +119,12 @@ const TasksListScreen = () => {
         >
           <Icon name="add" size={30} color="white" />
         </TouchableOpacity>
+        {/* מודל אפשרויות */}
+        <OptionsModal
+          optionsModalRef={optionsModalRef}
+          handleOptionSelect={handleOptionSelect}
+          options={options}
+        />
       </GestureHandlerRootView>
     </PageWithMenu>
   );
@@ -101,10 +148,10 @@ const styles = StyleSheet.create({
     margin: 3
   },
   taskTitle: {
-    textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10 
+    textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10
   },
   optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
-  taskDescription: { textAlign: "right",fontSize: 14, color: "#888", },
+  taskDescription: { textAlign: "right", fontSize: 14, color: "#888", },
   button: {
     padding: 10,
     backgroundColor: "#dc3545",

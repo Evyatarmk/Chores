@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import { useUserAndHome } from "./UserAndHomeContext";
 
 const TaskContext = createContext();
 export const useTasks = () => useContext(TaskContext);
@@ -8,33 +9,48 @@ export const TaskProvider = ({ children }) => {
     "2025-03-30": [
       { 
         id: 1, 
+        date: "2025-03-30",
+        time: "10:00 AM",  // Added time here
         title: "Meeting", 
-        description: "10 AM - Zoom Call", 
+        description: "Zoom Call", 
         homeId: "home1", 
         category: "אירוע", 
-        participants: ["user1", "user2"] 
+        participants: [
+          { id: "t", name: "אביתר" },
+          { id: "user2", name: "User Two" }
+        ] 
       },
       { 
         id: 2, 
-        title: "Workout", 
-        description: "7 AM - Gym", 
+        title: "Workout",
+        date: "2025-03-30", 
+        time: "7:00 AM",  // Added time here
+        description: "Gym", 
         homeId: "home1", 
         category: "משימה", 
-        participants: ["user1"], 
-        maxParticipants: 5  // הגבלה על מספר המשתתפים במשימה
+        participants: [{ id: "user1", name: "User One" }], 
+        maxParticipants: 5
       }
     ],
     "2025-04-01": [
       { 
         id: 3, 
+        date: "2025-04-01",
+        time: "7:00 AM",  // Added time here
         title: "Workout", 
-        description: "7 AM - Gym", 
+        description: "Gym", 
         homeId: "home1", 
         category: "אירוע", 
-        participants: ["user2", "user3"] 
+        participants: [
+          { id: "user2", name: "User Two" },
+          { id: "user3", name: "User Three" }
+        ]
       }
     ]
   });
+  
+  const { user, home } = useUserAndHome();
+
   
 
  
@@ -58,6 +74,21 @@ export const TaskProvider = ({ children }) => {
     return tasks[date] || [];
   };
 
+  const signUpForTask = (date, taskId) => {
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [date]: prevTasks[date].map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              participants: task.participants.some(participant => participant.id === user.id)
+                ? task.participants // אם המשתמש כבר רשום, אל תוסיף אותו שוב
+                : [...task.participants, { id: user.id, name: user.name }] // הוסף את המשתמש אם הוא לא נמצא
+            }
+          : task
+      ),
+    }));
+  };
   
   const removeTaskForDate = (date, taskId) => {
     setTasks(prevTasks => {
@@ -74,27 +105,42 @@ export const TaskProvider = ({ children }) => {
     });
   };
   
-  const getTask = (date, taskId) => {
-    console.log("Fetching task for date:", date, "and taskId:", taskId);
-  
-    const formattedDate = new Date(date).toISOString().split('T')[0];
-    const tasksForDate = tasks[formattedDate];
-    
-    console.log(formattedDate );
-    if (!tasksForDate) {
-      return null; // Return null if no tasks exist for the given date
+const getTask = (date, taskId) => {
+
+    if (!tasks) {
+      console.log("Tasks are not loaded yet.");
+      return null;
     }
+
+
+    // המרת date למחרוזת בפורמט הנכון
+    const formattedDate = typeof date === "string" ? date.trim() : new Date(date).toISOString().split("T")[0];
+
     
-    // Find the task with the matching taskId
-    const task = tasksForDate.find((task) => task.id === taskId);
-    
+    const tasksForDate = tasks[formattedDate];
+    console.log("Tasks for this date:", tasksForDate);
+
+    if (!tasksForDate) {
+      console.log("No tasks found for this date:", formattedDate);
+      return null;
+    }
+
+    // הפיכת taskId למספר
+    const task = tasksForDate.find((task) => task.id === Number(taskId));
+    console.log("Found task:", task);
+
     if (!task) {
       console.log("No task found with taskId:", taskId);
-      return null; // Return null if no task is found with the matching taskId
+      return null;
     }
+
+    return task;
+};
+
   
-    return task; // Return the task if found
-  };
+  
+  
+  
   
   const editTask = (date, id, updatedTask) => {
     setTasks(prevTasks => {
@@ -127,15 +173,7 @@ export const TaskProvider = ({ children }) => {
   }));
 };
 
-// Function to sign up for a task
-const signUpForTask = (username, date, taskId) => {
-  setTasks((prevTasks) => ({
-    ...prevTasks,
-    [date]: prevTasks[date].map((task) =>
-      task.id === taskId ? { ...task, assignedTo: username } : task
-    ),
-  }));
-};
+
 
 
 

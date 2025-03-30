@@ -11,10 +11,14 @@ const TaskDetailsScreen = () => {
   const { getTask } = useTasks();
   
   const [taskData,setTaskData]=useState(null);
-  useEffect(()=>{
-    setTaskData(getTask(date,taskId))
-    console.log(date,taskId)
-  },[])
+  useEffect(() => {
+    if (date && taskId) {
+      console.log(String(date))
+      const fetchedTask = getTask(date, taskId);
+      setTaskData(fetchedTask);
+    }
+  }, [date, taskId]); // הוספת תלות כדי לקרוא שוב כאשר הפרמטרים משתנים
+  
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -42,15 +46,17 @@ const TaskDetailsScreen = () => {
 
       {/* Task Date */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.date}>תאריך: {taskData?.selectedDate}</Text>
+        <Text style={styles.date}>תאריך: {taskData?.date}</Text>
       </View>
 
-      {/* Task Participants */}
-      <View style={styles.detailsContainer}>
-        <Text style={styles.participants}>
-          משתתפים: {taskData?.participants.length > 0 ? taskData?.participants.join(", ") : "אין משתתפים"}
-        </Text>
-      </View>
+{/* Task Participants */}
+<View style={styles.detailsContainer}>
+  <Text style={styles.participants}>
+    משתתפים: {taskData?.participants.length > 0
+      ? taskData?.participants.map(participant => participant.name).join(", ")
+      : "אין משתתפים"}
+  </Text>
+</View>
 
       {/* Task Max Participants */}
       <View style={styles.detailsContainer}>
