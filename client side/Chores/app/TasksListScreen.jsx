@@ -86,7 +86,7 @@ const TasksListScreen = () => {
             <Text style={styles.editButton}>רשום - לצאת</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id,item.maxParticipants)}>
+          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)}>
             <Text style={styles.editButton}>הירשם למשימה</Text>
           </TouchableOpacity>
         )}

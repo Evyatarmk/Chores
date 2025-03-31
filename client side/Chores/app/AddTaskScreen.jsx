@@ -18,7 +18,7 @@ const AddTaskScreen = () => {
     category: "משימה", // Default to "Task"
     participants: [], // Default to empty array
     maxParticipants: 1, // Default max participants
-    selectedDate: "", // Default date (will be set later)
+    date: "", // Default date (will be set later)
   });
   const inputRef = useRef(null);
   const router = useRouter();
@@ -32,7 +32,7 @@ const AddTaskScreen = () => {
     setTaskData((prevState) => ({
       ...prevState,
       homeId: user.homeId,
-      selectedDate: day || "", // Initialize with the selected date
+      date: day || "", // Initialize with the selected date
     }));
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [user, day]);
@@ -48,7 +48,7 @@ const AddTaskScreen = () => {
     const newItem = { ...taskData, id: uuidv4() }; // Copy taskData and generate a new ID
     
     // Add task for the selected date
-    addTaskForDate(taskData.selectedDate, newItem);
+    addTaskForDate(taskData.date, newItem);
 
     // Navigate back after adding the task
     router.back();
@@ -63,7 +63,7 @@ const AddTaskScreen = () => {
       category: "משימה",
       participants: [],
       maxParticipants: 0,
-      selectedDate: day || "", // reset to the original date
+      date: day || "", // reset to the original date
     });
     router.back();
   };
@@ -78,7 +78,7 @@ const AddTaskScreen = () => {
   const handleDateSelect = (date) => {
     setTaskData((prevState) => ({
       ...prevState,
-      selectedDate: date, // Update the selected date
+      date: date, // Update the selected date
     }));
   };
 
@@ -158,7 +158,7 @@ const AddTaskScreen = () => {
             onDateSelect={handleDateSelect}
             showModal={showDatePicker}
             setShowModal={setShowDatePicker}
-            selectedDate={taskData.selectedDate}
+            date={taskData.date}
             minDate={null}
           />
         </View>

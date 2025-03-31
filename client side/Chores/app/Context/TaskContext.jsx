@@ -74,22 +74,50 @@ export const TaskProvider = ({ children }) => {
     return tasks[date] || [];
   };
 
-  const signUpForTask = (date, taskId, maxParticipants) => {
-    setTasks((prevTasks) => ({
-      ...prevTasks,
-      [date]: prevTasks[date].map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              participants: task.participants.some(participant => participant.id === user.id)
-                ? task.participants // If the user is already signed up, don't add them again
-                : task.participants.length < maxParticipants // Check if the number of participants is less than the max limit
-                ? [...task.participants, { id: user.id, name: user.name }] // Add the user if the limit is not reached
-                : task.participants // If the limit is reached, don't add the user
-            }
-          : task
-      ),
-    }));
+  const signUpForTask = (date, taskId) => {
+    setTasks(prevTasks => {
+      console.log("hi")
+      const newTasks = { ...prevTasks };
+      console.log(newTasks)
+   
+      console.log(date)
+      if (!newTasks[date]) return prevTasks; // If the date doesn't exist, return unchanged
+      
+      // Find the specific task
+      const taskIndex = newTasks[date].findIndex(task => task.id === taskId);
+
+      console.log(taskIndex)
+      if (taskIndex === -1) return prevTasks; // If the task isn't found, return unchanged
+  
+      const task = newTasks[date][taskIndex];
+  
+      // Check if the task has a maxParticipants limit
+      if (task.maxParticipants && task.participants.length >= task.maxParticipants) {
+        alert("Task is full. No more participants can sign up.");
+        return prevTasks;
+      }
+  
+      // Check if the user is already signed up
+      if (task.participants.some(participant => participant.id === user.id)) {
+        alert("You are already signed up for this task.");
+        return prevTasks;
+      }
+  
+      // Add the user to the participants list
+      const updatedTask = {
+        ...task,
+        participants: [...task.participants, user]
+      };
+  
+      // Update the tasks array
+      newTasks[date] = [
+        ...newTasks[date].slice(0, taskIndex),
+        updatedTask,
+        ...newTasks[date].slice(taskIndex + 1)
+      ];
+  
+      return newTasks;
+    });
   };
 
   const signOutOfTask = (date, taskId) => {

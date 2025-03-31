@@ -10,7 +10,7 @@ import PodiumComponent from "./Components/PodiumComponent";  // Import the new P
 
 export default function HomePageScreen() {
   const router = useRouter();
-  const { tasks, signUpForTask } = useTasks(); // Get tasks & sign-up function
+  const { tasks, signUpForTask,signOutOfTask } = useTasks(); // Get tasks & sign-up function
   const { user } = useUserAndHome(); // Get logged-in user
 
   if (!user) {
@@ -63,29 +63,45 @@ export default function HomePageScreen() {
       <Text style={styles.title}>Welcome to Your Chores App</Text>
       <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
       <PodiumComponent contributors={topContributors} />
-      {/* Task List */}
-      <View style={styles.taskContainer}>
-        <Text style={styles.dateText}>Tasks for Your Home:</Text>
-        {homeTasks.length ? (
-          homeTasks.map((task) => (
-            <View key={task.id} style={styles.taskItem}>
-              <Text style={styles.taskText}>
-                {task.title} - {task.description}
-              </Text>
-              <Text>Date: {task.date}</Text>
-              <Text>Assigned to: {task.assignedTo || "None"}</Text>
-              {!task.assignedTo ? (
-                <Button
-                  title="Sign Up"
-                  onPress={() => signUpForTask(user.name, task.date, task.id)}
-                />
-              ):null}
-            </View>
-          ))
-        ) : (
-          <Text style={styles.noTaskText}>No tasks available for your home.</Text>
-        )}
-      </View>
+ {/* Task List */}
+<View style={styles.taskContainer}>
+  <Text style={styles.dateText}>Tasks for Your Home:</Text>
+  {homeTasks.length ? (
+    homeTasks.map((task) => {
+      const isUserSignedUp = task.participants?.some(p => p.id === user.id); // Check if the user is signed up
+
+      return (
+        <View key={task.id} style={styles.taskItem}>
+          <Text style={styles.taskText}>
+            {task.title} - {task.description}
+          </Text>
+          <Text>Date: {task.date}</Text>
+          <Text>
+            Assigned to: {task.participants && task.participants.length > 0
+              ? task.participants.map(p => p.name).join(", ") // Display participant names
+              : "None"}
+          </Text>
+
+          {isUserSignedUp ? (
+            <Button
+              title="Sign Out"
+              onPress={() => signOutOfTask(task.date, task.id)}
+              color="red"
+            />
+          ) : (
+            <Button
+              title="Sign Up"
+              onPress={() => signUpForTask(task.date, task.id)}
+            />
+          )}
+        </View>
+      );
+    })
+  ) : (
+    <Text style={styles.noTaskText}>No tasks available for your home.</Text>
+  )}
+</View>
+
     </PageWithMenu>
   );
 }
