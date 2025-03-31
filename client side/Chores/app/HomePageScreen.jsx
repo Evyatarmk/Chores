@@ -109,7 +109,7 @@ export default function HomePageScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#e0e5ec",
   },
   title: {
     fontSize: 24,

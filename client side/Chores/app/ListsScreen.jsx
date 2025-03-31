@@ -251,7 +251,7 @@ const ListsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f4f4f4"},
+  container: { flex: 1, backgroundColor: "#e0e5ec"},
   listItem: {
     padding: 16,
     backgroundColor: "#fff",

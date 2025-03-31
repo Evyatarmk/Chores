@@ -114,7 +114,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#e0e5ec",
   },
   profileCard: {
     padding: 20,
@@ -154,11 +154,13 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 10,
     textAlign: "center",
+    
   },
   chart: {
     marginVertical: 10,
     borderRadius: 10,
     alignSelf: "center",
+    
   },
   membersList: {
     backgroundColor: "#fff",

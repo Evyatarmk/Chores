@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { View, Animated, TouchableOpacity, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { View, Animated, TouchableOpacity, Text, StyleSheet, TouchableWithoutFeedback, Image } from "react-native";
 import { useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialIcons";
+
+
 
 const PageWithMenu = (props) => {
   const router = useRouter();
@@ -32,11 +34,14 @@ const PageWithMenu = (props) => {
         <TouchableWithoutFeedback onPress={closeDrawer}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
-      ):null}
+      ) : null}
 
       {/* Drawer */}
       <Animated.View
-        style={[styles.drawer, { right: drawerRight, display: drawerOpen ? "flex" : "none" }]}
+        style={[
+          styles.drawer,
+          { right: drawerRight, display: drawerOpen ? "flex" : "none" },
+        ]}
       >
         {/* Close Button in Drawer */}
         <TouchableOpacity style={styles.closeButton} onPress={closeDrawer}>
@@ -44,20 +49,27 @@ const PageWithMenu = (props) => {
         </TouchableOpacity>
 
         {menuItems.map((item) => (
-          <TouchableOpacity
-            key={item.screen}
-            style={styles.drawerItem}
-            onPress={() => router.push(item.screen)}
-          >
-            <Text style={styles.drawerText}>{item.label}</Text>
-          </TouchableOpacity>
+          <View key={item.screen}>
+            <TouchableOpacity
+              style={styles.drawerItem}
+              onPress={() => router.push(item.screen)}
+            >
+              <Text style={styles.drawerText}>{item.label}</Text>
+            </TouchableOpacity>
+
+            {/* ✅ Render additional image if this item has one */}
+            {item.image && (
+              <Image source={item.image} style={styles.drawerImage} />
+            )}
+          </View>
         ))}
       </Animated.View>
+
 
       {/* Main Content */}
       <View style={styles.mainContent}>
         {props.children}
-        </View>
+      </View>
 
       {/* Bottom Menu Bar */}
       <View style={styles.bottomMenu}>
@@ -98,7 +110,11 @@ const menuItems = [
   { screen: "/LoginScreen", label: "התחברות" },
   { screen: "/ProfileScreen", label: "אזור אישי" },
   { screen: "/settings", label: "הגדרות" },
-  { screen: "/ChatScreen", label: "צ'אט" },
+  {
+    screen: "/ChatScreen", label: "צ'אט",
+    image: require("../images/result.png")
+  },
+
 
 ];
 
@@ -121,7 +137,7 @@ const styles = StyleSheet.create({
     right: -250, // מתחיל מחוץ לתצוגה בצד ימין
     bottom: 0,
     width: 250, // רוחב הדראואר
-    backgroundColor: "white",
+    backgroundColor: "#b0bfcc",
     padding: 20,
     shadowColor: "#000",
     shadowOpacity: 0.2,
@@ -144,10 +160,12 @@ const styles = StyleSheet.create({
   drawerText: {
     fontSize: 16,
     textAlign: "right",
+    fontWeight: "bold",
+
   },
   mainContent: {
-   flex:1,
-   marginBottom:80 
+    flex: 1,
+    marginBottom: 80
   },
   title: {
     fontSize: 24,
@@ -157,6 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 10,
     textAlign: "center",
+    
   },
   bottomMenu: {
     position: "absolute",
@@ -165,7 +184,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row", // סדר אופקי של כפתורים
     justifyContent: "space-around", // שיבוץ כפתורים עם רווח שווה ביניהם
-    backgroundColor: "#fff",
+    backgroundColor: "#b0bfcc",
     borderTopWidth: 1,
     borderTopColor: "#ddd",
   },
@@ -179,6 +198,14 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
+  drawerImage: {
+    width: 400,
+    height: 400,
+    alignSelf: "center",
+    marginTop: 10,
+    resizeMode: "contain",
+  },
+
 });
 
 export default PageWithMenu;

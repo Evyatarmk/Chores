@@ -36,8 +36,8 @@ const TaskDetailsScreen = () => {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="close" size={28} color="black" />
           <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
-        <Icon name="edit" size={18} color="#fff" />
-      </TouchableOpacity>
+            <Icon name="edit" size={18} color="#fff" />
+          </TouchableOpacity>
         </TouchableOpacity>
       </View>
       <Text style={styles.headerTitle}>פרטי המשימה</Text>
