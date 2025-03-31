@@ -5,6 +5,8 @@ import PageWithMenu from "./Components/PageWithMenu";
 import StoryComponent from "./Components/StoryComponent";
 import { useTasks } from "./Context/TaskContext";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
+import PodiumComponent from "./Components/PodiumComponent";  // Import the new PodiumComponent
+
 
 export default function HomePageScreen() {
   const router = useRouter();
@@ -21,6 +23,31 @@ export default function HomePageScreen() {
     );
   }
 
+  // Calculate top contributors - Sample logic (modify as per actual task structure)
+  const currentMonth = new Date().getMonth() + 1;  // Adjusting for 0-index
+  const contributions = {}; // Example structure: {userId: taskCount}
+
+  // Mock calculation logic (replace with actual data logic)
+  Object.values(tasks).forEach(dayTasks => {
+    dayTasks.forEach(task => {
+      if (task.completedBy && new Date(task.completionDate).getMonth() + 1 === currentMonth) {
+        contributions[task.completedBy] = (contributions[task.completedBy] || 0) + 1;
+      }
+    });
+  });
+
+  // Convert to array and sort to find top 3 contributors
+
+
+  const topContributors = [
+    {
+      name: user.name,
+      tasksCompleted: user.tasksStats.completedTasksByMonth[currentMonth] || 0
+    },  // Assuming 'user' is the logged-in user
+    { name: "Danny", tasksCompleted: 10 },
+    { name: "Sarah", tasksCompleted: 8 }
+  ];
+
   // Flatten tasks and filter by the user's homeId
   const homeTasks = Object.entries(tasks)
     .flatMap(([date, taskList]) =>
@@ -35,7 +62,7 @@ export default function HomePageScreen() {
 
       <Text style={styles.title}>Welcome to Your Chores App</Text>
       <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
-
+      <PodiumComponent contributors={topContributors} />
       {/* Task List */}
       <View style={styles.taskContainer}>
         <Text style={styles.dateText}>Tasks for Your Home:</Text>
