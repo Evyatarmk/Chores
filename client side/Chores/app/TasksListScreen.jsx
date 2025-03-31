@@ -11,12 +11,12 @@ import OptionsModal from "./Components/OptionsModal";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 const TasksListScreen = () => {
-  const { tasks, removeTaskForDate, getTasksForDate, signUpForTask,signOutOfTask } = useTasks();
+  const { tasks, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const router = useRouter();
   const optionsModalRef = useRef(null);
   const [currentList, setCurrentList] = useState(null);
-  const {user}=useUserAndHome()
+  const { user } = useUserAndHome()
   const options = [
     { icon: "edit", text: "ערוך", action: "edit" },
     { icon: "content-copy", text: "העתק", action: "copy", iconColor: "#007bff" },
@@ -61,51 +61,51 @@ const TasksListScreen = () => {
 
         {/* רשימת משימות לתאריך שנבחר */}
         {/* רשימת משימות לתאריך שנבחר */}
-<FlatList
-  data={getTasksForDate(selectedDate)}
-  keyExtractor={(item) => item.id.toString()}
-  renderItem={({ item }) => {
-    const isUserRegistered = item.participants.some(participant => participant.id === user?.id); // כאן אתה בודק אם המשתמש רשום, תחליף ב-id של המשתמש שלך
+        <FlatList
+          data={getTasksForDate(selectedDate)}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => {
+            const isUserRegistered = item.participants.some(participant => participant.id === user?.id); // כאן אתה בודק אם המשתמש רשום, תחליף ב-id של המשתמש שלך
 
-    return (
-      <TouchableOpacity
-        style={styles.taskItem}
-        onPress={() =>
-          router.push({
-            pathname: "./TaskDetailsScreen",
-            params: { taskId: item.id, date: selectedDate },
-          })
-        }
-      >
-        <Text style={styles.taskTitle}>{item.title}</Text>
-        <Text style={styles.taskDescription}>{item.description}</Text>
+            return (
+              <TouchableOpacity
+                style={styles.taskItem}
+                onPress={() =>
+                  router.push({
+                    pathname: "./TaskDetailsScreen",
+                    params: { taskId: item.id, date: selectedDate },
+                  })
+                }
+              >
+                <Text style={styles.taskTitle}>{item.title}</Text>
+                <Text style={styles.taskDescription}>{item.description}</Text>
 
-        {/* אם המשתמש רשום */}
-        {isUserRegistered ? (
-          <TouchableOpacity onPress={() => signOutOfTask(item.date, item.id)}>
-            <Text style={styles.editButton}>רשום - לצאת</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)}>
-            <Text style={styles.editButton}>הירשם למשימה</Text>
-          </TouchableOpacity>
-        )}
+                {/* אם המשתמש רשום */}
+                {isUserRegistered ? (
+                  <TouchableOpacity onPress={() => signOutOfTask(item.date, item.id)} style={styles.cancelRegisterButton}>
+                  <Text style={ styles.registerText}>בטל הרשמה</Text>
+                </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)} style={styles.registerButton}>
+                    <Text style={styles.registerText}>הירשם למשימה</Text>
+                  </TouchableOpacity>
+                )}
 
-        <TouchableOpacity
-          style={styles.optionsButton}
-          onPress={() => openOptionsPanel(item)}
-        >
-          <Icon name="more-vert" size={24} color="#888" />
-        </TouchableOpacity>
-      </TouchableOpacity>
-    );
-  }}
-  ListEmptyComponent={
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>אין משימות ליום זה</Text>
-    </View>
-  }
-/>
+                <TouchableOpacity
+                  style={styles.optionsButton}
+                  onPress={() => openOptionsPanel(item)}
+                >
+                  <Icon name="more-vert" size={24} color="#888" />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            );
+          }}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>אין משימות ליום זה</Text>
+            </View>
+          }
+        />
 
 
         <TouchableOpacity
@@ -187,6 +187,32 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     zIndex: 1000,
   },
+  registerButton: {
+    width: 160,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#4CAF50",
+    borderRadius: 5,
+    alignSelf: 'flex-end',  // This will push the button to the right side of its container
+    marginTop: 12,  // Add top margin to push it down from elements above
+
+  },
+  cancelRegisterButton: {
+    width: 160,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingTop: 10,
+    backgroundColor: "#f44336",
+    borderRadius: 5,
+    alignSelf: 'flex-end',  // This will push the button to the right side of its container
+    marginTop: 12,  // Add top margin to push it down from elements above
+  },
+  registerText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+  }
 });
 
 export default TasksListScreen;
