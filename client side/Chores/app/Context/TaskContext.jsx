@@ -9,8 +9,10 @@ export const TaskProvider = ({ children }) => {
     "2025-03-30": [
       { 
         id: '1', 
-        date: "2025-03-30",
-        time: "10:00 AM",  // Added time here
+        startDate: "2025-03-30", // Changed to startDate
+        endDate: "2025-03-30",   // Added endDate
+        startTime: "10:00 AM",
+        endTime: "10:00 AM",        // Added time here
         title: "Meeting", 
         description: "Zoom Call", 
         homeId: "home1", 
@@ -23,8 +25,10 @@ export const TaskProvider = ({ children }) => {
       { 
         id: '2', 
         title: "Workout",
-        date: "2025-03-30", 
-        time: "7:00 AM",  // Added time here
+        startDate: "2025-03-30",  // Changed to startDate
+        endDate: "2025-03-30",    // Added endDate
+        startTime: "10:00 AM",
+        endTime: "10:00 AM",          // Added time here
         description: "Gym", 
         homeId: "home1", 
         category: "משימה", 
@@ -32,11 +36,13 @@ export const TaskProvider = ({ children }) => {
         maxParticipants: 5
       }
     ],
-    "2025-04-01": [
+    "2025-03-13": [
       { 
         id: '3', 
-        date: "2025-04-01",
-        time: "7:00 AM",  // Added time here
+        startDate: "2025-03-13", // Changed to startDate
+        endDate: "2025-03-24",   // Added endDate
+        startTime: "10:00 AM",
+        endTime: "10:00 AM",          // Added time here
         title: "Workout", 
         description: "Gym", 
         homeId: "home1", 
@@ -48,6 +54,7 @@ export const TaskProvider = ({ children }) => {
       }
     ]
   });
+  
   
   const { user, home } = useUserAndHome();
 

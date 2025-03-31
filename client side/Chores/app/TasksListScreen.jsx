@@ -36,12 +36,59 @@ const TasksListScreen = () => {
     setCurrentList(list);
     optionsModalRef.current?.open();
   };
-  // תאריכים מסומנים ביומן
-  const markedDates = Object.keys(tasks).reduce((acc, date) => {
-    acc[date] = { marked: true, dotColor: "blue" };
-    return acc;
-  }, {});
-  markedDates[selectedDate] = { selected: true, selectedColor: "#1E90FF" };
+
+  const renderMarkedDates = () => {
+    const markedDates = {};
+  
+    // Helper to generate a random hex color
+    const getRandomColor = () => {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    };
+  
+    Object.keys(tasks).forEach((dateKey) => {
+      tasks[dateKey].forEach((task) => {
+        const startDate = new Date(task.startDate);
+        const endDate = new Date(task.endDate);
+        const startDateStr = startDate.toISOString().split('T')[0];
+        const endDateStr = endDate.toISOString().split('T')[0];
+  
+        // Assign a unique random color to this task
+        const color = getRandomColor();
+  
+        let current = new Date(startDate);
+  
+        while (current <= endDate) {
+          const dateStr = current.toISOString().split('T')[0];
+  
+          const period = {
+            startingDay: dateStr === startDateStr,
+            endingDay: dateStr === endDateStr,
+            color: color,
+            textColor: 'white',
+          };
+  
+          if (!markedDates[dateStr]) {
+            markedDates[dateStr] = { periods: [period] };
+          } else {
+            markedDates[dateStr].periods.push(period);
+          }
+  
+          current.setDate(current.getDate() + 1);
+        }
+      });
+    });
+  
+    console.log("Multi-period Marked Dates:", markedDates);
+    return markedDates;
+  };
+
+  
+
 
   return (
     <PageWithMenu>
@@ -50,7 +97,8 @@ const TasksListScreen = () => {
 
         {/* יומן להצגת התאריכים */}
         <Calendar
-          markedDates={markedDates}
+         markedDates={renderMarkedDates()}
+          markingType={"multi-period"}
           onDayPress={(day) => setSelectedDate(day.dateString)}
           theme={{
             selectedDayBackgroundColor: "#1E90FF",
@@ -59,7 +107,6 @@ const TasksListScreen = () => {
           }}
         />
 
-        {/* רשימת משימות לתאריך שנבחר */}
         {/* רשימת משימות לתאריך שנבחר */}
         <FlatList
           data={getTasksForDate(selectedDate)}
@@ -150,18 +197,26 @@ const styles = StyleSheet.create({
   taskTitle: {
     textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10
   },
-  optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
-  taskDescription: { textAlign: "right", fontSize: 14, color: "#888", },
+  taskDescription: { 
+    textAlign: "right", 
+    fontSize: 14, 
+    color: "#888", 
+    paddingBottom: 8,  // Adjust padding for better spacing
+  },
+  optionsButton: { 
+    position: "absolute", 
+    top: 12, 
+    left: 2, 
+    padding: 8, 
+    borderRadius: 25, 
+    zIndex: 1000 
+  },
   button: {
     padding: 10,
     backgroundColor: "#dc3545",
     borderRadius: 5,
     alignItems: "center",
     marginTop: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
   },
   emptyContainer: {
     alignItems: "center",
@@ -170,6 +225,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: "#666",
+    textAlign: "center", // Center the empty state text
   },
   addButton: {
     position: "absolute",
@@ -193,9 +249,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: "#4CAF50",
     borderRadius: 5,
-    alignSelf: 'flex-end',  // This will push the button to the right side of its container
-    marginTop: 12,  // Add top margin to push it down from elements above
-
+    alignSelf: 'flex-end',
+    marginTop: 12,
   },
   cancelRegisterButton: {
     width: 160,
@@ -204,8 +259,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: "#f44336",
     borderRadius: 5,
-    alignSelf: 'flex-end',  // This will push the button to the right side of its container
-    marginTop: 12,  // Add top margin to push it down from elements above
+    alignSelf: 'flex-end',
+    marginTop: 12,
   },
   registerText: {
     fontSize: 16,

@@ -63,7 +63,8 @@ const AddTaskScreen = () => {
       category: "משימה",
       participants: [],
       maxParticipants: 0,
-      date: day || "", // reset to the original date
+      startDate: day || "", // reset to the original date
+      endDate: day || "",
     });
     router.back();
   };
