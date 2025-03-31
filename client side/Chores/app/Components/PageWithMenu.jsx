@@ -64,7 +64,7 @@ const PageWithMenu = (props) => {
         {/* 4 buttons at the bottom with icons */}
         <TouchableOpacity style={styles.navButton} onPress={() => router.push("/ChatScreen")}>
           <Icon name="chat" size={24} color="black" />
-          <Text style={styles.navText}>צ'אט משפחתי</Text>
+          <Text style={styles.navText}>צ'אט</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => router.push("/ListsScreen")}>
           <Icon name="list" size={24} color="black" />
@@ -98,7 +98,7 @@ const menuItems = [
   { screen: "/LoginScreen", label: "התחברות" },
   { screen: "/ProfileScreen", label: "אזור אישי" },
   { screen: "/settings", label: "הגדרות" },
-  { screen: "/ChatScreen", label: "צ'אט משפחתי" },
+  { screen: "/ChatScreen", label: "צ'אט" },
 
 ];
 

@@ -3,21 +3,27 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTasks } from "./Context/TaskContext";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const TaskDetailsScreen = () => {
   const router = useRouter();
-  const params = useLocalSearchParams(); 
+  const params = useLocalSearchParams();
   const { taskId, date } = params;
   const { getTask } = useTasks();
 
   const [taskData, setTaskData] = useState(null);
+  const handleEdit = () => {
+    router.push({
+      pathname: "./TaskEditScreen",
+    })
+  };
 
   useEffect(() => {
     if (date && taskId) {
       console.log("Fetching task with date:", String(date), "and taskId:", taskId);
       const fetchedTask = getTask(date, taskId);
       console.log("Fetched task:", fetchedTask);
-      
+
       // Ensure taskData is always an object and participants is an array
       setTaskData(fetchedTask);
     }
@@ -29,9 +35,12 @@ const TaskDetailsScreen = () => {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="close" size={28} color="black" />
+          <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
+        <Icon name="edit" size={18} color="#fff" />
+      </TouchableOpacity>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>פרטי המשימה</Text>
       </View>
+      <Text style={styles.headerTitle}>פרטי המשימה</Text>
 
       {/* Task Title */}
       <View style={styles.detailsContainer}>
@@ -53,7 +62,7 @@ const TaskDetailsScreen = () => {
         <Text style={styles.date}>תאריך: {taskData?.date || "תאריך לא זמין"}</Text>
       </View>
 
-     
+
       <View style={styles.detailsContainer}>
         <Text style={styles.participants}>
           משתתפים: {taskData?.participants && taskData?.participants.length > 0
@@ -68,13 +77,6 @@ const TaskDetailsScreen = () => {
           מגבלת משתתפים: {taskData?.maxParticipants > 0 ? taskData.maxParticipants : "לא קיימת מגבלה"}
         </Text>
       </View>
-
-      {/* Edit Button */}
-      <View style={styles.editButtonContainer}>
-        <TouchableOpacity onPress={() => router.push("/edit-task")}>
-          <Text style={styles.editButton}>ערוך משימה</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -86,14 +88,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginBottom: 20,
+    textAlign: "center",
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
   },
   detailsContainer: {
     marginBottom: 15,
@@ -130,6 +132,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#007bff",
     textDecorationLine: "underline",
+  },
+  editIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "#4CAF50",
+    padding: 6,
+    borderRadius: 20,
+    elevation: 3,
   },
 });
 
