@@ -16,6 +16,7 @@ const TasksListScreen = () => {
 
   const router = useRouter();
   const optionsModalRef = useRef(null);
+  const editModalRef= useRef(null)
   const [currentList, setCurrentList] = useState(null);
   const { user } = useUserAndHome()
   const options = [
