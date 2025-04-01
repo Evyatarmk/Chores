@@ -78,7 +78,13 @@ export const TaskProvider = ({ children }) => {
 
   
   const getTasksForDate = (date) => {
-    return tasks[date] || [];
+    return Object.values(tasks)
+      .flat()
+      .filter(
+        (task) =>
+          new Date(date) >= new Date(task.startDate) &&
+          new Date(date) <= new Date(task.endDate)
+      );
   };
 
   const signUpForTask = (date, taskId) => {

@@ -29,7 +29,8 @@ const AddTaskScreen = () => {
   }, [user]);
   const currentTime = new Date();
   currentTime.setMinutes(Math.floor(currentTime.getMinutes() / 5) * 5); // עיגול למטה לעד 5 דקות הקרובים
-  const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });  const [taskData, setTaskData] = useState({
+  const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); 
+   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
     homeId: "home1",
