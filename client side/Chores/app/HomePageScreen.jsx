@@ -13,7 +13,7 @@ export default function HomePageScreen() {
   const { tasks, signUpForTask,signOutOfTask } = useTasks(); // Get tasks & sign-up function
   const { user } = useUserAndHome(); // Get logged-in user
 
-  if (!user) {
+  
     return (
       <PageWithMenu >
         <StoryComponent></StoryComponent>
@@ -21,7 +21,7 @@ export default function HomePageScreen() {
         <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
       </PageWithMenu>
     );
-  }
+  
 
   // Calculate top contributors - Sample logic (modify as per actual task structure)
   const currentMonth = new Date().getMonth() + 1;  // Adjusting for 0-index

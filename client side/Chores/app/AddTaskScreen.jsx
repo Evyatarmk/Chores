@@ -6,7 +6,7 @@ import { useTasks } from "./Context/TaskContext";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 import { v4 as uuidv4 } from "uuid";  // Ensure you import uuid for generating unique IDs
-import DatePicker from "./Components/DatePicker";
+import DateRangePicker from "./Components/DateRangePicker";
 import ItemSelector from "./Components/ItemSelector";
 
 const AddTaskScreen = () => {
@@ -26,7 +26,7 @@ const AddTaskScreen = () => {
   const { day } = useLocalSearchParams(); // Get the selected date from params
   const { user } = useUserAndHome();
   const [showDatePicker, setShowDatePicker] = useState(false); // Function to toggle date picker
-  
+  const [selectedRange, setSelectedRange] = useState({ start: day, end: null });
   // Update homeId when user changes
   useEffect(() => {
     setTaskData((prevState) => ({
@@ -155,6 +155,12 @@ const AddTaskScreen = () => {
           />
 
           {/* Date Picker */}
+          <DateRangePicker
+        onRangeSelect={(range) => setSelectedRange(range)}
+        selectedRange={selectedRange}
+        showModal={showDatePicker}
+        setShowModal={setShowDatePicker}
+      />
           <DatePicker
             onDateSelect={handleDateSelect}
             showModal={showDatePicker}

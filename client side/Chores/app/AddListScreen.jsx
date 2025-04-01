@@ -113,7 +113,8 @@ const AddListScreen = () => {
         setShowModal={setShowDatePicker}
         selectedDate={date}
         TodayMinDate={true} // שימוש בפרופס להגדרת היום כתאריך מינימלי
-      />      </View>
+      />    
+      </View>
 
 
       {/* כפתור יצירת הרשימה */}
