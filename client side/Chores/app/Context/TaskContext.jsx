@@ -78,7 +78,13 @@ export const TaskProvider = ({ children }) => {
 
   
   const getTasksForDate = (date) => {
-    return tasks[date] || [];
+    return Object.values(tasks)
+      .flat()
+      .filter(
+        (task) =>
+          new Date(date) >= new Date(task.startDate) &&
+          new Date(date) <= new Date(task.endDate)
+      );
   };
 
   const signUpForTask = (date, taskId) => {
@@ -143,17 +149,21 @@ export const TaskProvider = ({ children }) => {
   
   
   const removeTaskForDate = (date, taskId) => {
+    console.log("Removing task", taskId, "from", date);
+  
     setTasks(prevTasks => {
-      if (!prevTasks[date]) return prevTasks;
-      const updatedTasks = prevTasks[date].filter(task => task.id !== taskId);
-      if (updatedTasks.length === 0) {
-        const { [date]: _, ...rest } = prevTasks; 
-        return rest;
-      }
-      return {
-        ...prevTasks,
-        [date]: updatedTasks
-      };
+      let updatedTasks = { ...prevTasks };
+ 
+      Object.keys(prevTasks).forEach(dateKey => {
+        updatedTasks[dateKey] = prevTasks[dateKey].filter(task => task.id !== taskId);
+  
+        // Remove date key if no tasks are left on that date
+        if (updatedTasks[dateKey].length === 0) {
+          delete updatedTasks[dateKey];
+        }
+      });
+  
+      return updatedTasks;
     });
   };
   

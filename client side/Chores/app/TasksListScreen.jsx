@@ -13,8 +13,10 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 const TasksListScreen = () => {
   const { tasks, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+
   const router = useRouter();
   const optionsModalRef = useRef(null);
+  const editModalRef= useRef(null)
   const [currentList, setCurrentList] = useState(null);
   const { user } = useUserAndHome()
   const options = [
@@ -36,6 +38,7 @@ const TasksListScreen = () => {
     setCurrentList(list);
     optionsModalRef.current?.open();
   };
+
 
   const renderMarkedDates = () => {
     const markedDates = {};
@@ -99,7 +102,10 @@ const TasksListScreen = () => {
         <Calendar
          markedDates={renderMarkedDates()}
           markingType={"multi-period"}
-          onDayPress={(day) => setSelectedDate(day.dateString)}
+          onDayPress={(day) => {
+            setSelectedDate(day.dateString);
+           
+          }}
           theme={{
             selectedDayBackgroundColor: "#1E90FF",
             todayTextColor: "#1E90FF",
