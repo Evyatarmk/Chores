@@ -29,13 +29,13 @@ const AddTaskScreen = () => {
   }, [user]);
   const currentTime = new Date();
   currentTime.setMinutes(Math.floor(currentTime.getMinutes() / 5) * 5); // עיגול למטה לעד 5 דקות הקרובים
-  const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });  const [taskData, setTaskData] = useState({
+  const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); const [taskData, setTaskData] = useState({
     title: "",
     description: "",
     homeId: "home1",
     startTime: formattedTime,  // זמן התחלה
     endTime: formattedTime,    // זמן סיום
-    startDate:day ,
+    startDate: day,
     endDate: day,
     category: "משימה",
     participants: [], // Default to empty array
@@ -48,10 +48,10 @@ const AddTaskScreen = () => {
       alert("Please enter a title for the task.");
       return;
     }
-    
+
     let newItem = { ...taskData, id: uuidv4() }; // Copy taskData and generate a new ID
-    if (taskData.endDate==""||taskData.endDate==null) {
-      newItem={...newItem,endDate:taskData.startDate}
+    if (taskData.endDate == "" || taskData.endDate == null) {
+      newItem = { ...newItem, endDate: taskData.startDate }
     }
     console.log(newItem)
     // Add task for the selected date
@@ -71,85 +71,85 @@ const AddTaskScreen = () => {
   const handleStartDateSelect = (date) => {
     setTaskData((prevState) => {
       const updatedData = { ...prevState, startDate: date };
-  
+
       // אם תאריך הסיום קטן מתאריך ההתחלה, נעדכן אותו
       if (new Date(date) > new Date(prevState.endDate)) {
         updatedData.endDate = date;
       }
-  
+
       // אם תאריך ההתחלה זהה לתאריך הסיום, נוודא ששעת הסיום לא תהיה לפני שעת ההתחלה
       if (new Date(date).toLocaleDateString() === new Date(prevState.endDate).toLocaleDateString() && prevState.endTime) {
         const start = new Date(`2000-01-01T${prevState.startTime}`);
         const end = new Date(`2000-01-01T${prevState.endTime}`);
-  
+
         if (start > end) {
           updatedData.endTime = prevState.startTime; // עדכון שעת הסיום לשעת התחלה
         }
       }
-  
+
       return updatedData;
     });
   };
-  
+
   const handleEndDateSelect = (date) => {
     setTaskData((prevState) => {
       const updatedData = { ...prevState, endDate: date };
-  
+
       // אם תאריך הסיום קטן מתאריך ההתחלה, נעדכן גם את תאריך ההתחלה
       if (new Date(date) < new Date(prevState.startDate)) {
         updatedData.startDate = date;
       }
-  
+
       // אם תאריך הסיום זהה לתאריך ההתחלה, נוודא ששעת הסיום לא תהיה לפני שעת ההתחלה
       if (new Date(date).toLocaleDateString() === new Date(prevState.startDate).toLocaleDateString() && prevState.startTime) {
         const start = new Date(`2000-01-01T${prevState.startTime}`);
         const end = new Date(`2000-01-01T${prevState.endTime}`);
-  
+
         if (end < start) {
           updatedData.endTime = prevState.startTime; // עדכון שעת הסיום לשעת התחלה
         }
       }
-  
+
       return updatedData;
     });
   };
-  
+
   const handleStartTimeSelect = (time) => {
     setTaskData((prevState) => {
       const updatedData = { ...prevState, startTime: time };
-  
+
       // אם התאריך זהה ושעת ההתחלה גדולה משעת הסיום, נעדכן את שעת הסיום לשעת התחלה
       if (prevState.startDate === prevState.endDate && prevState.endTime) {
         const start = new Date(`2000-01-01T${time}`);
         const end = new Date(`2000-01-01T${prevState.endTime}`);
-  
+
         if (start > end) {
           updatedData.endTime = time; // עדכון שעת הסיום לשעת התחלה
         }
       }
-  
+
       return updatedData;
     });
   };
-  
+
   const handleEndTimeSelect = (time) => {
     setTaskData((prevState) => {
       const updatedData = { ...prevState, endTime: time };
-  
+
       // אם התאריך זהה ושעת הסיום קטנה משעת ההתחלה, נעדכן את שעת הסיום לשעת התחלה
       if (prevState.startDate === prevState.endDate && prevState.startTime) {
         const start = new Date(`2000-01-01T${prevState.startTime}`);
         const end = new Date(`2000-01-01T${time}`);
-  
+
         if (end < start) {
           updatedData.endTime = prevState.startTime; // עדכון שעת הסיום לשעת התחלה
         }
       }
-  
+
       return updatedData;
     });
   };
-  
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -207,37 +207,37 @@ const AddTaskScreen = () => {
             defaultSelected={taskData.category}
             firstItem="משימה"
           />
-  <Text>זמן התחלה</Text>
-<View style={styles.dateAndTimeContianer}>
-  {/* Date Picker */}
-  <DatePickerForTasks
-    onDateSelect={handleStartDateSelect}
-    showModal={showStartDatePicker}
-    setShowModal={setShowStartDatePicker}
-    selectedDate={taskData?.startDate}
-  />
-  {/* Time Picker */}
-  <TimePickerButton 
-    onConfirm={handleStartTimeSelect} 
-    initialTime={taskData.startTime} 
-  />
-</View>
+          <Text>זמן התחלה</Text>
+          <View style={styles.dateAndTimeContianer}>
+            {/* Date Picker */}
+            <DatePickerForTasks
+              onDateSelect={handleStartDateSelect}
+              showModal={showStartDatePicker}
+              setShowModal={setShowStartDatePicker}
+              selectedDate={taskData?.startDate}
+            />
+            {/* Time Picker */}
+            <TimePickerButton
+              onConfirm={handleStartTimeSelect}
+              initialTime={taskData.startTime}
+            />
+          </View>
 
-  <Text>זמן סוף</Text>
-<View style={styles.dateAndTimeContianer}>
-  {/* Date Picker */}
-  <DatePickerForTasks
-    onDateSelect={handleEndDateSelect}
-    showModal={showEndDatePicker}
-    setShowModal={setShowEndDatePicker}
-    selectedDate={taskData?.endDate}
-  />
-  {/* Time Picker */}
-  <TimePickerButton 
-    onConfirm={handleEndTimeSelect} 
-    initialTime={taskData.endTime} 
-  />
-</View>
+          <Text>זמן סוף</Text>
+          <View style={styles.dateAndTimeContianer}>
+            {/* Date Picker */}
+            <DatePickerForTasks
+              onDateSelect={handleEndDateSelect}
+              showModal={showEndDatePicker}
+              setShowModal={setShowEndDatePicker}
+              selectedDate={taskData?.endDate}
+            />
+            {/* Time Picker */}
+            <TimePickerButton
+              onConfirm={handleEndTimeSelect}
+              initialTime={taskData.endTime}
+            />
+          </View>
         </View>
 
         {/* Buttons */}
@@ -270,14 +270,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 20,
   },
-  dateAndTimeContianer:{
-     flexDirection: "row-reverse",
-         backgroundColor: "#f0f0f0",
-      justifyContent:"space-between",
-       width:"100%" ,
-       alignItems: 'center',
-        marginBottom: 10 ,
-        marginLeft:20 
+  dateAndTimeContianer: {
+    flexDirection: "row-reverse",
+    backgroundColor: "#f0f0f0",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: 'center',
+    marginBottom: 10,
+    marginLeft: 20
   },
   headerTitle: {
     fontSize: 20,
