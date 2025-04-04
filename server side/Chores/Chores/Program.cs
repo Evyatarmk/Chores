@@ -1,21 +1,43 @@
 using Chores.Data;
+using Chores.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ?? הוספת Authentication עם JWT
+var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false, // אין צורך לאמת את ה-issuer
+            ValidateAudience = false, // אין צורך לאמת את ה-audience
+            ValidateLifetime = true // אימות תוקף הטוקן
+        };
+    });
+
+builder.Services.AddAuthorization(); // הוספת Authorization
+builder.Services.AddScoped<TokenService>();
+
+// הוספת DbContext עם חיבור לבסיס נתונים
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// הוספת שירותים אחרים
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (true)
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -24,7 +46,9 @@ if (true)
 app.UseHttpsRedirection();
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-app.UseAuthorization();
+// שימוש ב-Authentication ו-Authorization
+app.UseAuthentication(); // הוספת אימות
+app.UseAuthorization(); // הוספת הרשאות
 
 app.MapControllers();
 

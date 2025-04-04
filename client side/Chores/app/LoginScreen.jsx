@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
-import Menu from "./Components/PageWithMenu";
 
 const LoginScreen = () => {
   const router = useRouter();

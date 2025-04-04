@@ -1,11 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useApiUrl } from "./ApiUrlProvider";
 import ErrorNotification from "../Components/ErrorNotification";
+import { useUserAndHome } from "./UserAndHomeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ListsContext = createContext();
 export const useLists = () => useContext(ListsContext);
 export const ListsProvider = ({ children }) => {
   const { baseUrl } = useApiUrl();
+  const { home ,user} = useUserAndHome();
+
+
   const [listsData, setListsData] = useState([
     {
       id: "1",
@@ -112,16 +117,21 @@ export const ListsProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const homeId = "home1";
-
-
   const handleCloseError = () => {
     setErrorMessage("")
     setErrorVisible(false)
   };
   const fetchListsData = async () => {
+    const accessToken = await AsyncStorage.getItem('accessToken');
+
     try {
-      const response = await fetch(`${baseUrl}/Lists/home/${homeId}`);
+      const response = await fetch(`${baseUrl}/Lists/home/${home.id}`, {
+        method: 'GET', // שיטה
+        headers: {
+          'Authorization': `Bearer ${accessToken}`, // הוספת טוקן ה-JWT לכותרת
+          'Content-Type': 'application/json', // הגדרת סוג התוכן
+        }
+      })
       if (!response.ok) {
         throw new Error("שגיאה בהורדת נתונים");
       }
@@ -136,9 +146,10 @@ export const ListsProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    //fetchListsData();
-  }, []);
-
+    if (home && user) {
+      fetchListsData();
+    }
+  }, [home, user]);
 
   // פונקציה לקבלת פריטים לפי listId
   const getList = (listId) => {

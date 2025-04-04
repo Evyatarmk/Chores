@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
+import { useApiUrl } from "./ApiUrlProvider";
 
 
 const UserAndHomeContext = createContext();
@@ -24,7 +25,7 @@ const mockUser = {
 };
 const mockHome = {
   id: "123",
-    name: "הבית של אביתר",
+  name: "הבית של אביתר",
     code: "12345678",
     members: [
       { id: "1", name: "אביתר", role: "admin",publicId:1 }, // אביתר הוא המנהל
@@ -33,6 +34,7 @@ const mockHome = {
 };
 
 export const UserAndHomeProvider = ({ children }) => {
+  const { baseUrl } = useApiUrl();
   const [user, setUser] = useState(null);
   const [home, setHome] = useState(null);
 
@@ -55,34 +57,51 @@ const generateMockToken = (userId) => {
   const token = JSON.stringify(tokenPayload);
   return token;
 };
-  const login = async (email, password) => {
-    if (email === mockUser.email && password === mockUser.password) {
-      setUser(mockUser);
-      setHome(mockHome);
-  
-      const mockToken = generateMockToken(mockUser.id);
-  
-      await AsyncStorage.setItem('accessToken', mockToken);
-  
+const login = async (email, password) => {
+  try {
+    const response = await fetch(`${baseUrl}/Users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (response.ok) {
+      // אם הבקשה הצליחה (סטטוס 2xx)
+      const data = await response.json();
+      const { accessToken, refreshToken } = data;
+
+      // שמירת הטוקנים ב-AsyncStorage
+      await AsyncStorage.setItem('accessToken', accessToken);
+      await AsyncStorage.setItem('refreshToken', refreshToken);
+
+      // עדכון המשתמש והבית
+      setUser(data.user);
+      setHome(data.home);
+
       return true;
     } else {
+      // אם הבקשה לא הצליחה, קרא את ההודעה מה-API
+      const errorData = await response.json();
+      
+      // הצגת הודעת השגיאה בהתאם לקוד הסטטוס
+      if (response.status === 401) {
+        console.log('Unauthorized: ', errorData); // או הצגת הודעה למשתמש
+      } else if (response.status === 404) {
+        console.log('Not Found: ', errorData); // או הצגת הודעה למשתמש
+      }
+
       return false;
     }
-  };
-  const Autologin = async (email, password) => {
-    if (email === mockUser.email && password === mockUser.password) {
-      setUser(mockUser);
-      setHome(mockHome);
-  
-      const mockToken = generateMockToken(mockUser.id);
-  
-      await AsyncStorage.setItem('accessToken', mockToken);
-  
-      return true;
-    } else {
-      return false;
-    }
-  };
+  } catch (error) {
+    console.error('Error during login:', error);
+    return false;
+  }
+};
+
+
+
   const logout = async () => {
     // מחיקת כל הטוקנים שנשמרו
     await AsyncStorage.removeItem('accessToken');

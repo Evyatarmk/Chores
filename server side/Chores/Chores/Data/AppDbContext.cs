@@ -10,7 +10,7 @@ namespace Chores.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Home> Homes { get; set; }
-        public DbSet<GroceryItem> GroceryItems { get; set; }
-        public DbSet<GroceryList> GroceryLists { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<List> Lists { get; set; }
     }
 }

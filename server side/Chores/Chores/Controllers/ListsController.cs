@@ -1,97 +1,97 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Chores.Data;
 using Chores.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Chores.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroceryListsController : ControllerBase
+    public class ListsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public GroceryListsController(AppDbContext context)
+        public ListsController(AppDbContext context)
         {
             _context = context;
         }
 
         // 📌 קבלת כל רשימות הקניות לבית ספציפי עם הפריטים שלהן
         [HttpGet("home/{homeId}")]
-        public async Task<ActionResult<IEnumerable<GroceryList>>> GetGroceryListsByHome(string homeId)
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<List>>> GetListsByHome(string homeId)
         {
-            var groceryLists = await _context.GroceryLists
+            var Lists = await _context.Lists
+            
                 .Where(g => g.HomeId == homeId)
                 .Include(g => g.Items)
                 .ToListAsync();
 
-            if (!groceryLists.Any())
+            if (!Lists.Any())
                 return NotFound("No grocery lists found for this home.");
 
-            return groceryLists;
+            return Lists;
         }
 
         // 📌 קבלת רשימה מסוימת לפי ID לבית ספציפי
         [HttpGet("home/{homeId}/{id}")]
-        public async Task<ActionResult<GroceryList>> GetGroceryListByHome(string homeId, string id)
+        public async Task<ActionResult<List>> GetListByHome(string homeId, string id)
         {
-            var groceryList = await _context.GroceryLists
+            var List = await _context.Lists
                 .Where(g => g.HomeId == homeId)
                 .Include(g => g.Items)
                 .FirstOrDefaultAsync(g => g.Id == id);
 
-            if (groceryList == null)
+            if (List == null)
                 return NotFound("Grocery list not found.");
 
-            return groceryList;
+            return List;
         }
 
         // 📌 יצירת רשימה חדשה לבית ספציפי
         [HttpPost("home/{homeId}")]
-        public async Task<ActionResult<GroceryList>> CreateGroceryList(string homeId,[FromBody] string name)
+        public async Task<ActionResult<List>> CreateList(string homeId,[FromBody] string name)
         {
-            var groceryList = new GroceryList();
-            groceryList.Id = Guid.NewGuid().ToString();
-            groceryList.Name = name;
-            groceryList.HomeId = homeId;
-            _context.GroceryLists.Add(groceryList);
+            var List = new List();
+            List.Id = Guid.NewGuid().ToString();
+            List.Name = name;
+            List.HomeId = homeId;
+            _context.Lists.Add(List);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetGroceryListByHome), new { homeId = homeId, id = groceryList.Id }, groceryList);
+            return CreatedAtAction(nameof(GetListByHome), new { homeId = homeId, id = List.Id }, List);
         }
        
         // 📌 הוספת פריט לרשימה מסוימת בבית ספציפי
         [HttpPost("home/{homeId}/lists/{listId}/items")]
-        public async Task<ActionResult<GroceryItem>> AddItemToList(string homeId, string listId, GroceryItem item)
+        public async Task<ActionResult<Item>> AddItemToList(string homeId, string listId, Item item)
         {
-            var groceryList = await _context.GroceryLists
+            var List = await _context.Lists
                 .Where(g => g.HomeId == homeId)
                 .FirstOrDefaultAsync(g => g.Id == listId);
 
-            if (groceryList == null)
+            if (List == null)
                 return NotFound("Grocery list not found.");
 
-            item.GroceryListId = listId;
-            _context.GroceryItems.Add(item);
+            item.ListId = listId;
+            _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetGroceryListByHome), new { homeId = homeId, id = listId }, item);
+            return CreatedAtAction(nameof(GetListByHome), new { homeId = homeId, id = listId }, item);
         }
         // 📌 שינוי שם לרשימה קיימת
         [HttpPut("home/{homeId}/list/{listId}")]
-        public async Task<IActionResult> UpdateGroceryList(string homeId, string listId, [FromBody] string name)
+        public async Task<IActionResult> UpdateList(string homeId, string listId, [FromBody] string name)
         {
-            var groceryList = await _context.GroceryLists
+            var List = await _context.Lists
                 .Where(g => g.HomeId == homeId)
                 .FirstOrDefaultAsync(g => g.Id == listId);
 
-            if (groceryList == null)
+            if (List == null)
                 return NotFound("Grocery list not found.");
 
-            groceryList.Name = name;
+            List.Name = name;
             await _context.SaveChangesAsync();
 
             return Ok();
@@ -103,17 +103,17 @@ namespace Chores.Controllers
         {
 
             // חיפוש הרשימה על פי homeId ו-listId
-            var groceryList = await _context.GroceryLists
+            var List = await _context.Lists
                 .Where(g => g.HomeId == homeId && g.Id == listId)
                 .Include(g => g.Items)
                 .FirstOrDefaultAsync();
 
             // אם הרשימה לא נמצאה
-            if (groceryList == null)
+            if (List == null)
                 return NotFound("Grocery list not found.");
 
             // חיפוש פריט מתוך הרשימה על פי itemId
-            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+            var item = List.Items.FirstOrDefault(i => i.Id == itemId);
 
             // אם הפריט לא נמצא
             if (item == null)
@@ -131,23 +131,23 @@ namespace Chores.Controllers
 
         // 📌 עדכון פריט (למשל שינוי סטטוס ל- isTaken) בבית ספציפי
         [HttpPut("home/{homeId}/lists/{listId}/items/{itemId}")]
-        public async Task<IActionResult> UpdateItem(string homeId, string listId, string itemId, GroceryItem updatedItem)
+        public async Task<IActionResult> UpdateItem(string homeId, string listId, string itemId, Item updatedItem)
         {
             if (itemId != updatedItem.Id)
                 return BadRequest("Item ID mismatch.");
 
             // חיפוש הרשימה על פי homeId ו-listId
-            var groceryList = await _context.GroceryLists
+            var List = await _context.Lists
                 .Where(g => g.HomeId == homeId && g.Id == listId)
                 .Include(g => g.Items)
                 .FirstOrDefaultAsync();
 
             // אם הרשימה לא נמצאה
-            if (groceryList == null)
+            if (List == null)
                 return NotFound("Grocery list not found.");
 
             // חיפוש פריט מתוך הרשימה על פי itemId
-            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+            var item = List.Items.FirstOrDefault(i => i.Id == itemId);
 
             // אם הפריט לא נמצא
             if (item == null)
@@ -167,19 +167,19 @@ namespace Chores.Controllers
 
         // 📌 מחיקת רשימה לבית ספציפי
         [HttpDelete("home/{homeId}/List/{id}")]
-        public async Task<IActionResult> DeleteGroceryList(string homeId, string id)
+        public async Task<IActionResult> DeleteList(string homeId, string id)
         {
-            var groceryList = await _context.GroceryLists
+            var List = await _context.Lists
                 .Include(g => g.Items)
                 .Where(g => g.HomeId == homeId)
                 .FirstOrDefaultAsync(g => g.Id == id);
 
-            if (groceryList == null)
+            if (List == null)
                 return NotFound("Grocery list not found.");
 
-            _context.GroceryItems.RemoveRange(groceryList.Items);
+            _context.Items.RemoveRange(List.Items);
 
-            _context.GroceryLists.Remove(groceryList);
+            _context.Lists.Remove(List);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -190,24 +190,24 @@ namespace Chores.Controllers
         public async Task<IActionResult> DeleteItem(string homeId, string listId, string itemId)
         {
             // חיפוש רשימה על פי homeId ו-listId
-            var groceryList = await _context.GroceryLists
+            var List = await _context.Lists
                 .Where(g => g.HomeId == homeId && g.Id == listId)
                 .Include(g => g.Items)
                 .FirstOrDefaultAsync();
 
             // אם הרשימה לא נמצאה
-            if (groceryList == null)
+            if (List == null)
                 return NotFound("Grocery list not found.");
 
             // חיפוש פריט מתוך הרשימה על פי itemId
-            var item = groceryList.Items.FirstOrDefault(i => i.Id == itemId);
+            var item = List.Items.FirstOrDefault(i => i.Id == itemId);
 
             // אם הפריט לא נמצא
             if (item == null)
                 return NotFound("Item not found.");
 
             // מחיקת הפריט
-            _context.GroceryItems.Remove(item);
+            _context.Items.Remove(item);
             await _context.SaveChangesAsync();
 
             return NoContent();

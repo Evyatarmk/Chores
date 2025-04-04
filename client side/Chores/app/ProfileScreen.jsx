@@ -11,6 +11,7 @@ import PageWithMenu from "./Components/PageWithMenu";
 const ProfileScreen = () => {
   const router = useRouter();
   const { user, home, logout } = useUserAndHome();
+  console.log(home)
   const screenWidth = Dimensions.get("window").width;
   const handleEdit = () => {
     router.push({
