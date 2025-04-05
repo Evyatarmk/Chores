@@ -36,9 +36,12 @@ const mockHome = {
 export const UserAndHomeProvider = ({ children }) => {
   const { baseUrl } = useApiUrl();
   const [user, setUser] = useState(null);
+  const [newUser, setNewUser] = useState(null);
   const [home, setHome] = useState(null);
 
-
+  const saveUser = (newUser) => {
+    setNewUser(newUser);
+  };
   const register = (newUser) => {
     console.log("נרשם בהצלחה:", newUser);
     setUser(newUser);
@@ -115,23 +118,95 @@ const login = async (email, password) => {
     router.replace("/LoginScreen"); // replace ימחק את ההיסטוריה של הניווט
   };
 
-  const setNewHome = (homeName) => {
-    let newHome = {
-      id: "12311",
-      name: homeName,
-      members: [ { id: user.id, name: user.name },],
-    };
-    setHome(newHome);
+  const setNewHome = async (homeName, user) => {
+    try {
+      const response = await fetch(`${baseUrl}/Users/register/newhome`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            RegisterUser: {
+              Name: user.name,
+              Email: user.email,
+              Password: user.password,  
+            },
+            HomeName: homeName,
+          },
+        ),
+      });
+  
+      if (response.ok) {
+        // אם הבקשה הצליחה (סטטוס 2xx)
+        const data = await response.json();
+        const { accessToken, refreshToken } = data;
+  
+        // שמירת הטוקנים ב-AsyncStorage
+        await AsyncStorage.setItem('accessToken', accessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+  
+        // עדכון המשתמש והבית
+        setUser(data.user);
+        setHome(data.home);
+  
+        return true;
+      } else {
+        // במקרה של שגיאה, לדוג' אם המייל כבר קיים או לא ניתן ליצור את הבית
+        const errorData = await response.json();
+        console.error('Error:', errorData);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error creating home:', error);
+      return false;
+    }
   };
-
-  const joinHome = (homeCode) => {
-    if (homeCode === mockHome.code){
-      setHome(mockHome)
-      return true;
-    } 
-    return false;
-      
+  
+  
+  const joinHome = async (homeCode, user) => {
+    try {
+      const response = await fetch(`${baseUrl}/Users/register/existinghome`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          registerUser: {
+              Name: user.name,
+              Email: user.email,
+              Password: user.password,
+            },
+            HomeCode: homeCode,
+          },
+        ),
+      });
+  
+      if (response.ok) {
+        // אם הבקשה הצליחה (סטטוס 2xx)
+        const data = await response.json();
+        const { accessToken, refreshToken } = data;
+  
+        // שמירת הטוקנים ב-AsyncStorage
+        await AsyncStorage.setItem('accessToken', accessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+  
+        // עדכון המשתמש והבית
+        setUser(data.user);
+        setHome(data.home);
+  
+        return true;
+      } else {
+        // במקרה של שגיאה, לדוג' אם המייל כבר קיים או לא ניתן להצטרף לבית
+        const errorData = await response.json();
+        console.error('Error:', errorData);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error joining home:', error);
+      return false;
+    }
   };
+  
 
   const updateHome = (updatedHome) => {
     setHome(updatedHome);
@@ -146,8 +221,10 @@ const login = async (email, password) => {
       value={{
         user,
         home,
+        newUser,
         setHome,
         setUser,
+        saveUser,
         register,
         login,
         logout,

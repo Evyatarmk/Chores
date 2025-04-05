@@ -22,17 +22,20 @@ namespace Chores.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<List>>> GetListsByHome(string homeId)
         {
-            var Lists = await _context.Lists
-            
+            var lists = await _context.Lists
                 .Where(g => g.HomeId == homeId)
                 .Include(g => g.Items)
                 .ToListAsync();
 
-            if (!Lists.Any())
-                return NotFound("No grocery lists found for this home.");
+            if (!lists.Any())
+            {
+                // אם אין רשימות, מחזירים רשימה ריקה
+                return Ok(new List<List>());
+            }
 
-            return Lists;
+            return Ok(lists);
         }
+
 
         // 📌 קבלת רשימה מסוימת לפי ID לבית ספציפי
         [HttpGet("home/{homeId}/{id}")]

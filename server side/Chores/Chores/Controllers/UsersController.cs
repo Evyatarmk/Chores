@@ -25,10 +25,10 @@ namespace Chores.Controllers
 
         // 📌 הרשמה עם הצטרפות לבית קיים
         [HttpPost("register/existinghome")]
-        public async Task<ActionResult<object>> RegisterWithExistingHome(RegisterRequest registerUser, string homeCode)
+        public async Task<ActionResult<object>> RegisterWithExistingHome([FromBody] RegisterWithExistingHomeRequest request)
         {
             // בדיקה אם המייל קיים
-            if (await _context.Users.AnyAsync(u => u.Email == registerUser.Email))
+            if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email))
             {
                 return BadRequest("Email already exists.");
             }
@@ -36,7 +36,7 @@ namespace Chores.Controllers
             // חיפוש בית קיים לפי קוד
             var home = await _context.Homes
                 .Include(h => h.Users) // כל המשתמשים בבית
-                .FirstOrDefaultAsync(h => h.Code == homeCode);
+                .FirstOrDefaultAsync(h => h.Code == request.HomeCode);
 
             if (home == null)
             {
@@ -46,9 +46,9 @@ namespace Chores.Controllers
             User user = new()
             {
                 Id = Guid.NewGuid().ToString(), // מזהה ייחודי
-                Name = registerUser.Name,
-                Email = registerUser.Email,
-                Password = HashPassword(registerUser.Password),
+                Name = request.RegisterUser.Name,
+                Email = request.RegisterUser.Email,
+                Password = HashPassword(request.RegisterUser.Password),
                 HomeId = home.Id,
                 Role = "user",
             };
@@ -103,10 +103,10 @@ namespace Chores.Controllers
 
         // 📌 הרשמה עם יצירת בית חדש
         [HttpPost("register/newhome")]
-        public async Task<ActionResult<object>> RegisterWithNewHome(RegisterRequest registerUser, string homeName)
+        public async Task<ActionResult<object>> RegisterWithNewHome([FromBody] RegisterWithNewHomeRequest request)
         {
             // בדיקה אם המייל קיים
-            if (await _context.Users.AnyAsync(u => u.Email == registerUser.Email))
+            if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email))
             {
                 return BadRequest("Email already exists.");
             }
@@ -115,16 +115,16 @@ namespace Chores.Controllers
             var newHome = new Home
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = homeName,
+                Name =  request.HomeName,
                 Users = new List<User>()
             };
 
             User user = new()
             {
                 Id = Guid.NewGuid().ToString(), // מזהה ייחודי
-                Name = registerUser.Name,
-                Email = registerUser.Email,
-                Password = HashPassword(registerUser.Password),
+                Name = request.RegisterUser.Name,
+                Email = request.RegisterUser.Email,
+                Password = HashPassword(request.RegisterUser.Password),
                 HomeId = newHome.Id,
                 Role = "admin",
                 PublicId = Guid.NewGuid().ToString(), // מזהה ציבורי ייחודי
@@ -290,7 +290,8 @@ namespace Chores.Controllers
         public async Task<ActionResult<object>> GetUserWithHome(string id)
         {
             var user = await _context.Users
-                .Include(u => u.Home) 
+                .Include(u => u.Home)
+                .ThenInclude(h => h.Users)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
@@ -335,5 +336,15 @@ namespace Chores.Controllers
     public class RefreshRequest
     {
         public string RefreshToken { get; set; }
+    }
+    public class RegisterWithExistingHomeRequest
+    {
+        public RegisterRequest RegisterUser { get; set; }
+        public string HomeCode { get; set; }
+    }
+    public class RegisterWithNewHomeRequest
+    {
+        public RegisterRequest RegisterUser { get; set; }
+        public string HomeName { get; set; }
     }
 }

@@ -2,23 +2,45 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
+import ErrorNotification from "./Components/ErrorNotification";
 
 const RegisterScreen = () => {
   const router = useRouter();
-  const { register } = useUserAndHome();
+  const { saveUser } = useUserAndHome();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState('');
+    const [errorVisible, setErrorVisible] = useState(false);
+    const handleCloseError = () => {
+      setErrorMessage("")
+      setErrorVisible(false)
+    };
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  };
   const handleRegister = () => {
-    if (!name || !email || !password) {
-      Alert.alert("שגיאה", "אנא מלא את כל השדות");
+    if (!email || !password||!name) {
+      setErrorMessage("אנא מלא את כל השדות");
+      setErrorVisible(true)
+      return;
+    }
+    if (!validateEmail(email)) {
+      setErrorMessage("אימייל לא חוקי");
+      setErrorVisible(true);
       return;
     }
 
-    const newUser = { id: Date.now(), name, email, password };
-    register(newUser);
-    Alert.alert("נרשמת בהצלחה!");
+    if (password.length < 8) {
+      setErrorMessage("הסיסמה חייבת להיות לפחות 8 תווים");
+      setErrorVisible(true);
+      return;
+    }
+
+
+    const newUser = { name, email, password };
+    saveUser(newUser);
     router.push("/JoinOrCreateHomeScreen");
   };
 
@@ -36,6 +58,8 @@ const RegisterScreen = () => {
       <Text style={styles.link} onPress={() => router.push("/LoginScreen")}>
         כבר יש לך חשבון? התחבר כאן
       </Text>
+      <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
+
     </View>
   );
 };

@@ -2,25 +2,47 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
+import ErrorNotification from "./Components/ErrorNotification";
 
 const LoginScreen = () => {
   const router = useRouter();
   const { login } = useUserAndHome();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleLogin = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
+  const handleCloseError = () => {
+    setErrorMessage("")
+    setErrorVisible(false)
+  };
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  };
+  const handleLogin = async() => {
     if (!email || !password) {
-      Alert.alert("שגיאה", "אנא מלא את כל השדות");
+      setErrorMessage("אנא מלא את כל השדות");
+      setErrorVisible(true)
+      return;
+    }
+    if (!validateEmail(email)) {
+      setErrorMessage("אימייל לא חוקי");
+      setErrorVisible(true);
       return;
     }
 
-    const user = login(email, password);
+    if (password.length < 8) {
+      setErrorMessage("הסיסמה חייבת להיות לפחות 8 תווים");
+      setErrorVisible(true);
+      return;
+    }
+
+    const user = await login(email, password);
     if (user) {
-      Alert.alert("התחברת בהצלחה!");
       router.push("/HomePageScreen");
     } else {
-      Alert.alert("שגיאה", "אימייל או סיסמה לא נכונים");
+      setErrorMessage("אימייל או סיסמה לא נכונים");
+      setErrorVisible(true);
     }
   };
 
@@ -37,6 +59,7 @@ const LoginScreen = () => {
       <Text style={styles.link} onPress={() => router.push("/RegisterScreen")}>
         אין לך חשבון? הירשם כאן
       </Text>
+      <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </View>
   );
 };

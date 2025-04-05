@@ -15,10 +15,10 @@ const AutoLogin = () => {
       console.log("Checking login data...");
 
       try {
-        const accessToken = await AsyncStorage.getItem('accessToken');
+        let accessToken = await AsyncStorage.getItem('accessToken');
+        const refreshToken = await AsyncStorage.getItem('refreshToken');
 
-        if (!accessToken) {
-          console.log("No token found, redirecting to LoginScreen");
+        if (!accessToken || !refreshToken) {
           router.push("/LoginScreen");
           return;
         }
@@ -32,20 +32,34 @@ const AutoLogin = () => {
           return;
         }
 
-        const currentTime = Date.now() / 1000; // זמן נוכחי בשניות
-        console.log(decodedToken.exp, currentTime);
+        const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp < currentTime) {
-          console.log("Token expired, redirecting to LoginScreen");
-          router.push("/LoginScreen");
-          return;
+          // 🔄 מנסה לרענן את הטוקן
+          console.log("Access token expired, attempting to refresh...");
+          const refreshResponse = await fetch(`${baseUrl}/Users/refresh`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ refreshToken }),
+          });
+
+          if (!refreshResponse.ok) {
+            router.push("/LoginScreen");
+            return;
+          }
+
+          const refreshData = await refreshResponse.json();
+          accessToken = refreshData.accessToken;
+
+          await AsyncStorage.setItem('accessToken', refreshData.accessToken);
+          await AsyncStorage.setItem('refreshToken', refreshData.refreshToken);
         }
 
-        // 📌 שליחת בקשה לשרת כדי לקבל את נתוני המשתמש והבית
-        const userId = decodedToken.nameid; // ה-ID של המשתמש מתוך הטוקן
-        console.log("Fetching user and home data for ID:", userId);
+        const userId = jwtDecode(accessToken).nameid;
 
-        const response = await fetch(`${baseUrl}/users/${userId}`, {
+        const response = await fetch(`${baseUrl}/Users/${userId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -54,7 +68,6 @@ const AutoLogin = () => {
         });
 
         if (!response.ok) {
-          console.error("Failed to fetch user data", response.status);
           router.push("/LoginScreen");
           return;
         }
@@ -63,7 +76,6 @@ const AutoLogin = () => {
         setUser(data.user);
         setHome(data.home);
 
-        console.log("User is logged in, redirecting to HomeScreen");
         router.push("/");
       } catch (error) {
         console.error("Error checking login data", error);
@@ -74,7 +86,7 @@ const AutoLogin = () => {
     checkLogin();
   }, []);
 
-  return null; // לא מחזירים UI כי זה נטען מאחורי הקלעים
+  return null;
 };
 
 export default AutoLogin;

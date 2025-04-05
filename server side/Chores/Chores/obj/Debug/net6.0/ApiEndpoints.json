@@ -315,14 +315,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "registerUser",
-        "Type": "Chores.Models.RegisterRequest",
+        "Name": "request",
+        "Type": "Chores.Controllers.RegisterWithExistingHomeRequest",
         "IsRequired": true
-      },
-      {
-        "Name": "homeCode",
-        "Type": "System.String",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -336,14 +331,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "registerUser",
-        "Type": "Chores.Models.RegisterRequest",
+        "Name": "request",
+        "Type": "Chores.Controllers.RegisterWithNewHomeRequest",
         "IsRequired": true
-      },
-      {
-        "Name": "homeName",
-        "Type": "System.String",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -3,6 +3,7 @@ import { useApiUrl } from "./ApiUrlProvider";
 import ErrorNotification from "../Components/ErrorNotification";
 import { useUserAndHome } from "./UserAndHomeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { fetchWithAuth } from "../Utils/fetchWithAuth"; 
 
 const ListsContext = createContext();
 export const useLists = () => useContext(ListsContext);
@@ -122,26 +123,26 @@ export const ListsProvider = ({ children }) => {
     setErrorVisible(false)
   };
   const fetchListsData = async () => {
-    const accessToken = await AsyncStorage.getItem('accessToken');
-
     try {
-      const response = await fetch(`${baseUrl}/Lists/home/${home.id}`, {
-        method: 'GET', // שיטה
-        headers: {
-          'Authorization': `Bearer ${accessToken}`, // הוספת טוקן ה-JWT לכותרת
-          'Content-Type': 'application/json', // הגדרת סוג התוכן
-        }
-      })
-      if (!response.ok) {
+      const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}`, {
+        method: 'GET',
+      });
+  
+      if (!response || !response.ok) {
         throw new Error("שגיאה בהורדת נתונים");
       }
+  
       const data = await response.json();
-      setListsData(data);
-    } catch (error) {
-      setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר")
-      setErrorVisible(true)
-    } finally {
 
+      if (data.length === 0) {
+        setListsData([]); // רשימה ריקה
+      } else {
+        setListsData(data);
+      }  
+      } catch (error) {
+      console.error("שגיאה בקבלת נתוני רשימות:", error);
+      setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר");
+      setErrorVisible(true);
     }
   };
 

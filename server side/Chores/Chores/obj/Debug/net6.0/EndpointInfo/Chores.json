@@ -445,30 +445,21 @@
         "tags": [
           "Users"
         ],
-        "parameters": [
-          {
-            "name": "homeCode",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/RegisterWithExistingHomeRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/RegisterWithExistingHomeRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/RegisterWithExistingHomeRequest"
               }
             }
           }
@@ -485,30 +476,21 @@
         "tags": [
           "Users"
         ],
-        "parameters": [
-          {
-            "name": "homeName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/RegisterWithNewHomeRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/RegisterWithNewHomeRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterRequest"
+                "$ref": "#/components/schemas/RegisterWithNewHomeRequest"
               }
             }
           }
@@ -706,6 +688,32 @@
             "nullable": true
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegisterWithExistingHomeRequest": {
+        "type": "object",
+        "properties": {
+          "registerUser": {
+            "$ref": "#/components/schemas/RegisterRequest"
+          },
+          "homeCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegisterWithNewHomeRequest": {
+        "type": "object",
+        "properties": {
+          "registerUser": {
+            "$ref": "#/components/schemas/RegisterRequest"
+          },
+          "homeName": {
             "type": "string",
             "nullable": true
           }

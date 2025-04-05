@@ -2,33 +2,50 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
+import ErrorNotification from "./Components/ErrorNotification";
 
 const JoinOrCreateHomeScreen = () => {
   const router = useRouter();
-  const { user, joinHome, setNewHome } = useUserAndHome();
+  const { newUser, joinHome, setNewHome } = useUserAndHome();
   const [code, setCode] = useState("");
   const [homeName, setHomeName] = useState("");
-
-  const handleJoinHome = () => {
+ const [errorMessage, setErrorMessage] = useState('');
+    const [errorVisible, setErrorVisible] = useState(false);
+    const handleCloseError = () => {
+      setErrorMessage("")
+      setErrorVisible(false)
+    };
+  const handleJoinHome =async () => {
     if (!code) {
-      Alert.alert("שגיאה", "אנא הכנס קוד בית");
+      setErrorMessage("אנא הכנס קוד בית");
+      setErrorVisible(true)
       return;
     }
-    if (joinHome(code, user)) {
-      Alert.alert("הצטרפת לבית בהצלחה!");
+    let status=await joinHome(code, newUser);
+    if (status) {
       router.push("/HomePageScreen");
     } else {
-      Alert.alert("שגיאה", "קוד הבית אינו תקף");
+      setErrorMessage("קוד הבית אינו תקף");
+      setErrorVisible(true)
+
     }
   };
 
-  const handleCreateHome = () => {
+  const handleCreateHome =async () => {
     if (!homeName) {
-      Alert.alert("שגיאה", "אנא הכנס שם לבית");
+      setErrorMessage("אנא הכנס שם לבית");
+      setErrorVisible(true)
+
       return;
     }
-    setNewHome(homeName, user);
-    router.push("/HomePageScreen");
+    let status=await setNewHome(homeName, newUser)
+    if (status) {
+      router.push("/HomePageScreen");
+    } else {
+      setErrorMessage("משהו לא עבד אנא נסה שוב");
+      setErrorVisible(true)
+
+    }
   };
 
   return (
@@ -56,6 +73,8 @@ const JoinOrCreateHomeScreen = () => {
       <TouchableOpacity style={styles.button} onPress={handleCreateHome}>
         <Text style={styles.buttonText}>צור בית</Text>
       </TouchableOpacity>
+      <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
+
     </View>
   );
 };
