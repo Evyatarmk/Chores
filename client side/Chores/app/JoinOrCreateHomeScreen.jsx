@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "reac
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import ErrorNotification from "./Components/ErrorNotification";
+import { Icon } from '@rneui/base';
 
 const JoinOrCreateHomeScreen = () => {
   const router = useRouter();
@@ -24,10 +25,6 @@ const JoinOrCreateHomeScreen = () => {
     let status=await joinHome(code, newUser);
     if (status) {
       router.push("/HomePageScreen");
-    } else {
-      setErrorMessage("קוד הבית אינו תקף");
-      setErrorVisible(true)
-
     }
   };
 
@@ -50,6 +47,12 @@ const JoinOrCreateHomeScreen = () => {
 
   return (
     <View style={styles.container}>
+            <TouchableOpacity
+        onPress={() => router.back()} // פונקציה לחזרה אחורה
+        style={styles.backButton}
+      >
+        <Icon name="arrow-back" size={24} color="#333" />
+      </TouchableOpacity>
       <Text style={styles.title}>הצטרף לבית קיים</Text>
       <TextInput
         style={styles.input}
@@ -86,6 +89,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     backgroundColor: "#f5f5f5",
+  },
+  backButton: {
+    position: 'absolute',
+    left: 10,
+    top: 20, 
+    zIndex: 1, 
   },
   title: {
     fontSize: 22,

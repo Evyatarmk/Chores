@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
 import { useApiUrl } from "./ApiUrlProvider";
+import ErrorNotification from "../Components/ErrorNotification";
 
 
 const UserAndHomeContext = createContext();
@@ -38,7 +39,12 @@ export const UserAndHomeProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [newUser, setNewUser] = useState(null);
   const [home, setHome] = useState(null);
-
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
+  const handleCloseError = () => {
+    setErrorMessage("")
+    setErrorVisible(false)
+  };
   const saveUser = (newUser) => {
     setNewUser(newUser);
   };
@@ -151,13 +157,19 @@ const login = async (email, password) => {
   
         return true;
       } else {
-        // במקרה של שגיאה, לדוג' אם המייל כבר קיים או לא ניתן ליצור את הבית
-        const errorData = await response.json();
-        console.error('Error:', errorData);
+        // ננסה לקרוא את הטקסט מתוך התגובה (ולא כ-json)
+        const errorText = await response.text();
+        console.warn('שגיאה מהשרת:', errorText);
+  
+        const translatedMessage = getHebrewErrorMessage(errorText);
+        setErrorMessage(translatedMessage);
+        setErrorVisible(true);
         return false;
       }
     } catch (error) {
-      console.error('Error creating home:', error);
+      console.error('שגיאה כללית ב-fetch:', error.message);
+      setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
+      setErrorVisible(true);
       return false;
     }
   };
@@ -172,42 +184,58 @@ const login = async (email, password) => {
         },
         body: JSON.stringify({
           registerUser: {
-              Name: user.name,
-              Email: user.email,
-              Password: user.password,
-            },
-            HomeCode: homeCode,
+            Name: user.name,
+            Email: user.email,
+            Password: user.password,
           },
-        ),
+          HomeCode: homeCode,
+        }),
       });
   
       if (response.ok) {
-        // אם הבקשה הצליחה (סטטוס 2xx)
         const data = await response.json();
         const { accessToken, refreshToken } = data;
   
-        // שמירת הטוקנים ב-AsyncStorage
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
   
-        // עדכון המשתמש והבית
         setUser(data.user);
         setHome(data.home);
   
         return true;
       } else {
-        // במקרה של שגיאה, לדוג' אם המייל כבר קיים או לא ניתן להצטרף לבית
-        const errorData = await response.json();
-        console.error('Error:', errorData);
+        // ננסה לקרוא את הטקסט מתוך התגובה (ולא כ-json)
+        const errorText = await response.text();
+        console.warn('שגיאה מהשרת:', errorText);
+  
+        const translatedMessage = getHebrewErrorMessage(errorText);
+        setErrorMessage(translatedMessage);
+        setErrorVisible(true);
         return false;
       }
     } catch (error) {
-      console.error('Error joining home:', error);
+      console.error('שגיאה כללית ב-fetch:', error.message);
+      setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
+      setErrorVisible(true);
       return false;
     }
   };
   
-
+  
+  const getHebrewErrorMessage = (serverMessage) => {
+    switch (serverMessage) {
+      case "Invalid email format.":
+        return "פורמט האימייל אינו תקין.";
+      case "Password must be at least 8 characters long.":
+        return "הסיסמה חייבת להיות לפחות 8 תווים.";
+      case "Email already exists.":
+        return "האימייל כבר קיים במערכת.";
+      case "Invalid home code.":
+        return "קוד הבית אינו תקף.";
+      default:
+        return "אירעה שגיאה. נסה שוב מאוחר יותר.";
+    }
+  };
   const updateHome = (updatedHome) => {
     setHome(updatedHome);
   };
@@ -234,7 +262,10 @@ const login = async (email, password) => {
         updateUser,
       }}
     >
+      
       {children}
+      <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
+
     </UserAndHomeContext.Provider>
   );
 };

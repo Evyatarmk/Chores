@@ -6,6 +6,7 @@ using Chores.Utils;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 
 namespace Chores.Controllers
@@ -27,6 +28,12 @@ namespace Chores.Controllers
         [HttpPost("register/existinghome")]
         public async Task<ActionResult<object>> RegisterWithExistingHome([FromBody] RegisterWithExistingHomeRequest request)
         {
+            if (!IsValidEmail(request.RegisterUser.Email))
+                return BadRequest("Invalid email format.");
+
+            if (request.RegisterUser.Password.Length < 8)
+                return BadRequest("Password must be at least 8 characters long.");
+
             // בדיקה אם המייל קיים
             if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email))
             {
@@ -105,6 +112,12 @@ namespace Chores.Controllers
         [HttpPost("register/newhome")]
         public async Task<ActionResult<object>> RegisterWithNewHome([FromBody] RegisterWithNewHomeRequest request)
         {
+            if (!IsValidEmail(request.RegisterUser.Email))
+                return BadRequest("Invalid email format.");
+
+            if (request.RegisterUser.Password.Length < 8)
+                return BadRequest("Password must be at least 8 characters long.");
+
             // בדיקה אם המייל קיים
             if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email))
             {
@@ -116,7 +129,9 @@ namespace Chores.Controllers
             {
                 Id = Guid.NewGuid().ToString(),
                 Name =  request.HomeName,
-                Users = new List<User>()
+                Users = new List<User>(),
+                Code = await GenerateUniqueHomeCodeAsync(),
+
             };
 
             User user = new()
@@ -277,7 +292,29 @@ namespace Chores.Controllers
             var hash = sha256.ComputeHash(bytes);
             return Convert.ToBase64String(hash);
         }
+        public async Task<string> GenerateUniqueHomeCodeAsync()
+        {
+            var random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            string homeCode;
 
+            do
+            {
+                // יצירת קוד רנדומלי בגודל 8
+                homeCode = new string(Enumerable.Range(0, 8)
+                    .Select(_ => chars[random.Next(chars.Length)])
+                    .ToArray());
+
+                // בדיקה אם הקוד כבר קיים במערכת
+            } while (await _context.Homes.AnyAsync(h => h.Code == homeCode));
+
+            return homeCode;
+        }
+        private bool IsValidEmail(string email)
+        {
+            var emailRegex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+            return emailRegex.IsMatch(email);
+        }
         // 📌 אימות סיסמה
         private static bool VerifyPassword(string inputPassword, string storedPassword)
         {

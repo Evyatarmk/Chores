@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from "react-native";
 import { Avatar } from '@rneui/themed';
 import { BarChart } from "react-native-chart-kit";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
@@ -62,52 +62,51 @@ const ProfileScreen = () => {
   return (
     <PageWithMenu>
       <NormalHeader title="אזור אישי" targetScreen="/"/>
-      <View style={styles.profileCard}>
-        <Avatar
-          source={{ uri: user?.profilePicture || "https://via.placeholder.com/150" }}
-          size="large"
-          rounded
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.profileCard}>
+          <Avatar
+            source={{ uri: user?.profilePicture || "https://via.placeholder.com/150" }}
+            size="large"
+            rounded
+          />
+          <Text style={styles.name}>{user?.name}</Text>
+          <Text style={styles.code}>קוד הבית: {home?.code}</Text>
+          <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
+            <Icon name="edit" size={18} color="#fff" />
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.subTitle}>משימות שבוצעו</Text>
+        <BarChart
+          data={data}
+          width={screenWidth - 40}
+          height={220}
+          yAxisLabel=""
+          chartConfig={chartConfig}
+          fromZero
+          showValuesOnTopOfBars
+          style={styles.chart}
         />
-        <Text style={styles.name}>{user?.name}</Text>
-        <Text style={styles.code}>קוד הבית: {home?.code}</Text>
-        <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
-          <Icon name="edit" size={18} color="#fff" />
+        <Text style={styles.subTitle}>חברי הבית</Text>
+        <View style={styles.membersList}>
+          {home?.members?.length > 0 ? (
+            home.members.map((member) => (
+              <View key={member.id} style={styles.memberItem}>
+                <Text style={styles.memberName}>{member.name}</Text>
+                <Text style={styles.memberRole}>
+                  {member.id === user.id ? "אתה" : member.role === "admin" ? "מנהל" : "חבר"}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noMembers}>אין חברים בבית</Text>
+          )}
+        </View>
+        <TouchableOpacity onPress={() => logout()} style={styles.logoutButton}>
+          <Icon name="exit-to-app" size={24} color="#fff" />
+          <Text style={styles.logoutText}>התנתקות</Text>
         </TouchableOpacity>
-      </View>
-      
-        
-
-
-      <Text style={styles.subTitle}>משימות שבוצעו</Text>
-      <BarChart
-        data={data}
-        width={screenWidth - 40}
-        height={220}
-        yAxisLabel=""
-        chartConfig={chartConfig}
-        fromZero
-        showValuesOnTopOfBars
-        style={styles.chart}
-      />
-      <Text style={styles.subTitle}>חברי הבית</Text>
-      <View style={styles.membersList}>
-        {home?.members?.length > 0 ? (
-          home.members.map((member) => (
-            <View key={member.id} style={styles.memberItem}>
-              <Text style={styles.memberName}>{member.name}</Text>
-              <Text style={styles.memberRole}>
-                {member.id === user.id ? "אתה" : member.role === "admin" ? "מנהל" : "חבר"}
-              </Text>
-            </View>
-          ))
-        ) : (
-          <Text style={styles.noMembers}>אין חברים בבית</Text>
-        )}
-      </View>
-      <TouchableOpacity onPress={() => logout()} style={styles.logoutButton}>
-        <Icon name="exit-to-app" size={24} color="#fff" />
-        <Text style={styles.logoutText}>התנתקות</Text>
-      </TouchableOpacity>
+      </ScrollView>
     </PageWithMenu>
   );
 };
@@ -155,13 +154,11 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 10,
     textAlign: "center",
-    
   },
   chart: {
     marginVertical: 10,
     borderRadius: 10,
     alignSelf: "center",
-    
   },
   membersList: {
     backgroundColor: "#fff",
@@ -210,6 +207,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
+  },
+  scrollContainer: {
+    paddingBottom: 20, // כדי להוסיף רווח בתחתית
   },
 });
 

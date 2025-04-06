@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Chores")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d50da7794e51703b1717b0893e0d78a1b6b9f8e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e0bfbb7ec687e29ff79dcce66ff6004f8de13f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Chores")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Chores")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
