@@ -125,14 +125,14 @@ const ListsScreen = () => {
       <NormalHeader title="הרשימות שלי" />
       
       <ItemSelector
-        items={categories}
+        items={categories.map(cat => cat.name)}
         onSelect={setSelectedCategory}
         defaultSelected="הכל"
         firstItem="הכל"
       />
       <FlatList
         data={listsDataToShow}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 110 }}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -213,7 +213,7 @@ const ListsScreen = () => {
           <View style={styles.row}>
                   <SelectableDropdown
                     label="קטגוריה"
-                    options={categories}
+                    options={categories.map(cat => cat.name)}
                     selectedValue={currentList?.category}
                     onSelect={handleCategorySelect}
                     onAdding={handleAddingCategory}

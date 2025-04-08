@@ -1,5 +1,89 @@
 [
   {
+    "ContainingType": "Chores.Controllers.CategoriesController",
+    "Method": "GetCategoriesByHome",
+    "RelativePath": "api/home/{homeId}/categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.CategoriesController",
+    "Method": "CreateCategory",
+    "RelativePath": "api/home/{homeId}/categories",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "category",
+        "Type": "Chores.Models.Category",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.CategoriesController",
+    "Method": "UpdateCategory",
+    "RelativePath": "api/home/{homeId}/categories/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedCategory",
+        "Type": "Chores.Models.Category",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.CategoriesController",
+    "Method": "DeleteCategory",
+    "RelativePath": "api/home/{homeId}/categories/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Chores.Controllers.ListsController",
     "Method": "GetListsByHome",
     "RelativePath": "api/Lists/home/{homeId}",
@@ -39,8 +123,8 @@
         "IsRequired": true
       },
       {
-        "Name": "name",
-        "Type": "System.String",
+        "Name": "newList",
+        "Type": "Chores.Models.List",
         "IsRequired": true
       }
     ],
@@ -127,7 +211,148 @@
         "IsRequired": true
       },
       {
-        "Name": "name",
+        "Name": "updatedList",
+        "Type": "Chores.Models.List",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "ClearCheckedItems",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/clearCheckedItems",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "CopyAllItems",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/copyAllItems",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "CopyPurchasedItems",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/copyPurchasedItems",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "CopyUnpurchasedItems",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/copyUnpurchasedItems",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "UpdateItem",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/item/{itemId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedItem",
+        "Type": "Chores.Models.Item",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "DeleteItem",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/item/{itemId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "itemId",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -160,6 +385,53 @@
       {
         "Name": "newStatus",
         "Type": "System.Boolean",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "UpdateOrAddItems",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/items",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "newItems",
+        "Type": "System.Collections.Generic.List\u00601[[Chores.Models.Item, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.ListsController",
+    "Method": "UncheckAllItems",
+    "RelativePath": "api/Lists/home/{homeId}/list/{listId}/uncheckAllItems",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "listId",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -200,63 +472,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Chores.Controllers.ListsController",
-    "Method": "UpdateItem",
-    "RelativePath": "api/Lists/home/{homeId}/lists/{listId}/items/{itemId}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "homeId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "listId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "itemId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "updatedItem",
-        "Type": "Chores.Models.Item",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Chores.Controllers.ListsController",
-    "Method": "DeleteItem",
-    "RelativePath": "api/Lists/home/{homeId}/lists/{listId}/items/{itemId}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "homeId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "listId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "itemId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",

@@ -6,6 +6,7 @@ import ItemSelector from "./Components/ItemSelector";
 import DatePicker from "./Components/DatePicker";
 import { useCategories } from "./Context/CategoryContext";
 import { useLists } from "./Context/ListsContext";
+import { useUserAndHome } from "./Context/UserAndHomeContext";
 import SelectableDropdown from "./Components/SelectableDropdown";
 
 const AddListScreen = () => {
@@ -32,11 +33,17 @@ const AddListScreen = () => {
   const router = useRouter();
   const { categories ,addCategory} = useCategories();
   const { addNewList } = useLists();
+  const { home } = useUserAndHome();
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
-  const handleAddingCategory = (newCategory) => {
+  const handleAddingCategory = (newCategoryName) => {
+    const newCategory={
+      id: Date.now().toString(),
+      name:newCategoryName,
+      homeId:home.id
+    }
     addCategory(newCategory)
   }
   const handleSave = () => {
@@ -46,7 +53,7 @@ const AddListScreen = () => {
       id: Date.now().toString(),
       name: listName,
       date: date,
-      homeId: "home-123",
+      homeId: home.id,
       category: category,
       items: [],
     };
@@ -98,7 +105,7 @@ const AddListScreen = () => {
       <View style={styles.row}>
         <SelectableDropdown
           label="קטגוריה"
-          options={categories}
+          options={categories.map(cat => cat.name)}
           selectedValue={category}
           onSelect={setCategory}
           allowAdding={true}
