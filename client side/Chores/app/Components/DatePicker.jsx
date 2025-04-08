@@ -31,7 +31,7 @@ const DatePicker = ({ onDateSelect, showModal, setShowModal, selectedDate, Today
     <>
       <TouchableOpacity style={styles.dateButton} onPress={() => setShowModal(true)}>
         <Ionicons name="calendar" size={12} color="white" />
-        <Text style={styles.dateButtonText}>{selectedDate || "ללא תאריך"}</Text>
+        <Text style={styles.dateButtonText}>{selectedDate==""?"ללא תאריך":selectedDate.split("T")[0]}</Text>
       </TouchableOpacity>
 
       <Modal transparent={true} animationType="slide" visible={showModal} onRequestClose={() => setShowModal(false)}>

@@ -15,7 +15,7 @@ export default function RootLayout() {
         <CategoryProvider>
           <TaskProvider>
             <ListsProvider>
-              {/*<AutoLogin/>*/}
+              <AutoLogin/>
               <Stack
                 screenOptions={{
                   headerShown: false,

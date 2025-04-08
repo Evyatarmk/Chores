@@ -28,6 +28,7 @@ const SelectableDropdown = ({
 
   const handleAddOption = () => {
     if (newOption.trim()) {
+      if(options.includes(newOption))return;
       if (onAdding) {
         onAdding(newOption.trim()); // קריאה לפונקציה על מנת לעדכן את הקונטקסט או הסטייט
       }

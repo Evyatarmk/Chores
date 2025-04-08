@@ -86,10 +86,6 @@ const PageWithMenu = (props) => {
           <Icon name="check-circle" size={24} color="black" />
           <Text style={styles.navText}>משימות</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => router.push("/ProfileScreen")}>
-          <Icon name="person" size={24} color="black" />
-          <Text style={styles.navText}>אזור אישי</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => router.push("/HomePageScreen")}>
           <Icon name="home" size={24} color="black" />
           <Text style={styles.navText}>דף הבית</Text>
@@ -129,14 +125,14 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: "rgba(0, 0, 0, 0.5)", // רקע כהה להבליט את הדראואר
-    zIndex: 5,
+    zIndex: 10,
   },
   drawer: {
     position: "absolute",
     top: 0,
     right: -250, // מתחיל מחוץ לתצוגה בצד ימין
     bottom: 0,
-    width: 250, // רוחב הדראואר
+    width: 230, // רוחב הדראואר
     backgroundColor: "#b0bfcc",
     padding: 20,
     shadowColor: "#000",
