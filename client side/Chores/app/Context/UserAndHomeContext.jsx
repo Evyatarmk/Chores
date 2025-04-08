@@ -10,8 +10,8 @@ const UserAndHomeContext = createContext();
 const mockUser = {
   id: "t",
   name: "אביתר",
-  email: "t",
-  password: "1",
+  email: "itaigalipo@gmail.com",
+  password: "12345678",
   homeId: "home1",
   role: "admin",
   profilePicture: "https://www.coaching-center.co.il/wp-content/uploads/2014/12/%D7%90%D7%99%D7%A9_%D7%9E%D7%9B%D7%99%D7%A8%D7%95%D7%AA_coaching_center.jpg",

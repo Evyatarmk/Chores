@@ -66,7 +66,10 @@ const TaskDetailsScreen = () => {
 
       {/* Task Date */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.date}>תאריך: {taskData?.date || "תאריך לא זמין"}</Text>
+      <Text style={styles.date}>
+        תאריך: {taskData?.startDate && taskData?.endDate ? `${taskData.startDate} - ${taskData.endDate}` : "תאריך לא זמין"}
+        </Text>
+
       </View>
 
 
