@@ -4,8 +4,8 @@ import { Modalize } from "react-native-modalize";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const BottomSheetModal = ({ modalRef, onClose, title, children }) => {
-  return (
-    <Modalize ref={modalRef} adjustToContentHeight handlePosition="inside" onOverlayPress={onClose}>
+  return ( 
+    <Modalize ref={modalRef} modalStyle={styles.modal} adjustToContentHeight handlePosition="inside" onOverlayPress={onClose}>
       <View style={styles.panelHeader}>
         <Text style={styles.panelTitle}>{title}</Text>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -18,6 +18,9 @@ const BottomSheetModal = ({ modalRef, onClose, title, children }) => {
 };
 
 const styles = StyleSheet.create({
+  modal: {
+    zIndex:1002
+  },
   panelHeader: {
     flexDirection: "row-reverse",
     justifyContent: "space-between",

@@ -5,7 +5,7 @@ import BottomSheetModal from "./BottomSheetModal";
 
 const OptionsModal = ({ optionsModalRef, handleOptionSelect, options }) => {
   return (
-    <BottomSheetModal modalRef={optionsModalRef} title="אפשרויות" onClose={() => optionsModalRef.current?.close()}>
+    <BottomSheetModal modalRef={optionsModalRef} modalStyle={styles.modal} title="אפשרויות" onClose={() => optionsModalRef.current?.close()}>
       <View style={styles.panelContent}>
         {options.map((option, index) => (
           <TouchableOpacity 

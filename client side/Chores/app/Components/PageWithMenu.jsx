@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    marginBottom: 80
+    marginBottom: 60
   },
   title: {
     fontSize: 24,

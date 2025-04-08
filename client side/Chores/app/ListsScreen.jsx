@@ -14,6 +14,7 @@ import { useCategories } from "./Context/CategoryContext";
 import DatePicker from "./Components/DatePicker";
 import SelectableDropdown from "./Components/SelectableDropdown";
 import PageWithMenu from "./Components/PageWithMenu";
+import { useUserAndHome } from "./Context/UserAndHomeContext";
 
 const ListsScreen = () => {
   const { listsData, fetchListsData, deleteList, updateList, copyAllItems, copyUnpurchasedItems, copyPurchasedItems } = useLists();
@@ -29,6 +30,7 @@ const ListsScreen = () => {
   const [listsDataToShow, setListsDataToShow] = useState(null);
   const { categories, addCategory } = useCategories();
   const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
+    const { home } = useUserAndHome();
   
   useEffect(() => {
     setListsDataToShow(listsData)
@@ -60,7 +62,12 @@ const ListsScreen = () => {
     await fetchListsData();
     setRefreshing(false);
   };
-  const handleAddingCategory = (newCategory) => {
+  const handleAddingCategory = (newCategoryName) => {
+    const newCategory={
+      id: Date.now().toString(),
+      name:newCategoryName,
+      homeId:home.id
+    }
     addCategory(newCategory)
   }
 
@@ -137,12 +144,13 @@ const ListsScreen = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.listItem}
-            onPress={() =>
+            onPress={() =>{
               router.push({
-                pathname: "./ListItemsScreen",
+                pathname: '/ListItemsScreen',
                 params: { listId: JSON.stringify(item.id) },
               })
             }
+          }
           >
             <Text style={styles.listTitle}>{item.name}</Text>
             <View style={styles.progressBarContainer}>
@@ -238,14 +246,14 @@ const ListsScreen = () => {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         message="האם אתה בטוח שברצונך למחוק פריט זה?"
-        onConfirm={() => { handleDelete(currentList.id); }}
+        onConfirm={() => { handleDelete(currentList?.id); }}
         confirmText="מחק"
         cancelText="ביטול"
       />
-    </GestureHandlerRootView>
     <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddListScreen" })}>
         <Icon name="add" size={30} color="white" />
       </TouchableOpacity>
+    </GestureHandlerRootView>
     </PageWithMenu>
   );
 };
@@ -275,7 +283,7 @@ const styles = StyleSheet.create({
   optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
   addButton: {
     position: "absolute",
-    bottom: 0,
+    bottom: 10,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

@@ -267,7 +267,7 @@ namespace Chores.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshRequest.RefreshToken);
 
-            if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
+            if (user == null )
             {
                 return Unauthorized("Invalid or expired refresh token.");
             }

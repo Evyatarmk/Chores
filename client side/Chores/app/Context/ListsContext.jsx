@@ -158,7 +158,7 @@ export const ListsProvider = ({ children }) => {
 
   // פונקציה לקבלת פריטים לפי listId
   const getList = (listId) => {
-    const list = listsData.find((list) => list.id === listId);
+    const list = listsData.find((list) => list.id == listId);
     return list;
   };
 

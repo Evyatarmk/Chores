@@ -18,18 +18,18 @@ namespace Chores.Controllers
             _context = context;
         }
 
-        // GET: api/homes/{homeId}/categories
+        // GET: api/home/{homeId}/categories
         [HttpGet]
         public async Task<IActionResult> GetCategoriesByHome(string homeId)
         {
             var categories = await _context.Categories
                 .Where(c => c.HomeId == homeId)
-                .ToListAsync();
+                .ToListAsync(); 
 
             return Ok(categories);
         }
 
-        // POST: api/homes/{homeId}/categories
+        // POST: api/home/{homeId}/categories
         [HttpPost]
         public async Task<IActionResult> CreateCategory(string homeId, [FromBody] Category category)
         {

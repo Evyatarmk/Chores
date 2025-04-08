@@ -13,7 +13,7 @@ namespace Chores.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<List> Lists { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<ItemHisrory> ItemHistory { get; set; }
+        public DbSet<ItemHistory> ItemHistory { get; set; }
 
     }
 }

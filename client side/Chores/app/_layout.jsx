@@ -4,6 +4,7 @@ import { TaskProvider } from "./Context/TaskContext";
 import { UserAndHomeProvider } from "./Context/UserAndHomeContext";
 import { ApiUrlProvider } from "./Context/ApiUrlProvider";
 import { CategoryProvider } from "./Context/CategoryContext";
+import { ItemHistoryProvider } from "./Context/ItemHistoryContext";
 import { StoriesProvider } from "./Context/StoriesContext";
 import AutoLogin from "./AutoLogin";
 
@@ -15,6 +16,7 @@ export default function RootLayout() {
         <CategoryProvider>
           <TaskProvider>
             <ListsProvider>
+              <ItemHistoryProvider>
               <AutoLogin/>
               <Stack
                 screenOptions={{
@@ -40,6 +42,7 @@ export default function RootLayout() {
                 <Stack.Screen name="HomePageScreen" />
                 <Stack.Screen name="ChatScreen" />
               </Stack>
+              </ItemHistoryProvider>
             </ListsProvider>
           </TaskProvider>
         </CategoryProvider>

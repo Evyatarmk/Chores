@@ -39,6 +39,8 @@ namespace Chores.Controllers
 
         // 📌 קבלת רשימה מסוימת לפי ID לבית ספציפי
         [HttpGet("home/{homeId}/{id}")]
+        [Authorize]
+
         public async Task<ActionResult<List>> GetListByHome(string homeId, string id)
         {
             var List = await _context.Lists
@@ -54,6 +56,8 @@ namespace Chores.Controllers
 
         // 📌 יצירת רשימה חדשה לבית ספציפי
         [HttpPost("home/{homeId}")]
+        [Authorize]
+
         public async Task<ActionResult<List>> CreateList(string homeId,[FromBody]List newList)
         {
             newList.Id = Guid.NewGuid().ToString();
@@ -66,6 +70,7 @@ namespace Chores.Controllers
        
         // 📌 הוספת פריט לרשימה מסוימת בבית ספציפי
         [HttpPost("home/{homeId}/lists/{listId}/items")]
+        [Authorize]
         public async Task<ActionResult<Item>> AddItemToList(string homeId, string listId, Item item)
         {
             var List = await _context.Lists
@@ -83,6 +88,7 @@ namespace Chores.Controllers
         }
         // 📌 העתקת כל הפריטים ברשימה
         [HttpPost("home/{homeId}/list/{listId}/copyAllItems")]
+        [Authorize]
         public async Task<IActionResult> CopyAllItems(string homeId, string listId)
         {
             // חיפוש הרשימה על פי homeId ו-listId
@@ -119,6 +125,7 @@ namespace Chores.Controllers
             return Ok(newList);
         }
         [HttpPost("home/{homeId}/list/{listId}/copyPurchasedItems")]
+        [Authorize]
         public async Task<IActionResult> CopyPurchasedItems(string homeId, string listId)
         {
             var List = await _context.Lists
@@ -154,6 +161,7 @@ namespace Chores.Controllers
         }
         // 📌 העתקת פריטים שלא נרכשו
         [HttpPost("home/{homeId}/list/{listId}/copyUnpurchasedItems")]
+        [Authorize]
         public async Task<IActionResult> CopyUnpurchasedItems(string homeId, string listId)
         {
             // חיפוש הרשימה על פי homeId ו-listId
@@ -193,6 +201,7 @@ namespace Chores.Controllers
 
         // 📌 שינוי רשימה קיימת
         [HttpPut("home/{homeId}/list/{listId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateList(string homeId, string listId, [FromBody] List updatedList)
         {
             var List = await _context.Lists
@@ -212,6 +221,7 @@ namespace Chores.Controllers
 
         // 📌 עדכון סטוטוס פריט 
         [HttpPut("home/{homeId}/list/{listId}/item/{itemId}/status/{newStatus}")]
+        [Authorize]
         public async Task<IActionResult> UpdateItemStatus(string homeId, string listId, string itemId, bool newStatus)
         {
 
@@ -243,6 +253,7 @@ namespace Chores.Controllers
         }
         // 📌 עדכון  פריט 
         [HttpPut("home/{homeId}/list/{listId}/item/{itemId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateItem(string homeId, string listId, string itemId, [FromBody]Item updatedItem )
         {
 
@@ -276,6 +287,7 @@ namespace Chores.Controllers
         }
         // 📌 הסרת סימון כל הפריטים ברשימה
         [HttpPut("home/{homeId}/list/{listId}/uncheckAllItems")]
+        [Authorize]
         public async Task<IActionResult> UncheckAllItems(string homeId, string listId)
         {
             // חיפוש הרשימה על פי homeId ו-listId
@@ -301,6 +313,7 @@ namespace Chores.Controllers
         }
         // 📌 הסרת פריטים שנלקחו מהרשימה
         [HttpPut("home/{homeId}/list/{listId}/clearCheckedItems")]
+        [Authorize]
         public async Task<IActionResult> ClearCheckedItems(string homeId, string listId)
         {
             // חיפוש הרשימה על פי homeId ו-listId
@@ -329,6 +342,7 @@ namespace Chores.Controllers
 
         // 📌 עדכון או הוספת פריטים ברשימה
         [HttpPut("home/{homeId}/list/{listId}/items")]
+        [Authorize]
         public async Task<IActionResult> UpdateOrAddItems(string homeId, string listId, [FromBody] List<Item> newItems)
         {
             // חיפוש הרשימה על פי homeId ו-listId
@@ -337,25 +351,21 @@ namespace Chores.Controllers
                 .Include(g => g.Items)
                 .FirstOrDefaultAsync();
 
-            // אם הרשימה לא נמצאה
             if (List == null)
                 return NotFound("Grocery list not found.");
 
             foreach (var newItem in newItems)
             {
-                // חיפוש פריט מתוך הרשימה על פי itemId
                 var item = List.Items.FirstOrDefault(i => i.Id == newItem.Id);
 
                 if (item != null)
                 {
-                    // אם הכמות היא 0, נמחק את הפריט
                     if (newItem.Quantity == 0)
                     {
                         List.Items.Remove(item);
                     }
                     else
                     {
-                        // אם הפריט קיים, נעדכן אותו
                         item.Name = newItem.Name;
                         item.Description = newItem.Description;
                         item.Quantity = newItem.Quantity;
@@ -366,18 +376,33 @@ namespace Chores.Controllers
                     newItem.Id = Guid.NewGuid().ToString();
                     List.Items.Add(newItem);
                 }
+
+                // הוספה ל־ItemHistory אם לא קיים שם כבר (לפי Id או שם)
+                bool existsInHistory = await _context.ItemHistory
+                    .AnyAsync(h => h.Name == newItem.Name && h.HomeId == homeId);
+
+                if (!existsInHistory)
+                {
+                    var historyItem = new ItemHistory
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = newItem.Name,
+                        Description = newItem.Description,
+                        HomeId = homeId,
+                        Category = List.Category,
+                    };
+
+                    _context.ItemHistory.Add(historyItem);
+                }
             }
 
-            // שמירה על השינויים
             await _context.SaveChangesAsync();
 
-            // החזרת הרשימה המעודכנת
             return Ok(new { items = List.Items });
         }
-
-
         // 📌 מחיקת רשימה לבית ספציפי
         [HttpDelete("home/{homeId}/List/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteList(string homeId, string id)
         {
             var List = await _context.Lists
@@ -398,6 +423,7 @@ namespace Chores.Controllers
 
         // 📌 מחיקת פריט מסוים מתוך רשימה בבית ספציפי
         [HttpDelete("home/{homeId}/list/{listId}/item/{itemId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteItem(string homeId, string listId, string itemId)
         {
             // חיפוש רשימה על פי homeId ו-listId

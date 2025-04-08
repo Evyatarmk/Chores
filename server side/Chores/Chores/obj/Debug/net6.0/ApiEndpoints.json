@@ -84,6 +84,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Chores.Controllers.ItemHistoryController",
+    "Method": "GetItemHistoryByHomeAndCategory",
+    "RelativePath": "api/ItemHistory/home/{homeId}/category/{category}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "category",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Chores.Controllers.ListsController",
     "Method": "GetListsByHome",
     "RelativePath": "api/Lists/home/{homeId}",

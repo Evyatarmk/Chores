@@ -29,7 +29,7 @@ const ListItemsScreen = () => {
   useEffect(() => {
     const list = getList(listId);
     setList(list)
-    const sortedItems = [...list.items].sort((a, b) => a.isTaken - b.isTaken);
+    const sortedItems = [...list?.items].sort((a, b) => a.isTaken - b.isTaken);
     setListsItems(sortedItems);
   }, [listId, listsData]);
 
@@ -150,8 +150,8 @@ const ListItemsScreen = () => {
       onPress={() =>
         router.push({
           pathname: "./AddListItemsScreen",
-          params: { listId: JSON.stringify(list.id)},
-        })
+          params: { listId: JSON.stringify(listId) },    
+            })
       }
       >
         <Icon name="add" size={30} color="white" />
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 0,
+    bottom: 10,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

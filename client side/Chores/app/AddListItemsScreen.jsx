@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import ClearableInput from "./Components/ClearableInput";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useLists } from "./Context/ListsContext";
+import { useItemHistory } from "./Context/ItemHistoryContext";
 import { v4 as uuidv4 } from "uuid"; // נדרשת חבילה זו
 
 const AddListItemsScreen = () => {
@@ -14,34 +15,41 @@ const AddListItemsScreen = () => {
   const [inputTextItemName, setInputTextItemName] = useState("");
   const [newItem, setNewItem] = useState(null)
   const { updateOrAddItems, getList } = useLists();
+  const { getItemHistoryByCategory} = useItemHistory();
 
   const [itemsToShow, setItemsToShow] = useState([]);
   const [itemsToAdd, setItemsToAdd] = useState([]);
-
   useEffect(() => {
-    const tempItems = [
-      { id: 101, name: "ביצים", description: "" },
-      { id: 102, name: "סוכר", description: "שקית 1 ג" },
-      { id: 103, name: "מלח", description: "מלח שולחן רגיל" },
-    ];
-    const tempItemsToShow = tempItems.map((item) => ({
-      id: uuidv4(),
-      name: item.name,
-      description: item.description,
-      quantity: 0,
-      isTaken: false,
-      listId: listId,
-    }));
-
-    const allItems = [...getList(listId).items, ...tempItemsToShow];
-
-    const uniqueItems = allItems.filter((item, index, self) =>
-      index === self.findIndex((t) => (
-        t.name === item.name && t.description === item.description
-      ))
-    );
-    setItemsToShow(uniqueItems);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const list =getList(listId)
+        const itemHistory = await getItemHistoryByCategory(list.category); // מחכה לתוצאה
+        console.log("ddwdwdwdhhhhh",itemHistory)
+        const ItemsToShow = itemHistory.map((item) => ({
+          id: uuidv4(),
+          name: item?.name,
+          description: item?.description,
+          quantity: 0,
+          isTaken: false,
+          listId: listId,
+        }));
+  
+        const allItems = [...list.items, ...ItemsToShow];
+        console.log("allItems",allItems)
+        const uniqueItems = allItems.filter((item, index, self) =>
+          index === self.findIndex((t) =>
+            t.name === item.name && t.description === item.description
+          )
+        );
+  
+        setItemsToShow(uniqueItems);
+      } catch (error) {
+        console.error("שגיאה בטעינת היסטוריית פריטים:", error);
+      }
+    };
+  
+    fetchData(); // מפעיל את הפונקציה הא-סינכרונית
+  }, [listId]);
 
   const handleAddItem = (item) => {
     setItemsToAdd((prevItems) => {
