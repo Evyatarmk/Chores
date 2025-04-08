@@ -10,22 +10,35 @@ const TaskEditScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { taskId, date } = params;
-  const { editTask, getTask } = useTasks();
+  const { editTask, getTasksForDate } = useTasks();
 
-  const task = getTask(date, taskId);  // Assuming getTask fetches task by date and ID
-
-  // Ensure the task has the right values when fetched
-  const [title, setTitle] = useState(task ? task.title : '');
-  const [description, setDescription] = useState(task ? task.description : '');
-  const [category, setCategory] = useState(task ? task.category : '');
-  const [startDate, setStartDate] = useState(task ? task.startDate : new Date());
-  const [endDate, setEndDate] = useState(task ? task.endDate : new Date());
-  const [startTime, setStartTime] = useState(task ? task.startTime : '');  // Ensure startTime is set correctly
-  const [endTime, setEndTime] = useState(task ? task.endTime : '');
-  const [maxParticipants, setMaxParticipants] = useState(task ? task.maxParticipants.toString() : '');
-
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [maxParticipants, setMaxParticipants] = useState("");
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  useEffect(() => {
+    if (date && taskId) {
+      const tasksForDate = getTasksForDate(date);
+      const fetchedTask = tasksForDate.find(task => String(task.id) === String(taskId));
+  
+      if (fetchedTask) {
+        setTitle(fetchedTask.title || "");
+        setDescription(fetchedTask.description || "");
+        setCategory(fetchedTask.category || "");
+        setMaxParticipants(String(fetchedTask.maxParticipants || ""));
+        setStartDate(new Date(fetchedTask.startDate)); // Convert string to Date
+        setEndDate(new Date(fetchedTask.endDate));     // Convert string to Date
+        setStartTime(fetchedTask.startTime || "");
+        setEndTime(fetchedTask.endTime || "");
+      }
+    }
+  }, [date, taskId, getTasksForDate]);
 
   const handleSave = () => {
     const updatedTask = {
@@ -38,21 +51,17 @@ const TaskEditScreen = () => {
       endTime,
       maxParticipants: parseInt(maxParticipants, 10)
     };
-    editTask(taskId, updatedTask);  // Adjusted to match your API if necessary
-    router.back();  // Navigate back after updating
+    editTask(taskId, updatedTask);
+    router.back();
   };
 
-  // Handle start time selection
   const handleStartTimeSelect = (time) => {
-    setStartTime(time); // Directly update startTime
-
-    // If start date is the same as end date and endTime exists, update endTime if needed
+    setStartTime(time);
     if (startDate === endDate && endTime) {
       const start = new Date(`2000-01-01T${time}`);
       const end = new Date(`2000-01-01T${endTime}`);
-
       if (start > end) {
-        setEndTime(time);  // Update endTime to match startTime if it's later
+        setEndTime(time);
       }
     }
   };
@@ -97,19 +106,19 @@ const TaskEditScreen = () => {
           placeholderTextColor="#ccc"
           keyboardType="numeric"
         />
-        {/* Date and Time Pickers */}
+
         <Text>זמן התחלה</Text>
         <View style={styles.dateAndTimeContianer}>
           <TouchableOpacity onPress={() => setShowStartDatePicker(true)} />
           <DatePickerForTasks
             showModal={showStartDatePicker}
             setShowModal={setShowStartDatePicker}
-            selectedDate={task.startDate}
+            selectedDate={startDate}
             onDateSelect={setStartDate}
           />
           <TimePickerButton
-            initialTime={task.startTime}  // Make sure startTime is passed correctly
-            onConfirm={handleStartTimeSelect}  // Update startTime when confirmed
+            initialTime={startTime}
+            onConfirm={handleStartTimeSelect}
           />
         </View>
 
@@ -124,7 +133,7 @@ const TaskEditScreen = () => {
           />
           <TimePickerButton
             initialTime={endTime}
-            onConfirm={setEndTime}  // Directly update endTime
+            onConfirm={setEndTime}
           />
         </View>
       </View>

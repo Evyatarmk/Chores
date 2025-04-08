@@ -9,7 +9,7 @@ const TaskDetailsScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { taskId, date } = params;
-  const { getTask } = useTasks();
+  const { getTasksForDate } = useTasks();
 
   const [taskData, setTaskData] = useState(null);
   const handleEdit = () => {
@@ -21,13 +21,20 @@ const TaskDetailsScreen = () => {
   useEffect(() => {
     if (date && taskId) {
       console.log("Fetching task with date:", String(date), "and taskId:", taskId);
-      const fetchedTask = getTask(date, taskId);
-      console.log("Fetched task:", fetchedTask);
-
-      // Ensure taskData is always an object and participants is an array
-      setTaskData(fetchedTask);
+  
+      const tasksForDate = getTasksForDate(date);
+      console.log("All tasks for date:", tasksForDate);
+  
+      const fetchedTask = tasksForDate.find(task => String(task.id) === String(taskId)); // ודא שהשוואת id היא תקינה גם אם יש סוגים שונים
+  
+      console.log("Fetched specific task:", fetchedTask);
+  
+      if (fetchedTask) {
+        setTaskData(fetchedTask); // שמור רק את המשימה שנמצאה
+      }
     }
-  }, [date, taskId, getTask]); // Added `getTask` as a dependency to ensure it updates correctly
+  }, [date, taskId, getTasksForDate]);
+  
 
   return (
     <View style={styles.container}>

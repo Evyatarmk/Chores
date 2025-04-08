@@ -10,7 +10,7 @@ export const TaskProvider = ({ children }) => {
       { 
         id: '1', 
         startDate: "2025-03-30", // Changed to startDate
-        endDate: "2025-04-30",   // Added endDate
+        endDate: "2025-03-30",   // Added endDate
         startTime: "10:00 AM",
         endTime: "10:00 AM",        // Added time here
         title: "Meeting", 
@@ -180,6 +180,7 @@ export const TaskProvider = ({ children }) => {
     const formattedDate =
       typeof date === "string" ? date.trim() : new Date(date).toISOString().split("T")[0];
   
+      
     const tasksForDate = tasks[formattedDate];
     console.log("Tasks for this date:", tasksForDate);
   
@@ -190,7 +191,7 @@ export const TaskProvider = ({ children }) => {
   console.log(taskId)
     // Find the specific task by taskId
     const foundTask = tasksForDate.find(task => task.id ===  taskId);
-    console.log("Found Task:", foundTask);
+    console.log("Found Task: gygygygygyg", foundTask);
   
     return foundTask || null;
   };
