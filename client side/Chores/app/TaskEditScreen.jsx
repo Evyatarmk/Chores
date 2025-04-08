@@ -12,58 +12,128 @@ const TaskEditScreen = () => {
   const { taskId, date } = params;
   const { editTask, getTasksForDate } = useTasks();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [maxParticipants, setMaxParticipants] = useState("");
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  useEffect(() => {
-    if (date && taskId) {
-      const tasksForDate = getTasksForDate(date);
-      const fetchedTask = tasksForDate.find(task => String(task.id) === String(taskId));
-  
-      if (fetchedTask) {
-        setTitle(fetchedTask.title || "");
-        setDescription(fetchedTask.description || "");
-        setCategory(fetchedTask.category || "");
-        setMaxParticipants(String(fetchedTask.maxParticipants || ""));
-        setStartDate(new Date(fetchedTask.startDate)); // Convert string to Date
-        setEndDate(new Date(fetchedTask.endDate));     // Convert string to Date
-        setStartTime(fetchedTask.startTime || "");
-        setEndTime(fetchedTask.endTime || "");
-      }
-    }
-  }, [date, taskId, getTasksForDate]);
+  const task = getTasksForDate(date);
 
-  const handleSave = () => {
-    const updatedTask = {
-      title,
-      description,
-      category,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      maxParticipants: parseInt(maxParticipants, 10)
-    };
-    editTask(taskId, updatedTask);
-    router.back();
+  // Ensure task is not undefined
+  const mytask = task.find(task => String(task.id) === String(taskId));
+
+  // Check if the task was found, otherwise return early or handle gracefully
+  if (!mytask) {
+    return <Text>Task not found</Text>; // Or some error handling UI
+  }
+
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false); // Function to toggle date picker
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false); // Function to toggle date picker
+
+  const currentTime = new Date();
+  currentTime.setMinutes(Math.floor(currentTime.getMinutes() / 5) * 5); // Round down to nearest 5 minutes
+  const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  const [toEditTaskData, setTaskData] = useState({
+    title: mytask.title || "",
+    description: mytask.description || "",
+    startTime: formattedTime,  // Start time
+    endTime: formattedTime,    // End time
+    startDate: mytask.startDate || new Date(),
+    endDate: mytask.endDate || new Date(),
+    category: mytask.category || "משימה",
+    participants: mytask.participants || [], // Default to empty array
+    maxParticipants: mytask.maxParticipants || 1, // Default max participants
+  });
+
+  const handleStartDateSelect = (date) => {
+    setTaskData((prevState) => {
+      const updatedData = { ...prevState, startDate: date };
+
+      // Update endDate if it's earlier than startDate
+      if (new Date(date) > new Date(prevState.endDate)) {
+        updatedData.endDate = date;
+      }
+
+      if (new Date(date).toLocaleDateString() === new Date(prevState.endDate).toLocaleDateString() && prevState.endTime) {
+        const start = new Date(`2000-01-01T${prevState.startTime}`);
+        const end = new Date(`2000-01-01T${prevState.endTime}`);
+
+        if (start > end) {
+          updatedData.endTime = prevState.startTime; // Update end time to match start time
+        }
+      }
+
+      return updatedData;
+    });
+  };
+
+  const handleEndDateSelect = (date) => {
+    setTaskData((prevState) => {
+      const updatedData = { ...prevState, endDate: date };
+
+      if (new Date(date) < new Date(prevState.startDate)) {
+        updatedData.startDate = date;
+      }
+
+      if (new Date(date).toLocaleDateString() === new Date(prevState.startDate).toLocaleDateString() && prevState.startTime) {
+        const start = new Date(`2000-01-01T${prevState.startTime}`);
+        const end = new Date(`2000-01-01T${prevState.endTime}`);
+
+        if (end < start) {
+          updatedData.endTime = prevState.startTime; // Update end time to match start time
+        }
+      }
+
+      return updatedData;
+    });
   };
 
   const handleStartTimeSelect = (time) => {
-    setStartTime(time);
-    if (startDate === endDate && endTime) {
-      const start = new Date(`2000-01-01T${time}`);
-      const end = new Date(`2000-01-01T${endTime}`);
-      if (start > end) {
-        setEndTime(time);
+    setTaskData((prevState) => {
+      const updatedData = { ...prevState, startTime: time };
+
+      if (prevState.startDate === prevState.endDate && prevState.endTime) {
+        const start = new Date(`2000-01-01T${time}`);
+        const end = new Date(`2000-01-01T${prevState.endTime}`);
+
+        if (start > end) {
+          updatedData.endTime = time; // Update end time to match start time
+        }
       }
-    }
+
+      return updatedData;
+    });
+  };
+
+  const handleEndTimeSelect = (time) => {
+    setTaskData((prevState) => {
+      const updatedData = { ...prevState, endTime: time };
+
+      if (prevState.startDate === prevState.endDate && prevState.startTime) {
+        const start = new Date(`2000-01-01T${prevState.startTime}`);
+        const end = new Date(`2000-01-01T${time}`);
+
+        if (end < start) {
+          updatedData.endTime = prevState.startTime; // Update end time to match start time
+        }
+      }
+
+      return updatedData;
+    });
+  };
+
+  const handleSave = () => {
+    const updatedTask = {
+      title: toEditTaskData.title,
+      description: toEditTaskData.description,
+      category: toEditTaskData.category,
+      startDate: toEditTaskData.startDate,
+      endDate: toEditTaskData.endDate,
+      startTime: toEditTaskData.startTime,
+      endTime: toEditTaskData.endTime,
+      maxParticipants: parseInt(toEditTaskData.maxParticipants, 10),
+    };
+   
+    
+
+    editTask(toEditTaskData.startDate, toEditTaskData.endDate, taskId, updatedTask);
+    router.back();
   };
 
   return (
@@ -79,29 +149,29 @@ const TaskEditScreen = () => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          value={title}
-          onChangeText={setTitle}
+          value={toEditTaskData.title}
+          onChangeText={(text) => setTaskData({ ...toEditTaskData, title: text })}
           placeholder="Title"
           placeholderTextColor="#ccc"
         />
         <TextInput
           style={styles.input}
-          value={description}
-          onChangeText={setDescription}
+          value={toEditTaskData.description}
+          onChangeText={(text) => setTaskData({ ...toEditTaskData, description: text })}
           placeholder="Description"
           placeholderTextColor="#ccc"
         />
         <TextInput
           style={styles.input}
-          value={category}
-          onChangeText={setCategory}
+          value={toEditTaskData.category}
+          onChangeText={(text) => setTaskData({ ...toEditTaskData, category: text })}
           placeholder="Category"
           placeholderTextColor="#ccc"
         />
         <TextInput
           style={styles.input}
-          value={maxParticipants}
-          onChangeText={text => setMaxParticipants(text.replace(/[^0-9]/g, ''))}
+          value={toEditTaskData.maxParticipants.toString()}
+          onChangeText={(text) => setTaskData({ ...toEditTaskData, maxParticipants: text.replace(/[^0-9]/g, '') })}
           placeholder="Max Participants"
           placeholderTextColor="#ccc"
           keyboardType="numeric"
@@ -113,11 +183,11 @@ const TaskEditScreen = () => {
           <DatePickerForTasks
             showModal={showStartDatePicker}
             setShowModal={setShowStartDatePicker}
-            selectedDate={startDate}
-            onDateSelect={setStartDate}
+            selectedDate={toEditTaskData.startDate}
+            onDateSelect={handleStartDateSelect}
           />
           <TimePickerButton
-            initialTime={startTime}
+            initialTime={toEditTaskData.startTime}
             onConfirm={handleStartTimeSelect}
           />
         </View>
@@ -128,12 +198,12 @@ const TaskEditScreen = () => {
           <DatePickerForTasks
             showModal={showEndDatePicker}
             setShowModal={setShowEndDatePicker}
-            selectedDate={endDate}
-            onDateSelect={setEndDate}
+            selectedDate={toEditTaskData.endDate}
+            onDateSelect={handleEndDateSelect}
           />
           <TimePickerButton
-            initialTime={endTime}
-            onConfirm={setEndTime}
+            initialTime={toEditTaskData.endTime}
+            onConfirm={handleEndTimeSelect}
           />
         </View>
       </View>
@@ -144,6 +214,7 @@ const TaskEditScreen = () => {
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

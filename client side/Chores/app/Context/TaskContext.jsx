@@ -201,20 +201,37 @@ export const TaskProvider = ({ children }) => {
   
   
   
-  const editTask = (date, id, updatedTask) => {
-    setTasks(prevTasks => {
-      if (!prevTasks[date]) return prevTasks; // If date doesn't exist, return unchanged
-  
-      const updatedTasks = prevTasks[date].map(task =>
-        task.id === id ? { ...task, ...updatedTask } : task
-      );
-  
-      return {
-        ...prevTasks,
-        [date]: updatedTasks
-      };
-    });
-  };
+ const editTask = (startDate, endDate, id, updatedTask) => {
+  setTasks(prevTasks => {
+    // Convert start and end dates to Date objects for easier comparison
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Create a new state object for updated tasks
+    const updatedTasks = { ...prevTasks };
+
+    // Loop through each day between startDate and endDate
+    let currentDate = start;
+    while (currentDate <= end) {
+      // Convert the current date to a string in YYYY-MM-DD format
+      const dateString = currentDate.toISOString().split('T')[0];  // "YYYY-MM-DD"
+
+      // If tasks exist for that date, update them
+      if (updatedTasks[dateString]) {
+        updatedTasks[dateString] = updatedTasks[dateString].map(task =>
+          task.id === id ? { ...task, ...updatedTask } : task
+        );
+      }
+
+      // Move to the next day
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    console.log(updatedTasks)
+
+    return updatedTasks;
+  });
+};
+
 
 
  const addTask = ( date, title, description) => {
