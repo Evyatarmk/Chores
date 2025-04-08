@@ -14,7 +14,7 @@ import DatePickerForTasks from "./Components/DatePickerForTasks";
 const AddTaskScreen = () => {
   const inputRef = useRef(null);
   const router = useRouter();
-  const { addTaskForDate } = useTasks();
+  const { tasks,addTaskForDate } = useTasks();
   const { day } = useLocalSearchParams(); // Get the selected date from params
   const { user } = useUserAndHome();
   const [showStartDatePicker, setShowStartDatePicker] = useState(false); // Function to toggle date picker
@@ -27,6 +27,8 @@ const AddTaskScreen = () => {
     }));
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [user]);
+
+
   const currentTime = new Date();
   currentTime.setMinutes(Math.floor(currentTime.getMinutes() / 5) * 5); // עיגול למטה לעד 5 דקות הקרובים
   const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -50,17 +52,30 @@ const AddTaskScreen = () => {
       return;
     }
 
-    let newItem = { ...taskData, id: uuidv4() }; // Copy taskData and generate a new ID
+    const getRandomColor = () => {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    };
+  
+
+    let newItem = { ...taskData, id: uuidv4(),color: getRandomColor() }; // Copy taskData and generate a new ID
     if (taskData.endDate == "" || taskData.endDate == null) {
       newItem = { ...newItem, endDate: taskData.startDate }
     }
     console.log(newItem)
     // Add task for the selected date
-    addTaskForDate(taskData.date, newItem);
+    addTaskForDate(taskData.startDate, newItem);
+
+    console.log(tasks);
 
     // Navigate back after adding the task
     router.back();
   };
+
 
   const handleInputChange = (field, value) => {
     setTaskData((prevState) => ({
