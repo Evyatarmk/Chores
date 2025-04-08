@@ -15,7 +15,7 @@ const TaskDetailsScreen = () => {
   const handleEdit = () => {
     router.push({
       pathname: "./TaskEditScreen",
-    })
+      params: { taskId, date }    })
   };
 
   useEffect(() => {

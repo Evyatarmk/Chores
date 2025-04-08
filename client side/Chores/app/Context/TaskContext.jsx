@@ -10,7 +10,7 @@ export const TaskProvider = ({ children }) => {
       { 
         id: '1', 
         startDate: "2025-03-30", // Changed to startDate
-        endDate: "2025-03-30",   // Added endDate
+        endDate: "2025-04-30",   // Added endDate
         startTime: "10:00 AM",
         endTime: "10:00 AM",        // Added time here
         title: "Meeting", 
@@ -18,6 +18,7 @@ export const TaskProvider = ({ children }) => {
         homeId: "home1", 
         category: "אירוע", 
         color: '#FF5733',
+        maxParticipants: 2,
         participants: [
           { id: "t", name: "אביתר" },
           { id: "user2", name: "User Two" }
