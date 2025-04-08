@@ -43,16 +43,6 @@ const TasksListScreen = () => {
   const renderMarkedDates = () => {
     const markedDates = {};
   
-    // Helper to generate a random hex color
-    const getRandomColor = () => {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    };
-  
     Object.keys(tasks).forEach((dateKey) => {
       tasks[dateKey].forEach((task) => {
         const startDate = new Date(task.startDate);
@@ -60,8 +50,7 @@ const TasksListScreen = () => {
         const startDateStr = startDate.toISOString().split('T')[0];
         const endDateStr = endDate.toISOString().split('T')[0];
   
-        // Assign a unique random color to this task
-        const color = getRandomColor();
+        const color = task.color || '#2196F3'; // צבע קבוע מהמשימה
   
         let current = new Date(startDate);
   
@@ -86,9 +75,9 @@ const TasksListScreen = () => {
       });
     });
   
-    console.log("Multi-period Marked Dates:", markedDates);
     return markedDates;
   };
+  
 
   
 

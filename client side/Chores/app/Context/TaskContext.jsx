@@ -17,6 +17,7 @@ export const TaskProvider = ({ children }) => {
         description: "Zoom Call", 
         homeId: "home1", 
         category: "אירוע", 
+        color: '#FF5733',
         participants: [
           { id: "t", name: "אביתר" },
           { id: "user2", name: "User Two" }
@@ -32,6 +33,7 @@ export const TaskProvider = ({ children }) => {
         description: "Gym", 
         homeId: "home1", 
         category: "משימה", 
+        color: 'pink',
         participants: [{ id: "user1", name: "User One" }], 
         maxParticipants: 5
       }
@@ -47,6 +49,7 @@ export const TaskProvider = ({ children }) => {
         description: "Gym", 
         homeId: "home1", 
         category: "אירוע", 
+        color: 'blue',
         participants: [
           { id: "user2", name: "User Two" },
           { id: "user3", name: "User Three" }

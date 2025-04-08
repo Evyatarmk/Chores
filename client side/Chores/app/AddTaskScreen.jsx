@@ -10,6 +10,7 @@ import ItemSelector from "./Components/ItemSelector";
 import ClearableInput from "./Components/ClearableInput";
 import TimePickerButton from "./Components/TimePickerButton";
 import DatePickerForTasks from "./Components/DatePickerForTasks";
+import { color } from "@rneui/base";
 
 const AddTaskScreen = () => {
   const inputRef = useRef(null);
@@ -39,6 +40,7 @@ const AddTaskScreen = () => {
     startDate: day,
     endDate: day,
     category: "משימה",
+    color:"",
     participants: [], // Default to empty array
     maxParticipants: 1, // Default max participants
   });
@@ -50,7 +52,7 @@ const AddTaskScreen = () => {
       return;
     }
 
-    let newItem = { ...taskData, id: uuidv4() }; // Copy taskData and generate a new ID
+    let newItem = { ...taskData, id: uuidv4(), color: getRandomColor() }; // Copy taskData and generate a new ID
     if (taskData.endDate == "" || taskData.endDate == null) {
       newItem = { ...newItem, endDate: taskData.startDate }
     }
@@ -60,6 +62,15 @@ const AddTaskScreen = () => {
 
     // Navigate back after adding the task
     router.back();
+  };
+
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   };
 
   const handleInputChange = (field, value) => {
