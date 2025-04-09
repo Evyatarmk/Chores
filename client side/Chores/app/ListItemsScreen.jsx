@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 10,
+    bottom: 20,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

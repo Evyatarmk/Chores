@@ -259,7 +259,7 @@ const ListsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#e0e5ec"},
+  container: { flex: 1},
   listItem: {
     padding: 16,
     backgroundColor: "#fff",
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   optionsButton: { position: "absolute", top: 12, left: 2, padding: 8, borderRadius: 25, zIndex: 1000 },
   addButton: {
     position: "absolute",
-    bottom: 10,
+    bottom: 20,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

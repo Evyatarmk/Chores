@@ -175,7 +175,7 @@ const TasksListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e0e5ec",
+   
   },
   taskItem: {
     padding: 16,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 10,
+    bottom: 20,
     right: 20,
     backgroundColor: "#007bff",
     width: 60,

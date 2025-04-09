@@ -177,7 +177,7 @@ const StoryComponent = () => {
           }
         >
 <Image 
-  source={require('../images/userImage.jpg')} 
+  source={item.profilePicture?item.profilePicture:require('../images/userImage.jpg')} 
   style={styles.profileImage} 
 />
     </View>
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   addMediaButton: {
-    backgroundColor: "#ff006e",
+    backgroundColor: "#007bff",
     width: 70,
     height: 70,
     borderRadius: 35,
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 35,
     borderWidth: 2,
-    borderColor: "#ff006e",
+    borderColor: "#007bff",
     justifyContent: "center",
     alignItems: "center",
     margin: 5,

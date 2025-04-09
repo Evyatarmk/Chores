@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image} from "react-native";
 import { Avatar } from '@rneui/themed';
 import { BarChart } from "react-native-chart-kit";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
@@ -64,11 +64,10 @@ const ProfileScreen = () => {
       <NormalHeader title="אזור אישי" targetScreen="/"/>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileCard}>
-          <Avatar
-            source={{ uri: user?.profilePicture || "https://via.placeholder.com/150" }}
-            size="large"
-            rounded
-          />
+           <Image
+              source={user?.profilePicture?{ uri: user?.profilePicture}:require('./images/userImage.jpg') }
+              style={styles.userImage}
+            />
           <Text style={styles.name}>{user?.name}</Text>
           <Text style={styles.code}>קוד הבית: {home?.code}</Text>
           <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
@@ -127,6 +126,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     marginBottom: 20,
     position: "relative",
+  },
+  userImage: {
+    width: 60,
+    height: 60,
+    marginLeft:10,
+    borderRadius: 30,
+    backgroundColor: "#ddd",
   },
   editIcon: {
     position: "absolute",
