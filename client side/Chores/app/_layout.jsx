@@ -17,10 +17,11 @@ export default function RootLayout() {
           <TaskProvider>
             <ListsProvider>
               <ItemHistoryProvider>
-              <AutoLogin/>
+              {/*<AutoLogin/>*/}
               <Stack
                 screenOptions={{
                   headerShown: false,
+                  animation: "none", 
                   headerStyle: { backgroundColor: "#f4511e" },
                   headerTintColor: "#fff",
                   headerTitleStyle: { fontWeight: "bold" },
