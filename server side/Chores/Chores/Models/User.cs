@@ -15,5 +15,8 @@
         public Home? Home { get; set; }
         public List<MediaItem> MediaItems { get; set; }
 
+        public List<Models.Task> Participants { get; set; } = new(); // This means tasks the user is participating in
+
+
     }
 }

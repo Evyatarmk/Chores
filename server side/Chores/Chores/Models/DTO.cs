@@ -46,4 +46,29 @@
         public string UploadDate { get; set; }
         public string UploadTime { get; set; }
     }
+
+
+    public class TaskDto
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string HomeId { get; set; }
+        public string Category { get; set; }
+        public string Color { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
+        public int? MaxParticipants { get; set; }
+
+        public List<ParticipantDto> Participants { get; set; }
+    }
+
+
+    public class ParticipantDto
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
 }

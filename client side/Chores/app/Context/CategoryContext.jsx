@@ -47,6 +47,8 @@ const [errorMessage, setErrorMessage] = useState('');
       setErrorVisible(true);
     }
   };
+
+  
   const fetchCategories = async () => {
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
@@ -67,6 +69,8 @@ const [errorMessage, setErrorMessage] = useState('');
       setErrorVisible(true);
     }
   };
+
+
   useEffect(() => {
     if (home && user) {
       fetchCategories();
