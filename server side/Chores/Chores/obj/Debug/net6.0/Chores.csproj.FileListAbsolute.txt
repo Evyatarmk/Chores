@@ -139,3 +139,8 @@ C:\Users\97250\Documents\GitHub\famliy-flow\server side\Chores\Chores\obj\Debug\
 C:\Users\97250\Documents\GitHub\famliy-flow\server side\Chores\Chores\obj\Debug\net6.0\ref\Chores.dll
 C:\Users\97250\Documents\GitHub\famliy-flow\server side\Chores\Chores\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
 C:\Users\97250\Documents\GitHub\famliy-flow\server side\Chores\Chores\bin\Debug\net6.0\Chores.staticwebassets.runtime.json
+C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.Bcl.Memory.dll
+C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.Bcl.TimeProvider.dll
+C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll

@@ -1,8 +1,13 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect} from "react";
 import { useUserAndHome } from "./UserAndHomeContext";
+import { useApiUrl } from "./ApiUrlProvider";
+import ErrorNotification from "../Components/ErrorNotification";
+import { fetchWithAuth } from "../Utils/fetchWithAuth";
+
 
 const TaskContext = createContext();
 export const useTasks = () => useContext(TaskContext);
+ 
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState({
@@ -58,12 +63,91 @@ export const TaskProvider = ({ children }) => {
       }
     ]
   });
-  
-  
+
   const { user, home } = useUserAndHome();
-
   
 
+  const { baseUrl } = useApiUrl();
+
+
+  const [errorMessage, setErrorMessage] = useState('');
+    const [errorVisible, setErrorVisible] = useState(false);
+ 
+    const handleCloseError = () => {
+      setErrorMessage("")
+      setErrorVisible(false)
+    };
+
+    useEffect(() => {
+      if (home && user) {
+        fetchTasks();
+      }
+    }, [home, user]);
+
+    const fetchTasks = async () => {
+      try {
+        const response = await fetchWithAuth(`${baseUrl}/Tasks/home/${home.id}`, {
+          method: 'GET',
+        });
+    
+        if (!response || !response.ok) {
+          throw new Error("שגיאה בקבלת קטגוריות");
+        }
+    
+        const data = await response.json();
+    
+        // Convert the data into a grouped object by startDate
+        const groupedTasks = data.reduce((acc, task) => {
+          const date = task.startDate.split("T")[0];; // Assuming task has a 'startDate' field
+    
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+    
+          // Add task to the array for that specific date
+          acc[date].push({
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            startDate: task.startDate.split("T")[0],
+            endDate: task.endDate.split("T")[0],
+            startTime:convertTo12HourFormat(task.startTime) ,
+            endTime: convertTo12HourFormat(task.endTime),
+            category: task.category,
+            color: task.color,
+            maxParticipants: task.maxParticipants,
+            participants: task.participants.map(participant => ({
+              id: participant.id,
+              name: participant.name,
+            })),
+          });
+    
+          return acc;
+        }, {});
+    
+        console.log(groupedTasks); // Check the transformed data
+        setTasks(groupedTasks);
+    
+      } catch (error) {
+        console.error("שגיאה בקבלת קטגוריות:", error);
+        setErrorMessage("לא ניתן לטעון קטגוריות, אנא נסה שוב מאוחר יותר");
+        setErrorVisible(true);
+      }
+    };
+
+    const convertTo12HourFormat = (timeString) => {
+      const [hours, minutes, seconds] = timeString.split(":"); // Split time string into components
+      const date = new Date();
+      date.setHours(parseInt(hours, 10));
+      date.setMinutes(parseInt(minutes, 10));
+      date.setSeconds(parseInt(seconds, 10));
+      
+      // Use toLocaleTimeString to format in 12-hour format
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    };
+    
+    
+  
  
   const addTaskForDate = (date, task) => {
     setTasks(prevTasks => {
@@ -258,6 +342,7 @@ export const TaskProvider = ({ children }) => {
   return (
     <TaskContext.Provider value={{ tasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask}}>
       {children}
+      <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </TaskContext.Provider>
   );
 };

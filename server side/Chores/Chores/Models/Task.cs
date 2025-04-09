@@ -13,11 +13,12 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public string StartTime { get; set; }  // You can also use TimeSpan or combine with DateTime
-        public string EndTime { get; set; }
+        public TimeSpan StartTime { get; set; }  // You can also use TimeSpan or combine with DateTime
+        public TimeSpan EndTime { get; set; }
 
         public int? MaxParticipants { get; set; }
 
         public List<User> Participants { get; set; } = new();
+
     }
 }

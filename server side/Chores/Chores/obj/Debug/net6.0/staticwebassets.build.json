@@ -1,20 +1,11 @@
 {
   "Version": 1,
-  "Hash": "t4hKh3BXbUEz7pTBEuhLdVIRTP74oLlgHDjK4XK4pkE=",
+  "Hash": "W2iaI8o48lHYCtRv0ZKmfT6nZ7sOoZ+fQz4hrZHGm8E=",
   "Source": "Chores",
   "BasePath": "_content/Chores",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [
-    {
-      "Name": "Chores\\wwwroot",
-      "Source": "Chores",
-      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
-      "BasePath": "_content/Chores",
-      "Pattern": "**"
-    }
-  ],
-  "Assets": [],
-  "Endpoints": []
+  "DiscoveryPatterns": [],
+  "Assets": []
 }

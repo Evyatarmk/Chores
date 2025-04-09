@@ -16,6 +16,26 @@ namespace Chores.Data
         public DbSet<ItemHistory> ItemHistory { get; set; }
         public DbSet<MediaItem> MediaItems { get; set; }
 
+        public DbSet<Chores.Models.Task> Tasks { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Chores.Models.Task>()
+                .HasMany(t => t.Participants)
+                .WithMany(u => u.Participants)
+                .UsingEntity<Dictionary<string, object>>(
+                    "TaskParticipants", // <-- name of your join table
+                    j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                    j => j.HasOne<Chores.Models.Task>().WithMany().HasForeignKey("TaskId"));
+        }
+
+     
 
     }
+
+
+
 }

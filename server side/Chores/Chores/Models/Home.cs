@@ -12,5 +12,6 @@ namespace Chores.Models
         public List<ItemHistory> ItemHistory { get; set; } = new List<ItemHistory>();
         public List<Category> Categories { get; set; } = new List<Category>();
 
+        public List<Models.Task> Tasks { get; set; } = new List<Models.Task>();
     }
 }

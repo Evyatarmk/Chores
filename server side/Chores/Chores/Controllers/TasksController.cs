@@ -1,120 +1,159 @@
-﻿//using Chores.Data;
-//using Microsoft.AspNetCore.Mvc;
+﻿using Chores.Data;
+using Chores.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-//// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+namespace Chores.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TasksController : ControllerBase
+    {
+        private readonly AppDbContext _context;
 
-//namespace Chores.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class TasksController : ControllerBase
-//    {
-//        private readonly AppDbContext _context;
+        public TasksController(AppDbContext context)
+        {
+            _context = context;
+        }
 
-//        public TasksController(AppDbContext context)
-//        {
-//            _context = context;
-//        }
+        [HttpGet("home/{homeId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasks(string homeId)
+        {
+            // Check if the home exists and include tasks and participants
+            var home = await _context.Homes
+                .Include(h => h.Tasks)              // Ensure tasks are loaded alongside the home
+                .ThenInclude(t => t.Participants)   // Include participants (users) for each task
+                .FirstOrDefaultAsync(h => h.Id == homeId);
 
-//        // GET: api/tasks
-//        [HttpGet]
-//        public async Task<ActionResult<IEnumerable<Task>>> GetTasks()
-//        {
-//            return await _context.Tasks
-//                .Include(t => t.Participants)
-//                .ToListAsync();
-//        }
+            if (home == null)
+            {
+                return NotFound($"Home with ID '{homeId}' was not found.");
+            }
 
-//        // GET: api/tasks/{id}
-//        [HttpGet("{id}")]
-//        public async Task<ActionResult<Task>> GetTask(string id)
-//        {
-//            var task = await _context.Tasks
-//                .Include(t => t.Participants)
-//                .FirstOrDefaultAsync(t => t.Id == id);
+            // Fetch tasks related to this home
+            var tasks = home.Tasks; // We already loaded the tasks with the home
 
-//            if (task == null)
-//                return NotFound();
+            // Convert tasks to DTOs
+            var taskDtos = tasks.Select(t => new TaskDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                HomeId = t.HomeId,
+                Category = t.Category,
+                Color = t.Color,
+                StartDate = t.StartDate,
+                EndDate = t.EndDate,
+                StartTime = t.StartTime,
+                EndTime = t.EndTime,
+                MaxParticipants = t.MaxParticipants,
+                Participants = t.Participants.Select(p => new ParticipantDto
+                {
+                    Id = p.PublicId,           // Access the user through the participant
+                    Name = p.Name        // Access the user details through the participant
+                }).ToList()
+            }).ToList();
 
-//            return task;
-//        }
+            return Ok(taskDtos); // Return the list of tasks as a response
+        }
 
-//        // POST: api/tasks
-//        [HttpPost]
-//        public async Task<ActionResult<Task>> PostTask(Task task)
-//        {
-//            // Attach existing users as participants
-//            if (task.Participants != null)
-//            {
-//                for (int i = 0; i < task.Participants.Count; i++)
-//                {
-//                    var userId = task.Participants[i].Id;
-//                    var user = await _context.Users.FindAsync(userId);
-//                    if (user != null)
-//                        task.Participants[i] = user;
-//                }
-//            }
+        // GET: api/tasks/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Chores.Models.Task>> GetTask(string id)
+        {
+            var task = await _context.Tasks
+                .Include(t => t.Participants)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
-//            _context.Tasks.Add(task);
-//            await _context.SaveChangesAsync();
+            if (task == null)
+                return NotFound();
 
-//            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
-//        }
+            return task;
+        }
 
-//        // PUT: api/tasks/{id}
-//        [HttpPut("{id}")]
-//        public async Task<IActionResult> PutTask(string id, Task updatedTask)
-//        {
-//            if (id != updatedTask.Id)
-//                return BadRequest();
+        // POST: api/tasks
+        [HttpPost]
+        public async Task<ActionResult<Chores.Models.Task>> PostTask(Chores.Models.Task task)
+        {
+            // Attach existing users as participants
+            if (task.Participants != null)
+            {
+                var attachedUsers = new List<User>();
+                foreach (var user in task.Participants)
+                {
+                    var existingUser = await _context.Users.FindAsync(user.Id);
+                    if (existingUser != null)
+                        attachedUsers.Add(existingUser);
+                }
+                task.Participants = attachedUsers;
+            }
 
-//            var existingTask = await _context.Tasks
-//                .Include(t => t.Participants)
-//                .FirstOrDefaultAsync(t => t.Id == id);
+            _context.Tasks.Add(task);
+            await _context.SaveChangesAsync();
 
-//            if (existingTask == null)
-//                return NotFound();
+            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
+        }
 
-//            // Update fields
-//            existingTask.Title = updatedTask.Title;
-//            existingTask.Description = updatedTask.Description;
-//            existingTask.Category = updatedTask.Category;
-//            existingTask.Color = updatedTask.Color;
-//            existingTask.StartDate = updatedTask.StartDate;
-//            existingTask.EndDate = updatedTask.EndDate;
-//            existingTask.StartTime = updatedTask.StartTime;
-//            existingTask.EndTime = updatedTask.EndTime;
-//            existingTask.MaxParticipants = updatedTask.MaxParticipants;
-//            existingTask.HomeId = updatedTask.HomeId;
+        // PUT: api/tasks/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTask(string id, Chores.Models.Task updatedTask)
+        {
+            if (id != updatedTask.Id)
+                return BadRequest();
 
-//            // Update participants
-//            existingTask.Participants.Clear();
-//            if (updatedTask.Participants != null)
-//            {
-//                foreach (var user in updatedTask.Participants)
-//                {
-//                    var existingUser = await _context.Users.FindAsync(user.Id);
-//                    if (existingUser != null)
-//                        existingTask.Participants.Add(existingUser);
-//                }
-//            }
+            var existingTask = await _context.Tasks
+                .Include(t => t.Participants)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
-//            await _context.SaveChangesAsync();
+            if (existingTask == null)
+                return NotFound();
 
-//            return NoContent();
-//        }
+            // Update fields
+            existingTask.Title = updatedTask.Title;
+            existingTask.Description = updatedTask.Description;
+            existingTask.Category = updatedTask.Category;
+            existingTask.Color = updatedTask.Color;
+            existingTask.StartDate = updatedTask.StartDate;
+            existingTask.EndDate = updatedTask.EndDate;
+            existingTask.StartTime = updatedTask.StartTime;
+            existingTask.EndTime = updatedTask.EndTime;
+            existingTask.MaxParticipants = updatedTask.MaxParticipants;
+            existingTask.HomeId = updatedTask.HomeId;
 
-//        // DELETE: api/tasks/{id}
-//        [HttpDelete("{id}")]
-//        public async Task<IActionResult> DeleteTask(string id)
-//        {
-//            var task = await _context.Tasks.FindAsync(id);
-//            if (task == null)
-//                return NotFound();
+            // Update participants
+            existingTask.Participants.Clear();
+            if (updatedTask.Participants != null)
+            {
+                foreach (var user in updatedTask.Participants)
+                {
+                    var existingUser = await _context.Users.FindAsync(user.Id);
+                    if (existingUser != null)
+                        existingTask.Participants.Add(existingUser);
+                }
+            }
 
-//            _context.Tasks.Remove(task);
-//            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-//            return NoContent();
-//        }
-//    }
+            return NoContent();
+        }
+
+        // DELETE: api/tasks/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(string id)
+        {
+            var task = await _context.Tasks
+                .Include(t => t.Participants)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (task == null)
+                return NotFound();
+
+            _context.Tasks.Remove(task);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
