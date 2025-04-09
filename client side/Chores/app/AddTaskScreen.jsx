@@ -14,7 +14,7 @@ import DatePickerForTasks from "./Components/DatePickerForTasks";
 const AddTaskScreen = () => {
   const inputRef = useRef(null);
   const router = useRouter();
-  const { tasks,addTaskForDate } = useTasks();
+  const { tasks, addTaskForDate } = useTasks();
   const { day } = useLocalSearchParams(); // Get the selected date from params
   const { user } = useUserAndHome();
   const [showStartDatePicker, setShowStartDatePicker] = useState(false); // Function to toggle date picker
@@ -60,9 +60,9 @@ const AddTaskScreen = () => {
       }
       return color;
     };
-  
 
-    let newItem = { ...taskData, id: uuidv4(),color: getRandomColor() }; // Copy taskData and generate a new ID
+
+    let newItem = { ...taskData, id: uuidv4(), color: getRandomColor() }; // Copy taskData and generate a new ID
     if (taskData.endDate == "" || taskData.endDate == null) {
       newItem = { ...newItem, endDate: taskData.startDate }
     }
@@ -180,12 +180,23 @@ const AddTaskScreen = () => {
           <Text style={styles.headerTitle}>הוסף משימה</Text>
         </View>
 
-        {/* Task Title */}
+        {/* Task Title
         <ClearableInput
           value={taskData.title}
           onChangeText={(value) => handleInputChange("title", value)}
           placeholder={"כותרת למשימה"}
-        />
+          style={styles.titleInput}
+        /> */}
+
+        {/* Task Title */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="כותרת למשימה"
+            value={taskData.title}
+            onChangeText={(value) => handleInputChange("title", value)}
+          />
+        </View>
 
         {/* Task Description */}
         <View style={styles.inputContainer}>
@@ -298,6 +309,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+  titleInput: {
+    marginBottom: 15,
+
   },
   inputContainer: {
     width: "100%",

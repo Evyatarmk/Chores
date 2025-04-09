@@ -5,12 +5,15 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTasks } from "./Context/TaskContext";
 import DatePickerForTasks from "./Components/DatePickerForTasks";
 import TimePickerButton from "./Components/TimePickerButton";
+import ItemSelector from "./Components/ItemSelector";
 
 const TaskEditScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { taskId, date } = params;
   const { editTask, getTasksForDate } = useTasks();
+  const categories = ["משימה", "אירוע"]; // Available categories
+
 
   const task = getTasksForDate(date);
 
@@ -101,6 +104,8 @@ const TaskEditScreen = () => {
     });
   };
 
+
+
   const handleEndTimeSelect = (time) => {
     setTaskData((prevState) => {
       const updatedData = { ...prevState, endTime: time };
@@ -118,6 +123,14 @@ const TaskEditScreen = () => {
     });
   };
 
+  const handleInputChange = (field, value) => {
+    setTaskData((prevState) => ({
+      ...prevState,
+      [field]: value,  // עדכון הערך של השדה המתאים
+    }));
+  };
+
+
   const handleSave = () => {
     const updatedTask = {
       title: toEditTaskData.title,
@@ -129,8 +142,8 @@ const TaskEditScreen = () => {
       endTime: toEditTaskData.endTime,
       maxParticipants: parseInt(toEditTaskData.maxParticipants, 10),
     };
-   
-    
+
+
 
     editTask(toEditTaskData.startDate, toEditTaskData.endDate, taskId, updatedTask);
     router.back();
@@ -151,23 +164,24 @@ const TaskEditScreen = () => {
           style={styles.input}
           value={toEditTaskData.title}
           onChangeText={(text) => setTaskData({ ...toEditTaskData, title: text })}
-          placeholder="Title"
+          placeholder="כותרת"
           placeholderTextColor="#ccc"
         />
         <TextInput
           style={styles.input}
           value={toEditTaskData.description}
           onChangeText={(text) => setTaskData({ ...toEditTaskData, description: text })}
-          placeholder="Description"
+          placeholder="תיאור"
           placeholderTextColor="#ccc"
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           value={toEditTaskData.category}
           onChangeText={(text) => setTaskData({ ...toEditTaskData, category: text })}
           placeholder="Category"
           placeholderTextColor="#ccc"
-        />
+        /> */}
+
         <TextInput
           style={styles.input}
           value={toEditTaskData.maxParticipants.toString()}
@@ -175,6 +189,13 @@ const TaskEditScreen = () => {
           placeholder="Max Participants"
           placeholderTextColor="#ccc"
           keyboardType="numeric"
+        />
+
+        <ItemSelector
+          items={categories}
+          onSelect={(category) => handleInputChange("category", category)}
+          defaultSelected={toEditTaskData.category}
+          firstItem="משימה"
         />
 
         <Text>זמן התחלה</Text>
