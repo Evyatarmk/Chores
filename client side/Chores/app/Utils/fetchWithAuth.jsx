@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { baseUrl } from "../Context/ApiUrlProvider"; 
 
 export const fetchWithAuth = async (url, options = {}) => {
+  
   try {
     let accessToken = await AsyncStorage.getItem("accessToken");
     const refreshToken = await AsyncStorage.getItem("refreshToken");
@@ -22,7 +23,6 @@ export const fetchWithAuth = async (url, options = {}) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken }),
       });
-users
       if (refreshResponse.ok) {
         const tokens = await refreshResponse.json();
         await AsyncStorage.setItem("accessToken", tokens.accessToken);

@@ -14,6 +14,8 @@ namespace Chores.Data
         public DbSet<List> Lists { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ItemHistory> ItemHistory { get; set; }
+        public DbSet<MediaItem> MediaItems { get; set; }
+
 
     }
 }

@@ -13,5 +13,7 @@
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
         public Home? Home { get; set; }
+        public List<MediaItem> MediaItems { get; set; }
+
     }
 }

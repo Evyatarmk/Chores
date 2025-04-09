@@ -2,6 +2,7 @@ using Chores.Data;
 using Chores.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -37,13 +38,27 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (true)
 {
+    app.UseDeveloperExceptionPage(); 
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+// שירות קבצים מתוך תיקיית wwwroot
+app.UseStaticFiles();
+
+// הגדרת שירות קבצים מתוך תיקיית uploads
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), @"uploads");
+
+// שירות קבצים מתוך תיקיות משנה של uploads
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = new PathString("/uploads")
+});
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 // שימוש ב-Authentication ו-Authorization

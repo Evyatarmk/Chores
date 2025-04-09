@@ -495,24 +495,87 @@
     ]
   },
   {
-    "ContainingType": "Chores.Controllers.UsersController",
-    "Method": "GenerateUniqueHomeCodeAsync",
-    "RelativePath": "api/Users",
-    "HttpMethod": "",
+    "ContainingType": "Chores.Controllers.MediaController",
+    "Method": "GetMediaForHome",
+    "RelativePath": "api/Media/home/{homeId}/media",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
+        "Name": "homeId",
         "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "IsRequired": true
       }
-    ]
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.MediaController",
+    "Method": "AddMediaItem",
+    "RelativePath": "api/Media/home/{homeId}/users/{userId}/media",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "MediaFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "UploadDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "UploadTime",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.MediaController",
+    "Method": "DeleteMediaItem",
+    "RelativePath": "api/Media/home/{homeId}/users/{userId}/media/{mediaId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "mediaId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",

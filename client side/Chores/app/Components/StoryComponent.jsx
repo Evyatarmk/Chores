@@ -176,8 +176,11 @@ const StoryComponent = () => {
               : styles.profileImageWithoutStories
           }
         >
-          <Image source={{ uri: item.profileImage }} style={styles.profileImage} />
-        </View>
+<Image 
+  source={require('../images/userImage.jpg')} 
+  style={styles.profileImage} 
+/>
+    </View>
       )}
 
       <Text style={styles.username}>

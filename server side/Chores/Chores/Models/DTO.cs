@@ -23,4 +23,27 @@
         public string Code { get; set; }
         public List<MemberDto> Members { get; set; } // כל חברי הבית
     }
+    public class MediaItemDto
+    {
+        public string MediaId { get; set; }
+        public string Type { get; set; }
+        public string Uri { get; set; }
+        public string UploadDate { get; set; }
+        public string UploadTime { get; set; }
+    }
+
+    public class UserMediaDto
+    {
+        public string UserId { get; set; }
+        public string Username { get; set; }
+        public string ProfileImage { get; set; }
+        public List<MediaItemDto> Media { get; set; }
+    }
+    public class CreateMediaItemDto
+    {
+        public IFormFile MediaFile { get; set; }  // שדה קובץ
+        public string Type { get; set; }
+        public string UploadDate { get; set; }
+        public string UploadTime { get; set; }
+    }
 }
