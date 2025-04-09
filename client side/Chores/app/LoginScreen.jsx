@@ -3,6 +3,8 @@ import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from "reac
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import ErrorNotification from "./Components/ErrorNotification";
+import { ActivityIndicator } from "react-native-web";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -11,6 +13,9 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleCloseError = () => {
     setErrorMessage("")
     setErrorVisible(false)
@@ -19,10 +24,10 @@ const LoginScreen = () => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return emailRegex.test(email);
   };
-  const handleLogin = async() => {
+  const handleLogin = async () => {
     if (!email || !password) {
       setErrorMessage("אנא מלא את כל השדות");
-      setErrorVisible(true)
+      setErrorVisible(true);
       return;
     }
     if (!validateEmail(email)) {
@@ -30,14 +35,18 @@ const LoginScreen = () => {
       setErrorVisible(true);
       return;
     }
-
     if (password.length < 8) {
       setErrorMessage("הסיסמה חייבת להיות לפחות 8 תווים");
       setErrorVisible(true);
       return;
     }
-
+  
+    setLoading(true); // מתחילים טעינה
+  
     const user = await login(email, password);
+  
+    setLoading(false); // מסיימים טעינה
+  
     if (user) {
       router.push("/HomePageScreen");
     } else {
@@ -49,14 +58,42 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>התחברות</Text>
-      <TextInput style={styles.input} placeholder="אימייל" value={email} onChangeText={setEmail} />
-      <TextInput style={styles.input} placeholder="סיסמה" value={password} onChangeText={setPassword} secureTextEntry />
-      
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>התחבר</Text>
-      </TouchableOpacity>
+      <View style={styles.inputContainer}>
+  <Icon name="email" size={24} color="#666" style={styles.icon} />
+  <TextInput
+    style={styles.input}
+    placeholder="אימייל"
+    value={email}
+    onChangeText={setEmail}
+    keyboardType="email-address"
+    autoCapitalize="none"
+  />
+</View>
 
-      <Text style={styles.link} onPress={() => router.push("/RegisterScreen")}>
+<View style={styles.inputContainer}>
+<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+    <Icon
+      name={showPassword ? "visibility" : "visibility-off"}
+      size={24}
+      color="#666"
+    />
+  </TouchableOpacity>  <TextInput
+    style={styles.input}
+    placeholder="סיסמה"
+    value={password}
+    onChangeText={setPassword}
+    secureTextEntry={!showPassword}
+  />
+</View>
+    
+      {loading ? (
+  <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 10 }} />
+) : (
+  <TouchableOpacity style={styles.button} onPress={handleLogin}>
+    <Text style={styles.buttonText}>התחבר</Text>
+  </TouchableOpacity>
+)}
+ <Text style={styles.link} onPress={() => router.push("/RegisterScreen")}>
         אין לך חשבון? הירשם כאן
       </Text>
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
@@ -78,16 +115,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#333",
   },
-  input: {
-    width: "100%",
-    padding: 12,
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
-    marginBottom: 12,
     backgroundColor: "#fff",
-    textAlign: "right",
+    marginBottom: 12,
+    paddingHorizontal: 10,
+    width:"100%"
+  },
+  
+  icon: {
+    marginRight: 8,
+  },
+  
+  input: {
+    flex: 1,
+    height:50,
+    paddingVertical: 10,
     fontSize: 16,
+    textAlign: "right", 
+    outlineStyle: "none", // ל-Web, לא תמיד נדרש ב־React Native
   },
   button: {
     width: "100%",
