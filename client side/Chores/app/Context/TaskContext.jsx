@@ -247,23 +247,24 @@ export const TaskProvider = ({ children }) => {
   };
   
   
-  const removeTaskForDate = (date, taskId) => {
-    console.log("Removing task", taskId, "from", date);
+  const removeTaskForDate = async (taskId) => {
+    console.log("Removing task", taskId);
   
-    setTasks(prevTasks => {
-      let updatedTasks = { ...prevTasks };
- 
-      Object.keys(prevTasks).forEach(dateKey => {
-        updatedTasks[dateKey] = prevTasks[dateKey].filter(task => task.id !== taskId);
-  
-        // Remove date key if no tasks are left on that date
-        if (updatedTasks[dateKey].length === 0) {
-          delete updatedTasks[dateKey];
-        }
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
+        method: 'DELETE',
       });
   
-      return updatedTasks;
-    });
+      if (!response.ok) {
+        throw new Error('Failed to delete task');
+      }
+  
+      console.log(`Task ${taskId} deleted successfully`);
+
+     fetchTasks()
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
   
   const getTask = (date, taskId) => {

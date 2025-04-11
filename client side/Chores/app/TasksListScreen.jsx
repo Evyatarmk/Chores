@@ -31,7 +31,7 @@ const TasksListScreen = () => {
         editModalRef.current?.open();
       }, 300);
     } if (option === "delete") {
-      removeTaskForDate(selectedDate, currentList.id)
+      removeTaskForDate( currentList.id)
     }
   };
   const openOptionsPanel = (list) => {
