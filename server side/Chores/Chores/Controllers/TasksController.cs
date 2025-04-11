@@ -75,26 +75,37 @@ namespace Chores.Controllers
 
         // POST: api/tasks
         [HttpPost]
-        public async Task<ActionResult<Chores.Models.Task>> PostTask(Chores.Models.Task task)
+      
+        public async Task<IActionResult> PostTask([FromBody] CreateTaskDto taskDto)
         {
-            // Attach existing users as participants
-            if (task.Participants != null)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var task = new Models.Task
             {
-                var attachedUsers = new List<User>();
-                foreach (var user in task.Participants)
-                {
-                    var existingUser = await _context.Users.FindAsync(user.Id);
-                    if (existingUser != null)
-                        attachedUsers.Add(existingUser);
-                }
-                task.Participants = attachedUsers;
-            }
+                Id = Guid.NewGuid().ToString(),
+                Title = taskDto.Title,
+                Description = taskDto.Description,
+                HomeId = taskDto.HomeId,
+                Category = taskDto.Category,
+                StartDate = taskDto.StartDate,
+                EndDate = taskDto.EndDate,
+                MaxParticipants = taskDto.MaxParticipants,
+
+                Color = taskDto.Color,
+             
+                StartTime = TimeSpan.Zero,   // Default start time
+                EndTime = TimeSpan.Zero      // Default end time
+            };
 
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
+            return Ok(task);
         }
+
+     
+
 
         // PUT: api/tasks/{id}
         [HttpPut("{id}")]

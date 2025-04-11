@@ -148,21 +148,32 @@ export const TaskProvider = ({ children }) => {
     
     
   
- 
-  const addTaskForDate = (date, task) => {
-    setTasks(prevTasks => {
-      // Check if tasks already exist for the given date
-      const existingTasks = prevTasks[date] || [];
-  
-      // Add the new task to the existing tasks array
-      const updatedTasks = [...existingTasks, task];
-  
-      return {
-        ...prevTasks,
-        [date]: updatedTasks
-      };
-    });
-  };
+
+    const addTaskForDate = async (task, homeId) => {
+      try {
+        const response = await fetch(`${baseUrl}/Tasks`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...task,
+            homeId: homeId,
+          }),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to add task');
+        }
+    
+        const result = await response.json();
+        console.log('Task added successfully:', result);
+        fetchTasks();
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
+    };
+    
 
   
   const getTasksForDate = (date) => {
@@ -340,7 +351,7 @@ export const TaskProvider = ({ children }) => {
 
 
   return (
-    <TaskContext.Provider value={{ tasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask}}>
+    <TaskContext.Provider value={{ tasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask,fetchTasks}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </TaskContext.Provider>

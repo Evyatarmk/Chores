@@ -47,6 +47,11 @@ const AddTaskScreen = () => {
   const categories = ["משימה", "אירוע"]; // Available categories
 
   const handleAddTask = () => {
+    if (!user || !user.homeId) {
+      alert("You must be logged in to add a task.");
+      return;
+    }
+
     if (!taskData.title) {
       alert("Please enter a title for the task.");
       return;
@@ -68,7 +73,9 @@ const AddTaskScreen = () => {
     }
     console.log(newItem)
     // Add task for the selected date
-    addTaskForDate(taskData.startDate, newItem);
+    addTaskForDate(newItem, user.homeId);
+
+    
 
     console.log(tasks);
 
