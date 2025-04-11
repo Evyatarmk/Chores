@@ -51,7 +51,7 @@ namespace Chores.Controllers
                 MaxParticipants = t.MaxParticipants,
                 Participants = t.Participants.Select(p => new ParticipantDto
                 {
-                    Id = p.PublicId,           // Access the user through the participant
+                    Id = p.Id,           // Access the user through the participant
                     Name = p.Name        // Access the user details through the participant
                 }).ToList()
             }).ToList();
@@ -104,7 +104,29 @@ namespace Chores.Controllers
             return Ok(task);
         }
 
-     
+
+        [HttpPost("{taskId}/participants/{userId}")]
+        public async Task<IActionResult> SignUpForTask(string taskId, string userId)
+        {
+            var task = await _context.Tasks
+                .Include(t => t.Participants)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (task == null || user == null)
+                return NotFound();
+
+            if (!task.Participants.Contains(user))
+            {
+                task.Participants.Add(user);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok("User signed up for task.");
+        }
+
+
 
 
         // PUT: api/tasks/{id}

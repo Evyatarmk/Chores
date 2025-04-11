@@ -128,7 +128,7 @@ const TasksListScreen = () => {
                   <Text style={ styles.registerText}>בטל הרשמה</Text>
                 </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity onPress={() => signUpForTask(item.date, item.id)} style={styles.registerButton}>
+                  <TouchableOpacity onPress={() => signUpForTask(item.id,user.id)} style={styles.registerButton}>
                     <Text style={styles.registerText}>הירשם למשימה</Text>
                   </TouchableOpacity>
                 )}

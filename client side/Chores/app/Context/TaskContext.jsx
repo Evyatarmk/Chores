@@ -186,51 +186,28 @@ export const TaskProvider = ({ children }) => {
       );
   };
 
-  const signUpForTask = (date, taskId) => {
-    setTasks(prevTasks => {
-      console.log("hi")
-      const newTasks = { ...prevTasks };
-      console.log(newTasks)
-   
-      console.log(date)
-      if (!newTasks[date]) return prevTasks; // If the date doesn't exist, return unchanged
-      
-      // Find the specific task
-      const taskIndex = newTasks[date].findIndex(task => task.id === taskId);
-
-      console.log(taskIndex)
-      if (taskIndex === -1) return prevTasks; // If the task isn't found, return unchanged
+  const signUpForTask = async (taskId, userId) => {
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
+        method: 'POST',
+      });
   
-      const task = newTasks[date][taskIndex];
-  
-      // Check if the task has a maxParticipants limit
-      if (task.maxParticipants && task.participants.length >= task.maxParticipants) {
-        alert("Task is full. No more participants can sign up.");
-        return prevTasks;
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to sign up for task: ${errorText}`);
       }
   
-      // Check if the user is already signed up
-      if (task.participants.some(participant => participant.id === user.id)) {
-        alert("You are already signed up for this task.");
-        return prevTasks;
-      }
+      const result = await response.text(); // assuming your backend just returns a message
+      console.log('Signed up successfully:', result);
   
-      // Add the user to the participants list
-      const updatedTask = {
-        ...task,
-        participants: [...task.participants, user]
-      };
-  
-      // Update the tasks array
-      newTasks[date] = [
-        ...newTasks[date].slice(0, taskIndex),
-        updatedTask,
-        ...newTasks[date].slice(taskIndex + 1)
-      ];
-  
-      return newTasks;
-    });
+      // Optional: refresh tasks or participants
+      fetchTasks();
+    } catch (error) {
+      console.error('Error signing up for task:', error.message);
+    }
   };
+  
+  
 
   const signOutOfTask = (date, taskId) => {
     setTasks((prevTasks) => ({

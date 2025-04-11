@@ -99,4 +99,11 @@
        
     }
 
+    public class TaskParticipantDto
+    {
+        public string UserId { get; set; }
+    }
+
+
+
 }
