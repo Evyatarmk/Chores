@@ -138,14 +138,12 @@ const TaskEditScreen = () => {
       category: toEditTaskData.category,
       startDate: toEditTaskData.startDate,
       endDate: toEditTaskData.endDate,
-      startTime: toEditTaskData.startTime,
-      endTime: toEditTaskData.endTime,
       maxParticipants: parseInt(toEditTaskData.maxParticipants, 10),
     };
 
 
 
-    editTask(toEditTaskData.startDate, toEditTaskData.endDate, taskId, updatedTask);
+    editTask(taskId, updatedTask);
     router.back();
   };
 

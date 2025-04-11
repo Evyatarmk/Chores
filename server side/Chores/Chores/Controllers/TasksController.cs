@@ -109,10 +109,9 @@ namespace Chores.Controllers
 
         // PUT: api/tasks/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(string id, Chores.Models.Task updatedTask)
+        public async Task<IActionResult> PutTask(string id, [FromBody] UpdateTaskDto updatedTask)
         {
-            if (id != updatedTask.Id)
-                return BadRequest();
+         
 
             var existingTask = await _context.Tasks
                 .Include(t => t.Participants)
@@ -125,25 +124,14 @@ namespace Chores.Controllers
             existingTask.Title = updatedTask.Title;
             existingTask.Description = updatedTask.Description;
             existingTask.Category = updatedTask.Category;
-            existingTask.Color = updatedTask.Color;
+      
             existingTask.StartDate = updatedTask.StartDate;
             existingTask.EndDate = updatedTask.EndDate;
-            existingTask.StartTime = updatedTask.StartTime;
-            existingTask.EndTime = updatedTask.EndTime;
+           
+           
             existingTask.MaxParticipants = updatedTask.MaxParticipants;
-            existingTask.HomeId = updatedTask.HomeId;
+          
 
-            // Update participants
-            existingTask.Participants.Clear();
-            if (updatedTask.Participants != null)
-            {
-                foreach (var user in updatedTask.Participants)
-                {
-                    var existingUser = await _context.Users.FindAsync(user.Id);
-                    if (existingUser != null)
-                        existingTask.Participants.Add(existingUser);
-                }
-            }
 
             await _context.SaveChangesAsync();
 

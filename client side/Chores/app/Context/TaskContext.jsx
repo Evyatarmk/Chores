@@ -295,38 +295,31 @@ export const TaskProvider = ({ children }) => {
   
   
   
+  const editTask = async (taskId, updatedTask) => {
+    console.log("Editing task:", taskId, updatedTask);
   
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask),
+      });
   
- const editTask = (startDate, endDate, id, updatedTask) => {
-  setTasks(prevTasks => {
-    // Convert start and end dates to Date objects for easier comparison
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Create a new state object for updated tasks
-    const updatedTasks = { ...prevTasks };
-
-    // Loop through each day between startDate and endDate
-    let currentDate = start;
-    while (currentDate <= end) {
-      // Convert the current date to a string in YYYY-MM-DD format
-      const dateString = currentDate.toISOString().split('T')[0];  // "YYYY-MM-DD"
-
-      // If tasks exist for that date, update them
-      if (updatedTasks[dateString]) {
-        updatedTasks[dateString] = updatedTasks[dateString].map(task =>
-          task.id === id ? { ...task, ...updatedTask } : task
-        );
+      if (!response.ok) {
+        throw new Error('Failed to edit task');
       }
-
-      // Move to the next day
-      currentDate.setDate(currentDate.getDate() + 1);
+  
+      console.log(`Task ${taskId} edited successfully`);
+  
+      // Refresh the task list or UI
+      fetchTasks();
+    } catch (error) {
+      console.error('Error editing task:', error);
     }
-    console.log(updatedTasks)
-
-    return updatedTasks;
-  });
-};
+  };
+  
 
 
 
