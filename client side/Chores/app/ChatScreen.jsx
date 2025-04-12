@@ -13,8 +13,8 @@ export default function ChatScreen() {
   const flatListRef = useRef();  // Reference to the FlatList
 
   useEffect(() => {
-    const houseId = user?.houseId || "defaultHouse"; // קחי את מזהה הבית מהמשתמש
-  
+    const houseId = user?.homeId || "defaultHouse"; // קחי את מזהה הבית מהמשתמש
+    console.log(houseId)
     const q = query(
       collection(db, 'houses', houseId, 'messages'),
       orderBy('timestamp', 'asc')
@@ -34,8 +34,8 @@ export default function ChatScreen() {
 
   const handleSend = async () => {
     if (inputText.trim()) {
-      const houseId = user?.houseId || "defaultHouse";
-  
+      const houseId = user?.homeId || "defaultHouse";
+
       const newMessage = {
         text: inputText,
         sender: user.name,
@@ -43,7 +43,7 @@ export default function ChatScreen() {
         timestamp: new Date().toISOString(),
         isSender: true
       };
-  
+
       try {
         await addDoc(collection(db, 'houses', houseId, 'messages'), newMessage);
         setInputText('');
@@ -54,14 +54,30 @@ export default function ChatScreen() {
   };
   
 
-  const renderMessageItem = ({ item }) => (
-    <View style={[styles.messageBubble, item.isSender ? styles.sentMessage : styles.receivedMessage]}>
-      <Image source={{ uri: item.senderImage }} style={styles.profilePic} />
-      <View style={styles.textContainer}>
-        <Text style={styles.messageText}>{item.text}</Text>
+  const renderMessageItem = ({ item }) => {
+    const isCurrentUser = item.sender === user.name;
+  
+    return (
+      <View style={[
+        styles.messageRow,
+        isCurrentUser ? styles.sentRow : styles.receivedRow
+      ]}>
+        {!isCurrentUser && (
+          <Image source={{ uri: item.senderImage }} style={styles.profilePic} />
+        )}
+        <View style={[
+          styles.messageBubble,
+          isCurrentUser ? styles.sentMessage : styles.receivedMessage
+        ]}>
+          <Text style={styles.senderName}>{item.sender}</Text>
+          <Text style={styles.messageText}>{item.text}</Text>
+        </View>
+        {isCurrentUser && (
+          <Image source={{ uri: item.senderImage }} style={styles.profilePic} />
+        )}
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <PageWithMenu>
@@ -143,5 +159,43 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     marginRight: 10,
+  },
+  messageRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginVertical: 4,
+  },
+  
+  sentRow: {
+    justifyContent: 'flex-end',
+  },
+  
+  receivedRow: {
+    justifyContent: 'flex-start',
+  },
+  
+  senderName: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 2,
+  },
+  
+  sentMessage: {
+    backgroundColor: '#dcf8c6',
+    alignSelf: 'flex-end',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  
+  receivedMessage: {
+    backgroundColor: '#ffffff',
+    alignSelf: 'flex-start',
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
 });
