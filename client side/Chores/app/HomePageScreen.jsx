@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useRouter } from "expo-router";
 import PageWithMenu from "./Components/PageWithMenu";
@@ -10,10 +10,21 @@ import PodiumComponent from "./Components/PodiumComponent";  // Import the new P
 
 export default function HomePageScreen() {
   const router = useRouter();
-  const { tasks, signUpForTask,signOutOfTask } = useTasks(); // Get tasks & sign-up function
+  const { myTasks, signUpForTask,signOutOfTask,fetchMyTasks } = useTasks(); // Get tasks & sign-up function
   const { user } = useUserAndHome(); // Get logged-in user
 
   
+
+  useEffect(() => {
+    if (user && user.id) {
+      fetchMyTasks(user.id);
+    }
+  }, [user]);
+  
+
+  
+ 
+  if(!user){
     return (
       <PageWithMenu >
         <StoryComponent></StoryComponent>
@@ -21,89 +32,48 @@ export default function HomePageScreen() {
         <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
       </PageWithMenu>
     );
-  
 
-  // Calculate top contributors - Sample logic (modify as per actual task structure)
-  const currentMonth = new Date().getMonth() + 1;  // Adjusting for 0-index
-  const contributions = {}; // Example structure: {userId: taskCount}
+  }
 
-  // Mock calculation logic (replace with actual data logic)
-  Object.values(tasks).forEach(dayTasks => {
-    dayTasks.forEach(task => {
-      if (task.completedBy && new Date(task.completionDate).getMonth() + 1 === currentMonth) {
-        contributions[task.completedBy] = (contributions[task.completedBy] || 0) + 1;
-      }
-    });
-  });
-
-  // Convert to array and sort to find top 3 contributors
+  return(
+    <PageWithMenu >
+    <StoryComponent></StoryComponent>
+    <Text style={styles.title}>Welcome to Your Chores App</Text>
+    <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
 
 
-  const topContributors = [
-    {
-      name: user.name,
-      tasksCompleted: user.tasksStats.completedTasksByMonth[currentMonth] || 0
-    },  // Assuming 'user' is the logged-in user
-    { name: "Danny", tasksCompleted: 10 },
-    { name: "Sarah", tasksCompleted: 8 }
-  ];
-
-  // Flatten tasks and filter by the user's homeId
-  const homeTasks = Object.entries(tasks)
-    .flatMap(([date, taskList]) =>
-      taskList
-        .filter((task) => task.homeId === user.homeId) // Only show tasks for this home
-        .map((task) => ({ ...task, date }))
-    );
-    console.log(homeTasks);
-  return (
-    <PageWithMenu>
-      <StoryComponent></StoryComponent>
-
-      <Text style={styles.title}>Welcome to Your Chores App</Text>
-      <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
-      <PodiumComponent contributors={topContributors} />
- {/* Task List */}
-<View style={styles.taskContainer}>
-  <Text style={styles.dateText}>Tasks for Your Home:</Text>
-  {homeTasks.length ? (
-    homeTasks.map((task) => {
-      const isUserSignedUp = task.participants?.some(p => p.id === user.id); // Check if the user is signed up
-
-      return (
-        <View key={task.id} style={styles.taskItem}>
-          <Text style={styles.taskText}>
-            {task.title} - {task.description}
-          </Text>
-          <Text>Date: {task.date}</Text>
-          <Text>
-            Assigned to: {task.participants && task.participants.length > 0
-              ? task.participants.map(p => p.name).join(", ") // Display participant names
-              : "None"}
-          </Text>
-
-          {isUserSignedUp ? (
-            <Button
-              title="Sign Out"
-              onPress={() => signOutOfTask(task.date, task.id)}
-              color="red"
-            />
-          ) : (
-            <Button
-              title="Sign Up"
-              onPress={() => signUpForTask(task.date, task.id)}
-            />
-          )}
+    <View>
+      <Text style={styles.sectionTitle}>המשימות שלי</Text>
+       {myTasks.length === 0 ? (
+       <Text style={styles.noTaskText}>אין משימות</Text>
+         ) : (
+            myTasks.map((task) => (
+               <View key={task.id} style={styles.card}>
+                  <Text style={styles.taskTitle}>{task.title}</Text>
+                  <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
+                  <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
+                  <View style={styles.buttonWrapper}>
+                <Button
+            title="בטל הרשמה"
+            color="#ff4d4d"
+            onPress={() => signOutOfTask(task.id, user.id)}
+          />
         </View>
-      );
-    })
-  ) : (
-    <Text style={styles.noTaskText}>No tasks available for your home.</Text>
+      </View>
+    ))
   )}
 </View>
 
-    </PageWithMenu>
+
+  </PageWithMenu>
+
+
+
+
+
   );
+  
+
 }
 
 const styles = StyleSheet.create({
@@ -150,4 +120,42 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
   },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 20,
+    textAlign: "center",
+    color: "#333",
+  },
+  
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  
+  taskTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  
+  taskInfo: {
+    fontSize: 14,
+    color: "#555",
+    marginBottom: 3,
+  },
+  
+  buttonWrapper: {
+    marginTop: 10,
+    alignItems: "flex-start",
+  },
+  
 });

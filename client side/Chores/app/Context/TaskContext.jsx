@@ -64,6 +64,8 @@ export const TaskProvider = ({ children }) => {
     ]
   });
 
+const [myTasks, setMyTasks] = useState([]);
+
   const { user, home } = useUserAndHome();
   
 
@@ -207,20 +209,41 @@ export const TaskProvider = ({ children }) => {
     }
   };
   
+  const fetchMyTasks = async (userId) => {
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/user/${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch tasks");
+  
+      const data = await response.json();
+      console.log(data)
+      setMyTasks(data);
+    } catch (error) {
+      console.error("Error fetching my tasks:", error.message);
+    }
+  };
   
 
-  const signOutOfTask = (date, taskId) => {
-    setTasks((prevTasks) => ({
-      ...prevTasks,
-      [date]: prevTasks[date].map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              participants: task.participants.filter(participant => participant.id !== user.id) // הסר את המשתמש אם הוא נמצא
-            }
-          : task
-      ),
-    }));
+  const signOutOfTask = async (taskId, userId) => {
+
+    console.log("Signing out user:", userId, "from task:", taskId);
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to sign out from task: ${errorText}`);
+      }
+  
+      console.log('Signed out successfully');
+      
+      // Optionally reload the task list
+      fetchTasks();
+      fetchMyTasks(user.id);
+    } catch (error) {
+      console.error('Error signing out from task:', error.message);
+    }
   };
   
   
@@ -322,7 +345,7 @@ export const TaskProvider = ({ children }) => {
 
 
   return (
-    <TaskContext.Provider value={{ tasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask,fetchTasks}}>
+    <TaskContext.Provider value={{ tasks,myTasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask,fetchTasks,fetchMyTasks}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </TaskContext.Provider>

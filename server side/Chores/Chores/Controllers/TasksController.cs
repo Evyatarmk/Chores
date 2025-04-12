@@ -73,6 +73,29 @@ namespace Chores.Controllers
             return task;
         }
 
+
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetTasksForUser(string userId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.Participants.Any(p => p.Id == userId))
+                .Select(t => new
+                {
+                    t.Id,
+                    t.Title,
+                    t.Description,
+                    t.StartDate,
+                    t.EndDate,
+                    t.Category
+                })
+                .ToListAsync();
+
+            return Ok(tasks);
+        }
+
+
+
         // POST: api/tasks
         [HttpPost]
       
@@ -176,5 +199,30 @@ namespace Chores.Controllers
 
             return NoContent();
         }
+
+
+        [HttpDelete("{taskId}/participants/{userId}")]
+        public async Task<IActionResult> SignOutFromTask(string taskId, string userId)
+        {
+            var task = await _context.Tasks
+                .Include(t => t.Participants)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (task == null || user == null)
+                return NotFound("Task or user not found.");
+
+            if (task.Participants.Contains(user))
+            {
+                task.Participants.Remove(user);
+                await _context.SaveChangesAsync();
+                return Ok("User signed out from task.");
+            }
+
+            return BadRequest("User was not signed up for the task.");
+        }
+
+
     }
 }

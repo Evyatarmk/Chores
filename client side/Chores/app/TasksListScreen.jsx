@@ -85,8 +85,7 @@ const TasksListScreen = () => {
   return (
     <PageWithMenu>
       <GestureHandlerRootView style={styles.container}>
-        <NormalHeader title="המשימות שלי" />
-
+        <NormalHeader title="המשימות של הבית"></NormalHeader>
         {/* יומן להצגת התאריכים */}
         <Calendar
          markedDates={renderMarkedDates()}
@@ -123,8 +122,8 @@ const TasksListScreen = () => {
                 <Text style={styles.taskDescription}>{item.description}</Text>
 
                 {/* אם המשתמש רשום */}
-                {isUserRegistered ? (
-                  <TouchableOpacity onPress={() => signOutOfTask(item.date, item.id)} style={styles.cancelRegisterButton}>
+                {isUserRegistered ? (            
+                  <TouchableOpacity onPress={() => signOutOfTask(item.id,user.id)} style={styles.cancelRegisterButton}>
                   <Text style={ styles.registerText}>בטל הרשמה</Text>
                 </TouchableOpacity>
                 ) : (
