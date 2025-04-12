@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, TextInput, Button, FlatList, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import PageWithMenu from './Components/PageWithMenu';
 import { useUserAndHome } from './Context/UserAndHomeContext';
+import { db } from './FirebaseConfig';
+import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
+
 
 export default function ChatScreen() {
   const { user } = useUserAndHome();
@@ -10,26 +13,46 @@ export default function ChatScreen() {
   const flatListRef = useRef();  // Reference to the FlatList
 
   useEffect(() => {
-    // Whenever messages update, scroll to the end of the FlatList
-    if (messages.length > 0) {
-      flatListRef.current.scrollToEnd({ animated: false });
-    }
-  }, [messages]);
+    const houseId = user?.houseId || "defaultHouse"; // קחי את מזהה הבית מהמשתמש
+  
+    const q = query(
+      collection(db, 'houses', houseId, 'messages'),
+      orderBy('timestamp', 'asc')
+    );
+  
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedMessages = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setMessages(fetchedMessages);
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (inputText.trim()) {
+      const houseId = user?.houseId || "defaultHouse";
+  
       const newMessage = {
-        id: Date.now().toString(),
         text: inputText,
         sender: user.name,
         senderImage: user.profilePicture,
         timestamp: new Date().toISOString(),
         isSender: true
       };
-      setMessages(previousMessages => [...previousMessages, newMessage]);  // Append new message
-      setInputText('');
+  
+      try {
+        await addDoc(collection(db, 'houses', houseId, 'messages'), newMessage);
+        setInputText('');
+      } catch (error) {
+        console.error("Error sending message: ", error);
+      }
     }
   };
+  
 
   const renderMessageItem = ({ item }) => (
     <View style={[styles.messageBubble, item.isSender ? styles.sentMessage : styles.receivedMessage]}>

@@ -2483,23 +2483,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\itaig\\.nuget\\packages\\": {},
+    "C:\\Users\\ronik\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\Chores.csproj",
+      "projectUniqueName": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\Chores.csproj",
       "projectName": "Chores",
-      "projectPath": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\Chores.csproj",
-      "packagesPath": "C:\\Users\\itaig\\.nuget\\packages\\",
-      "outputPath": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\obj\\",
+      "projectPath": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\Chores.csproj",
+      "packagesPath": "C:\\Users\\ronik\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\itaig\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ronik\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2508,6 +2508,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2525,7 +2526,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net6.0": {
@@ -2581,7 +2583,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }

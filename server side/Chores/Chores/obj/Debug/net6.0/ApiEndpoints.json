@@ -586,22 +586,12 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "task",
-        "Type": "Chores.Models.Task",
+        "Name": "taskDto",
+        "Type": "Chores.Models.CreateTaskDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "Chores.Models.Task",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Chores.Controllers.TasksController",
@@ -644,7 +634,7 @@
       },
       {
         "Name": "updatedTask",
-        "Type": "Chores.Models.Task",
+        "Type": "Chores.Models.UpdateTaskDto",
         "IsRequired": true
       }
     ],
@@ -660,6 +650,48 @@
     "Parameters": [
       {
         "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.TasksController",
+    "Method": "SignUpForTask",
+    "RelativePath": "api/Tasks/{taskId}/participants/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "taskId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.TasksController",
+    "Method": "SignOutFromTask",
+    "RelativePath": "api/Tasks/{taskId}/participants/{userId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "taskId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -691,6 +723,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.TasksController",
+    "Method": "GetTasksForUser",
+    "RelativePath": "api/Tasks/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",
