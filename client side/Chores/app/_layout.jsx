@@ -6,10 +6,12 @@ import { ApiUrlProvider } from "./Context/ApiUrlProvider";
 import { CategoryProvider } from "./Context/CategoryContext";
 import { ItemHistoryProvider } from "./Context/ItemHistoryContext";
 import { StoriesProvider } from "./Context/StoriesContext";
+import { NotificationProvider } from './Context/NotificationContext';
 import AutoLogin from "./AutoLogin";
 
 export default function RootLayout() {
   return (
+    <NotificationProvider>
     <ApiUrlProvider>
       <UserAndHomeProvider>
       <StoriesProvider>
@@ -50,6 +52,7 @@ export default function RootLayout() {
       </StoriesProvider>
       </UserAndHomeProvider>
     </ApiUrlProvider>
+    </NotificationProvider>
   );
 }
 

@@ -5,12 +5,16 @@ import { useUserAndHome } from './Context/UserAndHomeContext';
 import { db } from './FirebaseConfig';
 import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import moment from 'moment';
+import { useNotification } from './Context/NotificationContext';
+
 
 export default function ChatScreen() {
   const { user } = useUserAndHome();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef();  // Reference to the FlatList
+
+  const { setUnreadCount } = useNotification();
 
   useEffect(() => {
     const houseId = user?.homeId || "defaultHouse";
@@ -27,6 +31,7 @@ export default function ChatScreen() {
       setMessages(fetchedMessages);
     });
 
+    setUnreadCount(0); 
     return () => unsubscribe();
   }, []);
 
