@@ -51,7 +51,7 @@ namespace Chores.Controllers
                 MaxParticipants = t.MaxParticipants,
                 Participants = t.Participants.Select(p => new ParticipantDto
                 {
-                    Id = p.PublicId,           // Access the user through the participant
+                    Id = p.Id,           // Access the user through the participant
                     Name = p.Name        // Access the user details through the participant
                 }).ToList()
             }).ToList();
@@ -73,35 +73,90 @@ namespace Chores.Controllers
             return task;
         }
 
+
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetTasksForUser(string userId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.Participants.Any(p => p.Id == userId))
+                .Select(t => new
+                {
+                    t.Id,
+                    t.Title,
+                    t.Description,
+                    t.StartDate,
+                    t.EndDate,
+                    t.Category
+                })
+                .ToListAsync();
+
+            return Ok(tasks);
+        }
+
+
+
         // POST: api/tasks
         [HttpPost]
-        public async Task<ActionResult<Chores.Models.Task>> PostTask(Chores.Models.Task task)
+      
+        public async Task<IActionResult> PostTask([FromBody] CreateTaskDto taskDto)
         {
-            // Attach existing users as participants
-            if (task.Participants != null)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var task = new Models.Task
             {
-                var attachedUsers = new List<User>();
-                foreach (var user in task.Participants)
-                {
-                    var existingUser = await _context.Users.FindAsync(user.Id);
-                    if (existingUser != null)
-                        attachedUsers.Add(existingUser);
-                }
-                task.Participants = attachedUsers;
-            }
+                Id = Guid.NewGuid().ToString(),
+                Title = taskDto.Title,
+                Description = taskDto.Description,
+                HomeId = taskDto.HomeId,
+                Category = taskDto.Category,
+                StartDate = taskDto.StartDate,
+                EndDate = taskDto.EndDate,
+                MaxParticipants = taskDto.MaxParticipants,
+
+                Color = taskDto.Color,
+             
+                StartTime = TimeSpan.Zero,   // Default start time
+                EndTime = TimeSpan.Zero      // Default end time
+            };
 
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
+            return Ok(task);
         }
+
+
+        [HttpPost("{taskId}/participants/{userId}")]
+        public async Task<IActionResult> SignUpForTask(string taskId, string userId)
+        {
+            var task = await _context.Tasks
+                .Include(t => t.Participants)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (task == null || user == null)
+                return NotFound();
+
+            if (!task.Participants.Contains(user))
+            {
+                task.Participants.Add(user);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok("User signed up for task.");
+        }
+
+
+
 
         // PUT: api/tasks/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(string id, Chores.Models.Task updatedTask)
+        public async Task<IActionResult> PutTask(string id, [FromBody] UpdateTaskDto updatedTask)
         {
-            if (id != updatedTask.Id)
-                return BadRequest();
+         
 
             var existingTask = await _context.Tasks
                 .Include(t => t.Participants)
@@ -114,25 +169,14 @@ namespace Chores.Controllers
             existingTask.Title = updatedTask.Title;
             existingTask.Description = updatedTask.Description;
             existingTask.Category = updatedTask.Category;
-            existingTask.Color = updatedTask.Color;
+      
             existingTask.StartDate = updatedTask.StartDate;
             existingTask.EndDate = updatedTask.EndDate;
-            existingTask.StartTime = updatedTask.StartTime;
-            existingTask.EndTime = updatedTask.EndTime;
+           
+           
             existingTask.MaxParticipants = updatedTask.MaxParticipants;
-            existingTask.HomeId = updatedTask.HomeId;
+          
 
-            // Update participants
-            existingTask.Participants.Clear();
-            if (updatedTask.Participants != null)
-            {
-                foreach (var user in updatedTask.Participants)
-                {
-                    var existingUser = await _context.Users.FindAsync(user.Id);
-                    if (existingUser != null)
-                        existingTask.Participants.Add(existingUser);
-                }
-            }
 
             await _context.SaveChangesAsync();
 
@@ -155,5 +199,30 @@ namespace Chores.Controllers
 
             return NoContent();
         }
+
+
+        [HttpDelete("{taskId}/participants/{userId}")]
+        public async Task<IActionResult> SignOutFromTask(string taskId, string userId)
+        {
+            var task = await _context.Tasks
+                .Include(t => t.Participants)
+                .FirstOrDefaultAsync(t => t.Id == taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+
+            if (task == null || user == null)
+                return NotFound("Task or user not found.");
+
+            if (task.Participants.Contains(user))
+            {
+                task.Participants.Remove(user);
+                await _context.SaveChangesAsync();
+                return Ok("User signed out from task.");
+            }
+
+            return BadRequest("User was not signed up for the task.");
+        }
+
+
     }
 }

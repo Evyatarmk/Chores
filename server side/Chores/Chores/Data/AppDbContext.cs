@@ -19,6 +19,8 @@ namespace Chores.Data
         public DbSet<Chores.Models.Task> Tasks { get; set; }
 
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -30,8 +32,9 @@ namespace Chores.Data
                     "TaskParticipants", // <-- name of your join table
                     j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
                     j => j.HasOne<Chores.Models.Task>().WithMany().HasForeignKey("TaskId"));
-        }
 
+
+        }
      
 
     }

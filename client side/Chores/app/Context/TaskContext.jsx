@@ -64,6 +64,8 @@ export const TaskProvider = ({ children }) => {
     ]
   });
 
+const [myTasks, setMyTasks] = useState([]);
+
   const { user, home } = useUserAndHome();
   
 
@@ -148,21 +150,32 @@ export const TaskProvider = ({ children }) => {
     
     
   
- 
-  const addTaskForDate = (date, task) => {
-    setTasks(prevTasks => {
-      // Check if tasks already exist for the given date
-      const existingTasks = prevTasks[date] || [];
-  
-      // Add the new task to the existing tasks array
-      const updatedTasks = [...existingTasks, task];
-  
-      return {
-        ...prevTasks,
-        [date]: updatedTasks
-      };
-    });
-  };
+
+    const addTaskForDate = async (task, homeId) => {
+      try {
+        const response = await fetch(`${baseUrl}/Tasks`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...task,
+            homeId: homeId,
+          }),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to add task');
+        }
+    
+        const result = await response.json();
+        console.log('Task added successfully:', result);
+        fetchTasks();
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
+    };
+    
 
   
   const getTasksForDate = (date) => {
@@ -175,84 +188,83 @@ export const TaskProvider = ({ children }) => {
       );
   };
 
-  const signUpForTask = (date, taskId) => {
-    setTasks(prevTasks => {
-      console.log("hi")
-      const newTasks = { ...prevTasks };
-      console.log(newTasks)
-   
-      console.log(date)
-      if (!newTasks[date]) return prevTasks; // If the date doesn't exist, return unchanged
-      
-      // Find the specific task
-      const taskIndex = newTasks[date].findIndex(task => task.id === taskId);
-
-      console.log(taskIndex)
-      if (taskIndex === -1) return prevTasks; // If the task isn't found, return unchanged
-  
-      const task = newTasks[date][taskIndex];
-  
-      // Check if the task has a maxParticipants limit
-      if (task.maxParticipants && task.participants.length >= task.maxParticipants) {
-        alert("Task is full. No more participants can sign up.");
-        return prevTasks;
-      }
-  
-      // Check if the user is already signed up
-      if (task.participants.some(participant => participant.id === user.id)) {
-        alert("You are already signed up for this task.");
-        return prevTasks;
-      }
-  
-      // Add the user to the participants list
-      const updatedTask = {
-        ...task,
-        participants: [...task.participants, user]
-      };
-  
-      // Update the tasks array
-      newTasks[date] = [
-        ...newTasks[date].slice(0, taskIndex),
-        updatedTask,
-        ...newTasks[date].slice(taskIndex + 1)
-      ];
-  
-      return newTasks;
-    });
-  };
-
-  const signOutOfTask = (date, taskId) => {
-    setTasks((prevTasks) => ({
-      ...prevTasks,
-      [date]: prevTasks[date].map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              participants: task.participants.filter(participant => participant.id !== user.id) // הסר את המשתמש אם הוא נמצא
-            }
-          : task
-      ),
-    }));
-  };
-  
-  
-  const removeTaskForDate = (date, taskId) => {
-    console.log("Removing task", taskId, "from", date);
-  
-    setTasks(prevTasks => {
-      let updatedTasks = { ...prevTasks };
- 
-      Object.keys(prevTasks).forEach(dateKey => {
-        updatedTasks[dateKey] = prevTasks[dateKey].filter(task => task.id !== taskId);
-  
-        // Remove date key if no tasks are left on that date
-        if (updatedTasks[dateKey].length === 0) {
-          delete updatedTasks[dateKey];
-        }
+  const signUpForTask = async (taskId, userId) => {
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
+        method: 'POST',
       });
   
-      return updatedTasks;
-    });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to sign up for task: ${errorText}`);
+      }
+  
+      const result = await response.text(); // assuming your backend just returns a message
+      console.log('Signed up successfully:', result);
+  
+      // Optional: refresh tasks or participants
+      fetchTasks();
+    } catch (error) {
+      console.error('Error signing up for task:', error.message);
+    }
+  };
+  
+  const fetchMyTasks = async (userId) => {
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/user/${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch tasks");
+  
+      const data = await response.json();
+      console.log(data)
+      setMyTasks(data);
+    } catch (error) {
+      console.error("Error fetching my tasks:", error.message);
+    }
+  };
+  
+
+  const signOutOfTask = async (taskId, userId) => {
+
+    console.log("Signing out user:", userId, "from task:", taskId);
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to sign out from task: ${errorText}`);
+      }
+  
+      console.log('Signed out successfully');
+      
+      // Optionally reload the task list
+      fetchTasks();
+      fetchMyTasks(user.id);
+    } catch (error) {
+      console.error('Error signing out from task:', error.message);
+    }
+  };
+  
+  
+  const removeTaskForDate = async (taskId) => {
+    console.log("Removing task", taskId);
+  
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete task');
+      }
+  
+      console.log(`Task ${taskId} deleted successfully`);
+
+     fetchTasks()
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
   
   const getTask = (date, taskId) => {
@@ -283,38 +295,31 @@ export const TaskProvider = ({ children }) => {
   
   
   
+  const editTask = async (taskId, updatedTask) => {
+    console.log("Editing task:", taskId, updatedTask);
   
+    try {
+      const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask),
+      });
   
- const editTask = (startDate, endDate, id, updatedTask) => {
-  setTasks(prevTasks => {
-    // Convert start and end dates to Date objects for easier comparison
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Create a new state object for updated tasks
-    const updatedTasks = { ...prevTasks };
-
-    // Loop through each day between startDate and endDate
-    let currentDate = start;
-    while (currentDate <= end) {
-      // Convert the current date to a string in YYYY-MM-DD format
-      const dateString = currentDate.toISOString().split('T')[0];  // "YYYY-MM-DD"
-
-      // If tasks exist for that date, update them
-      if (updatedTasks[dateString]) {
-        updatedTasks[dateString] = updatedTasks[dateString].map(task =>
-          task.id === id ? { ...task, ...updatedTask } : task
-        );
+      if (!response.ok) {
+        throw new Error('Failed to edit task');
       }
-
-      // Move to the next day
-      currentDate.setDate(currentDate.getDate() + 1);
+  
+      console.log(`Task ${taskId} edited successfully`);
+  
+      // Refresh the task list or UI
+      fetchTasks();
+    } catch (error) {
+      console.error('Error editing task:', error);
     }
-    console.log(updatedTasks)
-
-    return updatedTasks;
-  });
-};
+  };
+  
 
 
 
@@ -340,7 +345,7 @@ export const TaskProvider = ({ children }) => {
 
 
   return (
-    <TaskContext.Provider value={{ tasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask}}>
+    <TaskContext.Provider value={{ tasks,myTasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask,fetchTasks,fetchMyTasks}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </TaskContext.Provider>
