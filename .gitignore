@@ -64,3 +64,17 @@ server side/Chores/Chores/obj/Debug/net6.0/Chores.AssemblyInfo.cs
 **/bin/
 **/obj/
 /server side/Chores/Chores/obj
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+Logs/
+[Nn]etcore/
+[Nn]etcoreobj/
