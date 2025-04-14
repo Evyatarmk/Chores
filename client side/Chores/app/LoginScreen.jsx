@@ -3,7 +3,7 @@ import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from "reac
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import ErrorNotification from "./Components/ErrorNotification";
-import { ActivityIndicator } from "react-native-web";
+import { ActivityIndicator } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const LoginScreen = () => {
@@ -17,36 +17,40 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleCloseError = () => {
-    setErrorMessage("")
-    setErrorVisible(false)
+    setErrorMessage("");
+    setErrorVisible(false);
   };
+
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return emailRegex.test(email);
   };
+
   const handleLogin = async () => {
     if (!email || !password) {
       setErrorMessage("אנא מלא את כל השדות");
       setErrorVisible(true);
       return;
     }
+
     if (!validateEmail(email)) {
       setErrorMessage("אימייל לא חוקי");
       setErrorVisible(true);
       return;
     }
+
     if (password.length < 8) {
       setErrorMessage("הסיסמה חייבת להיות לפחות 8 תווים");
       setErrorVisible(true);
       return;
     }
-  
-    setLoading(true); // מתחילים טעינה
-  
+
+    setLoading(true);
+
     const user = await login(email, password);
-  
-    setLoading(false); // מסיימים טעינה
-  
+
+    setLoading(false);
+
     if (user) {
       router.push("/HomePageScreen");
     } else {
@@ -58,44 +62,49 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>התחברות</Text>
-      <View style={styles.inputContainer}>
-  <Icon name="email" size={24} color="#666" style={styles.icon} />
-  <TextInput
-    style={styles.input}
-    placeholder="אימייל"
-    value={email}
-    onChangeText={setEmail}
-    keyboardType="email-address"
-    autoCapitalize="none"
-  />
-</View>
 
-<View style={styles.inputContainer}>
-<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-    <Icon
-      name={showPassword ? "visibility" : "visibility-off"}
-      size={24}
-      color="#666"
-    />
-  </TouchableOpacity>  <TextInput
-    style={styles.input}
-    placeholder="סיסמה"
-    value={password}
-    onChangeText={setPassword}
-    secureTextEntry={!showPassword}
-  />
-</View>
-    
+      <View style={styles.inputContainer}>
+        <Icon name="email" size={24} color="#666" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="אימייל"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Icon
+            name={showPassword ? "visibility" : "visibility-off"}
+            size={24}
+            color="#666"
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="סיסמה"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+        />
+      </View>
+
       {loading ? (
-  <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 10 }} />
-) : (
-  <TouchableOpacity style={styles.button} onPress={handleLogin}>
-    <Text style={styles.buttonText}>התחבר</Text>
-  </TouchableOpacity>
-)}
- <Text style={styles.link} onPress={() => router.push("/RegisterScreen")}>
-        אין לך חשבון? הירשם כאן
-      </Text>
+        <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 10 }} />
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>התחבר</Text>
+        </TouchableOpacity>
+      )}
+
+      <TouchableOpacity onPress={() => router.push("/RegisterScreen")}>
+        <Text style={styles.link}>אין לך חשבון? הירשם כאן</Text>
+      </TouchableOpacity>
+
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </View>
   );
@@ -124,20 +133,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginBottom: 12,
     paddingHorizontal: 10,
-    width:"100%"
+    width: "100%",
   },
-  
   icon: {
     marginRight: 8,
   },
-  
   input: {
     flex: 1,
-    height:50,
+    height: 50,
     paddingVertical: 10,
     fontSize: 16,
-    textAlign: "right", 
-    outlineStyle: "none", // ל-Web, לא תמיד נדרש ב־React Native
+    textAlign: "right",
+    outlineStyle: "none",
   },
   button: {
     width: "100%",

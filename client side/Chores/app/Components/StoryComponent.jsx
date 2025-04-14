@@ -182,8 +182,11 @@ const StoryComponent = () => {
 />
     </View>
       )}
-
-      <Text style={styles.username}>
+      <Text 
+      style={styles.username}
+       numberOfLines={1}
+  ellipsizeMode="tail"
+      >
         {item.username}
       </Text>
     </TouchableOpacity>
@@ -332,6 +335,7 @@ const styles = StyleSheet.create({
   },
 
   username: {
+    maxWidth: 60,
     fontSize: 14,
   },
 

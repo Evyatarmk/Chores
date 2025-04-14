@@ -143,4 +143,3 @@ C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.Bc
 C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.Bcl.Memory.dll
 C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.Bcl.TimeProvider.dll
 C:\ChoresGitClone\Chores\server side\Chores\Chores\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
-C:\Users\97250\Documents\GitHub\famliy-flow\server side\Chores\Chores\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt

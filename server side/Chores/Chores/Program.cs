@@ -53,7 +53,12 @@ app.UseStaticFiles();
 // הגדרת שירות קבצים מתוך תיקיית uploads
 var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), @"uploads");
 
-// שירות קבצים מתוך תיקיות משנה של uploads
+// ודא שהתיקייה קיימת, ואם לא - צור אותה
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
 app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),

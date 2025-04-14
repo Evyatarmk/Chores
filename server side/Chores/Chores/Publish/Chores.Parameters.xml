@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="IIS Web Application Name" description="" value="Chores" tags="IisApp">
-    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server\ side\\Chores\\Chores\\obj\\Release\\net6\.0\\PubTmp\\Out\\$" />
-  </parameter>
-</parameters>
