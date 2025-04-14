@@ -18,67 +18,9 @@ const PageWithMenu = (props) => {
   const segments = useSegments();
   const { user } = useUserAndHome();
   const { setUnreadCount, unreadCount } = useNotification();
-  const pathname = usePathname();
 
-  const lastSeenTimestampRef = useRef(null);
-  const initializedRef = useRef(false);
 
-  useEffect(() => {
-    if (!user?.homeId) return;
   
-    const houseId = user.homeId;
-    const q = query(
-      collection(db, 'houses', houseId, 'messages'),
-      orderBy('timestamp', 'asc')
-    );
-  
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const docs = snapshot.docs;
-      if (!docs.length) return;
-  
-      const latest = docs[docs.length - 1].data();
-      const latestSender = latest.sender;
-  
-      // Handle latest timestamp correctly: it may come as Firestore Timestamp
-      const latestTimestamp = latest.timestamp instanceof Timestamp
-        ? latest.timestamp.toDate() // If it's a Firestore Timestamp, convert to Date
-        : new Date(latest.timestamp); // Else, treat it as a normal string/Date
-  
-      console.log("Raw latest timestamp:", latestTimestamp);
-  
-      if (!initializedRef.current) {
-        lastSeenTimestampRef.current = latestTimestamp;
-        initializedRef.current = true;
-        return;
-      }
-  
-      const lastSeen = lastSeenTimestampRef.current;
-  
-      // Convert lastSeen to Date if it's a Firestore Timestamp
-      const lastSeenDate = lastSeen instanceof Timestamp ? lastSeen.toDate() : new Date(lastSeen);
-  
-      console.log("Last seen timestamp:", lastSeenDate);
-  
-      const isFromAnotherUser = latestSender !== user.name;
-      const isNotOnChatScreen = pathname !== '/ChatScreen';
-      const isNewMessage = latestTimestamp > lastSeenDate;
-  
-      if (isFromAnotherUser && isNotOnChatScreen && isNewMessage) {
-        setUnreadCount((prev) => prev + 1);
-        lastSeenTimestampRef.current = latestTimestamp;
-      }
-    });
-  
-    return () => unsubscribe();
-  }, [user?.homeId]);
-  
-  
-  // Reset unread count when on chat screen
-  useEffect(() => {
-    if (pathname === '/ChatScreen') {
-      setUnreadCount(0);
-    }
-  }, [pathname]);
 
   const currentPath = '/' + segments[0];
 

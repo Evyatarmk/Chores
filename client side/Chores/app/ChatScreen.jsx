@@ -29,6 +29,7 @@ export default function ChatScreen() {
   
     markAsSeen();
   
+
     const q = query(
       collection(db, 'houses', houseId, 'messages'),
       orderBy('timestamp', 'asc')
