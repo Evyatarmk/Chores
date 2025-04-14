@@ -61,7 +61,6 @@ export default function ChatScreen() {
     };
   }, []);
   
-
   const handleSend = async () => {
     if (inputText.trim()) {
       const houseId = user?.homeId || "defaultHouse";
