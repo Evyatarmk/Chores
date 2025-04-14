@@ -97,8 +97,8 @@ const PageWithMenu = (props) => {
       {/* Bottom Menu Bar */}
       <View style={styles.bottomMenu}>
         <TouchableOpacity onPress={() => router.push('/ChatScreen')} style={styles.navButton}>
-          <View style={styles.iconWrapper}>
-            <Icon
+        <View style={[styles.iconWrapper, currentPath === '/ChatScreen' && styles.activeIconWrapper]}>
+        <Icon
               name="chat"
               size={24}
               color={currentPath === '/ChatScreen' ? '#007bff' : 'black'}
@@ -108,7 +108,7 @@ const PageWithMenu = (props) => {
                 <Text style={styles.badgeText}>{unreadCount}</Text>
               </View>
             )}
-            <Text style={styles.navText}>צ'אט</Text>
+            <Text  style={[styles.navText, currentPath === '/ChatScreen' && styles.activeText]}>צ'אט</Text>
           </View>
         </TouchableOpacity>
 
