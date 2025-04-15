@@ -9,10 +9,12 @@ import { Calendar } from "react-native-calendars";
 import PageWithMenu from "./Components/PageWithMenu";
 import OptionsModal from "./Components/OptionsModal";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
+import AlertModal from "./Components/AlertModal";
 
 const TasksListScreen = () => {
   const { tasks, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+  const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
 
   const router = useRouter();
   const optionsModalRef = useRef(null);
@@ -21,18 +23,28 @@ const TasksListScreen = () => {
   const { user } = useUserAndHome()
   const options = [
     { icon: "edit", text: "ערוך", action: "edit" },
-    { icon: "content-copy", text: "העתק", action: "copy", iconColor: "#007bff" },
     { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
   ];
   const handleOptionSelect = (option) => {
     if (option === "edit") {
       optionsModalRef.current?.close();
+      handleEdit()
       setTimeout(() => {
         editModalRef.current?.open();
       }, 300);
     } if (option === "delete") {
-      removeTaskForDate( currentList.id)
+      setModalDeleteVisible(true)
     }
+  };
+  
+  const handleEdit = () => {
+    router.push({
+      pathname: "./TaskEditScreen",
+      params: { taskId: currentList.id, date: selectedDate }  })
+  };
+  const handleDelete = () => {
+    optionsModalRef.current?.close();
+    removeTaskForDate( currentList.id)
   };
   const openOptionsPanel = (list) => {
     setCurrentList(list);
@@ -107,7 +119,7 @@ const TasksListScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
             const isUserRegistered = item.participants.some(participant => participant.id === user?.id); // כאן אתה בודק אם המשתמש רשום, תחליף ב-id של המשתמש שלך
-
+console.log(item.category)
             return (
               <TouchableOpacity
                 style={styles.taskItem}
@@ -121,16 +133,37 @@ const TasksListScreen = () => {
                 <Text style={styles.taskTitle}>{item.title}</Text>
                 <Text style={styles.taskDescription}>{item.description}</Text>
 
-                {/* אם המשתמש רשום */}
-                {isUserRegistered ? (            
-                  <TouchableOpacity onPress={() => signOutOfTask(item.id,user.id)} style={styles.cancelRegisterButton}>
-                  <Text style={ styles.registerText}>בטל הרשמה</Text>
-                </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity onPress={() => signUpForTask(item.id,user.id)} style={styles.registerButton}>
-                    <Text style={styles.registerText}>הירשם למשימה</Text>
-                  </TouchableOpacity>
-                )}
+                {item.category === "אירוע" ? (
+  isUserRegistered ? (
+    <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
+      <Text style={styles.registerText}>בטל הרשמה</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
+      <Text style={styles.registerText}>הירשם לאירוע</Text>
+    </TouchableOpacity>
+  )
+) : (
+  item.participants.length < item.maxParticipants ? (
+    isUserRegistered ? (
+      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
+        <Text style={styles.registerText}>בטל הרשמה</Text>
+      </TouchableOpacity>
+    ) : (
+      <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
+        <Text style={styles.registerText}>הירשם למשימה</Text>
+      </TouchableOpacity>
+    )
+  ) : (
+    isUserRegistered && (
+      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
+        <Text style={styles.registerText}>בטל הרשמה</Text>
+      </TouchableOpacity>
+    )
+  )
+)}
+
+            
 
                 <TouchableOpacity
                   style={styles.optionsButton}
@@ -166,6 +199,14 @@ const TasksListScreen = () => {
           handleOptionSelect={handleOptionSelect}
           options={options}
         />
+        <AlertModal
+                visible={modalDeleteVisible}
+                onClose={() => setModalDeleteVisible(false)}
+                message="האם אתה בטוח שברצונך למחוק פריטים אלו?"
+                onConfirm={handleDelete}
+                confirmText="מחק"
+                cancelText="ביטול"
+              />
       </GestureHandlerRootView>
     </PageWithMenu>
   );

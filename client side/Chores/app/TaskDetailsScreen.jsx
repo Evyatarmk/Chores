@@ -21,7 +21,7 @@ const TaskDetailsScreen = () => {
   useEffect(() => {
     if (date && taskId) {
       console.log("Fetching task with date:", String(date), "and taskId:", taskId);
-  
+      
       const tasksForDate = getTasksForDate(date);
       console.log("All tasks for date:", tasksForDate);
   

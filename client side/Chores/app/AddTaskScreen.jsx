@@ -19,6 +19,7 @@ const AddTaskScreen = () => {
   const { user } = useUserAndHome();
   const [showStartDatePicker, setShowStartDatePicker] = useState(false); // Function to toggle date picker
   const [showEndDatePicker, setShowEndDatePicker] = useState(false); // Function to toggle date picker
+  const [isEvent, setIsEvent] = useState(true); // Function to toggle date picker
   // Update homeId when user changes
   useEffect(() => {
     setTaskData((prevState) => ({
@@ -85,11 +86,26 @@ const AddTaskScreen = () => {
 
 
   const handleInputChange = (field, value) => {
-    setTaskData((prevState) => ({
-      ...prevState,
-      [field]: value,  // עדכון הערך של השדה המתאים
-    }));
+    setTaskData((prevState) => {
+      let updated = {
+        ...prevState,
+        [field]: value,
+      };
+  
+      if (field === "category") {
+        if (value === "אירוע") {
+          setIsEvent(false);
+          updated.maxParticipants = -1; // ערך לא הגיוני
+        } else if (value === "משימה") {
+          setIsEvent(true);
+          updated.maxParticipants = 1; // או ערך אחר שמתאים כברירת מחדל
+        }
+      }
+  
+      return updated;
+    });
   };
+  
 
   const handleStartDateSelect = (date) => {
     setTaskData((prevState) => {
@@ -215,8 +231,7 @@ const AddTaskScreen = () => {
             multiline
           />
         </View>
-
-        <View style={styles.inputContainer}>
+        {isEvent? <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="מספר מקסימלי של משתתפים"
@@ -230,7 +245,8 @@ const AddTaskScreen = () => {
             keyboardType="numeric"
             multiline={false}
           />
-        </View>
+        </View>:null}
+       
 
 
         <View style={styles.column}>

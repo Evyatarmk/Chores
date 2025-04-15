@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import PageWithMenu from "./Components/PageWithMenu";
 import StoryComponent from "./Components/StoryComponent";
@@ -10,21 +10,21 @@ import PodiumComponent from "./Components/PodiumComponent";  // Import the new P
 
 export default function HomePageScreen() {
   const router = useRouter();
-  const { myTasks, signUpForTask,signOutOfTask,fetchMyTasks } = useTasks(); // Get tasks & sign-up function
+  const { myTasks, signUpForTask, signOutOfTask, fetchMyTasks } = useTasks(); // Get tasks & sign-up function
   const { user } = useUserAndHome(); // Get logged-in user
 
-  
+
 
   useEffect(() => {
     if (user && user.id) {
       fetchMyTasks(user.id);
     }
   }, [user]);
-  
 
-  
- 
-  if(!user){
+
+
+
+  if (!user) {
     return (
       <PageWithMenu >
         <StoryComponent></StoryComponent>
@@ -35,44 +35,52 @@ export default function HomePageScreen() {
 
   }
 
-  return(
+  return (
     <PageWithMenu >
-    <StoryComponent></StoryComponent>
-    <Text style={styles.title}>Welcome to Your Chores App</Text>
-    <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
+      <StoryComponent></StoryComponent>
+      <Text style={styles.title}>Welcome to Your Chores App</Text>
+      <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
 
 
-    <View>
-      <Text style={styles.sectionTitle}>המשימות שלי</Text>
-       {myTasks.length === 0 ? (
-       <Text style={styles.noTaskText}>אין משימות</Text>
-         ) : (
-            myTasks.map((task) => (
-               <View key={task.id} style={styles.card}>
-                  <Text style={styles.taskTitle}>{task.title}</Text>
-                  <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
-                  <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
-                  <View style={styles.buttonWrapper}>
+      <View>
+        <Text style={styles.sectionTitle}>המשימות שלי</Text>
+        {myTasks.length === 0 ? (
+          <Text style={styles.noTaskText}>אין משימות</Text>
+        ) : (
+          myTasks.map((task) => (
+            <TouchableOpacity 
+            key={task.id} 
+            style={styles.card}
+            onPress={() =>{
+              router.push({
+                pathname: "./TaskDetailsScreen",
+                params: { taskId: task.id, date: task.startDate.split("T")[0] },
+            })}}
+            >
+              <Text style={styles.taskTitle}>{task.title}</Text>
+              <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
+              <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
+              <View style={styles.buttonWrapper}>
                 <Button
-            title="בטל הרשמה"
-            color="#ff4d4d"
-            onPress={() => signOutOfTask(task.id, user.id)}
-          />
-        </View>
+                  title="בטל הרשמה"
+                  color="#ff4d4d"
+                  onPress={() => signOutOfTask(task.id, user.id)}
+                />
+              </View>
+            </TouchableOpacity>
+          ))
+        )}
       </View>
-    ))
-  )}
-</View>
 
 
-  </PageWithMenu>
+    </PageWithMenu>
 
 
 
 
 
   );
-  
+
 
 }
 
@@ -128,7 +136,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
   },
-  
+
   card: {
     backgroundColor: "#ffffff",
     borderRadius: 10,
@@ -140,22 +148,22 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  
+
   taskTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
   },
-  
+
   taskInfo: {
     fontSize: 14,
     color: "#555",
     marginBottom: 3,
   },
-  
+
   buttonWrapper: {
     marginTop: 10,
     alignItems: "flex-start",
   },
-  
+
 });
