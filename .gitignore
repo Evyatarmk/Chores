@@ -79,3 +79,4 @@ Logs/
 [Nn]etcore/
 [Nn]etcoreobj/
 /server side/Chores/Chores/bin
+*.dll
