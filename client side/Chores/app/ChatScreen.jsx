@@ -77,7 +77,7 @@ export default function ChatScreen() {
       try {
         await addDoc(collection(db, 'houses', houseId, 'messages'), newMessage);
         setInputText('');
-        // גלול מיד לאחר שליחה
+        // גלול  לאחר שליחה
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 100);
