@@ -228,7 +228,7 @@ const TaskEditScreen = () => {
       </View>
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Save Changes</Text>
+        <Text style={styles.saveButtonText}>שמור</Text>
       </TouchableOpacity>
     </ScrollView>
   );
