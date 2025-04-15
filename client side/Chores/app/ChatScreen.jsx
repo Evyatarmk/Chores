@@ -77,12 +77,24 @@ export default function ChatScreen() {
       try {
         await addDoc(collection(db, 'houses', houseId, 'messages'), newMessage);
         setInputText('');
+        // גלול מיד לאחר שליחה
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
       } catch (error) {
         console.error("Error sending message: ", error);
       }
     }
   };
-
+  useEffect(() => {
+    if (messages.length > 0 && flatListRef.current) {
+      // לחכות קצת כדי לוודא שהרנדר הסתיים
+      setTimeout(() => {
+        flatListRef.current.scrollToEnd({ animated: false });
+      }, 100);
+    }
+  }, [messages]);
+  
   const renderMessageItem = ({ item }) => {
     const isCurrentUser = item.sender === user.name;
   
@@ -120,6 +132,7 @@ export default function ChatScreen() {
           renderItem={renderMessageItem}
           keyExtractor={item => item.id}
           style={styles.messagesContainer}
+          
         />
         <View style={styles.inputContainer}>
           <TextInput
@@ -144,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     backgroundColor: '#e0e5ec',
+    
   },
   messagesContainer: {
     flex: 1,

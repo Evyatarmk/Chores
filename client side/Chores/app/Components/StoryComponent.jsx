@@ -144,6 +144,7 @@ const StoryComponent = () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images", "videos"],
       allowsEditing: true,
+      base64: false,
       quality: 1,
     });
 
@@ -156,7 +157,7 @@ const StoryComponent = () => {
         type: result.assets[0].type,  // סוג המדיה (תמונה או וידאו)
         uri: result.assets[0].uri,
         uploadDate: new Date().toISOString().split("T")[0],  // תאריך העלאה
-        uploadTime: new Date().toLocaleTimeString(),  // זמן העלאה
+        uploadTime:new Date().toTimeString().split(' ')[0], // זמן העלאה
       };
       addStory(newMedia)
     }
