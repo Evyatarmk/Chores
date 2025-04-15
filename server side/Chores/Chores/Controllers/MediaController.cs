@@ -52,15 +52,9 @@ namespace Chores.Controllers
 
 
         [HttpPost("home/{homeId}/users/{userId}/media")]
-        public async Task<IActionResult> AddMediaItem(
-    string homeId,
-    string userId,
-    [FromQuery] string uploadDate,
-    [FromQuery] string uploadTime,
-        [FromQuery] string type,
-
-    [FromForm] IFormFile mediaFile)
+        public async Task<IActionResult> AddMediaItem(string homeId, string userId, [FromForm] CreateMediaItemDto dto)
         {
+            // חיפוש הבית לפי ID
             var home = await _context.Homes
                 .Include(h => h.Users)
                 .FirstOrDefaultAsync(h => h.Id == homeId);
@@ -68,54 +62,61 @@ namespace Chores.Controllers
             if (home == null)
                 return NotFound("Home not found");
 
+            // חיפוש המשתמש לפי ID
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == userId && u.HomeId == homeId);
 
             if (user == null)
                 return NotFound("User not found in this home");
 
+            // יצירת אובייקט מדיה חדש
             var media = new MediaItem
             {
                 Id = Guid.NewGuid().ToString(),
-                Type = type,
-                UploadDate = uploadDate,
-                UploadTime = uploadTime,
+                Type = dto.Type,
+                UploadDate = dto.UploadDate,
+                UploadTime = dto.UploadTime,
                 UserId = userId
             };
 
-            if (mediaFile != null && mediaFile.Length > 0)
+            // בדיקת אם יש קובץ בתנאי הבקשה
+            if (dto.MediaFile != null && dto.MediaFile.Length > 0)
             {
                 try
                 {
+                    // יצירת תיקיית uploads אם אין כבר כזאת
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(mediaFile.FileName);
+                    // יצירת שם קובץ ייחודי
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.MediaFile.FileName);
                     var filePath = Path.Combine(uploadsFolder, fileName);
 
+                    // שמירת הקובץ בדיסק
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        await mediaFile.CopyToAsync(fileStream);
+                        await dto.MediaFile.CopyToAsync(fileStream);
                     }
 
-                    media.Uri = fileName; // שומרים את שם הקובץ
+                    // עדכון ה-URI עם המיקום החדש של הקובץ
+                    var fileUri = $"https://{Request.Host}/uploads/{fileName}";
+                    media.Uri = fileName; // שמירה רק בשם הקובץ
                 }
                 catch (Exception ex)
                 {
+                    // במקרה של שגיאה בשמירת הקובץ, מחזירים שגיאה
                     return StatusCode(500, $"Error saving media file: {ex.Message}");
                 }
             }
-            else
-            {
-                return BadRequest("Media file is required");
-            }
 
+            // הוספת המדיה למסד הנתונים
             _context.MediaItems.Add(media);
             await _context.SaveChangesAsync();
 
+            // החזרת התוצאה עם ה-URI הכולל את שם הקובץ
             var result = new
             {
                 MediaId = media.Id,

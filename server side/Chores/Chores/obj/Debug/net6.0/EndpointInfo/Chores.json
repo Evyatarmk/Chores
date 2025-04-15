@@ -859,27 +859,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "uploadDate",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "uploadTime",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "requestBody": {
@@ -888,50 +867,32 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "ContentType": {
+                  "MediaFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Type": {
                     "type": "string"
                   },
-                  "ContentDisposition": {
+                  "UploadDate": {
                     "type": "string"
                   },
-                  "Headers": {
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "Length": {
-                    "type": "integer",
-                    "format": "int64"
-                  },
-                  "Name": {
-                    "type": "string"
-                  },
-                  "FileName": {
+                  "UploadTime": {
                     "type": "string"
                   }
                 }
               },
               "encoding": {
-                "ContentType": {
+                "MediaFile": {
                   "style": "form"
                 },
-                "ContentDisposition": {
+                "Type": {
                   "style": "form"
                 },
-                "Headers": {
+                "UploadDate": {
                   "style": "form"
                 },
-                "Length": {
-                  "style": "form"
-                },
-                "Name": {
-                  "style": "form"
-                },
-                "FileName": {
+                "UploadTime": {
                   "style": "form"
                 }
               }

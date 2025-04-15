@@ -529,47 +529,22 @@
         "IsRequired": true
       },
       {
-        "Name": "uploadDate",
+        "Name": "MediaFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Type",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "uploadTime",
+        "Name": "UploadDate",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "type",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "ContentType",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "ContentDisposition",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Headers",
-        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
-        "IsRequired": false
-      },
-      {
-        "Name": "Length",
-        "Type": "System.Int64",
-        "IsRequired": false
-      },
-      {
-        "Name": "Name",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "FileName",
+        "Name": "UploadTime",
         "Type": "System.String",
         "IsRequired": false
       }

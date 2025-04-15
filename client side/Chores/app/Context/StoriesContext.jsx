@@ -89,7 +89,9 @@ export const StoriesProvider = ({ children }) => {
   const addStory = async (newStory) => {
     const userHasStory = stories.some((story) => story.userId === user?.id);
   
+    // שמירת המצב הנוכחי של סיפורים לפני עדכון
     const prevStories = [...stories];
+  
     let updatedStories;
   
     if (!userHasStory) {
@@ -111,23 +113,27 @@ export const StoriesProvider = ({ children }) => {
       });
     }
   
+    // Sort the stories after adding the new story
     updatedStories = sortStories(updatedStories);
+    console.log(updatedStories);
     setStories(updatedStories);
-    console.log("New Story URI:", newStory.uploadTime);
-
+  
+    // שליחה לשרת עם fetch
     try {
       const formData = new FormData();
       formData.append('MediaFile', {
-        uri: newStory.uri,
+        uri: newStory.uri, // או כל מידע אחר שקשור לקובץ
         name: 'mediafile', // שם קובץ אקראי
         type: 'image/jpeg', // או סוג הקובץ המתאים
       });
-  
-  
-      // תוודא שה-URL בצד הלקוח תואם לפורמט של השרת
-      const response = await fetch(`${baseUrl}/media/home/${home.id}/users/${user.id}/media?uploadDate=${newStory.uploadDate}&type=${newStory.type}&uploadTime=${newStory.uploadTime}`, {
+      formData.append('Type', newStory.type);
+      formData.append('UploadDate', newStory.uploadDate);
+      formData.append('UploadTime', newStory.uploadTime);
+      console.log("uri"+newStory.uri+'Type'+ newStory.type+'UploadDate'+ newStory.uploadDate+'UploadTime'+ newStory.uploadTime)
+      const response = await fetch(`https://localhost:7214/api/Media/home/home1/users/acc37b7d-3a52-43ae-a21f-a197babd217d/media`, {
         method: 'POST',
         body: formData,
+        
       });
   
       if (!response.ok) {
@@ -137,15 +143,17 @@ export const StoriesProvider = ({ children }) => {
       const data = await response.json();
       console.log('תמונה הועלתה בהצלחה:', data);
   
+      // עדכון הסיפורים עם המידע שהתקבל מהשרת
       const updatedStory = {
         ...newStory,
-        mediaId: data.MediaId, // עדכון עם ה-mediaId שהוחזר מהשרת
-        uri: data.Uri, // עדכון URI עם המידע שהתקבל
-        uploadDate: data.UploadDate,
-        uploadTime: data.UploadTime,
+        mediaId: data.mediaId, // עדכון עם ה-mediaId שהוחזר מהשרת
+        uri: data.uri, // עדכון URI עם המידע שהתקבל
+        uploadDate: data.uploadDate,
+        uploadTime: data.uploadTime,
       };
   
-      let updatedStoriesWithServerData = stories.map((story) => {
+      // עדכון הסיפור בסטייט
+      const updatedStoriesWithServerData = stories.map((story) => {
         if (story.userId === user?.id) {
           const updatedMedia = story.media.map((mediaItem) =>
             mediaItem.mediaId === newStory.mediaId ? updatedStory : mediaItem
@@ -155,17 +163,23 @@ export const StoriesProvider = ({ children }) => {
         return story;
       });
   
+      // Sort the stories after updating
       updatedStoriesWithServerData = sortStories(updatedStoriesWithServerData);
+  
+      // עדכון הסטייט עם המידע החדש
       setStories(updatedStoriesWithServerData);
   
     } catch (error) {
       console.error('שגיאה בהעלאת סיפור:', error);
+  
+      // החזרת המצב הקודם במקרה של שגיאה
       setStories(prevStories);
+  
+      // הצגת שגיאה למשתמש או כל טיפול אחר
       setErrorMessage("לא ניתן להוסיף סיפור, אנא נסה שוב.");
       setErrorVisible(true);
     }
   };
-  
   
   const deleteStory = async (mediaId) => {
     // שמירת ה-state הקודם של הסטוריז
