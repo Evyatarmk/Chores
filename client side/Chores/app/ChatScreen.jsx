@@ -6,62 +6,39 @@ import { db } from './FirebaseConfig';
 import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import moment from 'moment';
 import { useNotification } from './Context/NotificationContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 
 export default function ChatScreen() {
   const { user } = useUserAndHome();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
-  const flatListRef = useRef();  // Reference to the FlatList
-
+  const flatListRef = useRef();
   const { setUnreadCount } = useNotification();
 
   useEffect(() => {
     const houseId = user?.homeId || "defaultHouse";
-  
-    // כשנכנסים לצ'אט – עדכון זמן צפייה ואיפוס מונה
-    const markAsSeen = async () => {
-      await AsyncStorage.setItem(`lastSeen-${houseId}`, new Date().toISOString());
-      setUnreadCount(0);
-    };
-  
-    markAsSeen();
-  
 
     const q = query(
       collection(db, 'houses', houseId, 'messages'),
       orderBy('timestamp', 'asc')
     );
-  
-    let unsubscribe = onSnapshot(q, async (snapshot) => {
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetchedMessages = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
-  
+
       setMessages(fetchedMessages);
-  
-      const lastSeenStr = await AsyncStorage.getItem(`lastSeen-${houseId}`);
-      const lastSeen = lastSeenStr ? new Date(lastSeenStr) : new Date(0);
-  
-      const unseenCount = fetchedMessages.filter(msg => {
-        const msgTime = new Date(msg.timestamp);
-        return msgTime > lastSeen && msg.sender !== user.name;
-      }).length;
-  
-      setUnreadCount(unseenCount);
+
+      // גלילה לסוף
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: false });
+      }, 100);
     });
-  
-    return () => {
-      // כשעוזבים את הצ'אט – נעדכן את זמן היציאה
-      const now = new Date().toISOString();
-      AsyncStorage.setItem(`lastSeen-${houseId}`, now);
-      unsubscribe();
-    };
+
+    return () => unsubscribe();
   }, []);
-  
+
   const handleSend = async () => {
     if (inputText.trim()) {
       const houseId = user?.homeId || "defaultHouse";
@@ -77,43 +54,61 @@ export default function ChatScreen() {
       try {
         await addDoc(collection(db, 'houses', houseId, 'messages'), newMessage);
         setInputText('');
-        // גלול  לאחר שליחה
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
-      }, 100);
+        setTimeout(() => {
+          flatListRef.current?.scrollToEnd({ animated: true });
+        }, 100);
       } catch (error) {
         console.error("Error sending message: ", error);
       }
     }
   };
-
   const renderMessageItem = ({ item }) => {
     const isCurrentUser = item.sender === user.name;
   
+    // נשתמש בתמונה מההודעה, ואם אין – ננסה לשלוף מהקונטקסט או ברירת מחדל
+    const senderImage =
+      item.senderImage ||
+      (isCurrentUser ? user.profilePicture : null) ||
+      'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+  
     return (
-      <View style={[
-        styles.messageRow,
-        isCurrentUser ? styles.sentRow : styles.receivedRow
-      ]}>
+      <View
+        style={[
+          styles.messageRow,
+          isCurrentUser ? styles.sentRow : styles.receivedRow,
+        ]}
+      >
         {!isCurrentUser && (
-          <Image source={{ uri: item.senderImage }} style={styles.profilePic} />
+          <Image
+            source={{ uri: senderImage }}
+            style={styles.profilePic}
+          />
         )}
-        <View style={[
-          styles.messageBubble,
-          isCurrentUser ? styles.sentMessage : styles.receivedMessage
-        ]}>
+  
+        <View
+          style={[
+            styles.messageBubble,
+            isCurrentUser ? styles.sentMessage : styles.receivedMessage,
+          ]}
+        >
           <Text style={styles.senderName}>{item.sender}</Text>
           <Text style={styles.messageText}>{item.text}</Text>
           <Text style={styles.timestamp}>
-            {moment(item.timestamp).format('HH:mm')} {/* You can change format */}
+            {moment(item.timestamp).format('HH:mm')}
           </Text>
         </View>
+  
         {isCurrentUser && (
-          <Image source={{ uri: item.senderImage }} style={styles.profilePic} />
+          <Image
+            source={{ uri: senderImage }}
+            style={styles.profilePic}
+          />
         )}
       </View>
     );
   };
+  
+
 
   return (
     <PageWithMenu>
@@ -124,6 +119,9 @@ export default function ChatScreen() {
           renderItem={renderMessageItem}
           keyExtractor={item => item.id}
           style={styles.messagesContainer}
+          onContentSizeChange={() => {
+            flatListRef.current?.scrollToEnd({ animated: false });
+          }}
         />
         <View style={styles.inputContainer}>
           <TextInput
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   messageBubble: {
-    flexDirection: 'column', // Stack sender name above the message text
+    flexDirection: 'column',
     padding: 10,
     marginVertical: 4,
     backgroundColor: '#d1d8e0',
@@ -163,13 +161,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   profilePic: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 10,
-  },
-  textContainer: {
-    flex: 1,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginHorizontal: 8,
+    resizeMode: 'cover',
+    backgroundColor: '#ccc',
   },
   messageText: {
     color: '#2c3e50',
@@ -185,7 +182,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderTopWidth: 1,
     borderColor: '#bdc3c7',
-    borderBottomWidth:10,
+    borderBottomWidth: 10,
   },
   input: {
     flex: 1,
@@ -199,9 +196,10 @@ const styles = StyleSheet.create({
   },
   messageRow: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    marginVertical: 4,
+    alignItems: 'flex-start', // כדי שהתמונה תהיה למעלה
+    marginVertical: 6,
   },
+  
   sentRow: {
     justifyContent: 'flex-end',
   },
@@ -212,7 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4, // Give a little more space between name and message
+    marginBottom: 4,
   },
   sentMessage: {
     backgroundColor: '#dcf8c6',
