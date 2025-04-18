@@ -241,14 +241,15 @@ const login = async (email, password) => {
   };
 
   const updateUser = async (newName, newPicture) => {
+    console.log(user.id,newName, newPicture)
     try {
-      const response = await fetch(`${baseUrl}/Users/editUserProfilePic&Name/`, {
+      const response = await fetch(`${baseUrl}/Users/editUserProfilePic&Name`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Id: user.Id,
+          Id: user.id,
           Name: newName,
           profilePicture: newPicture,
         }),
