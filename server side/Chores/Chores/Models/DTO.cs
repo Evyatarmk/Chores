@@ -104,6 +104,11 @@
         public string UserId { get; set; }
     }
 
-
+    public class UserUpdateDto
+    {
+        public string Id { get; set; } // <-- You need the user's ID to find the user
+        public string Name { get; set; }
+        public string ProfilePicture { get; set; }
+    }
 
 }

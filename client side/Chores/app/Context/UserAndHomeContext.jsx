@@ -239,9 +239,36 @@ const login = async (email, password) => {
   const updateHome = (updatedHome) => {
     setHome(updatedHome);
   };
-  const updateUser = (newName,newPicture) => {
-    setUser((prev)=>({...prev,name:newName,profilePicture:newPicture}));
+
+  const updateUser = async (newName, newPicture) => {
+    try {
+      const response = await fetch(`${baseUrl}/Users/editUserProfilePic&Name/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Id: user.Id,
+          Name: newName,
+          profilePicture: newPicture,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update user');
+      }
+  
+      setUser(prev => ({
+        ...prev,
+        name: newName,
+        profilePicture: newPicture
+      }));
+  
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
   };
+  
 
 
   return (

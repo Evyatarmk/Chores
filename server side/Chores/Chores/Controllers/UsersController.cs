@@ -369,7 +369,40 @@ namespace Chores.Controllers
             });
         }
 
+
+        [HttpPut("editUserProfilePic&Name")]
+        public async Task<IActionResult> EditUserProfile([FromBody] UserUpdateDto userUpdate)
+        {
+            if (userUpdate == null)
+            {
+                return BadRequest("Invalid user update data.");
+            }
+
+            var user = await _context.Users.FindAsync(userUpdate.Id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            user.Name = userUpdate.Name;
+            user.ProfilePicture = userUpdate.ProfilePicture;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok("User updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
+
     }
+
+ 
 
     public class RefreshRequest
     {

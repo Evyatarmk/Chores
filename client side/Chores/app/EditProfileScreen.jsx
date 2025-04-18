@@ -25,6 +25,7 @@ const EditProfileScreen = () => {
     router.push("/ProfileScreen");  // Redirect back to profile screen
   };
 
+  
   const handleImageChange = async () => {
     // בקשה להרשאות לגישה לגלריה ולמצלמה
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
