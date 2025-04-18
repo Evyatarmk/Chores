@@ -6,6 +6,7 @@ import { db } from './FirebaseConfig';
 import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import moment from 'moment';
 import { useNotification } from './Context/NotificationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ChatScreen() {
   const { user } = useUserAndHome();
@@ -16,28 +17,51 @@ export default function ChatScreen() {
 
   useEffect(() => {
     const houseId = user?.homeId || "defaultHouse";
-
+  
+    // כשנכנסים לצ'אט – עדכון זמן צפייה ואיפוס מונה
+    const markAsSeen = async () => {
+      await AsyncStorage.setItem(`lastSeen-${houseId}`, new Date().toISOString());
+      setUnreadCount(0);
+    };
+  
+    markAsSeen();
+  
     const q = query(
       collection(db, 'houses', houseId, 'messages'),
       orderBy('timestamp', 'asc')
     );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+  
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
       const fetchedMessages = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
-
+  
       setMessages(fetchedMessages);
-
+  
+      const lastSeenStr = await AsyncStorage.getItem(`lastSeen-${houseId}`);
+      const lastSeen = lastSeenStr ? new Date(lastSeenStr) : new Date(0);
+  
+      const unseenCount = fetchedMessages.filter(msg => {
+        const msgTime = new Date(msg.timestamp);
+        return msgTime > lastSeen && msg.sender !== user.name;
+      }).length;
+  
+      setUnreadCount(unseenCount);
+  
       // גלילה לסוף
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: false });
       }, 100);
     });
-
-    return () => unsubscribe();
+  
+    return () => {
+      const now = new Date().toISOString();
+      AsyncStorage.setItem(`lastSeen-${houseId}`, now);
+      unsubscribe();
+    };
   }, []);
+  
 
   const handleSend = async () => {
     if (inputText.trim()) {
