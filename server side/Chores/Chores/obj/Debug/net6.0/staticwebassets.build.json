@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "A4kDDQIvS8TLfwB4j9fxG+sOB5NW2qYdEI3Aq3WZlN4=",
+  "Hash": "T/BRaY+uMz9ttDAgsN6i3VoqHirj/PFGMtCcwCcrVpI=",
   "Source": "Chores",
   "BasePath": "_content/Chores",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Chores\\wwwroot",
+      "Source": "Chores",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }

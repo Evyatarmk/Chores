@@ -48,24 +48,38 @@ export default function HomePageScreen() {
           <Text style={styles.noTaskText}>אין משימות</Text>
         ) : (
           myTasks.map((task) => (
-            <TouchableOpacity 
-            key={task.id} 
-            style={styles.card}
-            onPress={() =>{
-              router.push({
-                pathname: "./TaskDetailsScreen",
-                params: { taskId: task.id, date: task.startDate.split("T")[0] },
-            })}}
+            <TouchableOpacity
+              key={task.id}
+              style={styles.card}
+              onPress={() => {
+                router.push({
+                  pathname: "./TaskDetailsScreen",
+                  params: { taskId: task.id, date: task.startDate.split("T")[0] },
+                })
+              }}
             >
               <Text style={styles.taskTitle}>{task.title}</Text>
               <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
               <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
-              <View style={styles.buttonWrapper}>
-                <Button
-                  title="בטל הרשמה"
-                  color="#ff4d4d"
-                  onPress={() => signOutOfTask(task.id, user.id)}
-                />
+                <View style={styles.buttonWrapper}>
+                  {/* כפתור ביטול הרשמה */}
+                  <View style={[styles.buttonContainer, task.category === "משימה" && styles.withMargin]}>
+                    <Button
+                      title="בטל הרשמה"
+                      color="#ff4d4d"
+                      onPress={() => signOutOfTask(task.id, user.id)}
+                    />
+                  </View>
+                  {/* כפתור סמן כבוצע - רק אם הקטגוריה היא "משימה" */}
+                  {task.category === "משימה" && (
+                    <View style={styles.buttonContainer}>
+                      <Button
+                        title="סמן כבוצע"
+                        color="#4CAF50"
+                        onPress={() => markTaskAsCompleted(task.id, user.id)}
+                      />
+                    </View>
+                  )}
               </View>
             </TouchableOpacity>
           ))
@@ -163,7 +177,19 @@ const styles = StyleSheet.create({
 
   buttonWrapper: {
     marginTop: 10,
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
+
+  buttonContainer: {
+    flex: 1,
+  },
+
+  withMargin: {
+    marginRight: 10,
+  },
+
+
 
 });

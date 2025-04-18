@@ -18,7 +18,7 @@ const TasksListScreen = () => {
 
   const router = useRouter();
   const optionsModalRef = useRef(null);
-  const editModalRef= useRef(null)
+  const editModalRef = useRef(null)
   const [currentList, setCurrentList] = useState(null);
   const { user } = useUserAndHome()
   const options = [
@@ -36,15 +36,16 @@ const TasksListScreen = () => {
       setModalDeleteVisible(true)
     }
   };
-  
+
   const handleEdit = () => {
     router.push({
       pathname: "./TaskEditScreen",
-      params: { taskId: currentList.id, date: selectedDate }  })
+      params: { taskId: currentList.id, date: selectedDate }
+    })
   };
   const handleDelete = () => {
     optionsModalRef.current?.close();
-    removeTaskForDate( currentList.id)
+    removeTaskForDate(currentList.id)
   };
   const openOptionsPanel = (list) => {
     setCurrentList(list);
@@ -54,44 +55,44 @@ const TasksListScreen = () => {
 
   const renderMarkedDates = () => {
     const markedDates = {};
-  
+
     Object.keys(tasks).forEach((dateKey) => {
       tasks[dateKey].forEach((task) => {
         const startDate = new Date(task.startDate);
         const endDate = new Date(task.endDate);
         const startDateStr = startDate.toISOString().split('T')[0];
         const endDateStr = endDate.toISOString().split('T')[0];
-  
+
         const color = task.color || '#2196F3'; // צבע קבוע מהמשימה
-  
+
         let current = new Date(startDate);
-  
+
         while (current <= endDate) {
           const dateStr = current.toISOString().split('T')[0];
-  
+
           const period = {
             startingDay: dateStr === startDateStr,
             endingDay: dateStr === endDateStr,
             color: color,
             textColor: 'white',
           };
-  
+
           if (!markedDates[dateStr]) {
             markedDates[dateStr] = { periods: [period] };
           } else {
             markedDates[dateStr].periods.push(period);
           }
-  
+
           current.setDate(current.getDate() + 1);
         }
       });
     });
-  
+
     return markedDates;
   };
-  
 
-  
+
+
 
 
   return (
@@ -100,11 +101,11 @@ const TasksListScreen = () => {
         <NormalHeader title="המשימות של הבית"></NormalHeader>
         {/* יומן להצגת התאריכים */}
         <Calendar
-         markedDates={renderMarkedDates()}
+          markedDates={renderMarkedDates()}
           markingType={"multi-period"}
           onDayPress={(day) => {
             setSelectedDate(day.dateString);
-           
+
           }}
           theme={{
             selectedDayBackgroundColor: "#1E90FF",
@@ -119,7 +120,7 @@ const TasksListScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
             const isUserRegistered = item.participants.some(participant => participant.id === user?.id); // כאן אתה בודק אם המשתמש רשום, תחליף ב-id של המשתמש שלך
-console.log(item.category)
+            console.log(item.category)
             return (
               <TouchableOpacity
                 style={styles.taskItem}
@@ -134,36 +135,47 @@ console.log(item.category)
                 <Text style={styles.taskDescription}>{item.description}</Text>
 
                 {item.category === "אירוע" ? (
-  isUserRegistered ? (
-    <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
-      <Text style={styles.registerText}>בטל הרשמה</Text>
-    </TouchableOpacity>
-  ) : (
-    <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
-      <Text style={styles.registerText}>הירשם לאירוע</Text>
-    </TouchableOpacity>
-  )
-) : (
-  item.participants.length < item.maxParticipants ? (
-    isUserRegistered ? (
-      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
-        <Text style={styles.registerText}>בטל הרשמה</Text>
-      </TouchableOpacity>
-    ) : (
-      <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
-        <Text style={styles.registerText}>הירשם למשימה</Text>
-      </TouchableOpacity>
-    )
-  ) : (
-    isUserRegistered && (
-      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
-        <Text style={styles.registerText}>בטל הרשמה</Text>
-      </TouchableOpacity>
-    )
-  )
-)}
+                  isUserRegistered ? (
+                    <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
+                      <Text style={styles.registerText}>בטל הרשמה</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
+                      <Text style={styles.registerText}>הירשם לאירוע</Text>
+                    </TouchableOpacity>
+                  )
+                ) : (
+                  item.participants.length < item.maxParticipants ? (
+                    isUserRegistered ? (
+                      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
+                        <Text style={styles.registerText}>בטל הרשמה</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
+                        <Text style={styles.registerText}>הירשם למשימה</Text>
+                      </TouchableOpacity>
+                    )
+                  ) : (
+                    isUserRegistered && (
+                      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
+                        <Text style={styles.registerText}>בטל הרשמה</Text>
+                      </TouchableOpacity>
+                    )
+                  )
+                )}
+                {isUserRegistered && !item.completedAt && item.category === "משימה" && (
+                  <TouchableOpacity
+                    onPress={async () => {
+                      await markTaskAsCompleted(item.id, user.id);
+                    }}
+                    style={[styles.registerButton, { backgroundColor: "#2196F3", marginTop: 10 }]}
+                  >
+                    <Text style={styles.registerText}>סמן כבוצע</Text>
+                  </TouchableOpacity>
+                )}
 
-            
+
+
 
                 <TouchableOpacity
                   style={styles.optionsButton}
@@ -200,13 +212,13 @@ console.log(item.category)
           options={options}
         />
         <AlertModal
-                visible={modalDeleteVisible}
-                onClose={() => setModalDeleteVisible(false)}
-                message="האם אתה בטוח שברצונך למחוק פריטים אלו?"
-                onConfirm={handleDelete}
-                confirmText="מחק"
-                cancelText="ביטול"
-              />
+          visible={modalDeleteVisible}
+          onClose={() => setModalDeleteVisible(false)}
+          message="האם אתה בטוח שברצונך למחוק פריטים אלו?"
+          onConfirm={handleDelete}
+          confirmText="מחק"
+          cancelText="ביטול"
+        />
       </GestureHandlerRootView>
     </PageWithMenu>
   );
@@ -215,7 +227,7 @@ console.log(item.category)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
+
   },
   taskItem: {
     padding: 16,
@@ -232,19 +244,19 @@ const styles = StyleSheet.create({
   taskTitle: {
     textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10
   },
-  taskDescription: { 
-    textAlign: "right", 
-    fontSize: 14, 
-    color: "#888", 
+  taskDescription: {
+    textAlign: "right",
+    fontSize: 14,
+    color: "#888",
     paddingBottom: 8,  // Adjust padding for better spacing
   },
-  optionsButton: { 
-    position: "absolute", 
-    top: 12, 
-    left: 2, 
-    padding: 8, 
-    borderRadius: 25, 
-    zIndex: 1000 
+  optionsButton: {
+    position: "absolute",
+    top: 12,
+    left: 2,
+    padding: 8,
+    borderRadius: 25,
+    zIndex: 1000
   },
   button: {
     padding: 10,
