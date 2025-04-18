@@ -140,29 +140,39 @@ export default function ChatScreen() {
   return (
     <PageWithMenu>
       <View style={styles.container}>
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          renderItem={renderMessageItem}
-          keyExtractor={item => item.id}
-          style={styles.messagesContainer}
-          onContentSizeChange={() => {
-            flatListRef.current?.scrollToEnd({ animated: false });
-          }}
-        />
-        <View style={styles.inputContainer}>
-          <TextInput
-            value={inputText}
-            onChangeText={setInputText}
-            placeholder="Type a message..."
-            style={styles.input}
-          />
-          <Button
-            title="Send"
-            onPress={handleSend}
-            color="#075E54"
-          />
-        </View>
+        {!user ? (
+          <View style={styles.centeredMessage}>
+            <Text style={styles.notLoggedInText}>יש להתחבר על מנת להשתמש בצ'אט</Text>
+          </View>
+        ) : (
+          <>
+            {/* FlatList וכל הצ'אט הרגיל */}
+            <FlatList
+              ref={flatListRef}
+              data={messages}
+              renderItem={renderMessageItem}
+              keyExtractor={item => item.id}
+              style={styles.messagesContainer}
+              onContentSizeChange={() => {
+                flatListRef.current?.scrollToEnd({ animated: false });
+              }}
+            />
+  
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={inputText}
+                onChangeText={setInputText}
+                placeholder="Type a message..."
+                style={styles.input}
+              />
+              <Button
+                title="Send"
+                onPress={handleSend}
+                color="#075E54"
+              />
+            </View>
+          </>
+        )}
       </View>
     </PageWithMenu>
   );
@@ -255,4 +265,15 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
+  centeredMessage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  notLoggedInText: {
+    fontSize: 18,
+    color: '#555',
+    textAlign: 'center',
+  },  
 });
