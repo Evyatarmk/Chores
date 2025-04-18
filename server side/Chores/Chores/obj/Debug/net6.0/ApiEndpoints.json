@@ -758,6 +758,22 @@
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "EditUserProfile",
+    "RelativePath": "api/Users/editUserProfilePic\u0026Name",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userUpdate",
+        "Type": "Chores.Models.UserUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "Login",
     "RelativePath": "api/Users/login",
     "HttpMethod": "POST",

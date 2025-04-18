@@ -17,51 +17,51 @@ export default function ChatScreen() {
 
   useEffect(() => {
     const houseId = user?.homeId || "defaultHouse";
-  
+
     // כשנכנסים לצ'אט – עדכון זמן צפייה ואיפוס מונה
     const markAsSeen = async () => {
       await AsyncStorage.setItem(`lastSeen-${houseId}`, new Date().toISOString());
       setUnreadCount(0);
     };
-  
+
     markAsSeen();
-  
+
     const q = query(
       collection(db, 'houses', houseId, 'messages'),
       orderBy('timestamp', 'asc')
     );
-  
+
     const unsubscribe = onSnapshot(q, async (snapshot) => {
       const fetchedMessages = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
-  
+
       setMessages(fetchedMessages);
-  
+
       const lastSeenStr = await AsyncStorage.getItem(`lastSeen-${houseId}`);
       const lastSeen = lastSeenStr ? new Date(lastSeenStr) : new Date(0);
-  
+
       const unseenCount = fetchedMessages.filter(msg => {
         const msgTime = new Date(msg.timestamp);
         return msgTime > lastSeen && msg.sender !== user.name;
       }).length;
-  
+
       setUnreadCount(unseenCount);
-  
+
       // גלילה לסוף
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: false });
       }, 100);
     });
-  
+
     return () => {
       const now = new Date().toISOString();
       AsyncStorage.setItem(`lastSeen-${houseId}`, now);
       unsubscribe();
     };
   }, []);
-  
+
 
   const handleSend = async () => {
     if (inputText.trim()) {
@@ -69,6 +69,7 @@ export default function ChatScreen() {
 
       const newMessage = {
         text: inputText,
+        senderId: user.id,
         sender: user.name,
         senderImage: user.profilePicture,
         timestamp: new Date().toISOString(),
@@ -87,14 +88,16 @@ export default function ChatScreen() {
     }
   };
   const renderMessageItem = ({ item }) => {
-    const isCurrentUser = item.sender === user.name;
-  
+    const isCurrentUser = item.senderId === user.id;
+    const displayName = isCurrentUser ? user.name : item.sender;
+
+
     // נשתמש בתמונה מההודעה, ואם אין – ננסה לשלוף מהקונטקסט או ברירת מחדל
     const senderImage =
       item.senderImage ||
       (isCurrentUser ? user.profilePicture : null) ||
       'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
-  
+
     return (
       <View
         style={[
@@ -108,20 +111,20 @@ export default function ChatScreen() {
             style={styles.profilePic}
           />
         )}
-  
+
         <View
           style={[
             styles.messageBubble,
             isCurrentUser ? styles.sentMessage : styles.receivedMessage,
           ]}
         >
-          <Text style={styles.senderName}>{item.sender}</Text>
+          <Text style={styles.senderName}>{displayName}</Text>
           <Text style={styles.messageText}>{item.text}</Text>
           <Text style={styles.timestamp}>
             {moment(item.timestamp).format('HH:mm')}
           </Text>
         </View>
-  
+
         {isCurrentUser && (
           <Image
             source={{ uri: senderImage }}
@@ -131,7 +134,7 @@ export default function ChatScreen() {
       </View>
     );
   };
-  
+
 
 
   return (
@@ -223,7 +226,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start', // כדי שהתמונה תהיה למעלה
     marginVertical: 6,
   },
-  
+
   sentRow: {
     justifyContent: 'flex-end',
   },
