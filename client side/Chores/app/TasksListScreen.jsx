@@ -21,6 +21,11 @@ const TasksListScreen = () => {
   const editModalRef = useRef(null)
   const [currentList, setCurrentList] = useState(null);
   const { user } = useUserAndHome()
+  const categoryColors = {
+    משימה: "#42A5F5", // כחול נעים
+    אירוע: "#AB47BC", // סגול רך
+  };
+  const DEFAULT_CATEGORY_COLOR = "#90CAF9"; // צבע ברירת מחדל  
   const options = [
     { icon: "edit", text: "ערוך", action: "edit" },
     { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
@@ -55,41 +60,50 @@ const TasksListScreen = () => {
 
   const renderMarkedDates = () => {
     const markedDates = {};
-
+  
     Object.keys(tasks).forEach((dateKey) => {
       tasks[dateKey].forEach((task) => {
         const startDate = new Date(task.startDate);
         const endDate = new Date(task.endDate);
         const startDateStr = startDate.toISOString().split('T')[0];
         const endDateStr = endDate.toISOString().split('T')[0];
-
-        const color = task.color || '#2196F3'; // צבע קבוע מהמשימה
-
+  
+        const color = categoryColors[task.category] || DEFAULT_CATEGORY_COLOR;
+  
         let current = new Date(startDate);
-
+  
         while (current <= endDate) {
           const dateStr = current.toISOString().split('T')[0];
-
+  
           const period = {
             startingDay: dateStr === startDateStr,
             endingDay: dateStr === endDateStr,
             color: color,
             textColor: 'white',
           };
-
+  
           if (!markedDates[dateStr]) {
             markedDates[dateStr] = { periods: [period] };
           } else {
             markedDates[dateStr].periods.push(period);
           }
-
+  
           current.setDate(current.getDate() + 1);
         }
       });
     });
-
+  
+    // 🎯 הוספת היום שנבחר כ-selected
+    if (!markedDates[selectedDate]) {
+      markedDates[selectedDate] = {};
+    }
+    markedDates[selectedDate].selected = true;
+    markedDates[selectedDate].selectedColor = "#42A5F5"; // צבע הבחירה שאת רוצה
+    markedDates[selectedDate].selectedTextColor = "#fff";
+  
     return markedDates;
   };
+  
 
 
 
