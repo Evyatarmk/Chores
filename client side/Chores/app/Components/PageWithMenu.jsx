@@ -51,7 +51,7 @@ const PageWithMenu = (props) => {
     { screen: "/ListsScreen", label: "רשימת קניות" },
     { screen: "/TasksListScreen", label: "משימות" },
     { screen: "/ProfileScreen", label: "אזור אישי" },
-    { screen: "/settings", label: "הגדרות" },
+    { screen: "/SettingsScreen", label: "הגדרות" },
     { screen: "/ChatScreen", label: "צ'אט" },
     user
       ? { screen: "/Logout", label: "התנתק" }

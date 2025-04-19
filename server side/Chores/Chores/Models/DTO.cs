@@ -111,4 +111,11 @@
         public string ProfilePicture { get; set; }
     }
 
+    public class LeaveHomeDto
+    {
+        public string UserId { get; set; }
+    }
 }
+
+
+

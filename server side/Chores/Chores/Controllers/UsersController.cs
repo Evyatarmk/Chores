@@ -35,7 +35,7 @@ namespace Chores.Controllers
                 return BadRequest("Password must be at least 8 characters long.");
 
             // בדיקה אם המייל קיים
-            if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email))
+            if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email && u.HomeId != null))
             {
                 return BadRequest("Email already exists.");
             }
@@ -128,7 +128,7 @@ namespace Chores.Controllers
             var newHome = new Home
             {
                 Id = Guid.NewGuid().ToString(),
-                Name =  request.HomeName,
+                Name = request.HomeName,
                 Users = new List<User>(),
                 Code = await GenerateUniqueHomeCodeAsync(),
 
@@ -267,7 +267,7 @@ namespace Chores.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshRequest.RefreshToken);
 
-            if (user == null )
+            if (user == null)
             {
                 return Unauthorized("Invalid or expired refresh token.");
             }
@@ -398,24 +398,40 @@ namespace Chores.Controllers
             }
         }
 
+        [HttpDelete("leaveHome")]
+        public async Task<IActionResult> LeaveHome([FromBody] LeaveHomeDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.UserId))
+                return BadRequest("User ID is required.");
+
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if (user == null)
+                return NotFound("User not found.");
+
+            if (string.IsNullOrEmpty(user.HomeId))
+                return BadRequest("User is not associated with a home.");
+
+            user.HomeId = null;
+            await _context.SaveChangesAsync();
+
+            return Ok("התנתקת מהבית בהצלחה.");
+        }
 
 
-    }
 
- 
-
-    public class RefreshRequest
-    {
-        public string RefreshToken { get; set; }
-    }
-    public class RegisterWithExistingHomeRequest
-    {
-        public RegisterRequest RegisterUser { get; set; }
-        public string HomeCode { get; set; }
-    }
-    public class RegisterWithNewHomeRequest
-    {
-        public RegisterRequest RegisterUser { get; set; }
-        public string HomeName { get; set; }
+        public class RefreshRequest
+        {
+            public string RefreshToken { get; set; }
+        }
+        public class RegisterWithExistingHomeRequest
+        {
+            public RegisterRequest RegisterUser { get; set; }
+            public string HomeCode { get; set; }
+        }
+        public class RegisterWithNewHomeRequest
+        {
+            public RegisterRequest RegisterUser { get; set; }
+            public string HomeName { get; set; }
+        }
     }
 }
