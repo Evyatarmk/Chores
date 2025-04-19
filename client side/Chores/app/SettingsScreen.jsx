@@ -2,21 +2,56 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import PageWithMenu from "./Components/PageWithMenu";
+import { useApiUrl } from "./Context/ApiUrlProvider";
 
 const SettingsScreen = () => {
   const { user, home, joinHome, setHome, setUser, leaveHome } = useUserAndHome();
   const [joinCode, setJoinCode] = useState("");
+  const { baseUrl } = useApiUrl();
+
 
   const handleJoinHome = async () => {
-    if (!joinCode.trim()) return;
+    if (!joinCode.trim()) return; // If joinCode is empty, return early
+  
+    try {
+      // Make the POST request to join the home
+      const response = await fetch(`${baseUrl}/Users/updateHomeId`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          homeCode: joinCode.trim(),
+        }),
+      });
+  
+      // Check if the response is OK (status 200)
+      if (!response.ok) {
+        const errorData = await response.json();
+      alert("שגיאה", errorData.message || "קוד לא תקין או שהצטרפות נכשלה");
+        return;
+      }
+  
+      // If the request is successful
+      const data = await response.json();
+  console.log(data)
+      // Assuming the data returned contains a success flag or user info
+      if (data.success) {
+        setJoinCode(""); // Clear the join code
 
-    const success = await joinHome(joinCode.trim(), user);
-    if (!success) {
-      Alert.alert("שגיאה", "קוד לא תקין או שהצטרפות נכשלה");
-    } else {
-      setJoinCode("");
+        setUser(data.user); 
+       alert("הצטרפת בהצלחה לבית!");
+      } else {
+       alert("שגיאה", "הצטרפות נכשלה");
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error("Error joining home:", error);
+      Alert.alert("שגיאה", "אירעה שגיאה, אנא נסה שוב.");
     }
   };
+  
 
 
   return (
@@ -30,6 +65,7 @@ const SettingsScreen = () => {
         <TouchableOpacity style={styles.leaveButton} onPress={() => leaveHome(user?.id)}>
           <Text style={styles.buttonText}>התנתק מהבית</Text>
         </TouchableOpacity>
+
 
 
         <Text style={styles.label}>הצטרפות לבית חדש לפי קוד:</Text>

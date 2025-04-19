@@ -7,32 +7,6 @@ import ErrorNotification from "../Components/ErrorNotification";
 
 const UserAndHomeContext = createContext();
 
-const mockUser = {
-  id: "t",
-  name: "אביתר",
-  email: "itaigalipo@gmail.com",
-  password: "12345678",
-  homeId: "home1",
-  role: "admin",
-  profilePicture: "https://www.coaching-center.co.il/wp-content/uploads/2014/12/%D7%90%D7%99%D7%A9_%D7%9E%D7%9B%D7%99%D7%A8%D7%95%D7%AA_coaching_center.jpg",
-  tasksStats: {
-    completedTasksByMonth: {
-      1: 10,
-      2: 8,
-      3: 12,
-    },
-    totalCompletedTasks: 30,
-  },
-};
-const mockHome = {
-  id: "123",
-  name: "הבית של אביתר",
-  code: "12345678",
-  members: [
-    { id: "1", name: "אביתר", role: "admin", publicId: 1 }, // אביתר הוא המנהל
-    { id: "2", name: "דני", role: "user", publicId: 2 }, // דני הוא חבר רגיל
-  ]
-};
 
 export const UserAndHomeProvider = ({ children }) => {
   const { baseUrl } = useApiUrl();
@@ -294,7 +268,7 @@ export const UserAndHomeProvider = ({ children }) => {
       }));
 
       console.log("התנתקת מהבית בהצלחה.");
-      // ✅ ניתוב לעמוד בחירת או יצירת בית
+      
       router.replace("/JoinOrCreateHomeScreen");
     } catch (error) {
       console.error("שגיאה בהתנתקות מהבית:", error.message);

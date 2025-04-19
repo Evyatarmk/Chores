@@ -7,6 +7,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using System.Security.Claims;
 
 
 namespace Chores.Controllers
@@ -35,7 +36,7 @@ namespace Chores.Controllers
                 return BadRequest("Password must be at least 8 characters long.");
 
             // בדיקה אם המייל קיים
-            if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email && u.HomeId != null))
+            if (await _context.Users.AnyAsync(u => u.Email == request.RegisterUser.Email))
             {
                 return BadRequest("Email already exists.");
             }
@@ -207,16 +208,16 @@ namespace Chores.Controllers
                 return Unauthorized("Invalid email or password.");
             }
 
-            // יצירת טוקן גישה ו-refresh token
+            // Create access and refresh tokens
             var accessToken = _tokenService.GenerateAccessToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
-            // עדכון המשתמש עם ה-refresh token במסד הנתונים
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1); // תוקף לשנה
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1);
             await _context.SaveChangesAsync();
 
-            // המרת המידע ל-DTO
+            await _context.Entry(user).ReloadAsync();
+
             var userDto = new UserDto
             {
                 Id = user.Id,
@@ -224,33 +225,34 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId,
-                ProfilePicture = user.ProfilePicture // אם יש תמונת פרופיל
+                ProfilePicture = user.ProfilePicture
             };
 
-            // שליפת הבית של המשתמש
-            var home = await _context.Homes.Include(h => h.Users)
-                                           .FirstOrDefaultAsync(h => h.Id == user.HomeId);
+            HomeDto homeDto = null;
 
-            if (home == null)
+            if (user.HomeId != null)
             {
-                return NotFound("Home not found.");
+                var home = await _context.Homes
+                    .Include(h => h.Users)
+                    .FirstOrDefaultAsync(h => h.Id == user.HomeId);
+
+                if (home != null)
+                {
+                    homeDto = new HomeDto
+                    {
+                        Id = home.Id,
+                        Name = home.Name,
+                        Code = home.Code,
+                        Members = home.Users.Select(u => new MemberDto
+                        {
+                            Name = u.Name,
+                            Role = u.Role,
+                            PublicId = u.PublicId
+                        }).ToList()
+                    };
+                }
             }
 
-            // המרת רשימת החברים לבית ל-MemberDto
-            var homeDto = new HomeDto
-            {
-                Id = home.Id,
-                Name = home.Name,
-                Code = home.Code,
-                Members = home.Users.Select(u => new MemberDto
-                {
-                    Name = u.Name,
-                    Role = u.Role,
-                    PublicId = u.PublicId
-                }).ToList()
-            };
-
-            // החזרת המידע
             return Ok(new
             {
                 accessToken,
@@ -396,6 +398,57 @@ namespace Chores.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+
+        [HttpPut("updateHomeId")]
+        public async Task<IActionResult> UpdateHomeId([FromBody] UpdateHomeRequest updateHomeRequest)
+        {
+            if (updateHomeRequest == null || string.IsNullOrWhiteSpace(updateHomeRequest.UserId))
+            {
+                return BadRequest("UserId is required.");
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == updateHomeRequest.UserId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (updateHomeRequest.HomeCode != null)
+            {
+                // If the HomeCode is provided, try to find the corresponding home
+                var home = await _context.Homes.FirstOrDefaultAsync(h => h.Code == updateHomeRequest.HomeCode);
+
+                if (home == null)
+                {
+                    return NotFound("Home not found.");
+                }
+
+                // Update the user's HomeId to the found home's ID
+                user.HomeId = home.Id;
+            }
+            else
+            {
+                // If HomeCode is null, update the user's HomeId to null
+                user.HomeId = null;
+            }
+
+            await _context.SaveChangesAsync(); // Save changes to the database
+
+            // Return success with the updated user data
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                HomeId = user.HomeId, // Return updated HomeId (could be null)
+                ProfilePicture = user.ProfilePicture
+            };
+
+            return Ok(new { success = true, message = "Home updated successfully.", user = userDto });
         }
 
         [HttpDelete("leaveHome")]

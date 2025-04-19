@@ -16,7 +16,11 @@ export default function ChatScreen() {
   const { setUnreadCount } = useNotification();
 
   useEffect(() => {
-    const houseId = user?.homeId || "defaultHouse";
+    const houseId = user?.homeId;
+    if (!houseId) {
+      console.warn("User has no house. Skipping chat loading.");
+      return;
+    }
 
     // כשנכנסים לצ'אט – עדכון זמן צפייה ואיפוס מונה
     const markAsSeen = async () => {

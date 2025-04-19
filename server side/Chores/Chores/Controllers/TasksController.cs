@@ -78,6 +78,18 @@ namespace Chores.Controllers
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetTasksForUser(string userId)
         {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+          
+            if (user.HomeId == null)
+            {
+                return BadRequest("User is not part of a home. No tasks available.");
+            }
+
             var tasks = await _context.Tasks
                 .Where(t => t.Participants.Any(p => p.Id == userId))
                 .Select(t => new
@@ -93,6 +105,7 @@ namespace Chores.Controllers
 
             return Ok(tasks);
         }
+
 
 
 

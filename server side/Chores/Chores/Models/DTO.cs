@@ -115,6 +115,13 @@
     {
         public string UserId { get; set; }
     }
+
+    public class UpdateHomeRequest
+    {
+        public string UserId { get; set; }  
+        public string HomeCode { get; set; }
+    }
+
 }
 
 
