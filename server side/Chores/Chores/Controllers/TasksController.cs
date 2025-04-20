@@ -82,7 +82,7 @@ namespace Chores.Controllers
             var today = DateTime.UtcNow.Date;
             var oneMonthFromNow = today.AddDays(30);
 
-            // בדוק אם הבית קיים וכולל משימות ופרטי המשתתפים
+            // בדיקה אם הבית קיים כולל משימות ומשתתפים
             var home = await _context.Homes
                 .Include(h => h.Tasks)
                 .ThenInclude(t => t.Participants)
@@ -93,27 +93,35 @@ namespace Chores.Controllers
                 return NotFound($"Home with ID '{homeId}' was not found.");
             }
 
-          
-            if (user.HomeId == null)
-            {
-                return BadRequest("User is not part of a home. No tasks available.");
-            }
-
-            var tasks = await _context.Tasks
-                .Where(t => t.Participants.Any(p => p.Id == userId))
-                .Select(t => new
+            // סינון משימות בטווח של החודש הקרוב וללא משתתפים כלל
+            var tasks = home.Tasks
+                .Where(t =>
+                    t.StartDate.Date >= today &&
+                    t.StartDate.Date <= oneMonthFromNow &&
+                    t.Participants.Count == 0)
+                .Select(t => new TaskDto
                 {
-                    t.Id,
-                    t.Title,
-                    t.Description,
-                    t.StartDate,
-                    t.EndDate,
-                    t.Category
+                    Id = t.Id,
+                    Title = t.Title,
+                    Description = t.Description,
+                    StartDate = t.StartDate,
+                    EndDate = t.EndDate,
+                    StartTime = t.StartTime,
+                    EndTime = t.EndTime,
+                    Category = t.Category,
+                    Color = t.Color,
+                    MaxParticipants = t.MaxParticipants,
+                    Participants = t.Participants.Select(p => new ParticipantDto
+                    {
+                        Id = p.Id,           // Access the user through the participant
+                        Name = p.Name        // Access the user details through the participant
+                    }).ToList()
                 })
-                .ToListAsync();
+                .ToList();
 
-            return Ok(taskDtos);
+            return Ok(tasks);
         }
+
 
 
         //GET
