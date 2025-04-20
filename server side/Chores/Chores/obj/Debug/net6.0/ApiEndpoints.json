@@ -537,16 +537,6 @@
         "Name": "Type",
         "Type": "System.String",
         "IsRequired": false
-      },
-      {
-        "Name": "UploadDate",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "UploadTime",
-        "Type": "System.String",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -701,18 +691,13 @@
   {
     "ContainingType": "Chores.Controllers.TasksController",
     "Method": "GetCompletedTasksPerMonth",
-    "RelativePath": "api/Tasks/completedTasksPerMonth/{userId}/{homeId}",
+    "RelativePath": "api/Tasks/completedTasksPerMonth/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "homeId",
         "Type": "System.String",
         "IsRequired": true
       }

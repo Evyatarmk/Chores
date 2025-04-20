@@ -20,8 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="uploads\" />
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\uploads\03c84075-4242-421f-b355-381f21394a1e.jpg" />
+    <None Include="wwwroot\uploads\38541982-1511-4325-86ef-7f23573c3aed.jpg" />
+    <None Include="wwwroot\uploads\7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg" />
+    <None Include="wwwroot\uploads\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg" />
   </ItemGroup>
 
 </Project>

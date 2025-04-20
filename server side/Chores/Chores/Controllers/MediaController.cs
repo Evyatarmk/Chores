@@ -50,73 +50,78 @@ namespace Chores.Controllers
             return Ok(userMediaDtos);
         }
 
-
         [HttpPost("home/{homeId}/users/{userId}/media")]
         public async Task<IActionResult> AddMediaItem(string homeId, string userId, [FromForm] CreateMediaItemDto dto)
         {
-            // חיפוש הבית לפי ID
+            // בדיקת בית
             var home = await _context.Homes
                 .Include(h => h.Users)
                 .FirstOrDefaultAsync(h => h.Id == homeId);
-
             if (home == null)
                 return NotFound("Home not found");
 
-            // חיפוש המשתמש לפי ID
+            // בדיקת משתמש
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == userId && u.HomeId == homeId);
-
             if (user == null)
                 return NotFound("User not found in this home");
 
-            // יצירת אובייקט מדיה חדש
+            // בדיקת קובץ
+            if (dto.MediaFile == null || dto.MediaFile.Length == 0)
+                return BadRequest("Media file is required.");
+
+            // (אופציונלי) בדיקת סוג הקובץ
+            var allowedTypes = new[] { "image/jpeg", "image/png" };
+            if (!allowedTypes.Contains(dto.MediaFile.ContentType))
+                return BadRequest("Only JPEG and PNG files are allowed.");
+
+            // יצירת אובייקט מדיה
             var media = new MediaItem
             {
                 Id = Guid.NewGuid().ToString(),
                 Type = dto.Type,
-                UploadDate = dto.UploadDate,
-                UploadTime = dto.UploadTime,
+                UploadDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                UploadTime = DateTime.Now.ToString("HH:mm:ss"),
                 UserId = userId
             };
 
-            // בדיקת אם יש קובץ בתנאי הבקשה
-            if (dto.MediaFile != null && dto.MediaFile.Length > 0)
+            try
             {
-                try
+                // שמירת התמונה
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var extension = Path.GetExtension(dto.MediaFile.FileName);
+                if (string.IsNullOrEmpty(extension))
                 {
-                    // יצירת תיקיית uploads אם אין כבר כזאת
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-                    if (!Directory.Exists(uploadsFolder))
+                    extension = dto.MediaFile.ContentType switch
                     {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    // יצירת שם קובץ ייחודי
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.MediaFile.FileName);
-                    var filePath = Path.Combine(uploadsFolder, fileName);
-
-                    // שמירת הקובץ בדיסק
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await dto.MediaFile.CopyToAsync(fileStream);
-                    }
-
-                    // עדכון ה-URI עם המיקום החדש של הקובץ
-                    var fileUri = $"https://{Request.Host}/uploads/{fileName}";
-                    media.Uri = fileName; // שמירה רק בשם הקובץ
+                        "image/jpeg" => ".jpg",
+                        "image/png" => ".png",
+                        "video/mp4" => ".mp4",
+                        _ => ".dat"
+                    };
                 }
-                catch (Exception ex)
+
+                var fileName = Guid.NewGuid().ToString() + extension;
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    // במקרה של שגיאה בשמירת הקובץ, מחזירים שגיאה
-                    return StatusCode(500, $"Error saving media file: {ex.Message}");
+                    await dto.MediaFile.CopyToAsync(fileStream);
                 }
+
+                media.Uri = fileName;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error saving media file: {ex.Message}");
             }
 
-            // הוספת המדיה למסד הנתונים
             _context.MediaItems.Add(media);
             await _context.SaveChangesAsync();
 
-            // החזרת התוצאה עם ה-URI הכולל את שם הקובץ
             var result = new
             {
                 MediaId = media.Id,
@@ -128,6 +133,7 @@ namespace Chores.Controllers
 
             return CreatedAtAction(nameof(GetMediaForHome), new { homeId = home.Id }, result);
         }
+
 
         [HttpDelete("home/{homeId}/users/{userId}/media/{mediaId}")]
         public async Task<IActionResult> DeleteMediaItem(string homeId, string userId, string mediaId)

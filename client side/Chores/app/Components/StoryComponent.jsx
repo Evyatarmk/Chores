@@ -51,7 +51,7 @@ const StoryComponent = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isLongPress, setIsLongPress] = useState(false);
-  const { stories, addStory,deleteStory } = useStories();
+  const { stories, addStory, deleteStory } = useStories();
   const { user } = useUserAndHome();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -129,7 +129,7 @@ const StoryComponent = () => {
     }
   };
   const handleDeleteStory = (storyId) => {
-   deleteStory(currentUser.media[currentImageIndex]?.mediaId)
+    deleteStory(currentUser.media[currentImageIndex]?.mediaId)
     closeStory()
   };
   const handleAddMedia = async () => {
@@ -155,8 +155,6 @@ const StoryComponent = () => {
         mediaId: mediaId,  // הוספתי מזהה ייחודי לכל מדיה
         type: result.assets[0].type,  // סוג המדיה (תמונה או וידאו)
         uri: result.assets[0].uri,
-        uploadDate: new Date().toISOString().split("T")[0],  // תאריך העלאה
-        uploadTime: new Date().toLocaleTimeString(),  // זמן העלאה
       };
       addStory(newMedia)
     }
@@ -176,16 +174,16 @@ const StoryComponent = () => {
               : styles.profileImageWithoutStories
           }
         >
-<Image 
-  source={item.profilePicture?item.profilePicture:require('../images/userImage.jpg')} 
-  style={styles.profileImage} 
-/>
-    </View>
+          <Image
+            source={item.profilePicture ? item.profilePicture : require('../images/userImage.jpg')}
+            style={styles.profileImage}
+          />
+        </View>
       )}
-      <Text 
-      style={styles.username}
-       numberOfLines={1}
-  ellipsizeMode="tail"
+      <Text
+        style={styles.username}
+        numberOfLines={1}
+        ellipsizeMode="tail"
       >
         {item.username}
       </Text>
@@ -219,11 +217,11 @@ const StoryComponent = () => {
                     source={{ uri: currentUser.profileImage }}
                     style={styles.modalProfileImage}
                   />
-                   <View style={styles.userDetails}>
-                  <Text style={styles.username}>{currentUser.username}</Text>
-                  <Text style={styles.uploadDetails}>
-                    {timeAgo(currentUser.media[currentImageIndex]?.uploadDate, currentUser.media[currentImageIndex]?.uploadTime)}
-                  </Text>
+                  <View style={styles.userDetails}>
+                    <Text style={styles.username}>{currentUser.username}</Text>
+                    <Text style={styles.uploadDetails}>
+                      {timeAgo(currentUser.media[currentImageIndex]?.uploadDate, currentUser.media[currentImageIndex]?.uploadTime)}
+                    </Text>
                   </View>
                 </View>
                 {currentUser.userId === user?.id && (
@@ -265,15 +263,15 @@ const StoryComponent = () => {
             onPress={goToNextImage}
             style={styles.navButtonRight}
           />
-      <AlertModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        message="האם אתה בטוח שברצונך למחוק פריט זה?"
-        onConfirm={handleDeleteStory}
-        confirmText="מחק"
-        cancelText="ביטול"
-      />
-         
+          <AlertModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            message="האם אתה בטוח שברצונך למחוק פריט זה?"
+            onConfirm={handleDeleteStory}
+            confirmText="מחק"
+            cancelText="ביטול"
+          />
+
         </View>
       </Modal>
 
@@ -354,7 +352,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     zIndex: 101,
-    padding:5
+    padding: 5
   },
 
   modalProfileImage: {
@@ -365,12 +363,12 @@ const styles = StyleSheet.create({
   },
 
   userDetailsContainer: {
-    flex:1,
+    flex: 1,
     alignItems: "center",
     flexDirection: "row"
   },
-  userDetails:{
-flexDirection:"column"
+  userDetails: {
+    flexDirection: "column"
   },
 
   uploadDetails: {

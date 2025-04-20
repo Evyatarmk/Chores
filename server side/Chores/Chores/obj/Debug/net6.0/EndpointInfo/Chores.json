@@ -873,12 +873,6 @@
                   },
                   "Type": {
                     "type": "string"
-                  },
-                  "UploadDate": {
-                    "type": "string"
-                  },
-                  "UploadTime": {
-                    "type": "string"
                   }
                 }
               },
@@ -887,12 +881,6 @@
                   "style": "form"
                 },
                 "Type": {
-                  "style": "form"
-                },
-                "UploadDate": {
-                  "style": "form"
-                },
-                "UploadTime": {
                   "style": "form"
                 }
               }
@@ -1138,7 +1126,7 @@
         }
       }
     },
-    "/api/Tasks/completedTasksPerMonth/{userId}/{homeId}": {
+    "/api/Tasks/completedTasksPerMonth/{userId}": {
       "get": {
         "tags": [
           "Tasks"
@@ -1146,14 +1134,6 @@
         "parameters": [
           {
             "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "homeId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2066,6 +2046,10 @@
           },
           "status": {
             "type": "boolean"
+          },
+          "completedByUserId": {
+            "type": "string",
+            "nullable": true
           },
           "completedDate": {
             "type": "string",

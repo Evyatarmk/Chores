@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useTasks } from "./Context/TaskContext";
 import NormalHeader from "./Components/NormalHeader";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import { Calendar } from "react-native-calendars";
 import PageWithMenu from "./Components/PageWithMenu";
@@ -13,13 +13,12 @@ import AlertModal from "./Components/AlertModal";
 import { useApiUrl } from "./Context/ApiUrlProvider";
 
 const TasksListScreen = () => {
-  const { tasksFormatted, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask,markTaskAsCompleted,markTaskAsNotCompleted  } = useTasks();
+  const { tasksFormatted, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask, markTaskAsCompleted, markTaskAsNotCompleted } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [currentList, setCurrentList] = useState(null);
-    const {user } = useUserAndHome();
+  const { user } = useUserAndHome();
   const router = useRouter();
-
   const optionsModalRef = useRef(null);
 
   const categoryColors = {
@@ -34,7 +33,7 @@ const TasksListScreen = () => {
   ];
 
   const handleOptionSelect = (option) => {
-    
+
     if (option === "edit") {
       router.push({
         pathname: "./TaskEditScreen",
@@ -60,7 +59,7 @@ const TasksListScreen = () => {
 
   const renderMarkedDates = () => {
     const markedDates = {};
-  
+
     Object.keys(tasksFormatted).forEach((dateKey) => {
       tasksFormatted[dateKey].forEach((task) => {
         const startDate = new Date(task.startDate);
@@ -104,26 +103,28 @@ const TasksListScreen = () => {
 
   return (
     <PageWithMenu>
-      <GestureHandlerRootView style={styles.container}>
+      <ScrollView style={styles.container}>
         <NormalHeader title="המשימות של הבית" />
 
-        <Calendar
-          markedDates={renderMarkedDates()}
-          markingType="multi-period"
-          onDayPress={(day) => setSelectedDate(day.dateString)}
-          theme={{
-            selectedDayBackgroundColor: "#1E90FF",
-            todayTextColor: "#1E90FF",
-            arrowColor: "#1E90FF",
-          }}
-        />
+        <View style={{ marginBottom: 20 }}>
+  <Calendar
+    markedDates={renderMarkedDates()}
+    markingType="multi-period"
+    onDayPress={(day) => setSelectedDate(day.dateString)}
+    theme={{
+      selectedDayBackgroundColor: "#1E90FF",
+      todayTextColor: "#1E90FF",
+      arrowColor: "#1E90FF",
+    }}
+  />
+</View>
 
         <FlatList
           data={getTasksForDate(selectedDate)}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
             const isUserRegistered = item.participants.some(p => p.id === user?.id);
-
+          
             return (
               <TouchableOpacity
                 style={styles.taskItem}
@@ -131,9 +132,9 @@ const TasksListScreen = () => {
               >
                 <Text style={styles.taskTitle}>{item.title}</Text>
                 <Text style={styles.taskDescription}>{item.description}</Text>
-
-                {item.category === "אירוע" || item.category === "משימה" ? (
-                  isUserRegistered ? (
+          
+                <View style={styles.buttonRow}>
+                  {isUserRegistered ? (
                     <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
                       <Text style={styles.registerText}>בטל הרשמה</Text>
                     </TouchableOpacity>
@@ -141,37 +142,39 @@ const TasksListScreen = () => {
                     <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
                       <Text style={styles.registerText}>הירשם</Text>
                     </TouchableOpacity>
-                  )
-                ) : null}
-
-                {isUserRegistered && item.category === "משימה" && (
-                  
-                  <TouchableOpacity
-                    onPress={() => {
-                      console.log(item)
-                      if (item.status == true) {
-                        markTaskAsNotCompleted(item.id);
-                      } else {
-                        markTaskAsCompleted(item.id);
-                      }
-                    }}
-                    style={[
-                      styles.registerButton,
-                      { backgroundColor: item.status ? "#FF5722" : "#2196F3", marginTop: 10 },
-                    ]}
-                  >
-                    <Text style={styles.registerText}>
-                      {item.status ? "סמן כלא בוצע" : "סמן כבוצע"}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-
+                  )}
+          
+                  {isUserRegistered && item.category === "משימה" && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (item.status == true) {
+                          markTaskAsNotCompleted(item.id);
+                        } else {
+                          markTaskAsCompleted(item.id);
+                        }
+                      }}
+                      style={[
+                        styles.registerButton,
+                        {
+                          backgroundColor: item.status ? "#FF5722" : "#2196F3",
+                          marginLeft: 10, // רווח בין הכפתורים
+                        },
+                      ]}
+                    >
+                      <Text style={styles.registerText}>
+                        {item.status ? "סמן כלא בוצע" : "סמן כבוצע"}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+          
                 <TouchableOpacity style={styles.optionsButton} onPress={() => openOptionsPanel(item)}>
                   <Icon name="more-vert" size={24} color="#888" />
                 </TouchableOpacity>
               </TouchableOpacity>
             );
           }}
+          
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>אין משימות ליום זה</Text>
@@ -200,7 +203,7 @@ const TasksListScreen = () => {
           confirmText="מחק"
           cancelText="ביטול"
         />
-      </GestureHandlerRootView>
+      </ScrollView>
     </PageWithMenu>
   );
 };
@@ -208,6 +211,11 @@ const TasksListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
   },
   taskItem: {
     padding: 16,

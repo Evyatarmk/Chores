@@ -41,11 +41,10 @@
     }
     public class CreateMediaItemDto
     {
-        public IFormFile MediaFile { get; set; }  // שדה קובץ
+        public IFormFile MediaFile { get; set; }
         public string Type { get; set; }
-        public string UploadDate { get; set; }
-        public string UploadTime { get; set; }
     }
+
 
 
     public class TaskDto
