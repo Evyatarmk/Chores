@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import NormalHeader from "./Components/NormalHeader";
 import AlertModal from "./Components/AlertModal";
 import { useUserAndHome } from './Context/UserAndHomeContext';
+import { v4 as uuidv4 } from 'uuid';
 
 const EditCategoryScreen = () => {
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
@@ -26,8 +27,8 @@ const EditCategoryScreen = () => {
 
     const newCategory = {
       name: name,
-      homeId: home.id,
-      id:categories.id
+         id: uuidv4(),
+     homeId: home.id,
     };
 
     addCategory(newCategory);

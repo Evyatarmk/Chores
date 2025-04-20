@@ -14,7 +14,7 @@ export const CategoryProvider = ({ children }) => {
   
 const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
-  console.log(categories)
+
 
   const handleCloseError = () => {
     setErrorMessage("")
@@ -23,6 +23,8 @@ const [errorMessage, setErrorMessage] = useState('');
  
  
   const addCategory = async (newCategory) => {
+
+   
   
     // שמירת המצב הקודם למקרה של שגיאה
     const prevCategories = [...categories];
@@ -30,6 +32,7 @@ const [errorMessage, setErrorMessage] = useState('');
     const updatedCategories = [...categories, newCategory];
     setCategories(updatedCategories);
   console.log(JSON.stringify( newCategory ))
+  console.log(updatedCategories)
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
         method: 'POST',
