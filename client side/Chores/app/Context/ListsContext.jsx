@@ -127,7 +127,7 @@ export const ListsProvider = ({ children }) => {
     try {
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}`, {
         method: 'GET',
-      });
+      }, baseUrl);
   
       if (!response || !response.ok) {
         throw new Error("שגיאה בהורדת נתונים");
@@ -173,7 +173,7 @@ export const ListsProvider = ({ children }) => {
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}`, {
         method: 'POST',
         body: JSON.stringify(newList)
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error('Failed to create list list');
@@ -207,7 +207,7 @@ export const ListsProvider = ({ children }) => {
       // שליחת בקשת מחיקה לשרת
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/List/${listId}`, {
         method: 'DELETE'
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error('Failed to delete list list');
@@ -241,7 +241,7 @@ export const ListsProvider = ({ children }) => {
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}`, {
         method: 'PUT',
         body: JSON.stringify(updatedListSafe), // שולח את כל הנתונים המעודכנים
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error('Failed to update list list');
@@ -280,8 +280,7 @@ export const ListsProvider = ({ children }) => {
         `${baseUrl}/Lists/home/${home.id}/List/${listId}/Item/${itemId}/status/${newStatus}`,
         {
           method: "PUT",
-        }
-      );
+        }, baseUrl);
   
       if (!response.ok) {
         throw new Error("Failed to update item status");
@@ -333,7 +332,7 @@ export const ListsProvider = ({ children }) => {
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/item/${updatedItem.id}`, {
         method: 'PUT',
         body: JSON.stringify(updatedItem),
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error("Failed to update item");
@@ -380,7 +379,7 @@ export const ListsProvider = ({ children }) => {
       // שליחת הבקשה לשרת למחיקת הפריט
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/item/${ItemId}`, {
         method: 'DELETE',
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error("Failed to delete item");
@@ -443,7 +442,7 @@ export const ListsProvider = ({ children }) => {
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/items`, {
         method: 'PUT', // עדכון פריטים
         body: JSON.stringify(newItems),
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error("Failed to update or add items");
@@ -493,7 +492,7 @@ export const ListsProvider = ({ children }) => {
       // שליחת הבקשה לשרת לעדכון או מחיקת הפריטים שנלקחו
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/clearCheckedItems`, {
         method: 'PUT', // עדכון פריטים
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error("Failed to clear checked items");
@@ -532,7 +531,7 @@ export const ListsProvider = ({ children }) => {
       // שליחת הבקשה לשרת לעדכון מצב של כל הפריטים
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/uncheckAllItems`, {
         method: 'PUT', // עדכון מצב כל הפריטים
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error("Failed to uncheck all items");
@@ -572,7 +571,7 @@ const copyAllItems = async (listId) => {
     // שליחת הבקשה לשרת להעתקת כל הפריטים
     const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyAllItems`, {
       method: 'POST',
-    });
+    }, baseUrl);
 
     if (!response.ok) {
       throw new Error("Failed to copy all items");
@@ -616,7 +615,7 @@ const copyPurchasedItems = async (listId) => {
     const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyPurchasedItems`, {
       method: 'POST',
       body: JSON.stringify(newList),
-    });
+    }, baseUrl);
 
     if (!response.ok) {
       throw new Error("Failed to copy purchased items");
@@ -655,7 +654,7 @@ const copyUnpurchasedItems = async (listId) => {
     const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyUnpurchasedItems`, {
       method: 'POST',
       body: JSON.stringify(newList),
-    });
+    }, baseUrl);
 
     if (!response.ok) {
       throw new Error("Failed to copy unpurchased items");
