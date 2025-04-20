@@ -129,11 +129,24 @@ namespace Chores.Controllers
         [HttpGet("completedTasksPerMonth/{userId}")]
         public async Task<IActionResult> GetCompletedTasksPerMonth(string userId)
         {
-            var tasks = await _context.Tasks
-                .Where(t => t.CompletedByUserId == userId && t.Status == true && t.CompletedDate != null)
+            // Get the HomeId of the user
+            var userHome = await _context.Homes
+                .FirstOrDefaultAsync(h => h.Id == userId);
+
+            if (userHome == null)
+            {
+                return NotFound("User's home not found.");
+            }
+
+            // Get the user's Tasks directly through Home
+            var completedTasks = await _context.Tasks
+                .Where(t => t.HomeId == userHome.Id
+                            && t.Status == true
+                            && t.CompletedDate != null)
                 .ToListAsync();
 
-            var grouped = tasks
+            // Group them by Year and Month
+            var grouped = completedTasks
                 .GroupBy(t => new { t.CompletedDate.Value.Year, t.CompletedDate.Value.Month })
                 .Select(g => new
                 {
@@ -141,7 +154,8 @@ namespace Chores.Controllers
                     Month = g.Key.Month,
                     CompletedTasks = g.Count()
                 })
-                .OrderBy(g => g.Year).ThenBy(g => g.Month)
+                .OrderBy(g => g.Year)
+                .ThenBy(g => g.Month)
                 .ToList();
 
             return Ok(grouped);
@@ -254,7 +268,6 @@ namespace Chores.Controllers
             }
 
             task.Status = true;
-            task.CompletedByUserId = dto.UserId;
             task.CompletedDate = DateTime.UtcNow;
 
             _context.Tasks.Update(task);
@@ -280,7 +293,6 @@ namespace Chores.Controllers
             }
 
             task.Status = false;
-            task.CompletedByUserId = null;
             task.CompletedDate = null; // אפשר גם למחוק פה תאריך אם תרצה
 
             _context.Tasks.Update(task);
