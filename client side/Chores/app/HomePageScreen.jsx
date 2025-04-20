@@ -10,7 +10,7 @@ import PodiumComponent from "./Components/PodiumComponent";  // Import the new P
 
 export default function HomePageScreen() {
   const router = useRouter();
-  const { availableTasksForNextMonth, myTasks, signUpForTask, signOutOfTask } = useTasks(); // Get tasks & sign-up function
+  const { availableTasksForNextMonth, myTasks, signUpForTask, signOutOfTask,markTaskAsCompleted,markTaskAsNotCompleted } = useTasks(); // Get tasks & sign-up function
   const { user } = useUserAndHome(); // Get logged-in user
 
 
