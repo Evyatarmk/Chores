@@ -19,17 +19,16 @@ namespace Chores.Controllers
         [HttpGet("home/{homeId}/media")]
         public async Task<IActionResult> GetMediaForHome(string homeId)
         {
-            // חיפוש הבית לפי ID
             var home = await _context.Homes
-                .Include(h => h.Users) // כולל את כל המשתמשים של הבית
-                .ThenInclude(u => u.MediaItems) // כולל את כל המדיה של המשתמשים
+                .Include(h => h.Users)
+                .ThenInclude(u => u.MediaItems)
                 .FirstOrDefaultAsync(h => h.Id == homeId);
 
-            // אם לא נמצא הבית
             if (home == null)
                 return NotFound("Home not found");
 
-            // יצירת רשימה של משתמשים ומדיה עבורם
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/cgroup83/test2/tar1/uploads";
+
             var userMediaDtos = home.Users.Select(user => new UserMediaDto
             {
                 UserId = user.Id,
@@ -39,16 +38,15 @@ namespace Chores.Controllers
                 {
                     MediaId = media.Id,
                     Type = media.Type,
-                    // יצירת ה-URI עם הכתובת המלאה
-                    Uri = $"https://{Request.Host}/uploads/{media.Uri}",
+                    Uri = $"{baseUrl}/{media.Uri}",
                     UploadDate = media.UploadDate,
                     UploadTime = media.UploadTime
                 }).ToList()
             }).ToList();
 
-            // החזרת התוצאה
             return Ok(userMediaDtos);
         }
+
 
         [HttpPost("home/{homeId}/users/{userId}/media")]
         public async Task<IActionResult> AddMediaItem(string homeId, string userId, [FromForm] CreateMediaItemDto dto)
@@ -70,7 +68,6 @@ namespace Chores.Controllers
             if (dto.MediaFile == null || dto.MediaFile.Length == 0)
                 return BadRequest("Media file is required.");
 
-
             // יצירת אובייקט מדיה
             var media = new MediaItem
             {
@@ -83,7 +80,7 @@ namespace Chores.Controllers
 
             try
             {
-                // שמירת התמונה
+                // שמירת הקובץ בתיקיית wwwroot/uploads
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
@@ -96,7 +93,7 @@ namespace Chores.Controllers
                         "image/jpeg" => ".jpg",
                         "image/png" => ".png",
                         "video/mp4" => ".mp4",
-                        "video/quicktime" => ".mov", // ✅ תמיכה ב־.mov
+                        "video/quicktime" => ".mov",
                         _ => ".dat"
                     };
                 }
@@ -119,17 +116,19 @@ namespace Chores.Controllers
             _context.MediaItems.Add(media);
             await _context.SaveChangesAsync();
 
+            // ⚠️ עדכון הנתיב הציבורי שכולל את מיקומך תחת cgroup83/test2/tar1
             var result = new
             {
                 MediaId = media.Id,
                 Type = media.Type,
-                Uri = $"https://{Request.Host}/uploads/{media.Uri}",
+                Uri = $"https://proj.ruppin.ac.il/cgroup83/test2/tar1/uploads/{media.Uri}",
                 UploadDate = media.UploadDate,
                 UploadTime = media.UploadTime
             };
 
             return CreatedAtAction(nameof(GetMediaForHome), new { homeId = home.Id }, result);
         }
+
 
 
         [HttpDelete("home/{homeId}/users/{userId}/media/{mediaId}")]

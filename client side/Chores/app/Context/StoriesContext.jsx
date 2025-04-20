@@ -94,16 +94,27 @@ export const StoriesProvider = ({ children }) => {
     setStories(sortStories(optimisticStories));
 
     try {
-      // 2. בונים FormData
       const formData = new FormData();
       const fileName = newStory.uri.split('/').pop();
-      formData.append('MediaFile', {
-        uri: newStory.uri,
-        name: fileName.endsWith('.mp4') ? fileName : `${fileName}.mp4`, // הוספה יזומה של סיומת אם חסרה
-        type: 'video/mp4',
-      });
-
-
+    
+      // קביעת הסיומת לפי שם הקובץ
+      const extension = fileName?.split('.').pop()?.toLowerCase();
+    
+      // הגדרת סוג MIME לפי הסיומת
+      let fileType = 'application/octet-stream'; // ברירת מחדל
+      if (extension === 'jpg' || extension === 'jpeg') {
+        fileType = 'image/jpeg';
+      } else if (extension === 'png') {
+        fileType = 'image/png';
+      } else if (extension === 'mp4') {
+        fileType = 'video/mp4';
+      } else if (extension === 'mov') {
+        fileType = 'video/quicktime';
+      }
+    
+      console.log('הסיומת שזוהתה:', extension);
+      console.log('סוג הקובץ שנשלח:', fileType);
+    
       if (newStory.uri.startsWith('data:')) {
         // המרה של data:uri → Blob
         const fetchRes = await fetch(newStory.uri);
@@ -227,7 +238,7 @@ export const StoriesProvider = ({ children }) => {
 
 
   return (
-    <StoriesContext.Provider value={{ stories, addStory, deleteStory }}>
+    <StoriesContext.Provider value={{ stories, addStory, deleteStory,fetchStories }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
 

@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useStories } from "../Context/StoriesContext"
 import { useUserAndHome } from "../Context/UserAndHomeContext"
 import AlertModal from "../Components/AlertModal";
+import { GestureHandlerRootView, RefreshControl } from "react-native-gesture-handler";
 
 const timeAgo = (uploadDate, uploadTime) => {
   const now = new Date();
@@ -51,10 +52,16 @@ const StoryComponent = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [isLongPress, setIsLongPress] = useState(false);
-  const { stories, addStory, deleteStory } = useStories();
+  const { stories, addStory, deleteStory,fetchStories } = useStories();
   const { user } = useUserAndHome();
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchStories();
+    setRefreshing(false);
+  };
   const openStory = (user) => {
     if (user.media.length == 0) return;
     setCurrentUser(user);
@@ -191,6 +198,7 @@ const StoryComponent = () => {
   );
   return (
     <View style={styles.container}>
+      <GestureHandlerRootView>
       <FlatList
         data={[{
           userId: 0,
@@ -204,6 +212,9 @@ const StoryComponent = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.flatListContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#9Bd35A', '#689F38']} />
+        }
       />
 
       <Modal visible={visible} transparent={true} animationType="slide">
@@ -274,7 +285,7 @@ const StoryComponent = () => {
 
         </View>
       </Modal>
-
+      </GestureHandlerRootView>
     </View>
   );
 };
