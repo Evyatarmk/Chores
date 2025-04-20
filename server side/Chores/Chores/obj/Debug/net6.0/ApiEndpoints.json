@@ -726,19 +726,60 @@
   },
   {
     "ContainingType": "Chores.Controllers.TasksController",
-    "Method": "GetTasksForUser",
-    "RelativePath": "api/Tasks/user/{userId}",
+    "Method": "GetAvailableTasksForNextMonth",
+    "RelativePath": "api/Tasks/home/{homeId}/tasks/month/available",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Chores.Models.TaskDto, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chores.Controllers.TasksController",
+    "Method": "GetUserTasksForNextWeekInHome",
+    "RelativePath": "api/Tasks/home/{homeId}/user/{userId}/tasks/week",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
       {
         "Name": "userId",
         "Type": "System.String",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Chores.Models.TaskDto, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",

@@ -10,7 +10,8 @@ export const useTasks = () => useContext(TaskContext);
  
 
 export const TaskProvider = ({ children }) => {
-  const [tasks, setTasks] = useState({
+  const [tasks, setTasks] = useState([]);
+  const [tasksFormatted, setTasksFormatted] = useState({
     "2025-03-30": [
       { 
         id: '1', 
@@ -65,6 +66,7 @@ export const TaskProvider = ({ children }) => {
   });
 
 const [myTasks, setMyTasks] = useState([]);
+const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([]);
 
   const { user, home } = useUserAndHome();
   
@@ -83,9 +85,50 @@ const [myTasks, setMyTasks] = useState([]);
     useEffect(() => {
       if (home && user) {
         fetchTasks();
+        fetchAvailableTasksForNextMonth()
+        fetchMyTasks()
       }
     }, [home, user]);
-
+    useEffect(() => {
+      if (tasks) {
+        // פונקציה ליצירת האובייקט הממויין לפי תאריך
+        const groupTasksByDate = (tasksArray) =>
+          tasksArray.reduce((acc, task) => {
+            const date = task.startDate.split("T")[0];
+    
+            if (!acc[date]) {
+              acc[date] = [];
+            }
+    
+            acc[date].push({
+              id: task.id,
+              title: task.title,
+              description: task.description,
+              startDate: task.startDate.split("T")[0],
+              endDate: task.endDate.split("T")[0],
+              startTime: convertTo12HourFormat(task.startTime),
+              endTime: convertTo12HourFormat(task.endTime),
+              homeId: task.homeId,
+              category: task.category,
+              color: task.color,
+              maxParticipants: task.maxParticipants,
+              participants: task.participants.map(p => ({
+                id: p.id,
+                name: p.name,
+              })),
+            });
+    
+            return acc;
+          }, {});
+    
+        // כל המשימות
+        const groupedAllTasks = groupTasksByDate(tasks);
+    
+       
+        setTasksFormatted(groupedAllTasks);
+    
+      }
+    }, [home, user,tasks]);
     const fetchTasks = async () => {
       try {
         const response = await fetchWithAuth(`${baseUrl}/Tasks/home/${home.id}`, {
@@ -93,47 +136,90 @@ const [myTasks, setMyTasks] = useState([]);
         }, baseUrl);
     
         if (!response || !response.ok) {
-          throw new Error("שגיאה בקבלת קטגוריות");
+          throw new Error("שגיאה בקבלת משימות");
         }
     
         const data = await response.json();
     
-        // Convert the data into a grouped object by startDate
-        const groupedTasks = data.reduce((acc, task) => {
-          const date = task.startDate.split("T")[0];; // Assuming task has a 'startDate' field
     
-          if (!acc[date]) {
-            acc[date] = [];
-          }
+        // פונקציה ליצירת האובייקט הממויין לפי תאריך
+        const groupTasksByDate = (tasksArray) =>
+          tasksArray.reduce((acc, task) => {
+            const date = task.startDate.split("T")[0];
     
-          // Add task to the array for that specific date
-          acc[date].push({
-            id: task.id,
-            title: task.title,
-            description: task.description,
-            startDate: task.startDate.split("T")[0],
-            endDate: task.endDate.split("T")[0],
-            startTime:convertTo12HourFormat(task.startTime) ,
-            endTime: convertTo12HourFormat(task.endTime),
-            category: task.category,
-            color: task.color,
-            maxParticipants: task.maxParticipants,
-            participants: task.participants.map(participant => ({
-              id: participant.id,
-              name: participant.name,
-            })),
-          });
+            if (!acc[date]) {
+              acc[date] = [];
+            }
     
-          return acc;
-        }, {});
+            acc[date].push({
+              id: task.id,
+              title: task.title,
+              description: task.description,
+              startDate: task.startDate.split("T")[0],
+              endDate: task.endDate.split("T")[0],
+              startTime: convertTo12HourFormat(task.startTime),
+              endTime: convertTo12HourFormat(task.endTime),
+              homeId: task.homeId,
+              category: task.category,
+              color: task.color,
+              maxParticipants: task.maxParticipants,
+              participants: task.participants.map(p => ({
+                id: p.id,
+                name: p.name,
+              })),
+            });
     
-        console.log(groupedTasks); // Check the transformed data
-        setTasks(groupedTasks);
+            return acc;
+          }, {});
+    
+        // כל המשימות
+        const groupedAllTasks = groupTasksByDate(data);
+    
+        // עדכון הסטייטים
+        setTasks(data);
+        setTasksFormatted(groupedAllTasks);
     
       } catch (error) {
-        console.error("שגיאה בקבלת קטגוריות:", error);
-        setErrorMessage("לא ניתן לטעון קטגוריות, אנא נסה שוב מאוחר יותר");
+        console.error("שגיאה בקבלת משימות:", error);
+        setErrorMessage("לא ניתן לטעון משימות, אנא נסה שוב מאוחר יותר");
         setErrorVisible(true);
+      }
+    };
+    
+    const fetchAvailableTasksForNextMonth = async () => {
+      try {
+        // קריאה ל-API החדש
+        const response = await fetchWithAuth(`${baseUrl}/Tasks/home/${home.id}/tasks/month/available`, {
+          method: 'GET',
+        }, baseUrl);
+
+    
+        if (!response || !response.ok) {
+          throw new Error("שגיאה בקבלת משימות לחודש הקרוב");
+        }
+    
+        const data = await response.json();
+    
+        setAvailableTasksForNextMonth(data);
+    
+      } catch (error) {
+        console.error("שגיאה בקבלת משימות לחודש הקרוב:", error);
+        setErrorMessage("לא ניתן לטעון משימות לחודש הקרוב, אנא נסה שוב מאוחר יותר");
+        setErrorVisible(true);
+      }
+    };
+    const fetchMyTasks = async () => {
+      try {
+        const response = await fetchWithAuth(`${baseUrl}/Tasks/home/${home.id}/user/${user.id}/tasks/week`,{
+          method: 'GET',
+          }, baseUrl);
+        if (!response.ok) throw new Error("Failed to fetch tasks");
+    
+        const data = await response.json();
+        console.log(data)
+        setMyTasks(data);
+      } catch (error) {
+        console.error("Error fetching my tasks:", error.message);
       }
     };
 
@@ -152,16 +238,30 @@ const [myTasks, setMyTasks] = useState([]);
   
 
     const addTaskForDate = async (task, homeId) => {
+      const newTask = { ...task, homeId };
+      const tempId = Date.now(); // מזהה זמני
+    
+      // שמירה על המצב הקודם
+      const previousTasks = [...tasks];
+      const previousAvailableTasks = [...availableTasksForNextMonth];
+    
+      const optimisticTask = {
+        ...newTask,
+        id: tempId,
+        participants: [], // אם צריך
+      };
+    
+      // עדכון מיידי במסך
+      setTasks((prev) => [...prev, optimisticTask]);
+      setAvailableTasksForNextMonth((prev) => [...prev, optimisticTask]);
+    
       try {
         const response = await fetch(`${baseUrl}/Tasks`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            ...task,
-            homeId: homeId,
-          }),
+          body: JSON.stringify(newTask),
         });
     
         if (!response.ok) {
@@ -170,16 +270,32 @@ const [myTasks, setMyTasks] = useState([]);
     
         const result = await response.json();
         console.log('Task added successfully:', result);
-        fetchTasks();
+    
+        // החלפת המשימה הזמנית עם זו שחזרה מהשרת
+        setTasks((prev) =>
+          prev.map((t) => (t.id === tempId ? result : t))
+        );
+        setAvailableTasksForNextMonth((prev) =>
+          prev.map((t) => (t.id === tempId ? result : t))
+        );
+    
       } catch (error) {
         console.error('Error adding task:', error);
+    
+        // החזרת מצב קודם
+        setTasks(previousTasks);
+        setAvailableTasksForNextMonth(previousAvailableTasks);
+    
+        // הצגת שגיאה
+        setErrorMessage("הייתה בעיה בהוספת המשימה. נסה שוב מאוחר יותר.");
+        setErrorVisible(true);
       }
     };
     
 
   
   const getTasksForDate = (date) => {
-    return Object.values(tasks)
+    return Object.values(tasksFormatted)
       .flat()
       .filter(
         (task) =>
@@ -204,23 +320,13 @@ const [myTasks, setMyTasks] = useState([]);
   
       // Optional: refresh tasks or participants
       fetchTasks();
+      fetchMyTasks();
     } catch (error) {
       console.error('Error signing up for task:', error.message);
     }
   };
   
-  const fetchMyTasks = async (userId) => {
-    try {
-      const response = await fetch(`${baseUrl}/Tasks/user/${userId}`);
-      if (!response.ok) throw new Error("Failed to fetch tasks");
-  
-      const data = await response.json();
-      console.log(data)
-      setMyTasks(data);
-    } catch (error) {
-      console.error("Error fetching my tasks:", error.message);
-    }
-  };
+ 
   
 
   const signOutOfTask = async (taskId, userId) => {
@@ -240,33 +346,48 @@ const [myTasks, setMyTasks] = useState([]);
       
       // Optionally reload the task list
       fetchTasks();
-      fetchMyTasks(user.id);
+      fetchMyTasks();
     } catch (error) {
       console.error('Error signing out from task:', error.message);
     }
   };
   
   
-  const removeTaskForDate = async (taskId) => {
-    console.log("Removing task", taskId);
-  
-    try {
-      const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
-        method: 'DELETE',
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to delete task');
-      }
-  
-      console.log(`Task ${taskId} deleted successfully`);
+const removeTaskForDate = async (taskId) => {
+  console.log("Removing task", taskId);
 
-     fetchTasks()
-    } catch (error) {
-      console.error('Error deleting task:', error);
+  // שמירה על המצב הקודם
+  const previousTasks = [...tasks];
+  const previousAvailableTasks = [...availableTasksForNextMonth];
+
+  // עדכון מיידי במסך
+  setTasks((prev) => prev.filter((t) => t.id !== taskId));
+  setAvailableTasksForNextMonth((prev) => prev.filter((t) => t.id !== taskId));
+
+  try {
+    const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete task');
     }
-  };
-  
+
+    console.log(`Task ${taskId} deleted successfully`);
+    fetchTasks(); // רענון רשימת משימות מהשרת
+  } catch (error) {
+    console.error('Error deleting task:', error);
+
+    // שחזור המצב הקודם במקרה של שגיאה
+    setTasks(previousTasks);
+    setAvailableTasksForNextMonth(previousAvailableTasks);
+
+    // הצגת הודעת שגיאה
+    setErrorMessage("הייתה בעיה במחיקת המשימה. נסה שוב מאוחר יותר.");
+    setErrorVisible(true);
+  }
+};
+
   const getTask = (date, taskId) => {
     if (!tasks) {
       console.log("Tasks are not loaded yet.");
@@ -323,21 +444,7 @@ const [myTasks, setMyTasks] = useState([]);
 
 
 
- const addTask = ( date, title, description) => {
-
-  const newTask = {
-    id: Date.now(), // Unique ID
-    title,
-    description,
-    assignedTo: null,
-  };
-
-  setTasks((prevTasks) => ({
-    ...prevTasks,
-    [date]: prevTasks[date] ? [...prevTasks[date], newTask] : [newTask],
-  }));
-};
-
+ 
 
 
 
@@ -345,7 +452,7 @@ const [myTasks, setMyTasks] = useState([]);
 
 
   return (
-    <TaskContext.Provider value={{ tasks,myTasks,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask,addTask ,signOutOfTask,fetchTasks,fetchMyTasks}}>
+    <TaskContext.Provider value={{ tasks,tasksFormatted,myTasks,availableTasksForNextMonth,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask ,signOutOfTask,fetchTasks,fetchMyTasks}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </TaskContext.Provider>

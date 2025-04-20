@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Button, FlatList, TouchableWithoutFeedback, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import PageWithMenu from "./Components/PageWithMenu";
 import StoryComponent from "./Components/StoryComponent";
@@ -10,16 +10,12 @@ import PodiumComponent from "./Components/PodiumComponent";  // Import the new P
 
 export default function HomePageScreen() {
   const router = useRouter();
-  const { myTasks, signUpForTask, signOutOfTask, fetchMyTasks } = useTasks(); // Get tasks & sign-up function
+  const { availableTasksForNextMonth, myTasks, signUpForTask, signOutOfTask } = useTasks(); // Get tasks & sign-up function
   const { user } = useUserAndHome(); // Get logged-in user
 
 
 
-  useEffect(() => {
-    if (user && user.id) {
-      fetchMyTasks(user.id);
-    }
-  }, [user]);
+
 
 
 
@@ -36,31 +32,27 @@ export default function HomePageScreen() {
   }
 
   return (
-    <PageWithMenu >
-      <StoryComponent></StoryComponent>
-      <Text style={styles.title}>Welcome to Your Chores App</Text>
-      <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
-
-
-      <View>
-        <Text style={styles.sectionTitle}>המשימות שלי</Text>
-        {myTasks.length === 0 ? (
-          <Text style={styles.noTaskText}>אין משימות</Text>
-        ) : (
-          myTasks.map((task) => (
-            <TouchableOpacity
-              key={task.id}
-              style={styles.card}
-              onPress={() => {
-                router.push({
-                  pathname: "./TaskDetailsScreen",
-                  params: { taskId: task.id, date: task.startDate.split("T")[0] },
-                })
-              }}
-            >
-              <Text style={styles.taskTitle}>{task.title}</Text>
-              <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
-              <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
+    <PageWithMenu>
+      <StoryComponent />
+      <ScrollView>
+        <Text style={styles.sectionTitle}>המשימות שלי לשבוע הקרוב</Text>
+        <View style={styles.listContainer}>
+          <FlatList
+            data={myTasks}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item: task }) => (
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => {
+                  router.push({
+                    pathname: "./TaskDetailsScreen",
+                    params: { taskId: task.id, date: task.startDate.split("T")[0] },
+                  });
+                }}
+              >
+                <Text style={styles.taskTitle}>{task.title}</Text>
+                <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
+                <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
                 <View style={styles.buttonWrapper}>
                   {/* כפתור ביטול הרשמה */}
                   <View style={[styles.buttonContainer, task.category === "משימה" && styles.withMargin]}>
@@ -70,7 +62,7 @@ export default function HomePageScreen() {
                       onPress={() => signOutOfTask(task.id, user.id)}
                     />
                   </View>
-                  {/* כפתור סמן כבוצע - רק אם הקטגוריה היא "משימה" */}
+                  {/* כפתור סמן כבוצע */}
                   {task.category === "משימה" && (
                     <View style={styles.buttonContainer}>
                       <Button
@@ -80,20 +72,47 @@ export default function HomePageScreen() {
                       />
                     </View>
                   )}
-              </View>
-            </TouchableOpacity>
-          ))
-        )}
-      </View>
-
-
+                </View>
+              </TouchableOpacity>
+            )}
+            ListEmptyComponent={<Text style={styles.noTaskText}>אין משימות</Text>}
+          />
+        </View>
+  
+        <Text style={styles.sectionTitle}>משימות ואירועים זמינים החודש</Text>
+        <View style={styles.listContainer}>
+          <FlatList
+            data={availableTasksForNextMonth}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item: task }) => (
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => {
+                  router.push({
+                    pathname: "./TaskDetailsScreen",
+                    params: { taskId: task.id, date: task.startDate.split("T")[0] },
+                  });
+                }}
+              >
+                <Text style={styles.taskTitle}>{task.title}</Text>
+                <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
+                <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
+                <View style={styles.buttonWrapper}>
+                  <View style={[styles.buttonContainer, task.category === "משימה" && styles.withMargin]}>
+                    <TouchableOpacity onPress={() => signUpForTask(task.id, user.id)} style={styles.registerButton}>
+                      <Text style={styles.registerText}>הירשם למשימה</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            )}
+            ListEmptyComponent={<Text style={styles.noTaskText}>אין משימות</Text>}
+          />
+        </View>
+      </ScrollView>
     </PageWithMenu>
-
-
-
-
-
   );
+  
 
 
 }
@@ -102,6 +121,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#e0e5ec",
+  },
+  listContainer: {
+    height: 300, // הגובה הקבוע לכל רשימה (תוכל לשנות את הערך כאן בהתאם לצורך)
+    marginBottom: 10, // רווח בין הרשימות
+  },
+  registerButton: {
+    width: 160,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#4CAF50",
+    borderRadius: 5,
+    alignSelf: 'flex-end',
+    marginTop: 12,
+  },
+  registerText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
   },
   title: {
     fontSize: 24,

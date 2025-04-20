@@ -73,38 +73,105 @@ namespace Chores.Controllers
             return task;
         }
 
-
-
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetTasksForUser(string userId)
+        [HttpGet("home/{homeId}/tasks/month/available")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAvailableTasksForNextMonth(string homeId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
+            var today = DateTime.UtcNow.Date;
+            var oneMonthFromNow = today.AddDays(30);
+
+            // בדוק אם הבית קיים וכולל משימות ופרטי המשתתפים
+            var home = await _context.Homes
+                .Include(h => h.Tasks)
+                .ThenInclude(t => t.Participants)
+                .FirstOrDefaultAsync(h => h.Id == homeId);
+
+            if (home == null)
             {
-                return NotFound("User not found.");
+                return NotFound($"Home with ID '{homeId}' was not found.");
             }
 
-          
-            if (user.HomeId == null)
-            {
-                return BadRequest("User is not part of a home. No tasks available.");
-            }
+            // סינון משימות שזמן ההתחלה שלהן הוא מהיום ועד חודש קדימה ויש להן מקום פנוי
+            var availableTasks = home.Tasks
+                .Where(t =>
+                    t.StartDate.Date >= today &&
+                    t.StartDate.Date <= oneMonthFromNow &&
+                    t.Participants.Count < t.MaxParticipants)
+                .ToList();
 
-            var tasks = await _context.Tasks
-                .Where(t => t.Participants.Any(p => p.Id == userId))
-                .Select(t => new
+            // המרת המשימות ל-DTO
+            var taskDtos = availableTasks.Select(t => new TaskDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                HomeId = t.HomeId,
+                Category = t.Category,
+                Color = t.Color,
+                StartDate = t.StartDate,
+                EndDate = t.EndDate,
+                StartTime = t.StartTime,
+                EndTime = t.EndTime,
+                MaxParticipants = t.MaxParticipants,
+                Participants = t.Participants.Select(p => new ParticipantDto
                 {
-                    t.Id,
-                    t.Title,
-                    t.Description,
-                    t.StartDate,
-                    t.EndDate,
-                    t.Category
-                })
-                .ToListAsync();
+                    Id = p.Id,
+                    Name = p.Name
+                }).ToList()
+            }).ToList();
 
-            return Ok(tasks);
+            return Ok(taskDtos);
         }
+
+        [HttpGet("home/{homeId}/user/{userId}/tasks/week")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetUserTasksForNextWeekInHome(string homeId, string userId)
+        {
+            var today = DateTime.UtcNow.Date;
+            var oneWeekFromNow = today.AddDays(7);
+
+            // בדוק אם הבית קיים וכולל משימות ופרטי המשתתפים
+            var home = await _context.Homes
+                .Include(h => h.Tasks)
+                .ThenInclude(t => t.Participants)
+                .FirstOrDefaultAsync(h => h.Id == homeId);
+
+            if (home == null)
+            {
+                return NotFound($"Home with ID '{homeId}' was not found.");
+            }
+
+            // סינון משימות שהמשתמש משתתף בהן, בטווח של שבוע הקרוב
+            var userTasks = home.Tasks
+                .Where(t =>
+                    t.StartDate.Date >= today &&
+                    t.StartDate.Date <= oneWeekFromNow &&
+                    t.Participants.Any(p => p.Id == userId))
+                .ToList();
+
+            var taskDtos = userTasks.Select(t => new TaskDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                HomeId = t.HomeId,
+                Category = t.Category,
+                Color = t.Color,
+                StartDate = t.StartDate,
+                EndDate = t.EndDate,
+                StartTime = t.StartTime,
+                EndTime = t.EndTime,
+                MaxParticipants = t.MaxParticipants,
+                Participants = t.Participants.Select(p => new ParticipantDto
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                }).ToList()
+            }).ToList();
+
+            return Ok(taskDtos);
+        }
+
 
 
 

@@ -12,7 +12,7 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 import AlertModal from "./Components/AlertModal";
 
 const TasksListScreen = () => {
-  const { tasks, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask } = useTasks();
+  const { tasksFormatted, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
 
@@ -61,8 +61,8 @@ const TasksListScreen = () => {
   const renderMarkedDates = () => {
     const markedDates = {};
   
-    Object.keys(tasks).forEach((dateKey) => {
-      tasks[dateKey].forEach((task) => {
+    Object.keys(tasksFormatted).forEach((dateKey) => {
+      tasksFormatted[dateKey].forEach((task) => {
         const startDate = new Date(task.startDate);
         const endDate = new Date(task.endDate);
         const startDateStr = startDate.toISOString().split('T')[0];
