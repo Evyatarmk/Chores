@@ -85,11 +85,12 @@ const myThisWeek = tasks.filter(task =>
               endTime: convertTo12HourFormat(task.endTime),
               homeId: task.homeId,
               category: task.category,
+              status:task.status,
               color: task.color,
               maxParticipants: task.maxParticipants,
               participants: task.participants.map(p => ({
-                id: p.id,
-                name: p.name,
+              id: p.id,
+              name: p.name,
               })),
             });
     
@@ -116,45 +117,9 @@ const myThisWeek = tasks.filter(task =>
     
         const data = await response.json();
 
-        console.log(data)
-    
-    
-        // פונקציה ליצירת האובייקט הממויין לפי תאריך
-        const groupTasksByDate = (tasksArray) =>
-          tasksArray.reduce((acc, task) => {
-            const date = task.startDate.split("T")[0];
-    
-            if (!acc[date]) {
-              acc[date] = [];
-            }
-    
-            acc[date].push({
-              id: task.id,
-              title: task.title,
-              description: task.description,
-              startDate: task.startDate.split("T")[0],
-              endDate: task.endDate.split("T")[0],
-              startTime: convertTo12HourFormat(task.startTime),
-              endTime: convertTo12HourFormat(task.endTime),
-              homeId: task.homeId,
-              category: task.category,
-              color: task.color,
-              maxParticipants: task.maxParticipants,
-              participants: task.participants.map(p => ({
-                id: p.id,
-                name: p.name,
-              })),
-            });
-    
-            return acc;
-          }, {});
-    
-        // כל המשימות
-        const groupedAllTasks = groupTasksByDate(data);
-    
+       
         // עדכון הסטייטים
         setTasks(data);
-        setTasksFormatted(groupedAllTasks);
     
       } catch (error) {
         console.error("שגיאה בקבלת משימות:", error);
@@ -178,25 +143,41 @@ const myThisWeek = tasks.filter(task =>
     
 
     const markTaskAsCompleted = async (taskId) => {
+      // שמירת מצב קודם
+      const previousTasks = [...tasks];
+    
+      // עדכון מיידי על המסך - שינוי המשימה המתאימה ל־completed
+      setTasks(prev =>
+        prev.map(task =>
+          task.id === taskId ? { ...task, status: true} : task
+        )
+      );
+    
       try {
-        const response = await fetch(`${baseUrl}/Tasks/markAsCompleted/${taskId}`, {
+        const response = await fetchWithAuth(`${baseUrl}/Tasks/markAsCompleted/${taskId}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ TaskId: taskId, UserId: user.id }),
         });
-  
+    
         if (!response.ok) {
           throw new Error("שגיאה בסימון משימה כבוצעה");
         }
-
-         fetchTasks()
+    
         const result = await response.json();
         console.log("Task marked as completed successfully:", result);
+    
+        fetchTasks(); // רענון מהשרת
+    
       } catch (error) {
         console.error("Error marking task as completed:", error);
+    
+        // שחזור מצב קודם
+        setTasks(previousTasks);
+    
+        setErrorMessage("הייתה בעיה בסימון המשימה כבוצעה. נסה שוב.");
+        setErrorVisible(true);
       }
     };
-    
 
     const markTaskAsNotCompleted = async (taskId) => { 
       try {
