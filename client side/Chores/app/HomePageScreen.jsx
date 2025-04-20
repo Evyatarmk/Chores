@@ -1,127 +1,117 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button, FlatList, TouchableWithoutFeedback, TouchableOpacity, ScrollView } from "react-native";
+
+import React, { useState, useRef } from "react";
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import PageWithMenu from "./Components/PageWithMenu";
 import StoryComponent from "./Components/StoryComponent";
 import { useTasks } from "./Context/TaskContext";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
-import PodiumComponent from "./Components/PodiumComponent";  // Import the new PodiumComponent
-
+import TaskItem from "./Components/TaskItem";
+import OptionsModal from "./Components/OptionsModal";
+import AlertModal from "./Components/AlertModal";
 
 export default function HomePageScreen() {
   const router = useRouter();
-  const { availableTasksForNextMonth, myTasks, signUpForTask, signOutOfTask,markTaskAsCompleted,markTaskAsNotCompleted } = useTasks(); // Get tasks & sign-up function
-  const { user } = useUserAndHome(); // Get logged-in user
+  const { availableTasksForNextMonth, removeTaskForDate, myTasks, signUpForTask, signOutOfTask, markTaskAsCompleted, markTaskAsNotCompleted } = useTasks();
+  const { user } = useUserAndHome();
+  const optionsModalRef = useRef(null);
+  const [currentList, setCurrentList] = useState(null);
+  const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState("myTasks"); // טאב נבחר
 
+  const options = [
+    { icon: "edit", text: "ערוך", action: "edit" },
+    { icon: "delete", text: "מחק", action: "delete", iconColor: "#ff4444" },
+  ];
 
+  const handleOptionSelect = (option) => {
+    if (option.action === "edit") {
+      router.push({
+        pathname: "./TaskEditScreen",
+        params: { taskId: currentList.id, date: currentList.startDate.split("T")[0] },
+      });
+    } else if (option.action == "delete") {
+      setModalDeleteVisible(true);
+    }
+    optionsModalRef.current?.close();
+  };
 
+  const handleDelete = () => {
+    if (currentList) {
+      removeTaskForDate(currentList.id);
+      setModalDeleteVisible(false);
+    }
+  };
 
+  const openOptionsPanel = (task) => {
+    setCurrentList(task);
+    optionsModalRef.current?.open();
+  };
 
-
-
-  if (!user) {
-    return (
-      <PageWithMenu >
-        <StoryComponent></StoryComponent>
-        <Text style={styles.title}>Welcome to Your Chores App</Text>
-        <Text style={styles.subtitle}>Manage your daily tasks efficiently!</Text>
-      </PageWithMenu>
-    );
-
-  }
+  const displayedTasks = activeTab === "myTasks" ? myTasks : availableTasksForNextMonth;
+  const sectionTitle = activeTab === "myTasks" ? "המשימות שלי לשבוע הקרוב" : "משימות ואירועים זמינים החודש";
 
   return (
     <PageWithMenu>
       <StoryComponent />
-      <ScrollView>
-        <Text style={styles.sectionTitle}>המשימות שלי לשבוע הקרוב</Text>
-        <View style={styles.listContainer}>
-          <FlatList
-            data={myTasks}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item: task }) => (
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => {
-                  router.push({
-                    pathname: "./TaskDetailsScreen",
-                    params: { taskId: task.id, date: task.startDate.split("T")[0] },
-                  });
-                }}
-              >
-                <Text style={styles.taskTitle}>{task.title}</Text>
-                <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
-                <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
-                <View style={styles.buttonWrapper}>
-                  {/* כפתור ביטול הרשמה */}
-                  <View style={[styles.buttonContainer, task.category === "משימה" && styles.withMargin]}>
-                    <Button
-                      title="בטל הרשמה"
-                      color="#ff4d4d"
-                      onPress={() => signOutOfTask(task.id, user.id)}
-                    />
-                  </View>
-                  {/* כפתור סמן כבוצע */}
-                  {task.category === "משימה" && (
-                    <View style={styles.buttonContainer}>
-                    <Button
-                      title={task.status ? "סמן כלא בוצע" : "סמן כבוצע"} 
-                      color={task.status ? "#f44336" : "#4CAF50"} // אדום לביטול, ירוק לביצוע
-                      onPress={() => {
-                        console.log(task.status)
-                        if (task.status) {
-                          markTaskAsNotCompleted(task.id); // משימה בוצעה - אז מסמנים כלא בוצעה
-                        } else {
-                          markTaskAsCompleted(task.id);     // משימה לא בוצעה - אז מסמנים כבוצעה
-                        }
-                      }}
-                    />
-                  </View>
-                  )}
-                </View>
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={<Text style={styles.noTaskText}>אין משימות</Text>}
+
+      {/* טאב-באר */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity
+          style={[styles.tabButton, activeTab === "myTasks" && styles.activeTab]}
+          onPress={() => setActiveTab("myTasks")}
+        >
+          <Text style={[styles.tabText, activeTab === "myTasks" && styles.activeTabText]}>המשימות שלי</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tabButton, activeTab === "monthly" && styles.activeTab]}
+          onPress={() => setActiveTab("monthly")}
+        >
+          <Text style={[styles.tabText, activeTab === "monthly" && styles.activeTabText]}>משימות החודש</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* כותרת */}
+      <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+
+      {/* רשימת משימות */}
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 100 }}
+        data={displayedTasks}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item: task }) => (
+          <TaskItem
+            task={task}
+            user={user}
+            selectedDate={task.startDate.split("T")[0]}
+            signUpForTask={signUpForTask}
+            signOutOfTask={signOutOfTask}
+            markTaskAsCompleted={markTaskAsCompleted}
+            markTaskAsNotCompleted={markTaskAsNotCompleted}
+            openOptionsPanel={() => openOptionsPanel(task)}
+            router={router}
           />
-        </View>
-  
-        <Text style={styles.sectionTitle}>משימות ואירועים זמינים החודש</Text>
-        <View style={styles.listContainer}>
-          <FlatList
-            data={availableTasksForNextMonth}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item: task }) => (
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => {
-                  router.push({
-                    pathname: "./TaskDetailsScreen",
-                    params: { taskId: task.id, date: task.startDate.split("T")[0] },
-                  });
-                }}
-              >
-                <Text style={styles.taskTitle}>{task.title}</Text>
-                <Text style={styles.taskInfo}>תאריך התחלה: {task.startDate.split("T")[0]}</Text>
-                <Text style={styles.taskInfo}>קטגוריה: {task.category}</Text>
-                <View style={styles.buttonWrapper}>
-                  <View style={[styles.buttonContainer, task.category === "משימה" && styles.withMargin]}>
-                    <TouchableOpacity onPress={() => signUpForTask(task.id, user.id)} style={styles.registerButton}>
-                      <Text style={styles.registerText}>הירשם למשימה</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={<Text style={styles.noTaskText}>אין משימות</Text>}
-          />
-        </View>
-      </ScrollView>
+        )}
+        ListEmptyComponent={<Text style={styles.noTaskText}>אין משימות</Text>}
+      />
+
+      <OptionsModal
+        optionsModalRef={optionsModalRef}
+        handleOptionSelect={handleOptionSelect}
+        options={options}
+      />
+      <AlertModal
+        visible={modalDeleteVisible}
+        onClose={() => setModalDeleteVisible(false)}
+        message="האם אתה בטוח שברצונך למחוק פריט זה?"
+        onConfirm={handleDelete}
+        confirmText="מחק"
+        cancelText="ביטול"
+      />
     </PageWithMenu>
   );
-  
-
-
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -194,7 +184,44 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
   },
-
+  tabBar: {
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    width: "100%",
+  },
+  
+  tabButton: {
+    paddingVertical: 10,
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent", // לא נבחר
+  },
+  
+  activeTab: {
+    borderBottomColor: '#007bff', // קו ירוק מתחת לנבחר
+  },
+  
+  tabText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  
+  activeTabText: {
+    color:'#007bff',
+  },
+  
+  noTaskText: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  
   card: {
     backgroundColor: "#ffffff",
     borderRadius: 10,

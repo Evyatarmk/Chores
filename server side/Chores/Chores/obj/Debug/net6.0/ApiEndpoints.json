@@ -691,13 +691,18 @@
   {
     "ContainingType": "Chores.Controllers.TasksController",
     "Method": "GetCompletedTasksPerMonth",
-    "RelativePath": "api/Tasks/completedTasksPerMonth/{userId}",
+    "RelativePath": "api/Tasks/completedTasksPerMonth/{userId}/{homeId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "homeId",
         "Type": "System.String",
         "IsRequired": true
       }
