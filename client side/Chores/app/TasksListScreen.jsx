@@ -105,7 +105,6 @@ const TasksListScreen = () => {
   return (
     <PageWithMenu>
       <GestureHandlerRootView style={styles.container}>
-        <ScrollView>
         <NormalHeader title="המשימות של הבית" />
 
         <View style={{ marginBottom: 20 }}>
@@ -144,7 +143,6 @@ const TasksListScreen = () => {
             </View>
           }
         />
-     </ScrollView>
        
 
         <OptionsModal

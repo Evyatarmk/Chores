@@ -9,6 +9,7 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 import TaskItem from "./Components/TaskItem";
 import OptionsModal from "./Components/OptionsModal";
 import AlertModal from "./Components/AlertModal";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function HomePageScreen() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function HomePageScreen() {
   return (
     <PageWithMenu>
       <StoryComponent />
-
+<GestureHandlerRootView>
       {/* טאב-באר */}
       <View style={styles.tabBar}>
         <TouchableOpacity
@@ -108,6 +109,7 @@ export default function HomePageScreen() {
         confirmText="מחק"
         cancelText="ביטול"
       />
+      </GestureHandlerRootView>
     </PageWithMenu>
   );
 }
