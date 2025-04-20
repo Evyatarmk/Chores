@@ -28,13 +28,14 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     if (user?.id) {
-      fetch(`${baseUrl}/Tasks/completedTasksPerMonth/${user.id}`)
+      fetch(`${baseUrl}/Tasks/completedTasksPerMonth/${user.id}/${home.id}`)
         .then((res) => res.json())
         .then((result) => {
           const mappedData = result.map(item => ({
             name: `${item.month}/${item.year}`,
             completedTasks: item.completedTasks
           }));
+          
           setData(mappedData);
         })
         .catch((error) => console.error('Error fetching task data:', error));
@@ -64,38 +65,43 @@ const ProfileScreen = () => {
 
         <Text style={styles.subTitle}>משימות שבוצעו</Text>
         <View style={{ alignItems: 'center', paddingHorizontal: 20 }}>
-        <BarChart
-          data={{
-            labels: data.map(item => item.name),
-            datasets: [
-              {
-                data: data.map(item => item.completedTasks),
-              },
-            ],
-          }}
-          width={screenWidth - 40} // add margin
-          height={260}
-          fromZero={true} // start y-axis from zero
-          showValuesOnTopOfBars={true} // show numbers on bars
-          yAxisLabel=""
-          chartConfig={{
-            backgroundColor: "#4c669f",
-            backgroundGradientFrom: "#6a11cb",
-            backgroundGradientTo: "#2575fc",
-            decimalPlaces: 0,
-            barPercentage: 0.7,
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 16,
-            },
-            propsForBackgroundLines: {
-              stroke: "#e3e3e3",
-              strokeDasharray: "", // solid lines
-            },
-          }}
-          verticalLabelRotation={25}
-        />
+          {data.length > 0 ? (
+         <BarChart
+         data={{
+           labels: data.map(item => item.name),
+           datasets: [
+             {
+               data: data.map(item => item.completedTasks),
+             },
+           ],
+         }}
+         width={screenWidth - 40}
+         height={260}
+         fromZero={true}
+         showValuesOnTopOfBars={true}
+         yAxisLabel=""
+         chartConfig={{
+           backgroundColor: "#4c669f",
+           backgroundGradientFrom: "#6a11cb",
+           backgroundGradientTo: "#2575fc",
+           decimalPlaces: 0,
+           barPercentage: 0.7,
+           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+           style: {
+             borderRadius: 16,
+           },
+           propsForBackgroundLines: {
+             stroke: "#e3e3e3",
+             strokeDasharray: "",
+           },
+         }}
+         verticalLabelRotation={25}
+       />
+       
+          ) : (
+            <Text>אין נתונים להצגה</Text> // "No data to display"
+          )}
         </View>
 
         <Text style={styles.subTitle}>חברי הבית</Text>

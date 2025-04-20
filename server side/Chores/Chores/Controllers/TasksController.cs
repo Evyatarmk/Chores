@@ -123,28 +123,29 @@ namespace Chores.Controllers
         }
 
 
+        //Get
 
-        //GET
         [HttpGet("completedTasksPerMonth/{userId}/{homeId}")]
         public async Task<IActionResult> GetCompletedTasksPerMonth(string userId, string homeId)
         {
-            // Get the Home of the user
+            // Get the Home of the user, include Tasks and their Participants, and ensure the user is part of the home
             var userHome = await _context.Homes
-                .FirstOrDefaultAsync(h => h.Id == homeId);
+                .Include(h => h.Users)              // Include users related to this home
+                .Include(h => h.Tasks)              // Include tasks related to this home
+                    .ThenInclude(t => t.Participants)   // Include participants (users) for each task
+                .FirstOrDefaultAsync(h => h.Id == homeId && h.Users.Any(u => u.Id == userId));
 
             if (userHome == null)
             {
                 return NotFound("User's home not found.");
             }
 
-            // Get the user's Tasks directly through Home
-            var completedTasks = await _context.Tasks
-                .Where(t => t.HomeId == userHome.Id
-                            && t.Status == true
-                            && t.CompletedDate != null)
-                .ToListAsync();
+            // Get the completed tasks directly through Home, filtering by completed tasks
+            var completedTasks = userHome.Tasks
+                .Where(t => t.Status == true && t.CompletedDate.HasValue)
+                .ToList();
 
-            // Group them by Year and Month
+            // Group the completed tasks by Year and Month
             var grouped = completedTasks
                 .GroupBy(t => new { t.CompletedDate.Value.Year, t.CompletedDate.Value.Month })
                 .Select(g => new
@@ -159,7 +160,6 @@ namespace Chores.Controllers
 
             return Ok(grouped);
         }
-
 
 
         // POST: api/tasks
