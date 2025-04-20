@@ -238,7 +238,7 @@ export const StoriesProvider = ({ children }) => {
 
 
   return (
-    <StoriesContext.Provider value={{ stories, addStory, deleteStory }}>
+    <StoriesContext.Provider value={{ stories, addStory, deleteStory,fetchStories }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
 
