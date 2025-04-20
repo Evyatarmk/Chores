@@ -194,7 +194,8 @@ const myThisWeek = tasks.filter(task =>
         const result = await response.json();
         console.log("Task marked as NOT completed successfully:", result);
       } catch (error) {
-        console.error("Error marking task as not completed:", error);
+        setErrorMessage("שגיאה בסימון משימה כלא בוצעה");
+        setErrorVisible(true);
       }
     };
   
@@ -350,11 +351,9 @@ const removeTaskForDate = async (taskId) => {
 
   // שמירה על המצב הקודם
   const previousTasks = [...tasks];
-  const previousAvailableTasks = [...availableTasksForNextMonth];
 
   // עדכון מיידי במסך
   setTasks((prev) => prev.filter((t) => t.id !== taskId));
-  setAvailableTasksForNextMonth((prev) => prev.filter((t) => t.id !== taskId));
 
   try {
     const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
@@ -372,7 +371,6 @@ const removeTaskForDate = async (taskId) => {
 
     // שחזור המצב הקודם במקרה של שגיאה
     setTasks(previousTasks);
-    setAvailableTasksForNextMonth(previousAvailableTasks);
 
     // הצגת הודעת שגיאה
     setErrorMessage("הייתה בעיה במחיקת המשימה. נסה שוב מאוחר יותר.");
@@ -429,7 +427,8 @@ const removeTaskForDate = async (taskId) => {
       // Refresh the task list or UI
       fetchTasks();
     } catch (error) {
-      console.error('Error editing task:', error);
+      setErrorMessage("שגיאה בעריכת משימה אנא נסה שוב");
+      setErrorVisible(true);
     }
   };
   
