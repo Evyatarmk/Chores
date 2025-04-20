@@ -10,53 +10,50 @@ import PageWithMenu from "./Components/PageWithMenu";
 import OptionsModal from "./Components/OptionsModal";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import AlertModal from "./Components/AlertModal";
+import { useApiUrl } from "./Context/ApiUrlProvider";
 
 const TasksListScreen = () => {
   const { tasksFormatted, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
-
-  const router = useRouter();
-  const optionsModalRef = useRef(null);
-  const editModalRef = useRef(null)
   const [currentList, setCurrentList] = useState(null);
-  const { user } = useUserAndHome()
+
+  const optionsModalRef = useRef(null);
+
   const categoryColors = {
     משימה: "#42A5F5", // כחול נעים
     אירוע: "#AB47BC", // סגול רך
   };
-  const DEFAULT_CATEGORY_COLOR = "#90CAF9"; // צבע ברירת מחדל  
+  const DEFAULT_CATEGORY_COLOR = "#90CAF9";
+
   const options = [
     { icon: "edit", text: "ערוך", action: "edit" },
-    { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
+    { icon: "delete", text: "מחק", action: "delete", iconColor: "#ff4444" },
   ];
+
   const handleOptionSelect = (option) => {
+    optionsModalRef.current?.close();
     if (option === "edit") {
-      optionsModalRef.current?.close();
-      handleEdit()
-      setTimeout(() => {
-        editModalRef.current?.open();
-      }, 300);
-    } if (option === "delete") {
-      setModalDeleteVisible(true)
+      router.push({
+        pathname: "./TaskEditScreen",
+        params: { taskId: currentList.id, date: selectedDate },
+      });
+    } else if (option === "delete") {
+      setModalDeleteVisible(true);
     }
   };
 
-  const handleEdit = () => {
-    router.push({
-      pathname: "./TaskEditScreen",
-      params: { taskId: currentList.id, date: selectedDate }
-    })
-  };
   const handleDelete = () => {
-    optionsModalRef.current?.close();
-    removeTaskForDate(currentList.id)
+    if (currentList) {
+      removeTaskForDate(currentList.id);
+      setModalDeleteVisible(false);
+    }
   };
+
   const openOptionsPanel = (list) => {
     setCurrentList(list);
     optionsModalRef.current?.open();
   };
-
 
   const renderMarkedDates = () => {
     const markedDates = {};
@@ -65,62 +62,52 @@ const TasksListScreen = () => {
       tasksFormatted[dateKey].forEach((task) => {
         const startDate = new Date(task.startDate);
         const endDate = new Date(task.endDate);
-        const startDateStr = startDate.toISOString().split('T')[0];
-        const endDateStr = endDate.toISOString().split('T')[0];
-  
         const color = categoryColors[task.category] || DEFAULT_CATEGORY_COLOR;
-  
+
         let current = new Date(startDate);
-  
         while (current <= endDate) {
-          const dateStr = current.toISOString().split('T')[0];
-  
+          const dateStr = current.toISOString().split("T")[0];
+
           const period = {
-            startingDay: dateStr === startDateStr,
-            endingDay: dateStr === endDateStr,
+            startingDay: dateStr === startDate.toISOString().split("T")[0],
+            endingDay: dateStr === endDate.toISOString().split("T")[0],
             color: color,
-            textColor: 'white',
+            textColor: "white",
           };
-  
+
           if (!markedDates[dateStr]) {
             markedDates[dateStr] = { periods: [period] };
           } else {
             markedDates[dateStr].periods.push(period);
           }
-  
+
           current.setDate(current.getDate() + 1);
         }
       });
     });
-  
-    // 🎯 הוספת היום שנבחר כ-selected
+
+    // הוספת היום הנבחר
     if (!markedDates[selectedDate]) {
       markedDates[selectedDate] = {};
     }
     markedDates[selectedDate].selected = true;
-    markedDates[selectedDate].selectedColor = "#42A5F5"; // צבע הבחירה שאת רוצה
+    markedDates[selectedDate].selectedColor = "#42A5F5";
     markedDates[selectedDate].selectedTextColor = "#fff";
-  
+
     return markedDates;
   };
-  
-
-
 
 
 
   return (
     <PageWithMenu>
       <GestureHandlerRootView style={styles.container}>
-        <NormalHeader title="המשימות של הבית"></NormalHeader>
-        {/* יומן להצגת התאריכים */}
+        <NormalHeader title="המשימות של הבית" />
+
         <Calendar
           markedDates={renderMarkedDates()}
-          markingType={"multi-period"}
-          onDayPress={(day) => {
-            setSelectedDate(day.dateString);
-
-          }}
+          markingType="multi-period"
+          onDayPress={(day) => setSelectedDate(day.dateString)}
           theme={{
             selectedDayBackgroundColor: "#1E90FF",
             todayTextColor: "#1E90FF",
@@ -128,73 +115,55 @@ const TasksListScreen = () => {
           }}
         />
 
-        {/* רשימת משימות לתאריך שנבחר */}
         <FlatList
           data={getTasksForDate(selectedDate)}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
-            const isUserRegistered = item.participants.some(participant => participant.id === user?.id); // כאן אתה בודק אם המשתמש רשום, תחליף ב-id של המשתמש שלך
-            console.log(item.category)
+            const isUserRegistered = item.participants.some(p => p.id === user?.id);
+
             return (
               <TouchableOpacity
                 style={styles.taskItem}
-                onPress={() =>
-                  router.push({
-                    pathname: "./TaskDetailsScreen",
-                    params: { taskId: item.id, date: selectedDate },
-                  })
-                }
+                onPress={() => router.push({ pathname: "./TaskDetailsScreen", params: { taskId: item.id, date: selectedDate } })}
               >
                 <Text style={styles.taskTitle}>{item.title}</Text>
                 <Text style={styles.taskDescription}>{item.description}</Text>
 
-                {item.category === "אירוע" ? (
+                {item.category === "אירוע" || item.category === "משימה" ? (
                   isUserRegistered ? (
                     <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
                       <Text style={styles.registerText}>בטל הרשמה</Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
-                      <Text style={styles.registerText}>הירשם לאירוע</Text>
+                      <Text style={styles.registerText}>הירשם</Text>
                     </TouchableOpacity>
                   )
-                ) : (
-                  item.participants.length < item.maxParticipants ? (
-                    isUserRegistered ? (
-                      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
-                        <Text style={styles.registerText}>בטל הרשמה</Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
-                        <Text style={styles.registerText}>הירשם למשימה</Text>
-                      </TouchableOpacity>
-                    )
-                  ) : (
-                    isUserRegistered && (
-                      <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
-                        <Text style={styles.registerText}>בטל הרשמה</Text>
-                      </TouchableOpacity>
-                    )
-                  )
-                )}
-                {isUserRegistered && !item.completedAt && item.category === "משימה" && (
+                ) : null}
+
+                {isUserRegistered && item.category === "משימה" && (
+                  
                   <TouchableOpacity
-                    onPress={async () => {
-                      await markTaskAsCompleted(item.id, user.id);
+                    onPress={() => {
+                      console.log(item)
+                      if (item.status == true) {
+                        markTaskAsNotCompleted(item.id);
+                      } else {
+                        markTaskAsCompleted(item.id);
+                      }
                     }}
-                    style={[styles.registerButton, { backgroundColor: "#2196F3", marginTop: 10 }]}
+                    style={[
+                      styles.registerButton,
+                      { backgroundColor: item.status ? "#FF5722" : "#2196F3", marginTop: 10 },
+                    ]}
                   >
-                    <Text style={styles.registerText}>סמן כבוצע</Text>
+                    <Text style={styles.registerText}>
+                      {item.status ? "סמן כלא בוצע" : "סמן כבוצע"}
+                    </Text>
                   </TouchableOpacity>
                 )}
 
-
-
-
-                <TouchableOpacity
-                  style={styles.optionsButton}
-                  onPress={() => openOptionsPanel(item)}
-                >
+                <TouchableOpacity style={styles.optionsButton} onPress={() => openOptionsPanel(item)}>
                   <Icon name="more-vert" size={24} color="#888" />
                 </TouchableOpacity>
               </TouchableOpacity>
@@ -207,28 +176,23 @@ const TasksListScreen = () => {
           }
         />
 
-
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() =>
-            router.push({
-              pathname: "./AddTaskScreen",
-              params: { day: selectedDate },
-            })
-          }
+          onPress={() => router.push({ pathname: "./AddTaskScreen", params: { day: selectedDate } })}
         >
           <Icon name="add" size={30} color="white" />
         </TouchableOpacity>
-        {/* מודל אפשרויות */}
+
         <OptionsModal
           optionsModalRef={optionsModalRef}
-          handleOptionSelect={handleOptionSelect}
+          handleOptionSelect={(option) => handleOptionSelect(option.action)}
           options={options}
         />
+
         <AlertModal
           visible={modalDeleteVisible}
           onClose={() => setModalDeleteVisible(false)}
-          message="האם אתה בטוח שברצונך למחוק פריטים אלו?"
+          message="האם אתה בטוח שברצונך למחוק פריט זה?"
           onConfirm={handleDelete}
           confirmText="מחק"
           cancelText="ביטול"
@@ -241,7 +205,6 @@ const TasksListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
   },
   taskItem: {
     padding: 16,
@@ -253,40 +216,56 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    margin: 3
+    marginHorizontal: 10,
   },
   taskTitle: {
-    textAlign: "right", fontSize: 20, fontWeight: "bold", color: "#333", paddingBottom: 10
+    textAlign: "right",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 8,
   },
   taskDescription: {
     textAlign: "right",
     fontSize: 14,
-    color: "#888",
-    paddingBottom: 8,  // Adjust padding for better spacing
+    color: "#666",
+    marginBottom: 8,
+  },
+  registerButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    alignSelf: "flex-start",
+    marginTop: 8,
+  },
+  cancelRegisterButton: {
+    backgroundColor: "#ff4444",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    alignSelf: "flex-start",
+    marginTop: 8,
+  },
+  registerText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
   },
   optionsButton: {
     position: "absolute",
-    top: 12,
-    left: 2,
-    padding: 8,
-    borderRadius: 25,
-    zIndex: 1000
-  },
-  button: {
-    padding: 10,
-    backgroundColor: "#dc3545",
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 10,
+    top: 8,
+    left: 8,
+    padding: 6,
+    zIndex: 10,
   },
   emptyContainer: {
     alignItems: "center",
-    marginVertical: 20,
+    marginTop: 20,
   },
   emptyText: {
     fontSize: 16,
-    color: "#666",
-    textAlign: "center", // Center the empty state text
+    color: "#888",
   },
   addButton: {
     position: "absolute",
@@ -296,39 +275,14 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
-    zIndex: 1000,
+    elevation: 5,
   },
-  registerButton: {
-    width: 160,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#4CAF50",
-    borderRadius: 5,
-    alignSelf: 'flex-end',
-    marginTop: 12,
-  },
-  cancelRegisterButton: {
-    width: 160,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    paddingTop: 10,
-    backgroundColor: "#f44336",
-    borderRadius: 5,
-    alignSelf: 'flex-end',
-    marginTop: 12,
-  },
-  registerText: {
-    fontSize: 16,
-    textAlign: "center",
-    color: "white",
-    fontWeight: "bold",
-  }
 });
 
 export default TasksListScreen;

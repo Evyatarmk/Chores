@@ -49,11 +49,13 @@ namespace Chores.Controllers
                 StartTime = t.StartTime,
                 EndTime = t.EndTime,
                 MaxParticipants = t.MaxParticipants,
+                Status = t.Status,
                 Participants = t.Participants.Select(p => new ParticipantDto
                 {
                     Id = p.Id,           // Access the user through the participant
                     Name = p.Name        // Access the user details through the participant
                 }).ToList()
+
             }).ToList();
 
             return Ok(taskDtos); // Return the list of tasks as a response
@@ -91,88 +93,51 @@ namespace Chores.Controllers
                 return NotFound($"Home with ID '{homeId}' was not found.");
             }
 
-            // סינון משימות שזמן ההתחלה שלהן הוא מהיום ועד חודש קדימה ויש להן מקום פנוי
-            var availableTasks = home.Tasks
-                .Where(t =>
-                    t.StartDate.Date >= today &&
-                    t.StartDate.Date <= oneMonthFromNow &&
-                    t.Participants.Count < t.MaxParticipants)
-                .ToList();
-
-            // המרת המשימות ל-DTO
-            var taskDtos = availableTasks.Select(t => new TaskDto
+          
+            if (user.HomeId == null)
             {
-                Id = t.Id,
-                Title = t.Title,
-                Description = t.Description,
-                HomeId = t.HomeId,
-                Category = t.Category,
-                Color = t.Color,
-                StartDate = t.StartDate,
-                EndDate = t.EndDate,
-                StartTime = t.StartTime,
-                EndTime = t.EndTime,
-                MaxParticipants = t.MaxParticipants,
-                Participants = t.Participants.Select(p => new ParticipantDto
-                {
-                    Id = p.Id,
-                    Name = p.Name
-                }).ToList()
-            }).ToList();
-
-            return Ok(taskDtos);
-        }
-
-        [HttpGet("home/{homeId}/user/{userId}/tasks/week")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<TaskDto>>> GetUserTasksForNextWeekInHome(string homeId, string userId)
-        {
-            var today = DateTime.UtcNow.Date;
-            var oneWeekFromNow = today.AddDays(7);
-
-            // בדוק אם הבית קיים וכולל משימות ופרטי המשתתפים
-            var home = await _context.Homes
-                .Include(h => h.Tasks)
-                .ThenInclude(t => t.Participants)
-                .FirstOrDefaultAsync(h => h.Id == homeId);
-
-            if (home == null)
-            {
-                return NotFound($"Home with ID '{homeId}' was not found.");
+                return BadRequest("User is not part of a home. No tasks available.");
             }
 
-            // סינון משימות שהמשתמש משתתף בהן, בטווח של שבוע הקרוב
-            var userTasks = home.Tasks
-                .Where(t =>
-                    t.StartDate.Date >= today &&
-                    t.StartDate.Date <= oneWeekFromNow &&
-                    t.Participants.Any(p => p.Id == userId))
-                .ToList();
-
-            var taskDtos = userTasks.Select(t => new TaskDto
-            {
-                Id = t.Id,
-                Title = t.Title,
-                Description = t.Description,
-                HomeId = t.HomeId,
-                Category = t.Category,
-                Color = t.Color,
-                StartDate = t.StartDate,
-                EndDate = t.EndDate,
-                StartTime = t.StartTime,
-                EndTime = t.EndTime,
-                MaxParticipants = t.MaxParticipants,
-                Participants = t.Participants.Select(p => new ParticipantDto
+            var tasks = await _context.Tasks
+                .Where(t => t.Participants.Any(p => p.Id == userId))
+                .Select(t => new
                 {
-                    Id = p.Id,
-                    Name = p.Name
-                }).ToList()
-            }).ToList();
+                    t.Id,
+                    t.Title,
+                    t.Description,
+                    t.StartDate,
+                    t.EndDate,
+                    t.Category
+                })
+                .ToListAsync();
 
             return Ok(taskDtos);
         }
 
 
+        //GET
+
+        [HttpGet("completedTasksPerMonth/{userId}")]
+        public async Task<IActionResult> GetCompletedTasksPerMonth(string userId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.CompletedByUserId == userId && t.Status == true && t.CompletedDate != null)
+                .ToListAsync();
+
+            var grouped = tasks
+                .GroupBy(t => new { t.CompletedDate.Value.Year, t.CompletedDate.Value.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    CompletedTasks = g.Count()
+                })
+                .OrderBy(g => g.Year).ThenBy(g => g.Month)
+                .ToList();
+
+            return Ok(grouped);
+        }
 
 
 
@@ -262,6 +227,60 @@ namespace Chores.Controllers
 
             return NoContent();
         }
+
+        //Put
+
+        [HttpPut("markAsCompleted/{taskId}")]
+        public async Task<IActionResult> MarkTaskAsCompleted([FromBody] MarkTaskCompletedDto dto)
+        {
+            if (dto == null || string.IsNullOrEmpty(dto.TaskId) || string.IsNullOrEmpty(dto.UserId))
+            {
+                return BadRequest("Task ID and User ID must be provided.");
+            }
+
+            var task = await _context.Tasks.FindAsync(dto.TaskId);
+
+            if (task == null)
+            {
+                return NotFound($"Task with ID {dto.TaskId} not found.");
+            }
+
+            task.Status = true;
+            task.CompletedByUserId = dto.UserId;
+            task.CompletedDate = DateTime.UtcNow;
+
+            _context.Tasks.Update(task);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Task marked as completed successfully.", taskId = task.Id });
+        }
+
+        // Put - סימון משימה כלא בוצעה
+        [HttpPut("markAsNotCompleted/{taskId}")]
+        public async Task<IActionResult> MarkTaskAsNotCompleted([FromBody] MarkTaskCompletedDto dto)
+        {
+            if (dto == null || string.IsNullOrEmpty(dto.TaskId) || string.IsNullOrEmpty(dto.UserId))
+            {
+                return BadRequest("Task ID and User ID must be provided.");
+            }
+
+            var task = await _context.Tasks.FindAsync(dto.TaskId);
+
+            if (task == null)
+            {
+                return NotFound($"Task with ID {dto.TaskId} not found.");
+            }
+
+            task.Status = false;
+            task.CompletedByUserId = null;
+            task.CompletedDate = null; // אפשר גם למחוק פה תאריך אם תרצה
+
+            _context.Tasks.Update(task);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Task marked as NOT completed successfully.", taskId = task.Id });
+        }
+
 
         // DELETE: api/tasks/{id}
         [HttpDelete("{id}")]

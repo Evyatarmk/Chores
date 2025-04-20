@@ -140,6 +140,8 @@ const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([])
         }
     
         const data = await response.json();
+
+        console.log(data)
     
     
         // פונקציה ליצירת האובייקט הממויין לפי תאריך
@@ -234,7 +236,46 @@ const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([])
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     };
     
+
+    const markTaskAsCompleted = async (taskId) => {
+      try {
+        const response = await fetch(`${baseUrl}/Tasks/markAsCompleted/${taskId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ TaskId: taskId, UserId: user.id }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("שגיאה בסימון משימה כבוצעה");
+        }
+
+         fetchTasks()
+        const result = await response.json();
+        console.log("Task marked as completed successfully:", result);
+      } catch (error) {
+        console.error("Error marking task as completed:", error);
+      }
+    };
     
+
+    const markTaskAsNotCompleted = async (taskId) => { 
+      try {
+        const response = await fetch(`${baseUrl}/Tasks/markAsNotCompleted/${taskId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ TaskId: taskId, UserId: user.id }),
+        });
+    
+        if (!response.ok) {
+          throw new Error("שגיאה בסימון משימה כלא בוצעה");
+        }
+        fetchTasks()
+        const result = await response.json();
+        console.log("Task marked as NOT completed successfully:", result);
+      } catch (error) {
+        console.error("Error marking task as not completed:", error);
+      }
+    };
   
 
     const addTaskForDate = async (task, homeId) => {

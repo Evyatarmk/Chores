@@ -19,7 +19,6 @@ export default function HomePageScreen() {
 
 
 
-
   if (!user) {
     return (
       <PageWithMenu >
@@ -65,12 +64,19 @@ export default function HomePageScreen() {
                   {/* כפתור סמן כבוצע */}
                   {task.category === "משימה" && (
                     <View style={styles.buttonContainer}>
-                      <Button
-                        title="סמן כבוצע"
-                        color="#4CAF50"
-                        onPress={() => markTaskAsCompleted(task.id, user.id)}
-                      />
-                    </View>
+                    <Button
+                      title={task.status ? "סמן כלא בוצע" : "סמן כבוצע"} 
+                      color={task.status ? "#f44336" : "#4CAF50"} // אדום לביטול, ירוק לביצוע
+                      onPress={() => {
+                        console.log(task.status)
+                        if (task.status) {
+                          markTaskAsNotCompleted(task.id); // משימה בוצעה - אז מסמנים כלא בוצעה
+                        } else {
+                          markTaskAsCompleted(task.id);     // משימה לא בוצעה - אז מסמנים כבוצעה
+                        }
+                      }}
+                    />
+                  </View>
                   )}
                 </View>
               </TouchableOpacity>
