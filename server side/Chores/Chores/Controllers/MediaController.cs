@@ -70,10 +70,6 @@ namespace Chores.Controllers
             if (dto.MediaFile == null || dto.MediaFile.Length == 0)
                 return BadRequest("Media file is required.");
 
-            // (אופציונלי) בדיקת סוג הקובץ
-            var allowedTypes = new[] { "image/jpeg", "image/png" };
-            if (!allowedTypes.Contains(dto.MediaFile.ContentType))
-                return BadRequest("Only JPEG and PNG files are allowed.");
 
             // יצירת אובייקט מדיה
             var media = new MediaItem
@@ -100,6 +96,7 @@ namespace Chores.Controllers
                         "image/jpeg" => ".jpg",
                         "image/png" => ".png",
                         "video/mp4" => ".mp4",
+                        "video/quicktime" => ".mov", // ✅ תמיכה ב־.mov
                         _ => ".dat"
                     };
                 }

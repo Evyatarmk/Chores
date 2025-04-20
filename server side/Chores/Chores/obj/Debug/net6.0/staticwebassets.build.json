@@ -1,6 +1,10 @@
 {
   "Version": 1,
+<<<<<<< HEAD
   "Hash": "zK1jMi/E8KHnXYXerJyf+BVqgQDwZsUXjYCCjwXqdqc=",
+=======
+  "Hash": "25Lfl7D5HiZO6Jqo7TZ8/aXPx07h0GD83EgcBwPoYYw=",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
   "Source": "Chores",
   "BasePath": "_content/Chores",
   "Mode": "Default",
@@ -80,7 +84,32 @@
       "OriginalItemSpec": "wwwroot\\uploads\\38541982-1511-4325-86ef-7f23573c3aed.jpg"
     },
     {
+<<<<<<< HEAD
       "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+=======
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/392d6d32-f82b-4c12-8683-804203fa2184#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7lqo24k3ch",
+      "Integrity": "m25HtT1OptUrxKPkO95tC9kqHJrPxTPNS+gcOr44snY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "SourceId": "Chores",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
@@ -122,7 +151,74 @@
       "OriginalItemSpec": "wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg"
     },
     {
+<<<<<<< HEAD
       "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+=======
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc#[.{fingerprint}]?.dat",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "859rypumxp",
+      "Integrity": "DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/69387507-258d-4ad0-8642-87348b86375e#[.{fingerprint}]?.mov",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "859rypumxp",
+      "Integrity": "DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "j2giu7usob",
+      "Integrity": "JaTwr63BdhGqW31Jy4CjhcvOmhSr8XYNI4fRlKqFPiA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "SourceId": "Chores",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
@@ -206,7 +302,32 @@
       "OriginalItemSpec": "wwwroot\\uploads\\838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg"
     },
     {
+<<<<<<< HEAD
       "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22",
+=======
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "6u897x8yqw",
+      "Integrity": "/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "SourceId": "Chores",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
@@ -227,7 +348,32 @@
       "OriginalItemSpec": "wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22"
     },
     {
+<<<<<<< HEAD
       "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg",
+=======
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "gwh4f9wy2k",
+      "Integrity": "oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "SourceId": "Chores",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
@@ -248,7 +394,32 @@
       "OriginalItemSpec": "wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg"
     },
     {
+<<<<<<< HEAD
       "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
+=======
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "vilwetqap2",
+      "Integrity": "CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "SourceId": "Chores",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
@@ -518,7 +689,11 @@
     },
     {
       "Route": "uploads/392d6d32-f82b-4c12-8683-804203fa2184.7lqo24k3ch.jpg",
+<<<<<<< HEAD
       "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+=======
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -539,7 +714,11 @@
         },
         {
           "Name": "Last-Modified",
+<<<<<<< HEAD
           "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+=======
+          "Value": "Sun, 20 Apr 2025 15:04:28 GMT"
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
         },
         {
           "Name": "Cache-Control",
@@ -563,7 +742,11 @@
     },
     {
       "Route": "uploads/392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+<<<<<<< HEAD
       "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+=======
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -584,7 +767,11 @@
         },
         {
           "Name": "Last-Modified",
+<<<<<<< HEAD
           "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+=======
+          "Value": "Sun, 20 Apr 2025 15:04:28 GMT"
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
         },
         {
           "Name": "Cache-Control",
@@ -681,8 +868,177 @@
       ]
     },
     {
+<<<<<<< HEAD
       "Route": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092.j2giu7usob.jpg",
       "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+=======
+      "Route": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc.859rypumxp.dat",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:31:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "859rypumxp"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc.dat"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:31:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/69387507-258d-4ad0-8642-87348b86375e.859rypumxp.mov",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/quicktime"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:31:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "859rypumxp"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/69387507-258d-4ad0-8642-87348b86375e.mov"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/69387507-258d-4ad0-8642-87348b86375e.mov",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/quicktime"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:31:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092.j2giu7usob.jpg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -703,7 +1059,11 @@
         },
         {
           "Name": "Last-Modified",
+<<<<<<< HEAD
           "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+=======
+          "Value": "Sun, 20 Apr 2025 15:04:42 GMT"
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
         },
         {
           "Name": "Cache-Control",
@@ -727,7 +1087,11 @@
     },
     {
       "Route": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+<<<<<<< HEAD
       "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+=======
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -748,7 +1112,11 @@
         },
         {
           "Name": "Last-Modified",
+<<<<<<< HEAD
           "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+=======
+          "Value": "Sun, 20 Apr 2025 15:04:42 GMT"
+>>>>>>> ed51a763e0016d37caf2bbf9d3dd2ccad7ab658f
         },
         {
           "Name": "Cache-Control",
@@ -1009,6 +1377,88 @@
       ]
     },
     {
+      "Route": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f.6u897x8yqw.jpg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3764914"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:26:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6u897x8yqw"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3764914"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:26:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU="
+        }
+      ]
+    },
+    {
       "Route": "uploads/90b71bc8-dd04-4ad3-8147-12a7d870dd22",
       "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22",
       "Selectors": [],
@@ -1091,6 +1541,88 @@
       ]
     },
     {
+      "Route": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151.gwh4f9wy2k.jpg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3363928"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:28:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "gwh4f9wy2k"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3363928"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:28:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE="
+        }
+      ]
+    },
+    {
       "Route": "uploads/a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jcz66wem79.jpg",
       "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg",
       "Selectors": [],
@@ -1169,6 +1701,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3084722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:10:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40.vilwetqap2.jpg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3084722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:10:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vilwetqap2"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4="
         }
       ]
     },
