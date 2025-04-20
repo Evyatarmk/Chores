@@ -80,3 +80,4 @@ Logs/
 [Nn]etcoreobj/
 /server side/Chores/Chores/bin
 *.dll
+server side/Chores/Chores/bin/Debug/net6.0/
