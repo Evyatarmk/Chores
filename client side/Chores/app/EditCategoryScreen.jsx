@@ -1,56 +1,68 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, Modal } from 'react-native';
 import { useCategories } from "./Context/CategoryContext";
-import { Ionicons } from '@expo/vector-icons'; // Make sure you have expo-vector-icons installed
+import { Ionicons } from '@expo/vector-icons';
 import NormalHeader from "./Components/NormalHeader";
-import AlertModal from "./Components/AlertModal"; // Import your custom modal component
+import AlertModal from "./Components/AlertModal";
+import { useUserAndHome } from './Context/UserAndHomeContext';
 
 const EditCategoryScreen = () => {
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
+  const { use, home } = useUserAndHome();
 
   const [name, setName] = useState('');
-  const [homeId, setHomeId] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   // Function to handle adding a category
   const handleAddCategory = () => {
-    if (!name.trim() || !homeId.trim()) {
+    if (!name.trim() || !home?.id) {
       Alert.alert('Validation Error', 'Please fill all fields');
       return;
     }
 
     const newCategory = {
       name: name,
-      homeId: parseInt(homeId),
+      homeId: home.id,
+      id:categories.id
     };
 
     addCategory(newCategory);
     setName('');
-    setHomeId('');
   };
 
   // Function to handle deleting a category
   const handleDeleteCategory = (id) => {
     setCategoryIdToDelete(id);
-    setModalVisible(true);  // Show the modal when user clicks delete
+    setModalVisible(true);
   };
 
-  // Close the modal without deleting
   const closeModal = () => {
     setModalVisible(false);
   };
 
-  // Confirm deletion and proceed to delete the category
   const confirmDelete = () => {
-    deleteCategory(categoryIdToDelete);  // Call deleteCategory with the selected category ID
-    closeModal();  // Close the modal after deletion
+    deleteCategory(categoryIdToDelete);
+    closeModal();
   };
 
   // Function to handle editing a category
   const handleEditCategory = (category) => {
-    setName(category.name);
-    setHomeId(category.homeId.toString());
+    setEditingCategory(category);
+    setNewCategoryName(category.name);
+    setEditModalVisible(true);
+  };
+
+  const handleConfirmEdit = () => {
+    if (editingCategory && newCategoryName.trim()) {
+      updateCategory({ ...editingCategory, name: newCategoryName });
+      setEditModalVisible(false);
+      setEditingCategory(null);
+      setNewCategoryName('');
+    }
   };
 
   return (
@@ -81,15 +93,6 @@ const EditCategoryScreen = () => {
           placeholder="Enter category name"
         />
 
-        <Text style={styles.label}>Home ID:</Text>
-        <TextInput
-          style={styles.input}
-          value={homeId}
-          onChangeText={setHomeId}
-          placeholder="Enter Home ID"
-          keyboardType="numeric"
-        />
-
         <TouchableOpacity style={styles.addButton} onPress={handleAddCategory}>
           <Ionicons name="add-circle-outline" size={30} color="green" />
           <Text style={styles.addButtonText}>Add Category</Text>
@@ -106,6 +109,38 @@ const EditCategoryScreen = () => {
         confirmText="מחק"
         cancelText="ביטול"
       />
+
+      {/* Modal for Edit Category */}
+      <Modal transparent visible={editModalVisible} animationType="slide">
+        <View style={styles.overlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>עריכת קטגוריה</Text>
+
+            <TextInput
+              style={styles.input}
+              value={newCategoryName}
+              onChangeText={setNewCategoryName}
+              placeholder="New category name"
+            />
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => setEditModalVisible(false)}
+              >
+                <Text style={styles.cancelText}>ביטול</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={handleConfirmEdit}
+              >
+                <Text style={styles.confirmText}>שמור</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -160,6 +195,45 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 18,
     color: 'green',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  cancelButton: {
+    marginRight: 20,
+    padding: 10,
+  },
+  confirmButton: {
+    padding: 10,
+    backgroundColor: 'green',
+    borderRadius: 5,
+  },
+  cancelText: {
+    color: 'red',
+    fontSize: 16,
+  },
+  confirmText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

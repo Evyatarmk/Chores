@@ -3,6 +3,7 @@ import { useUserAndHome } from "./UserAndHomeContext";
 import ErrorNotification from "../Components/ErrorNotification";
 import { fetchWithAuth } from "../Utils/fetchWithAuth";
 import { useApiUrl } from "./ApiUrlProvider";
+import { Alert } from "react-native";
 
 const CategoryContext = createContext();
 
@@ -76,6 +77,39 @@ const [errorMessage, setErrorMessage] = useState('');
       setErrorVisible(true);
     }
   };
+
+  const updateCategory = async (updatedCategory) => {
+    
+    try {
+        const response = await fetch(`${baseUrl}/home/${home.id}/categories/${updatedCategory.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedCategory.name),
+        });
+
+        // Log the response to check status and response body
+        console.log('Response Status:', response.status);
+        console.log('Response Body:', await response.text());
+
+        if (!response.ok) {
+            throw new Error('Failed to update category');
+        }
+
+        const updatedData = await response.json();
+        console.log('Category updated successfully:', updatedData);
+
+        // Optional: Refresh the categories list here if needed
+
+    } catch (error) {
+        console.error('Error updating category:', error);
+        Alert.alert('Error', 'Could not update the category. Please try again.');
+    }
+};
+
+
+  
   
 
 
@@ -106,9 +140,9 @@ const [errorMessage, setErrorMessage] = useState('');
     if (home && user) {
       fetchCategories();
     }
-  }, [home, user]);
+  }, [home, user,categories]);
   return (
-    <CategoryContext.Provider value={{ categories, addCategory ,deleteCategory}}>
+    <CategoryContext.Provider value={{ categories, addCategory ,deleteCategory,updateCategory}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
 

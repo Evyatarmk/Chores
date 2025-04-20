@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Chores.Controllers
 {
     [ApiController]
-    [Route("api/home/{homeId}/categories")]
+    [Route("api/home/{homeId}/categories/")]
     public class CategoriesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -41,9 +41,9 @@ namespace Chores.Controllers
             return Ok(category);
         }
 
-        // PUT: api/homes/{homeId}/categories/{id}
+        // PUT: api/home/{homeId}/categories/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(string homeId, string id, [FromBody] Category updatedCategory)
+        public async Task<IActionResult> UpdateCategory(string homeId, string id, [FromBody] string name)
         {
             var category = await _context.Categories
                 .FirstOrDefaultAsync(c => c.Id == id && c.HomeId == homeId);
@@ -51,8 +51,10 @@ namespace Chores.Controllers
             if (category == null)
                 return NotFound();
 
-            category.Name = updatedCategory.Name;
+            category.Name = name;
+
             await _context.SaveChangesAsync();
+
             return Ok(category);
         }
 
