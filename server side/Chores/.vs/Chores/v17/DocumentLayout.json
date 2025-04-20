@@ -3,6 +3,17 @@
   "WorkspaceRootPath": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.100\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\controllers\\mediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\controllers\\mediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\models\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\models\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -15,16 +26,8 @@
       "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\models\\dto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|c:\\users\\97250\\documents\\github\\famliy-flow\\server side\\chores\\chores\\controllers\\mediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3B2810A9-91C5-4829-8D8C-0A5E11CA0133}|Chores\\Chores.csproj|solutionrelative:chores\\controllers\\mediacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\obj\\Debug\\net6.0\\Chores.csproj.FileListAbsolute.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -107,7 +110,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -115,20 +118,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TasksController.cs",
-              "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\TasksController.cs",
-              "RelativeDocumentMoniker": "Chores\\Controllers\\TasksController.cs",
-              "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\TasksController.cs",
-              "RelativeToolTip": "Chores\\Controllers\\TasksController.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAYwEMAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T13:06:58.364Z",
+              "DocumentIndex": 0,
+              "Title": "Microsoft.NET.Sdk.StaticWebAssets.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.100\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.100\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.targets",
+              "ViewState": "AgIAAEgCAAAAAAAAAAApwGMCAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-04-20T16:33:46.055Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Program.cs",
               "RelativeDocumentMoniker": "Chores\\Program.cs",
@@ -140,7 +143,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Chores.csproj.FileListAbsolute.txt",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\obj\\Debug\\net6.0\\Chores.csproj.FileListAbsolute.txt",
               "RelativeDocumentMoniker": "Chores\\obj\\Debug\\net6.0\\Chores.csproj.FileListAbsolute.txt",
@@ -152,7 +155,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "MediaItem.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\MediaItem.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\MediaItem.cs",
@@ -164,7 +167,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "CategoriesController.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\CategoriesController.cs",
               "RelativeDocumentMoniker": "Chores\\Controllers\\CategoriesController.cs",
@@ -176,7 +179,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "Microsoft.Common.CurrentVersion.targets",
               "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
@@ -188,7 +191,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "asyncify.d.ts",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\client side\\Chores\\node_modules\\type-fest\\source\\asyncify.d.ts",
               "RelativeDocumentMoniker": "..\\..\\client side\\Chores\\node_modules\\type-fest\\source\\asyncify.d.ts",
@@ -200,7 +203,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "DTO.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\DTO.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\DTO.cs",
@@ -213,7 +216,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "ListsController.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\ListsController.cs",
               "RelativeDocumentMoniker": "Chores\\Controllers\\ListsController.cs",
@@ -225,7 +228,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Task.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\Task.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\Task.cs",
@@ -238,33 +241,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "MediaController.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\MediaController.cs",
               "RelativeDocumentMoniker": "Chores\\Controllers\\MediaController.cs",
               "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\MediaController.cs",
               "RelativeToolTip": "Chores\\Controllers\\MediaController.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAAYwDYAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAAAEAAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-09T07:50:46.694Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "Chores\\Controllers\\UsersController.cs",
               "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\UsersController.cs",
               "RelativeToolTip": "Chores\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIwBAAAAAAAAAAAhwJ0BAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-11T13:18:17.526Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 4,
+              "Title": "TasksController.cs",
+              "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\TasksController.cs",
+              "RelativeDocumentMoniker": "Chores\\Controllers\\TasksController.cs",
+              "ToolTip": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\TasksController.cs",
+              "RelativeToolTip": "Chores\\Controllers\\TasksController.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAYwEMAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-20T13:06:58.364Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\appsettings.json",
               "RelativeDocumentMoniker": "Chores\\appsettings.json",
@@ -276,7 +292,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "Home.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\Home.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\Home.cs",
@@ -288,7 +304,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "List.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\List.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\List.cs",
@@ -300,7 +316,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "ItemHisrory.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\ItemHisrory.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\ItemHisrory.cs",
@@ -312,7 +328,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "TokenService.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Utils\\TokenService.cs",
               "RelativeDocumentMoniker": "Chores\\Utils\\TokenService.cs",
@@ -324,7 +340,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\User.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\User.cs",
@@ -336,7 +352,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "ItemHistoryController.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Controllers\\ItemHistoryController.cs",
               "RelativeDocumentMoniker": "Chores\\Controllers\\ItemHistoryController.cs",
@@ -348,7 +364,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "Item.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\Item.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\Item.cs",
@@ -360,7 +376,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "LoginRequest.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\LoginRequest.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\LoginRequest.cs",
@@ -372,7 +388,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "Category.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\Category.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\Category.cs",
@@ -384,7 +400,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "Chores.csproj",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Chores.csproj",
               "RelativeDocumentMoniker": "Chores\\Chores.csproj",
@@ -392,11 +408,12 @@
               "RelativeToolTip": "Chores\\Chores.csproj",
               "ViewState": "AgIAAAsAAAAAAAAAAAAmwBYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-04T09:51:13.528Z"
+              "WhenOpened": "2025-04-04T09:51:13.528Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "RegisterRequest.cs",
               "DocumentMoniker": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\Models\\RegisterRequest.cs",
               "RelativeDocumentMoniker": "Chores\\Models\\RegisterRequest.cs",
@@ -408,7 +425,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\97250\\AppData\\Local\\SourceServer\\d570c0800cb4771609bb2ab520145f5902d77014ee43247b8dce18c4f686bbce\\server side\\Chores\\Chores\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\AppData\\Local\\SourceServer\\d570c0800cb4771609bb2ab520145f5902d77014ee43247b8dce18c4f686bbce\\server side\\Chores\\Chores\\Controllers\\UsersController.cs",
