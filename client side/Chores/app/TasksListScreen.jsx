@@ -17,6 +17,8 @@ const TasksListScreen = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [currentList, setCurrentList] = useState(null);
+    const {user } = useUserAndHome();
+  const router = useRouter();
 
   const optionsModalRef = useRef(null);
 
