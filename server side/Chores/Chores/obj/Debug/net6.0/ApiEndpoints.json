@@ -700,6 +700,27 @@
   },
   {
     "ContainingType": "Chores.Controllers.TasksController",
+    "Method": "GetCompletedTasksPerMonth",
+    "RelativePath": "api/Tasks/completedTasksPerMonth/{userId}/{homeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "homeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.TasksController",
     "Method": "GetTasks",
     "RelativePath": "api/Tasks/home/{homeId}",
     "HttpMethod": "GET",
@@ -752,34 +773,45 @@
   },
   {
     "ContainingType": "Chores.Controllers.TasksController",
-    "Method": "GetUserTasksForNextWeekInHome",
-    "RelativePath": "api/Tasks/home/{homeId}/user/{userId}/tasks/week",
-    "HttpMethod": "GET",
+    "Method": "MarkTaskAsCompleted",
+    "RelativePath": "api/Tasks/markAsCompleted/{taskId}",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "homeId",
-        "Type": "System.String",
+        "Name": "dto",
+        "Type": "Chores.Models.MarkTaskCompletedDto",
         "IsRequired": true
       },
       {
-        "Name": "userId",
-        "Type": "System.String",
+        "Name": "taskId",
+        "Type": "",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.TasksController",
+    "Method": "MarkTaskAsNotCompleted",
+    "RelativePath": "api/Tasks/markAsNotCompleted/{taskId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[Chores.Models.TaskDto, Chores, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "dto",
+        "Type": "Chores.Models.MarkTaskCompletedDto",
+        "IsRequired": true
+      },
+      {
+        "Name": "taskId",
+        "Type": "",
+        "IsRequired": true
       }
-    ]
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",

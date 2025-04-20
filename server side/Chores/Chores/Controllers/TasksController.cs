@@ -125,13 +125,12 @@ namespace Chores.Controllers
 
 
         //GET
-
         [HttpGet("completedTasksPerMonth/{userId}/{homeId}")]
-        public async Task<IActionResult> GetCompletedTasksPerMonth(string userId)
+        public async Task<IActionResult> GetCompletedTasksPerMonth(string userId, string homeId)
         {
-            // Get the HomeId of the user
+            // Get the Home of the user
             var userHome = await _context.Homes
-                .FirstOrDefaultAsync(h => h.Id == userId);
+                .FirstOrDefaultAsync(h => h.Id == homeId);
 
             if (userHome == null)
             {

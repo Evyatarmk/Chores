@@ -18,7 +18,6 @@ namespace Chores.Data
 
         public DbSet<Chores.Models.Task> Tasks { get; set; }
 
-       
 
 
 
