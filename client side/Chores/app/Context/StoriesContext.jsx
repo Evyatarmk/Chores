@@ -88,17 +88,22 @@ export const StoriesProvider = ({ children }) => {
 
   const addStory = async (newStory) => {
     const prevStories = [...stories];
-  
+
     // 1. הוספת הסיפור באופטימיות ל־UI
     let optimisticStories = upsertLocalStory(stories, newStory);
     setStories(sortStories(optimisticStories));
-  
+
     try {
       // 2. בונים FormData
       const formData = new FormData();
       const fileName = newStory.uri.split('/').pop();
-      const fileType = newStory.type === 'video' ? 'video/mp4' : 'image/jpeg';
-  
+      formData.append('MediaFile', {
+        uri: newStory.uri,
+        name: fileName.endsWith('.mp4') ? fileName : `${fileName}.mp4`, // הוספה יזומה של סיומת אם חסרה
+        type: 'video/mp4',
+      });
+
+
       if (newStory.uri.startsWith('data:')) {
         // המרה של data:uri → Blob
         const fetchRes = await fetch(newStory.uri);
@@ -112,9 +117,9 @@ export const StoriesProvider = ({ children }) => {
           type: fileType,
         });
       }
-  
+
       formData.append('Type', newStory.type);
-  
+
       // 3. שליחה לשרת
       const res = await fetch(
         `${baseUrl}/Media/home/${home.id}/users/${user.id}/media`,
@@ -124,17 +129,17 @@ export const StoriesProvider = ({ children }) => {
         }
       );
       if (!res.ok) throw new Error('שגיאה בשרת');
-  
+
       const data = await res.json();
       // 4. בוני את הסיפור המעודכן
       const updatedStory = {
         ...newStory,
-        mediaId:   data.mediaId,
-        uri:       data.uri,
-        uploadDate:data.uploadDate,
-        uploadTime:data.uploadTime,
+        mediaId: data.mediaId,
+        uri: data.uri,
+        uploadDate: data.uploadDate,
+        uploadTime: data.uploadTime,
       };
-  
+
       // 5. עדכון ה־UI עם הנתונים שקיבלנו
       setStories((current) =>
         sortStories(
@@ -158,17 +163,17 @@ export const StoriesProvider = ({ children }) => {
       setErrorVisible(true);
     }
   };
-  
+
   // פונקציה עזר שמכניסה או מוסיפה סיפור חדש לכרונולוגיה
   function upsertLocalStory(stories, newStory) {
     const idx = stories.findIndex((s) => s.userId === user.id);
     if (idx < 0) {
       return [
         {
-          userId:       user.id,
-          username:     user.name,
+          userId: user.id,
+          username: user.name,
           profileImage: user.profileImage,
-          media:        [newStory],
+          media: [newStory],
         },
         ...stories,
       ];
@@ -181,7 +186,7 @@ export const StoriesProvider = ({ children }) => {
       return updated;
     }
   }
-  
+
 
 
   const deleteStory = async (mediaId) => {

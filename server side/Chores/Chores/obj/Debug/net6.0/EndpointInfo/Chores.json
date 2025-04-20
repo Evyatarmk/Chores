@@ -1126,7 +1126,7 @@
         }
       }
     },
-    "/api/Tasks/completedTasksPerMonth/{userId}": {
+    "/api/Tasks/completedTasksPerMonth/{userId}/{homeId}": {
       "get": {
         "tags": [
           "Tasks"
@@ -1134,6 +1134,14 @@
         "parameters": [
           {
             "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "homeId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2046,10 +2054,6 @@
           },
           "status": {
             "type": "boolean"
-          },
-          "completedByUserId": {
-            "type": "string",
-            "nullable": true
           },
           "completedDate": {
             "type": "string",
