@@ -21,7 +21,7 @@ export const StoriesProvider = ({ children }) => {
     try {
       const response = await fetchWithAuth(`${baseUrl}/media/home/${home.id}/media`, {
         method: 'GET',
-      });
+      }, baseUrl);
   
       if (!response || !response.ok) {
         throw new Error("שגיאה בקבלת סיפורים");
@@ -202,7 +202,7 @@ export const StoriesProvider = ({ children }) => {
       // שליחה לבקשה למחיקת פריט המדיה
       const response = await fetchWithAuth(`${baseUrl}/media/home/${home.id}/users/${user?.id}/media/${mediaId}`, {
         method: 'DELETE',
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error('Failed to delete media item');

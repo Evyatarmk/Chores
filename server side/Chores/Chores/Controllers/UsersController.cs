@@ -194,8 +194,132 @@ namespace Chores.Controllers
                 home = homeDto
             });
         }
+        // 📌  מעבר לבית חדש
+        [Authorize]
+        [HttpPost("changeHome/new/{userId}")]
+        public async Task<ActionResult<object>> ChangeToNewHome([FromRoute] string userId, [FromBody] NewHomeRequest request)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return Unauthorized("User not found.");
+
+            // יצירת בית חדש
+            var newHome = new Home
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = request.HomeName,
+                Users = new List<User>(),
+                Code = await GenerateUniqueHomeCodeAsync(),
+            };
+
+            user.HomeId = newHome.Id;
+            user.Role = "admin";
+            newHome.Users.Add(user);
+
+            _context.Homes.Add(newHome);
+            await _context.SaveChangesAsync();
+
+            // יצירת טוקנים חדשים
+            var accessToken = _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1);
+            await _context.SaveChangesAsync();
+
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                HomeId = user.HomeId,
+                ProfilePicture = user.ProfilePicture
+            };
+
+            var homeDto = new HomeDto
+            {
+                Id = newHome.Id,
+                Name = newHome.Name,
+                Code = newHome.Code,
+                Members = newHome.Users.Select(u => new MemberDto
+                {
+                    Name = u.Name,
+                    Role = u.Role,
+                    PublicId = u.PublicId
+                }).ToList()
+            };
+
+            return Ok(new
+            {
+                accessToken,
+                refreshToken,
+                user = userDto,
+                home = homeDto
+            });
+        }
 
 
+        // 📌  מעבר לבית קיים
+        [Authorize]
+        [HttpPost("changeHome/existing/{userId}")]
+        public async Task<ActionResult<object>> ChangeToExistingHome([FromRoute] string userId, [FromBody] ExistingHomeRequest request)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return Unauthorized("User not found.");
+
+            var home = await _context.Homes
+                .Include(h => h.Users)
+                .FirstOrDefaultAsync(h => h.Code == request.HomeCode);
+
+            if (home == null)
+                return BadRequest("Invalid home code.");
+
+            user.HomeId = home.Id;
+            user.Role = "user";
+
+            home.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var accessToken = _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1);
+            await _context.SaveChangesAsync();
+
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                HomeId = user.HomeId,
+                ProfilePicture = user.ProfilePicture
+            };
+
+            var homeDto = new HomeDto
+            {
+                Id = home.Id,
+                Name = home.Name,
+                Code = home.Code,
+                Members = home.Users.Select(u => new MemberDto
+                {
+                    Name = u.Name,
+                    Role = u.Role,
+                    PublicId = u.PublicId
+                }).ToList()
+            };
+
+            return Ok(new
+            {
+                accessToken,
+                refreshToken,
+                user = userDto,
+                home = homeDto
+            });
+        }
 
 
         // 📌 התחברות - יצירת טוקן ו-Refresh Token
@@ -485,6 +609,15 @@ namespace Chores.Controllers
         {
             public RegisterRequest RegisterUser { get; set; }
             public string HomeName { get; set; }
+        }
+        public class NewHomeRequest
+        {
+            public string HomeName { get; set; }
+        }
+
+        public class ExistingHomeRequest
+        {
+            public string HomeCode { get; set; }
         }
     }
 }

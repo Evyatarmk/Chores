@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
 import { useApiUrl } from "./ApiUrlProvider";
 import ErrorNotification from "../Components/ErrorNotification";
+import { fetchWithAuth } from "../Utils/fetchWithAuth";
 
 
 const UserAndHomeContext = createContext();
@@ -194,7 +195,73 @@ export const UserAndHomeProvider = ({ children }) => {
       return false;
     }
   };
-
+  const changeToNewHome = async (homeName) => {
+    try {
+      const response = await fetchWithAuth(`${baseUrl}/Users/changeHome/new/${user.id}`, {
+        method: 'POST',
+        body: JSON.stringify({ HomeName: homeName }),  // שולחים את השם כ-JSON
+      }, baseUrl);
+  
+      if (response.ok) {
+        const data = await response.json();
+        const { newAccessToken, refreshToken } = data;
+  
+        await AsyncStorage.setItem('accessToken', newAccessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+  
+        setUser(data.user);
+        setHome(data.home);
+        return true;
+      } else {
+        const errorText = await response.text();
+        console.warn('שגיאה מהשרת:', errorText);
+  
+        const translatedMessage = getHebrewErrorMessage(errorText);
+        setErrorMessage(translatedMessage);
+        setErrorVisible(true);
+        return false;
+      }
+    } catch (error) {
+      console.error('שגיאה כללית ב-fetch:', error.message);
+      setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
+      setErrorVisible(true);
+      return false;
+    }
+  };
+  const changeToExistingHome = async (homeCode) => {
+    try {
+      const response = await fetchWithAuth(`${baseUrl}/Users/changeHome/existing/${user.id}`, {
+        method: 'POST',
+        body: JSON.stringify({ HomeCode: homeCode }),  // שולחים את הקוד כ-JSON
+      }, baseUrl);
+  
+      if (response.ok) {
+        const data = await response.json();
+        const { newAccessToken, refreshToken } = data;
+  
+        await AsyncStorage.setItem('accessToken', newAccessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+  
+        setUser(data.user);
+        setHome(data.home);
+        return true;
+      } else {
+        const errorText = await response.text();
+        console.warn('שגיאה מהשרת:', errorText);
+  
+        const translatedMessage = getHebrewErrorMessage(errorText);
+        setErrorMessage(translatedMessage);
+        setErrorVisible(true);
+        return false;
+      }
+    } catch (error) {
+      console.error('שגיאה כללית ב-fetch:', error.message);
+      setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
+      setErrorVisible(true);
+      return false;
+    }
+  };
+  
 
   const getHebrewErrorMessage = (serverMessage) => {
     switch (serverMessage) {
@@ -243,39 +310,7 @@ export const UserAndHomeProvider = ({ children }) => {
     }
   };
 
-  const leaveHome = async (userId) => {
-    try {
-      const response = await fetch(`${baseUrl}/Users/leaveHome`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: userId, // ✅ זה חייב להתאים ל-DTO בצד השרת
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`שגיאה מהשרת: ${errorText}`);
-      }
-
-      // עדכון מקומי של context
-      setHome(null);
-      setUser(prev => ({
-        ...prev,
-        homeId: null,
-      }));
-
-      console.log("התנתקת מהבית בהצלחה.");
-      
-      router.replace("/JoinOrCreateHomeScreen");
-    } catch (error) {
-      console.error("שגיאה בהתנתקות מהבית:", error.message);
-      setErrorMessage("אירעה שגיאה בעת ההתנתקות מהבית.");
-      setErrorVisible(true);
-    }
-  };
+ 
 
 
 
@@ -295,7 +330,8 @@ export const UserAndHomeProvider = ({ children }) => {
         joinHome,
         updateHome,
         updateUser,
-        leaveHome,
+        changeToNewHome,
+        changeToExistingHome
       }}
     >
 

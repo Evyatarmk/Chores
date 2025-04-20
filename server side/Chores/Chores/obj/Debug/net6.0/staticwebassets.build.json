@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "W2iaI8o48lHYCtRv0ZKmfT6nZ7sOoZ+fQz4hrZHGm8E=",
+  "Hash": "A4kDDQIvS8TLfwB4j9fxG+sOB5NW2qYdEI3Aq3WZlN4=",
   "Source": "Chores",
   "BasePath": "_content/Chores",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

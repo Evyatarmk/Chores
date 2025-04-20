@@ -90,7 +90,7 @@ const [myTasks, setMyTasks] = useState([]);
       try {
         const response = await fetchWithAuth(`${baseUrl}/Tasks/home/${home.id}`, {
           method: 'GET',
-        });
+        }, baseUrl);
     
         if (!response || !response.ok) {
           throw new Error("שגיאה בקבלת קטגוריות");

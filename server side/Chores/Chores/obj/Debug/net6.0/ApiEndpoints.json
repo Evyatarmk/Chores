@@ -758,6 +758,48 @@
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "ChangeToExistingHome",
+    "RelativePath": "api/Users/changeHome/existing/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Chores.Controllers.UsersController\u002BExistingHomeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "ChangeToNewHome",
+    "RelativePath": "api/Users/changeHome/new/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Chores.Controllers.UsersController\u002BNewHomeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "EditUserProfile",
     "RelativePath": "api/Users/editUserProfilePic\u0026Name",
     "HttpMethod": "PUT",
@@ -847,6 +889,22 @@
       {
         "Name": "request",
         "Type": "Chores.Controllers.UsersController\u002BRegisterWithNewHomeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "UpdateHomeId",
+    "RelativePath": "api/Users/updateHomeId",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateHomeRequest",
+        "Type": "Chores.Models.UpdateHomeRequest",
         "IsRequired": true
       }
     ],

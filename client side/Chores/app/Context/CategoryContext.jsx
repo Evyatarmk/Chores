@@ -31,7 +31,7 @@ const [errorMessage, setErrorMessage] = useState('');
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
         method: 'POST',
         body: JSON.stringify( newCategory ),
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error("שגיאה ביצירת קטגוריה");
@@ -53,7 +53,7 @@ const [errorMessage, setErrorMessage] = useState('');
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
         method: 'GET',
-      });
+      }, baseUrl);
   
       if (!response || !response.ok) {
         throw new Error("שגיאה בקבלת קטגוריות");

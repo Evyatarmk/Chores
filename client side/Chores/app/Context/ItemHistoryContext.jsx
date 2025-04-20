@@ -31,7 +31,7 @@ export const ItemHistoryProvider = ({ children }) => {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/itemhistory`, {
         method: 'POST',
         body: JSON.stringify(newItemHistory),
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error("שגיאה בהוספת היסטוריית פריט");
@@ -51,7 +51,7 @@ export const ItemHistoryProvider = ({ children }) => {
     try {
       const response = await fetchWithAuth(`${baseUrl}/ItemHistory/home/${home.id}/category/${category}`, {
         method: 'GET',
-      });
+      }, baseUrl);
 
       if (!response || !response.ok) {
         throw new Error("שגיאה בקבלת היסטוריית פריטים");
