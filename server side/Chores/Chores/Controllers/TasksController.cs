@@ -126,7 +126,7 @@ namespace Chores.Controllers
 
         //GET
 
-        [HttpGet("completedTasksPerMonth/{userId}")]
+        [HttpGet("completedTasksPerMonth/{userId}/{homeId}")]
         public async Task<IActionResult> GetCompletedTasksPerMonth(string userId)
         {
             // Get the HomeId of the user
