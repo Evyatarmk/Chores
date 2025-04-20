@@ -11,6 +11,7 @@ import OptionsModal from "./Components/OptionsModal";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
 import AlertModal from "./Components/AlertModal";
 import { useApiUrl } from "./Context/ApiUrlProvider";
+import TaskItem from "./Components/TaskItem";
 
 const TasksListScreen = () => {
   const { tasksFormatted, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask, markTaskAsCompleted, markTaskAsNotCompleted } = useTasks();
@@ -33,13 +34,12 @@ const TasksListScreen = () => {
   ];
 
   const handleOptionSelect = (option) => {
-
-    if (option === "edit") {
+    if (option.action === "edit") {
       router.push({
         pathname: "./TaskEditScreen",
         params: { taskId: currentList.id, date: selectedDate },
       });
-    } else if (option == "delete") {
+    } else if (option.action == "delete") {
       setModalDeleteVisible(true);
     }
     optionsModalRef.current?.close();
@@ -53,6 +53,7 @@ const TasksListScreen = () => {
   };
 
   const openOptionsPanel = (list) => {
+    console.log(list)
     setCurrentList(list);
     optionsModalRef.current?.open();
   };
@@ -103,7 +104,8 @@ const TasksListScreen = () => {
 
   return (
     <PageWithMenu>
-      <ScrollView style={styles.container}>
+      <GestureHandlerRootView style={styles.container}>
+        <ScrollView>
         <NormalHeader title="המשימות של הבית" />
 
         <View style={{ marginBottom: 20 }}>
@@ -118,62 +120,23 @@ const TasksListScreen = () => {
     }}
   />
 </View>
-
         <FlatList
           data={getTasksForDate(selectedDate)}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => {
-            const isUserRegistered = item.participants.some(p => p.id === user?.id);
-          
-            return (
-              <TouchableOpacity
-                style={styles.taskItem}
-                onPress={() => router.push({ pathname: "./TaskDetailsScreen", params: { taskId: item.id, date: selectedDate } })}
-              >
-                <Text style={styles.taskTitle}>{item.title}</Text>
-                <Text style={styles.taskDescription}>{item.description}</Text>
-          
-                <View style={styles.buttonRow}>
-                  {isUserRegistered ? (
-                    <TouchableOpacity onPress={() => signOutOfTask(item.id, user.id)} style={styles.cancelRegisterButton}>
-                      <Text style={styles.registerText}>בטל הרשמה</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity onPress={() => signUpForTask(item.id, user.id)} style={styles.registerButton}>
-                      <Text style={styles.registerText}>הירשם</Text>
-                    </TouchableOpacity>
-                  )}
-          
-                  {isUserRegistered && item.category === "משימה" && (
-                    <TouchableOpacity
-                      onPress={() => {
-                        if (item.status == true) {
-                          markTaskAsNotCompleted(item.id);
-                        } else {
-                          markTaskAsCompleted(item.id);
-                        }
-                      }}
-                      style={[
-                        styles.registerButton,
-                        {
-                          backgroundColor: item.status ? "#FF5722" : "#2196F3",
-                          marginLeft: 10, // רווח בין הכפתורים
-                        },
-                      ]}
-                    >
-                      <Text style={styles.registerText}>
-                        {item.status ? "סמן כלא בוצע" : "סמן כבוצע"}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-          
-                <TouchableOpacity style={styles.optionsButton} onPress={() => openOptionsPanel(item)}>
-                  <Icon name="more-vert" size={24} color="#888" />
-                </TouchableOpacity>
-              </TouchableOpacity>
-            );
-          }}
+          renderItem={({ item }) => (
+            <TaskItem
+              task={item}
+              user={user}
+              selectedDate={selectedDate}
+              signUpForTask={signUpForTask}
+              signOutOfTask={signOutOfTask}
+              markTaskAsCompleted={markTaskAsCompleted}
+              markTaskAsNotCompleted={markTaskAsNotCompleted}
+              openOptionsPanel={()=>openOptionsPanel(item)}
+              router={router}
+            />
+          )}
+         
           
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
@@ -181,13 +144,8 @@ const TasksListScreen = () => {
             </View>
           }
         />
-
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => router.push({ pathname: "./AddTaskScreen", params: { day: selectedDate } })}
-        >
-          <Icon name="add" size={30} color="white" />
-        </TouchableOpacity>
+     </ScrollView>
+       
 
         <OptionsModal
           optionsModalRef={optionsModalRef}
@@ -203,7 +161,14 @@ const TasksListScreen = () => {
           confirmText="מחק"
           cancelText="ביטול"
         />
-      </ScrollView>
+   
+         <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => router.push({ pathname: "./AddTaskScreen", params: { day: selectedDate } })}
+        >
+          <Icon name="add" size={30} color="white" />
+        </TouchableOpacity>
+      </GestureHandlerRootView>
     </PageWithMenu>
   );
 };

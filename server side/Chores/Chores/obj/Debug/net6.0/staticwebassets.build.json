@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xWT/9g+9s4bV5nksmzFrPeloBsx90Ro0pv1wuqs8LqU=",
+  "Hash": "CUdC4BL3miZNY4EFcqLkRcIjHYj9fayjAM6aReY5x9s=",
   "Source": "Chores",
   "BasePath": "_content/Chores",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "Chores\\wwwroot",
       "Source": "Chores",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\03c84075-4242-421f-b355-381f21394a1e.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\03c84075-4242-421f-b355-381f21394a1e.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/03c84075-4242-421f-b355-381f21394a1e.jpg",
       "AssetKind": "All",
@@ -55,10 +55,31 @@
       "OriginalItemSpec": "wwwroot\\uploads\\03c84075-4242-421f-b355-381f21394a1e.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\38541982-1511-4325-86ef-7f23573c3aed.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "jcz66wem79",
+      "Integrity": "c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\38541982-1511-4325-86ef-7f23573c3aed.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/38541982-1511-4325-86ef-7f23573c3aed.jpg",
       "AssetKind": "All",
@@ -74,10 +95,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\38541982-1511-4325-86ef-7f23573c3aed.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/392d6d32-f82b-4c12-8683-804203fa2184.jpg",
       "AssetKind": "All",
@@ -93,10 +114,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/5f31b506-ad34-4673-8453-0901a22144b8.jpg",
       "AssetKind": "All",
@@ -112,10 +133,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
       "AssetKind": "All",
@@ -131,10 +152,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
       "AssetKind": "All",
@@ -145,15 +166,38 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
+      "Fingerprint": "859rypumxp",
+      "Integrity": "DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov"
+    },
+    {
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "j2giu7usob",
+      "Integrity": "JaTwr63BdhGqW31Jy4CjhcvOmhSr8XYNI4fRlKqFPiA=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg",
       "AssetKind": "All",
@@ -169,10 +213,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\7f125877-3b1e-49c5-93a5-31cb771073ee",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7f125877-3b1e-49c5-93a5-31cb771073ee",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/7f125877-3b1e-49c5-93a5-31cb771073ee",
       "AssetKind": "All",
@@ -188,10 +232,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\7f125877-3b1e-49c5-93a5-31cb771073ee"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg",
       "AssetKind": "All",
@@ -207,10 +251,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
       "AssetKind": "All",
@@ -226,10 +270,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/90b71bc8-dd04-4ad3-8147-12a7d870dd22",
       "AssetKind": "All",
@@ -245,10 +289,31 @@
       "OriginalItemSpec": "wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\93c2ffac-9bb7-4848-9923-510c84d5224e.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/93c2ffac-9bb7-4848-9923-510c84d5224e#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "jcz66wem79",
+      "Integrity": "c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\93c2ffac-9bb7-4848-9923-510c84d5224e.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
       "AssetKind": "All",
@@ -264,10 +329,31 @@
       "OriginalItemSpec": "wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/9b953b61-b23f-4c24-8c02-082f8d56e6f7#[.{fingerprint}]?.mov",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "s1b61mbwxd",
+      "Integrity": "cOaqwUJ0/aZvJ/73Hd4IENSvyj+yk52uSiAo/DiyXGQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov"
+    },
+    {
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov",
       "AssetKind": "All",
@@ -321,10 +407,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
       "AssetKind": "All",
@@ -340,10 +426,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg"
     },
     {
-      "Identity": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
+      "Identity": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
       "SourceId": "Chores",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\ChoresGitClone\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\",
       "BasePath": "_content/Chores",
       "RelativePath": "uploads/e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
       "AssetKind": "All",
@@ -357,6 +443,1648 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "uploads/0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3328417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/0050c3ba-1fdb-4c80-acb6-82332269151b.ysngaasebd.jpeg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3328417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ysngaasebd"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/0050c3ba-1fdb-4c80-acb6-82332269151b.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/03c84075-4242-421f-b355-381f21394a1e.jcz66wem79.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\03c84075-4242-421f-b355-381f21394a1e.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jcz66wem79"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/03c84075-4242-421f-b355-381f21394a1e.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/03c84075-4242-421f-b355-381f21394a1e.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\03c84075-4242-421f-b355-381f21394a1e.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d.jcz66wem79.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:20:01 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jcz66wem79"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\2d7c3bdd-76dc-41bc-9db6-b90a54f1be3d.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:20:01 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/38541982-1511-4325-86ef-7f23573c3aed.jcz66wem79.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\38541982-1511-4325-86ef-7f23573c3aed.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jcz66wem79"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/38541982-1511-4325-86ef-7f23573c3aed.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/38541982-1511-4325-86ef-7f23573c3aed.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\38541982-1511-4325-86ef-7f23573c3aed.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/392d6d32-f82b-4c12-8683-804203fa2184.7lqo24k3ch.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3295281"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"m25HtT1OptUrxKPkO95tC9kqHJrPxTPNS+gcOr44snY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7lqo24k3ch"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/392d6d32-f82b-4c12-8683-804203fa2184.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-m25HtT1OptUrxKPkO95tC9kqHJrPxTPNS+gcOr44snY="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3295281"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"m25HtT1OptUrxKPkO95tC9kqHJrPxTPNS+gcOr44snY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-m25HtT1OptUrxKPkO95tC9kqHJrPxTPNS+gcOr44snY="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/5f31b506-ad34-4673-8453-0901a22144b8.16cjoxczb2.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "296928"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WYD+JJvqsqpK/1hhD5Q6QqUFPj4yUxgu1Eoyb2prAxc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "16cjoxczb2"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/5f31b506-ad34-4673-8453-0901a22144b8.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-WYD+JJvqsqpK/1hhD5Q6QqUFPj4yUxgu1Eoyb2prAxc="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/5f31b506-ad34-4673-8453-0901a22144b8.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "296928"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WYD+JJvqsqpK/1hhD5Q6QqUFPj4yUxgu1Eoyb2prAxc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-WYD+JJvqsqpK/1hhD5Q6QqUFPj4yUxgu1Eoyb2prAxc="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc.859rypumxp.dat",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "859rypumxp"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc.dat"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\675e0a2f-753e-401e-bec5-e9fc627858bc.dat",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/69387507-258d-4ad0-8642-87348b86375e.859rypumxp.mov",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/quicktime"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "859rypumxp"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/69387507-258d-4ad0-8642-87348b86375e.mov"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/69387507-258d-4ad0-8642-87348b86375e.mov",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\69387507-258d-4ad0-8642-87348b86375e.mov",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3585030"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/quicktime"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DC1XYbTakvE1quly91f82Sqgv/4reX3N7yMWfVclzWQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092.j2giu7usob.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3274526"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JaTwr63BdhGqW31Jy4CjhcvOmhSr8XYNI4fRlKqFPiA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "j2giu7usob"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-JaTwr63BdhGqW31Jy4CjhcvOmhSr8XYNI4fRlKqFPiA="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7c2410e9-d966-453e-9681-cf8fac03c092.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3274526"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JaTwr63BdhGqW31Jy4CjhcvOmhSr8XYNI4fRlKqFPiA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-JaTwr63BdhGqW31Jy4CjhcvOmhSr8XYNI4fRlKqFPiA="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/7d7d1761-7192-4456-b1e5-97d6e5a0811b.jcz66wem79.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jcz66wem79"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7d7d1761-7192-4456-b1e5-97d6e5a0811b.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/7f125877-3b1e-49c5-93a5-31cb771073ee",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7f125877-3b1e-49c5-93a5-31cb771073ee",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3646959"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/7f125877-3b1e-49c5-93a5-31cb771073ee.atoqrjduju",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\7f125877-3b1e-49c5-93a5-31cb771073ee",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3646959"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "atoqrjduju"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/7f125877-3b1e-49c5-93a5-31cb771073ee"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3328417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/838e1a27-1498-4347-a4ed-d6710983ecd8.ysngaasebd.jpeg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3328417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ysngaasebd"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/838e1a27-1498-4347-a4ed-d6710983ecd8.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gs5irxvkjqFYLYY77BuDVna1KQeWuTNyTfbRPBbTpyM="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f.6u897x8yqw.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3764914"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6u897x8yqw"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\8fa454b7-4387-44f6-94e8-516348a6b46f.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3764914"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/h+goF3N4fQjdbnXGW+fUkJ8uyeRc5bW5crUpxm2JvU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/90b71bc8-dd04-4ad3-8147-12a7d870dd22",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3646959"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/90b71bc8-dd04-4ad3-8147-12a7d870dd22.atoqrjduju",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\90b71bc8-dd04-4ad3-8147-12a7d870dd22",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3646959"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "atoqrjduju"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/90b71bc8-dd04-4ad3-8147-12a7d870dd22"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/93c2ffac-9bb7-4848-9923-510c84d5224e.jcz66wem79.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\93c2ffac-9bb7-4848-9923-510c84d5224e.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:28:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jcz66wem79"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/93c2ffac-9bb7-4848-9923-510c84d5224e.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/93c2ffac-9bb7-4848-9923-510c84d5224e.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\93c2ffac-9bb7-4848-9923-510c84d5224e.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:28:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151.gwh4f9wy2k.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3363928"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "gwh4f9wy2k"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\992cd642-4d12-471c-aeb7-d098bfa7b151.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3363928"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-oOb7Qd40we0rcT04S1gh3VaFxdMoGpo06pMsoetRFBE="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3436005"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/quicktime"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"cOaqwUJ0/aZvJ/73Hd4IENSvyj+yk52uSiAo/DiyXGQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-cOaqwUJ0/aZvJ/73Hd4IENSvyj+yk52uSiAo/DiyXGQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/9b953b61-b23f-4c24-8c02-082f8d56e6f7.s1b61mbwxd.mov",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3436005"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/quicktime"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"cOaqwUJ0/aZvJ/73Hd4IENSvyj+yk52uSiAo/DiyXGQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "s1b61mbwxd"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/9b953b61-b23f-4c24-8c02-082f8d56e6f7.mov"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-cOaqwUJ0/aZvJ/73Hd4IENSvyj+yk52uSiAo/DiyXGQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jcz66wem79.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jcz66wem79"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\a9f0c5b3-f04e-4bc0-a6ad-3ccacf70c29d.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "109191"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-c56artWTbMEsVpP0k7sVHGox4EW7lBjEkwlxBP5GHXI="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3084722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40.vilwetqap2.jpg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\c9c6d736-6fac-435a-8c8c-e271602aea40.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3084722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 16:25:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vilwetqap2"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/c9c6d736-6fac-435a-8c8c-e271602aea40.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-CUnWRiZjNqPVzV4MvI05lLQNbrrySGj7ovftD/B/VE4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.atoqrjduju.jpeg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3646959"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "atoqrjduju"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
+      "AssetFile": "C:\\Users\\97250\\Documents\\GitHub\\famliy-flow\\server side\\Chores\\Chores\\wwwroot\\uploads\\e5ed687d-3b05-41b7-ac62-1f6e00fbf0ab.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3646959"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 20 Apr 2025 15:11:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hncr1DWGqURM27BlXopIcKdcsoaN1ZFTSfM66ZikcYQ="
+        }
+      ]
     }
   ]
 }
