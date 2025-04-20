@@ -13,7 +13,7 @@ import AlertModal from "./Components/AlertModal";
 import { useApiUrl } from "./Context/ApiUrlProvider";
 
 const TasksListScreen = () => {
-  const { tasksFormatted, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask } = useTasks();
+  const { tasksFormatted, removeTaskForDate, getTasksForDate, signUpForTask, signOutOfTask,markTaskAsCompleted,markTaskAsNotCompleted  } = useTasks();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [currentList, setCurrentList] = useState(null);
@@ -34,15 +34,16 @@ const TasksListScreen = () => {
   ];
 
   const handleOptionSelect = (option) => {
-    optionsModalRef.current?.close();
+    
     if (option === "edit") {
       router.push({
         pathname: "./TaskEditScreen",
         params: { taskId: currentList.id, date: selectedDate },
       });
-    } else if (option === "delete") {
+    } else if (option == "delete") {
       setModalDeleteVisible(true);
     }
+    optionsModalRef.current?.close();
   };
 
   const handleDelete = () => {
@@ -187,7 +188,7 @@ const TasksListScreen = () => {
 
         <OptionsModal
           optionsModalRef={optionsModalRef}
-          handleOptionSelect={(option) => handleOptionSelect(option.action)}
+          handleOptionSelect={(option) => handleOptionSelect(option)}
           options={options}
         />
 

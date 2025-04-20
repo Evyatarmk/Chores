@@ -19,6 +19,8 @@ const [errorMessage, setErrorMessage] = useState('');
     setErrorMessage("")
     setErrorVisible(false)
   };
+ 
+ 
   const addCategory = async (newCategory) => {
   
     // שמירת המצב הקודם למקרה של שגיאה
@@ -47,6 +49,35 @@ const [errorMessage, setErrorMessage] = useState('');
       setErrorVisible(true);
     }
   };
+
+  const deleteCategory = async (categoryId) => {
+    // שמירת המצב הקודם למקרה של שגיאה
+    const prevCategories = [...categories];
+  
+    // עדכון ויזואלי מיידי
+    const updatedCategories = categories.filter(c => c.id !== categoryId);
+    setCategories(updatedCategories);
+  
+    try {
+      const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories/${categoryId}`, {
+        method: 'DELETE',
+      }, baseUrl);
+  
+      if (!response.ok) {
+        throw new Error("שגיאה במחיקת הקטגוריה");
+      }
+  
+      // אם הצליח - סבבה, אין צורך לעדכן שוב
+  
+    } catch (error) {
+      console.error("שגיאה במחיקת קטגוריה:", error);
+      setCategories(prevCategories); // שחזור למצב הקודם
+      setErrorMessage("שגיאה במחיקת הקטגוריה, נסה שוב מאוחר יותר");
+      setErrorVisible(true);
+    }
+  };
+  
+
 
   
   const fetchCategories = async () => {
@@ -77,7 +108,7 @@ const [errorMessage, setErrorMessage] = useState('');
     }
   }, [home, user]);
   return (
-    <CategoryContext.Provider value={{ categories, addCategory }}>
+    <CategoryContext.Provider value={{ categories, addCategory ,deleteCategory}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
 

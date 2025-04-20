@@ -10,7 +10,7 @@ const OptionsModal = ({ optionsModalRef, handleOptionSelect, options }) => {
         {options.map((option, index) => (
           <TouchableOpacity 
             key={index} 
-            onPress={() => handleOptionSelect(option.action)} 
+            onPress={() => handleOptionSelect(option)} 
             style={styles.panelOption}
           >
             <Icon name={option.icon} size={20} color={option.iconColor || '#000'} style={styles.optionIcon} />

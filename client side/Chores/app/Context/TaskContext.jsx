@@ -11,71 +11,13 @@ export const useTasks = () => useContext(TaskContext);
 
 export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
-  const [tasksFormatted, setTasksFormatted] = useState({
-    "2025-03-30": [
-      { 
-        id: '1', 
-        startDate: "2025-03-30", // Changed to startDate
-        endDate: "2025-03-30",   // Added endDate
-        startTime: "10:00 AM",
-        endTime: "10:00 AM",        // Added time here
-        title: "Meeting", 
-        description: "Zoom Call", 
-        homeId: "home1", 
-        category: "אירוע", 
-        color: '#FF5733',
-        maxParticipants: 2,
-        participants: [
-          { id: "t", name: "אביתר" },
-          { id: "user2", name: "User Two" }
-        ] 
-      },
-      { 
-        id: '2', 
-        title: "Workout",
-        startDate: "2025-03-30",  // Changed to startDate
-        endDate: "2025-03-30",    // Added endDate
-        startTime: "10:00 AM",
-        endTime: "10:00 AM",          // Added time here
-        description: "Gym", 
-        homeId: "home1", 
-        category: "משימה", 
-        color: 'pink',
-        participants: [{ id: "user1", name: "User One" }], 
-        maxParticipants: 5
-      }
-    ],
-    "2025-03-13": [
-      { 
-        id: '3', 
-        startDate: "2025-03-13", // Changed to startDate
-        endDate: "2025-03-24",   // Added endDate
-        startTime: "10:00 AM",
-        endTime: "10:00 AM",          // Added time here
-        title: "Workout", 
-        description: "Gym", 
-        homeId: "home1", 
-        category: "אירוע", 
-        color: 'blue',
-        participants: [
-          { id: "user2", name: "User Two" },
-          { id: "user3", name: "User Three" }
-        ]
-      }
-    ]
-  });
-
-const [myTasks, setMyTasks] = useState([]);
-const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([]);
-
+  const [tasksFormatted, setTasksFormatted] = useState({});
+  const [myTasks, setMyTasks] = useState([]);
+  const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([]);
   const { user, home } = useUserAndHome();
-  
-
   const { baseUrl } = useApiUrl();
-
-
   const [errorMessage, setErrorMessage] = useState('');
-    const [errorVisible, setErrorVisible] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false);
  
     const handleCloseError = () => {
       setErrorMessage("")
@@ -85,10 +27,43 @@ const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([])
     useEffect(() => {
       if (home && user) {
         fetchTasks();
-        fetchAvailableTasksForNextMonth()
-        fetchMyTasks()
+       
       }
     }, [home, user]);
+    useEffect(() => {
+      const currentUserId = user?.id; // או מאיפה שאתה שומר את המשתמש הנוכחי
+    
+      const startOfWeek = new Date();
+startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // ראשון
+startOfWeek.setHours(0, 0, 0, 0);
+
+const endOfWeek = new Date();
+endOfWeek.setDate(startOfWeek.getDate() + 6); // שבת
+endOfWeek.setHours(23, 59, 59, 999);
+
+const myThisWeek = tasks.filter(task =>
+  task.participants?.some(p => p.id === currentUserId) &&
+  new Date(task.startDate) >= startOfWeek &&
+  new Date(task.startDate) <= endOfWeek
+);
+    
+      const today = new Date();
+      const oneMonthFromNow = new Date();
+      oneMonthFromNow.setDate(today.getDate() + 30);
+    
+      const available = tasks.filter(task => {
+        const start = new Date(task.startDate);
+        return (
+          start >= today &&
+          start <= oneMonthFromNow &&
+          (task.participants?.length ?? 0) === 0
+        );
+      });
+    
+      setMyTasks(myThisWeek);     
+       setAvailableTasksForNextMonth(available);
+    }, [tasks, user]);
+
     useEffect(() => {
       if (tasks) {
         // פונקציה ליצירת האובייקט הממויין לפי תאריך
@@ -188,42 +163,7 @@ const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([])
       }
     };
     
-    const fetchAvailableTasksForNextMonth = async () => {
-      try {
-        // קריאה ל-API החדש
-        const response = await fetchWithAuth(`${baseUrl}/Tasks/home/${home.id}/tasks/month/available`, {
-          method: 'GET',
-        }, baseUrl);
 
-    
-        if (!response || !response.ok) {
-          throw new Error("שגיאה בקבלת משימות לחודש הקרוב");
-        }
-    
-        const data = await response.json();
-    
-        setAvailableTasksForNextMonth(data);
-    
-      } catch (error) {
-        console.error("שגיאה בקבלת משימות לחודש הקרוב:", error);
-        setErrorMessage("לא ניתן לטעון משימות לחודש הקרוב, אנא נסה שוב מאוחר יותר");
-        setErrorVisible(true);
-      }
-    };
-    const fetchMyTasks = async () => {
-      try {
-        const response = await fetchWithAuth(`${baseUrl}/Tasks/home/${home.id}/user/${user.id}/tasks/week`,{
-          method: 'GET',
-          }, baseUrl);
-        if (!response.ok) throw new Error("Failed to fetch tasks");
-    
-        const data = await response.json();
-        console.log(data)
-        setMyTasks(data);
-      } catch (error) {
-        console.error("Error fetching my tasks:", error.message);
-      }
-    };
 
     const convertTo12HourFormat = (timeString) => {
       const [hours, minutes, seconds] = timeString.split(":"); // Split time string into components
@@ -346,7 +286,32 @@ const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([])
   };
 
   const signUpForTask = async (taskId, userId) => {
+    // שמירת המצב הקודם
+    const previousTasks = [...tasks];
+    const previousAvailableTasks = { ...availableTasksForNextMonth };
+    const previousMyTasks = [...myTasks];
+  
     try {
+      // מציאת המשימה בעדכון אופטימי
+      const taskToUpdate = tasks.find(t => t.id === taskId);
+      if (!taskToUpdate) throw new Error("Task not found");
+  
+      const updatedTask = {
+        ...taskToUpdate,
+        participants: [...taskToUpdate.participants, { id: user.id, name: user.name }],
+      };
+  
+      setTasks(prev =>prev.map(t => (t.id === taskId ? updatedTask : t)));
+      setAvailableTasksForNextMonth(prev =>prev.map(t => (t.id === taskId ? updatedTask : t)));
+      setMyTasks(prev => {
+        const exists = prev.some(t => t.id === taskId);
+        if (exists) {
+          return prev.map(t => (t.id === taskId ? updatedTask : t));
+        } else {
+          return [...prev, updatedTask];
+        }
+      });  
+      // קריאה לשרת
       const response = await fetch(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
         method: 'POST',
       });
@@ -356,14 +321,19 @@ const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([])
         throw new Error(`Failed to sign up for task: ${errorText}`);
       }
   
-      const result = await response.text(); // assuming your backend just returns a message
+      const result = await response.text();
       console.log('Signed up successfully:', result);
   
-      // Optional: refresh tasks or participants
-      fetchTasks();
-      fetchMyTasks();
     } catch (error) {
       console.error('Error signing up for task:', error.message);
+  
+      // החזרת המצב הקודם
+      setTasks(previousTasks);
+      setAvailableTasksForNextMonth(previousAvailableTasks);
+      setMyTasks(previousMyTasks);
+  
+      setErrorMessage("הייתה בעיה בהרשמה למשימה. נסה שוב מאוחר יותר.");
+      setErrorVisible(true);
     }
   };
   
@@ -387,7 +357,7 @@ const [availableTasksForNextMonth, setAvailableTasksForNextMonth] = useState([])
       
       // Optionally reload the task list
       fetchTasks();
-      fetchMyTasks();
+     
     } catch (error) {
       console.error('Error signing out from task:', error.message);
     }
@@ -493,7 +463,7 @@ const removeTaskForDate = async (taskId) => {
 
 
   return (
-    <TaskContext.Provider value={{ tasks,tasksFormatted,myTasks,availableTasksForNextMonth,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask ,signOutOfTask,fetchTasks,fetchMyTasks}}>
+    <TaskContext.Provider value={{ tasks,tasksFormatted,myTasks,availableTasksForNextMonth,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask ,signOutOfTask,fetchTasks,markTaskAsNotCompleted ,markTaskAsCompleted}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </TaskContext.Provider>

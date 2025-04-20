@@ -19,6 +19,7 @@ const SettingsScreen = () => {
         setHome(null);
       }
     },
+    {title: "עריכת קטגוריות", onPress: () =>   router.push("/EditCategoryScreen") }
   ];
 
   return (
