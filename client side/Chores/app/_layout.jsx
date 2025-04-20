@@ -44,6 +44,7 @@ export default function RootLayout() {
                 <Stack.Screen name="TaskEditScreen" />
                 <Stack.Screen name="HomePageScreen" />
                 <Stack.Screen name="ChatScreen" />
+                <Stack.Screen name="SettingsScreen" />
               </Stack>
               </ItemHistoryProvider>
             </ListsProvider>

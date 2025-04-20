@@ -1,28 +1,31 @@
-import React, { useState,useEffect,useRef} from "react";
-import { View, Animated, TouchableOpacity, Text, StyleSheet, TouchableWithoutFeedback, Image } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Animated,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Image,
+} from "react-native";
 import { useRouter, useSegments } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useUserAndHome } from "../Context/UserAndHomeContext";
-import { useNotification } from '../Context/NotificationContext';
-import { usePathname } from 'expo-router';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import { db } from '../FirebaseConfig'; 
-import { Timestamp } from 'firebase/firestore';
-
-
+import { useNotification } from "../Context/NotificationContext";
+import { usePathname } from "expo-router";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { db } from "../FirebaseConfig";
+import { Timestamp } from "firebase/firestore";
 
 const PageWithMenu = (props) => {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerRight] = useState(new Animated.Value(-250));
   const segments = useSegments();
-  const { user } = useUserAndHome();
+  const { user, logout } = useUserAndHome(); // הוספת logout
   const { setUnreadCount, unreadCount } = useNotification();
 
-
-  
-
-  const currentPath = '/' + segments[0];
+  const currentPath = "/" + segments[0];
 
   const toggleDrawer = () => {
     Animated.timing(drawerRight, {
@@ -42,6 +45,19 @@ const PageWithMenu = (props) => {
     setDrawerOpen(false);
   };
 
+  // תפריט דינמי לפי מצב המשתמש
+  const dynamicMenuItems = [
+    { screen: "/HomePageScreen", label: "דף הבית" },
+    { screen: "/ListsScreen", label: "רשימת קניות" },
+    { screen: "/TasksListScreen", label: "משימות" },
+    { screen: "/ProfileScreen", label: "אזור אישי" },
+    { screen: "/SettingsScreen", label: "הגדרות" },
+    { screen: "/ChatScreen", label: "צ'אט" },
+    user
+      ? { screen: "/Logout", label: "התנתק" }
+      : { screen: "/LoginScreen", label: "התחבר" },
+  ];
+
   return (
     <View style={styles.container}>
       {drawerOpen && (
@@ -53,16 +69,23 @@ const PageWithMenu = (props) => {
       <Animated.View
         style={[
           styles.drawer,
-          { right: drawerRight, display: drawerOpen ? 'flex' : 'none' },
+          { right: drawerRight, display: drawerOpen ? "flex" : "none" },
         ]}
       >
         <TouchableOpacity style={styles.closeButton} onPress={closeDrawer}>
           <Icon name="close" size={24} color="black" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.userContainer} onPress={() => router.push('/ProfileScreen')}>
+        <TouchableOpacity
+          style={styles.userContainer}
+          onPress={() => router.push("/ProfileScreen")}
+        >
           <Image
-            source={user?.profilePicture ? { uri: user.profilePicture } : require('../images/userImage.jpg')}
+            source={
+              user?.profilePicture
+                ? { uri: user.profilePicture }
+                : require("../images/userImage.jpg")
+            }
             style={styles.userImage}
           />
           <View style={styles.userInfo}>
@@ -71,7 +94,7 @@ const PageWithMenu = (props) => {
           </View>
         </TouchableOpacity>
 
-        {menuItems.map((item) => {
+        {dynamicMenuItems.map((item) => {
           const isActive = currentPath === item.screen;
           return (
             <View key={item.screen}>
@@ -79,14 +102,25 @@ const PageWithMenu = (props) => {
                 style={[styles.drawerItem, isActive && styles.activeDrawerItem]}
                 onPress={() => {
                   closeDrawer();
-                  router.push(item.screen);
+                  if (item.screen === "/Logout") {
+                    logout?.(); // מבצע התנתקות אם הפונקציה קיימת
+                  } else {
+                    router.push(item.screen);
+                  }
                 }}
               >
-                <Text style={[styles.drawerText, isActive && styles.activeDrawerText]}>
+                <Text
+                  style={[
+                    styles.drawerText,
+                    isActive && styles.activeDrawerText,
+                  ]}
+                >
                   {item.label}
                 </Text>
               </TouchableOpacity>
-              {item.image && <Image source={item.image} style={styles.drawerImage} />}
+              {item.image && (
+                <Image source={item.image} style={styles.drawerImage} />
+              )}
             </View>
           );
         })}
@@ -96,61 +130,109 @@ const PageWithMenu = (props) => {
 
       {/* Bottom Menu Bar */}
       <View style={styles.bottomMenu}>
-        <TouchableOpacity onPress={() => router.push('/ChatScreen')} style={styles.navButton}>
-        <View style={[styles.iconWrapper, currentPath === '/ChatScreen' && styles.activeIconWrapper]}>
-        <Icon
+        <TouchableOpacity
+          onPress={() => router.push("/ChatScreen")}
+          style={styles.navButton}
+        >
+          <View
+            style={[
+              styles.iconWrapper,
+              currentPath === "/ChatScreen" && styles.activeIconWrapper,
+            ]}
+          >
+            <Icon
               name="chat"
               size={24}
-              color={currentPath === '/ChatScreen' ? '#007bff' : 'black'}
+              color={currentPath === "/ChatScreen" ? "#007bff" : "black"}
             />
             {unreadCount > 0 && (
               <View style={styles.badge}>
                 <Text style={styles.badgeText}>{unreadCount}</Text>
               </View>
             )}
-            <Text  style={[styles.navText, currentPath === '/ChatScreen' && styles.activeText]}>צ'אט</Text>
+            <Text
+              style={[
+                styles.navText,
+                currentPath === "/ChatScreen" && styles.activeText,
+              ]}
+            >
+              צ'אט
+            </Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navButton} onPress={() => router.push('/ListsScreen')}>
-          <View style={[styles.iconWrapper, currentPath === '/ListsScreen' && styles.activeIconWrapper]}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("/ListsScreen")}
+        >
+          <View
+            style={[
+              styles.iconWrapper,
+              currentPath === "/ListsScreen" && styles.activeIconWrapper,
+            ]}
+          >
             <Icon
               name="list"
               size={24}
-              color={currentPath === '/ListsScreen' ? '#007bff' : 'black'}
+              color={currentPath === "/ListsScreen" ? "#007bff" : "black"}
             />
             <Text
-              style={[styles.navText, currentPath === '/ListsScreen' && styles.activeText]}
+              style={[
+                styles.navText,
+                currentPath === "/ListsScreen" && styles.activeText,
+              ]}
             >
               רשימות
             </Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navButton} onPress={() => router.push('/TasksListScreen')}>
-          <View style={[styles.iconWrapper, currentPath === '/TasksListScreen' && styles.activeIconWrapper]}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("/TasksListScreen")}
+        >
+          <View
+            style={[
+              styles.iconWrapper,
+              currentPath === "/TasksListScreen" && styles.activeIconWrapper,
+            ]}
+          >
             <Icon
               name="check-circle"
               size={24}
-              color={currentPath === '/TasksListScreen' ? '#007bff' : 'black'}
+              color={currentPath === "/TasksListScreen" ? "#007bff" : "black"}
             />
             <Text
-              style={[styles.navText, currentPath === '/TasksListScreen' && styles.activeText]}
+              style={[
+                styles.navText,
+                currentPath === "/TasksListScreen" && styles.activeText,
+              ]}
             >
               משימות
             </Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navButton} onPress={() => router.push('/HomePageScreen')}>
-          <View style={[styles.iconWrapper, currentPath === '/HomePageScreen' && styles.activeIconWrapper]}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("/HomePageScreen")}
+        >
+          <View
+            style={[
+              styles.iconWrapper,
+              currentPath === "/HomePageScreen" && styles.activeIconWrapper,
+            ]}
+          >
             <Icon
               name="home"
               size={24}
-              color={currentPath === '/HomePageScreen' ? '#007bff' : 'black'}
+              color={currentPath === "/HomePageScreen" ? "#007bff" : "black"}
             />
             <Text
-              style={[styles.navText, currentPath === '/HomePageScreen' && styles.activeText]}
+              style={[
+                styles.navText,
+                currentPath === "/HomePageScreen" && styles.activeText,
+              ]}
             >
               בית
             </Text>
@@ -166,17 +248,6 @@ const PageWithMenu = (props) => {
     </View>
   );
 };
-
-const menuItems = [
-  { screen: '/HomePageScreen', label: 'דף הבית' },
-  { screen: '/ListsScreen', label: 'רשימת קניות' },
-  { screen: '/TasksListScreen', label: 'משימות' },
-  { screen: '/LoginScreen', label: 'התחברות' },
-  { screen: '/ProfileScreen', label: 'אזור אישי' },
-  { screen: '/settings', label: 'הגדרות' },
-  { screen: '/ChatScreen', label: "צ'אט" },
-];
-
 
 const styles = StyleSheet.create({
   container: {
@@ -344,5 +415,4 @@ const styles = StyleSheet.create({
   },
 
 });
-
 export default PageWithMenu;

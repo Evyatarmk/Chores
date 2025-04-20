@@ -32,6 +32,12 @@ namespace Chores.Data
                     "TaskParticipants", // <-- name of your join table
                     j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
                     j => j.HasOne<Chores.Models.Task>().WithMany().HasForeignKey("TaskId"));
+           
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Home)
+                .WithMany(h => h.Users)
+                .HasForeignKey(u => u.HomeId)
+                .OnDelete(DeleteBehavior.SetNull); // ✅ כך HomeId יהפוך ל-NULL במקום למחוק את המשתמש
 
 
         }

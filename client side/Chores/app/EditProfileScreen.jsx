@@ -26,27 +26,76 @@ const EditProfileScreen = () => {
   };
 
   const handleImageChange = async () => {
-    // בקשה להרשאות לגישה לגלריה ולמצלמה
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     const cameraPermissionResult = await ImagePicker.requestCameraPermissionsAsync();
-
-    if (permissionResult.granted === false || cameraPermissionResult.granted === false) {
+  
+    if (!permissionResult.granted || !cameraPermissionResult.granted) {
       Alert.alert("שגיאה", "אין לך הרשאות לגישה לגלריה או למצלמה");
       return;
     }
-
-    // אפשרות לבחור תמונה מהגלריה או לצלם תמונה
+  
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
       quality: 1,
     });
-
+  
     if (!pickerResult.canceled) {
-      setNewProfilePicture(pickerResult.assets[0].uri); // עדכון התמונה שנבחרה
+      const uri = pickerResult.assets[0].uri;
+      const filename = uri.split('/').pop();
+  
+      try {
+        const uploadedUri = await uploadProfilePicture(uri, filename, user.homeId, user.id);
+  
+        // uploadedUri is like "https://yourserver.com/uploads/filename.jpg"
+        // If you want to store only filename:
+        const shortFileName = uploadedUri.split('/').pop(); 
+  
+        await updateUser(newName, shortFileName); // updating only the filename
+      } catch (error) {
+        console.error('Error updating profile picture:', error);
+      }
     }
   };
 
+
+  const uploadProfilePicture = async (uri, filename, homeId, userId) => {
+    const formData = new FormData();
+  
+    formData.append('MediaFile', {
+      uri: uri,
+      name: filename,
+      type: 'image/jpeg', // or png
+    });
+  
+    formData.append('Type', 'profilePicture'); // you can define 'profilePicture' as a type
+    formData.append('UploadDate', new Date().toISOString().split('T')[0]); // YYYY-MM-DD
+    formData.append('UploadTime', new Date().toLocaleTimeString()); // HH:mm:ss
+  
+    try {
+      const response = await fetch(`${baseUrl}/home/${homeId}/users/${userId}/media`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to upload profile picture');
+      }
+  
+      const result = await response.json();
+      console.log('Image uploaded successfully:', result);
+  
+      // `result.Uri` will have full URL (https://yourhost/uploads/xxx.jpg)
+      return result.Uri; // return the image URL
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <NormalHeader title="עריכת פרופיל" />

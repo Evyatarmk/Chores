@@ -758,6 +758,38 @@
   },
   {
     "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "EditUserProfile",
+    "RelativePath": "api/Users/editUserProfilePic\u0026Name",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userUpdate",
+        "Type": "Chores.Models.UserUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
+    "Method": "LeaveHome",
+    "RelativePath": "api/Users/leaveHome",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Chores.Models.LeaveHomeDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Chores.Controllers.UsersController",
     "Method": "Login",
     "RelativePath": "api/Users/login",
     "HttpMethod": "POST",
@@ -782,7 +814,7 @@
     "Parameters": [
       {
         "Name": "refreshRequest",
-        "Type": "Chores.Controllers.RefreshRequest",
+        "Type": "Chores.Controllers.UsersController\u002BRefreshRequest",
         "IsRequired": true
       }
     ],
@@ -798,7 +830,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Chores.Controllers.RegisterWithExistingHomeRequest",
+        "Type": "Chores.Controllers.UsersController\u002BRegisterWithExistingHomeRequest",
         "IsRequired": true
       }
     ],
@@ -814,7 +846,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Chores.Controllers.RegisterWithNewHomeRequest",
+        "Type": "Chores.Controllers.UsersController\u002BRegisterWithNewHomeRequest",
         "IsRequired": true
       }
     ],
