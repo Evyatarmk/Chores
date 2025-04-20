@@ -49,11 +49,13 @@ namespace Chores.Controllers
                 StartTime = t.StartTime,
                 EndTime = t.EndTime,
                 MaxParticipants = t.MaxParticipants,
+                Status = t.Status,
                 Participants = t.Participants.Select(p => new ParticipantDto
                 {
                     Id = p.Id,           // Access the user through the participant
                     Name = p.Name        // Access the user details through the participant
                 }).ToList()
+
             }).ToList();
 
             return Ok(taskDtos); // Return the list of tasks as a response
@@ -73,7 +75,7 @@ namespace Chores.Controllers
             return task;
         }
 
-
+        //GET
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetTasksForUser(string userId)
@@ -99,13 +101,36 @@ namespace Chores.Controllers
                     t.Description,
                     t.StartDate,
                     t.EndDate,
-                    t.Category
+                    t.Category,
+                    t.Status
                 })
                 .ToListAsync();
 
             return Ok(tasks);
         }
 
+        //GET
+
+        [HttpGet("completedTasksPerMonth/{userId}")]
+        public async Task<IActionResult> GetCompletedTasksPerMonth(string userId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.CompletedByUserId == userId && t.Status == true && t.CompletedDate != null)
+                .ToListAsync();
+
+            var grouped = tasks
+                .GroupBy(t => new { t.CompletedDate.Value.Year, t.CompletedDate.Value.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    CompletedTasks = g.Count()
+                })
+                .OrderBy(g => g.Year).ThenBy(g => g.Month)
+                .ToList();
+
+            return Ok(grouped);
+        }
 
 
 
@@ -195,6 +220,60 @@ namespace Chores.Controllers
 
             return NoContent();
         }
+
+        //Put
+
+        [HttpPut("markAsCompleted/{taskId}")]
+        public async Task<IActionResult> MarkTaskAsCompleted([FromBody] MarkTaskCompletedDto dto)
+        {
+            if (dto == null || string.IsNullOrEmpty(dto.TaskId) || string.IsNullOrEmpty(dto.UserId))
+            {
+                return BadRequest("Task ID and User ID must be provided.");
+            }
+
+            var task = await _context.Tasks.FindAsync(dto.TaskId);
+
+            if (task == null)
+            {
+                return NotFound($"Task with ID {dto.TaskId} not found.");
+            }
+
+            task.Status = true;
+            task.CompletedByUserId = dto.UserId;
+            task.CompletedDate = DateTime.UtcNow;
+
+            _context.Tasks.Update(task);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Task marked as completed successfully.", taskId = task.Id });
+        }
+
+        // Put - סימון משימה כלא בוצעה
+        [HttpPut("markAsNotCompleted/{taskId}")]
+        public async Task<IActionResult> MarkTaskAsNotCompleted([FromBody] MarkTaskCompletedDto dto)
+        {
+            if (dto == null || string.IsNullOrEmpty(dto.TaskId) || string.IsNullOrEmpty(dto.UserId))
+            {
+                return BadRequest("Task ID and User ID must be provided.");
+            }
+
+            var task = await _context.Tasks.FindAsync(dto.TaskId);
+
+            if (task == null)
+            {
+                return NotFound($"Task with ID {dto.TaskId} not found.");
+            }
+
+            task.Status = false;
+            task.CompletedByUserId = null;
+            task.CompletedDate = null; // אפשר גם למחוק פה תאריך אם תרצה
+
+            _context.Tasks.Update(task);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Task marked as NOT completed successfully.", taskId = task.Id });
+        }
+
 
         // DELETE: api/tasks/{id}
         [HttpDelete("{id}")]

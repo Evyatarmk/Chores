@@ -10,7 +10,7 @@ import PodiumComponent from "./Components/PodiumComponent";  // Import the new P
 
 export default function HomePageScreen() {
   const router = useRouter();
-  const { myTasks, signUpForTask, signOutOfTask, fetchMyTasks } = useTasks(); // Get tasks & sign-up function
+  const { myTasks, signUpForTask, signOutOfTask, fetchMyTasks ,markTaskAsCompleted,markTaskAsNotCompleted} = useTasks(); // Get tasks & sign-up function
   const { user } = useUserAndHome(); // Get logged-in user
 
 
@@ -19,7 +19,7 @@ export default function HomePageScreen() {
     if (user && user.id) {
       fetchMyTasks(user.id);
     }
-  }, [user]);
+  }, [user,myTasks]);
 
 
 
@@ -73,12 +73,19 @@ export default function HomePageScreen() {
                   {/* כפתור סמן כבוצע - רק אם הקטגוריה היא "משימה" */}
                   {task.category === "משימה" && (
                     <View style={styles.buttonContainer}>
-                      <Button
-                        title="סמן כבוצע"
-                        color="#4CAF50"
-                        onPress={() => markTaskAsCompleted(task.id, user.id)}
-                      />
-                    </View>
+                    <Button
+                      title={task.status ? "סמן כלא בוצע" : "סמן כבוצע"} 
+                      color={task.status ? "#f44336" : "#4CAF50"} // אדום לביטול, ירוק לביצוע
+                      onPress={() => {
+                        console.log(task.status)
+                        if (task.status) {
+                          markTaskAsNotCompleted(task.id); // משימה בוצעה - אז מסמנים כלא בוצעה
+                        } else {
+                          markTaskAsCompleted(task.id);     // משימה לא בוצעה - אז מסמנים כבוצעה
+                        }
+                      }}
+                    />
+                  </View>
                   )}
               </View>
             </TouchableOpacity>

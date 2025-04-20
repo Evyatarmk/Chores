@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image } from "react-native";
 import { Avatar } from '@rneui/themed';
 import { BarChart } from "react-native-chart-kit";
 import { useUserAndHome } from "./Context/UserAndHomeContext";
@@ -7,8 +7,13 @@ import { useRouter } from "expo-router";
 import NormalHeader from "./Components/NormalHeader";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PageWithMenu from "./Components/PageWithMenu";
+import { useApiUrl } from "./Context/ApiUrlProvider";
+
+
+
 
 const ProfileScreen = () => {
+  const { baseUrl } = useApiUrl();
   const router = useRouter();
   const { user, home, logout } = useUserAndHome();
   console.log(home)
@@ -18,56 +23,37 @@ const ProfileScreen = () => {
       pathname: "./EditProfileScreen",
     })
   };
-  // נתונים אמיתיים מהמשתמש, אם אין נרצה להחזיר נתונים ברירת מחדל
-  const taskStats = user?.tasksStats?.completedTasksByMonth || {};
 
-  // אם אין נתונים, נמלא בנתונים לדוגמה
-  const data = {
-    labels: Object.keys(taskStats).map((month) => {
-      // המרה מהמפתחות 1, 2, 3 לשמות חודשים
-      const monthNames = ["ינואר", "פברואר", "מרץ"];
-      return monthNames[parseInt(month) - 1] || `חודש ${month}`;
-    }),
-    datasets: [
-      {
-        data: Object.values(taskStats), // כמות המשימות שהושלמו לכל חודש
-        color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`, // צבע הבר
-        strokeWidth: 2, // עובי הקו של הבר
-        fill: true, // מילוי בר בעמודה
-      },
-    ],
-  };
+  const [data, setData] = useState([]);
 
-  const chartConfig = {
-    backgroundColor: "#f4f4f4",
-    backgroundGradientFrom: "#f4f4f4",
-    backgroundGradientTo: "#f4f4f4",
-    decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`, // צבע הגרף
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // צבע התוויות
-    style: {
-      borderRadius: 10,
-    },
-    propsForDots: {
-      r: "6",
-      strokeWidth: "2",
-      stroke: "#ffa726",
-    },
-    propsForBackgroundLines: {
-      strokeWidth: 0.5,
-      stroke: "#D3D3D3", // צבע קווים לרקע
-    },
-  };
+  useEffect(() => {
+    if (user?.id) {
+      fetch(`${baseUrl}/Tasks/completedTasksPerMonth/${user.id}`)
+        .then((res) => res.json())
+        .then((result) => {
+          const mappedData = result.map(item => ({
+            name: `${item.month}/${item.year}`,
+            completedTasks: item.completedTasks
+          }));
+          setData(mappedData);
+        })
+        .catch((error) => console.error('Error fetching task data:', error));
+    }
+  }, [user?.id]);
+
+
+
+
 
   return (
     <PageWithMenu>
-      <NormalHeader title="אזור אישי" targetScreen="/"/>
+      <NormalHeader title="אזור אישי" targetScreen="/" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileCard}>
-           <Image
-              source={user?.profilePicture?{ uri: user?.profilePicture}:require('./images/userImage.jpg') }
-              style={styles.userImage}
-            />
+          <Image
+            source={user?.profilePicture ? { uri: user?.profilePicture } : require('./images/userImage.jpg')}
+            style={styles.userImage}
+          />
           <Text style={styles.name}>{user?.name}</Text>
           <Text style={styles.code}>קוד הבית: {home?.code}</Text>
           <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
@@ -75,17 +61,43 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
+
         <Text style={styles.subTitle}>משימות שבוצעו</Text>
+        <View style={{ alignItems: 'center', paddingHorizontal: 20 }}>
         <BarChart
-          data={data}
-          width={screenWidth - 40}
-          height={220}
+          data={{
+            labels: data.map(item => item.name),
+            datasets: [
+              {
+                data: data.map(item => item.completedTasks),
+              },
+            ],
+          }}
+          width={screenWidth - 40} // add margin
+          height={260}
+          fromZero={true} // start y-axis from zero
+          showValuesOnTopOfBars={true} // show numbers on bars
           yAxisLabel=""
-          chartConfig={chartConfig}
-          fromZero
-          showValuesOnTopOfBars
-          style={styles.chart}
+          chartConfig={{
+            backgroundColor: "#4c669f",
+            backgroundGradientFrom: "#6a11cb",
+            backgroundGradientTo: "#2575fc",
+            decimalPlaces: 0,
+            barPercentage: 0.7,
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+            propsForBackgroundLines: {
+              stroke: "#e3e3e3",
+              strokeDasharray: "", // solid lines
+            },
+          }}
+          verticalLabelRotation={25}
         />
+        </View>
+
         <Text style={styles.subTitle}>חברי הבית</Text>
         <View style={styles.membersList}>
           {home?.members?.length > 0 ? (
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   userImage: {
     width: 60,
     height: 60,
-    marginLeft:10,
+    marginLeft: 10,
     borderRadius: 30,
     backgroundColor: "#ddd",
   },

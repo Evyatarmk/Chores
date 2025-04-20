@@ -62,6 +62,8 @@
         public TimeSpan EndTime { get; set; }
         public int? MaxParticipants { get; set; }
 
+        public bool Status { get; set; }    
+
         public List<ParticipantDto> Participants { get; set; }
     }
 
@@ -120,6 +122,12 @@
     {
         public string UserId { get; set; }  
         public string HomeCode { get; set; }
+    }
+
+    public class MarkTaskCompletedDto
+    {
+        public string TaskId { get; set; }
+        public string UserId { get; set; }
     }
 
 }

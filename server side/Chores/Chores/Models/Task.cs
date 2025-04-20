@@ -18,6 +18,11 @@
 
         public int? MaxParticipants { get; set; }
 
+        public bool Status { get; set; }
+
+        public string? CompletedByUserId { get; set; } // NEW
+        public DateTime? CompletedDate { get; set; }  // NEW
+
         public List<User> Participants { get; set; } = new();
 
     }
