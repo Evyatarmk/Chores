@@ -146,7 +146,7 @@ export default function ChatScreen() {
                   placeholder="Type a message..."
                   style={styles.input}
                 />
-                <Button title="Send" onPress={handleSend} color='#007bff'  />
+                <Button title="Send" onPress={handleSend} color='#284b6b'  />
               </View>
             </>
           )}
@@ -197,10 +197,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    backgroundColor: `#e0f0ff`,
+    backgroundColor: `white`,
     padding: 8,
     borderTopWidth: 1,
-    borderColor: '#bdc3c7',
+    borderTopColor: 'white',
+    borderBottomColor: 'white',
     borderBottomWidth: 10,
   },
   input: {
