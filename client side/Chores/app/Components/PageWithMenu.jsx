@@ -19,12 +19,13 @@ import { Timestamp } from "firebase/firestore";
 import { useApiUrl } from "../Context/ApiUrlProvider";
 
 
+
 const PageWithMenu = (props) => {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerRight] = useState(new Animated.Value(-250));
   const segments = useSegments();
-  const { user, logout } = useUserAndHome(); // הוספת logout
+  const { user ,home, logout } = useUserAndHome(); 
   const { setUnreadCount, unreadCount } = useNotification();
 
 
@@ -106,6 +107,7 @@ const PageWithMenu = (props) => {
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{user?.name}</Text>
             <Text style={styles.userEmail}>{user?.email}</Text>
+            <Text style={styles.userEmail}>{home?.name}</Text>
           </View>
         </TouchableOpacity>
 
