@@ -82,7 +82,7 @@ const [errorMessage, setErrorMessage] = useState('');
   const updateCategory = async (updatedCategory) => {
     
     try {
-        const response = await fetch(`${baseUrl}/home/${home.id}/categories/${updatedCategory.id}`, {
+        const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories/${updatedCategory.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
