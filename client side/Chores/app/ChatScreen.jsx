@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, TextInput, Button, FlatList, Text, StyleSheet, Image } from 'react-native';
+import { View, TextInput, Button, FlatList, Text, StyleSheet, ImageBackground, Image } from 'react-native';
 import PageWithMenu from './Components/PageWithMenu';
 import { useUserAndHome } from './Context/UserAndHomeContext';
 import { db } from './FirebaseConfig';
@@ -18,7 +18,7 @@ export default function ChatScreen() {
   // controls whether new content auto‑scrolls
   const [autoScroll, setAutoScroll] = useState(true);
 
-  // load messages and track last-seen
+  // load messages and track last‑seen
   useEffect(() => {
     const houseId = user?.homeId;
     if (!houseId) return;
@@ -114,47 +114,56 @@ export default function ChatScreen() {
 
   return (
     <PageWithMenu>
-      <View style={styles.container}>
-        {!user ? (
-          <View style={styles.centeredMessage}>
-            <Text style={styles.notLoggedInText}>
-              יש להתחבר על מנת להשתמש בצ'אט
-            </Text>
-          </View>
-        ) : (
-          <>
-            <FlatList
-              ref={flatListRef}
-              data={messages}
-              renderItem={renderMessageItem}
-              keyExtractor={item => item.id}
-              style={styles.messagesContainer}
-              onContentSizeChange={handleContentSizeChange}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}
-            />
-
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={inputText}
-                onChangeText={setInputText}
-                placeholder="Type a message..."
-                style={styles.input}
-              />
-              <Button title="Send" onPress={handleSend} color="#075E54" />
+      <ImageBackground
+        source={require('./images/chatBackground.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          {!user ? (
+            <View style={styles.centeredMessage}>
+              <Text style={styles.notLoggedInText}>
+                יש להתחבר על מנת להשתמש בצ'אט
+              </Text>
             </View>
-          </>
-        )}
-      </View>
+          ) : (
+            <>
+              <FlatList
+                ref={flatListRef}
+                data={messages}
+                renderItem={renderMessageItem}
+                keyExtractor={item => item.id}
+                style={styles.messagesContainer}
+                onContentSizeChange={handleContentSizeChange}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+              />
+
+              <View style={styles.inputContainer}>
+                <TextInput
+                  value={inputText}
+                  onChangeText={setInputText}
+                  placeholder="Type a message..."
+                  style={styles.input}
+                />
+                <Button title="Send" onPress={handleSend} color='#007bff'  />
+              </View>
+            </>
+          )}
+        </View>
+      </ImageBackground>
     </PageWithMenu>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#e0e5ec',
+    backgroundColor: 'rgba(255,255,255,0.6)', // overlay for readability
   },
   messagesContainer: {
     flex: 1,
@@ -188,6 +197,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
+    backgroundColor: `#e0f0ff`,
     padding: 8,
     borderTopWidth: 1,
     borderColor: '#bdc3c7',
@@ -208,12 +218,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginVertical: 6,
   },
-  sentRow: {
-    justifyContent: 'flex-end',
-  },
-  receivedRow: {
-    justifyContent: 'flex-start',
-  },
+  sentRow: { justifyContent: 'flex-end' },
+  receivedRow: { justifyContent: 'flex-start' },
   senderName: {
     fontSize: 12,
     fontWeight: 'bold',
