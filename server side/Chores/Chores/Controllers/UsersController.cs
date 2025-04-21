@@ -341,15 +341,17 @@ namespace Chores.Controllers
             await _context.SaveChangesAsync();
 
             await _context.Entry(user).ReloadAsync();
-
             // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
             var isLocal = Request.Host.Host.Contains("localhost");
             var baseUrl = isLocal
                 ? $"{Request.Scheme}://{Request.Host}"
                 : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
-            var fullUri = $"{baseUrl}/{user.ProfilePicture}";
-
+            string fullUri = null;
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+            }
             var userDto = new UserDto
             {
                 Id = user.Id,
@@ -477,8 +479,11 @@ namespace Chores.Controllers
                 ? $"{Request.Scheme}://{Request.Host}"
                 : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
-            var fullUri = $"{baseUrl}/{user.ProfilePicture}";
-
+            string fullUri = null;
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+            }
 
             // המרת הנתונים ל-DTO
             var userDto = new UserDto
@@ -511,8 +516,7 @@ namespace Chores.Controllers
             });
         }
 
-
-        [HttpPut("editUserProfilePicAndName")]
+        [HttpPost("editUserProfilePicAndName")]
         public async Task<IActionResult> EditUserProfile([FromForm] UserUpdateDto userUpdate)
         {
             if (userUpdate == null)
@@ -526,12 +530,31 @@ namespace Chores.Controllers
             if (!string.IsNullOrEmpty(userUpdate.Name))
                 user.Name = userUpdate.Name;
 
+            string fileName = null;
+
             // שינוי תמונת פרופיל אם התקבלה
             if (userUpdate.ProfilePicture != null && userUpdate.ProfilePicture.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
+
+                // מחיקת קובץ קודם אם קיים
+                if (!string.IsNullOrEmpty(user.ProfilePicture))
+                {
+                    var oldFilePath = Path.Combine(uploadsFolder, user.ProfilePicture); // לא מוסיף שוב "uploads"
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            return StatusCode(500, $"Error deleting old profile picture: {ex.Message}");
+                        }
+                    }
+                }
 
                 var extension = Path.GetExtension(userUpdate.ProfilePicture.FileName);
                 if (string.IsNullOrEmpty(extension))
@@ -544,7 +567,7 @@ namespace Chores.Controllers
                     };
                 }
 
-                var fileName = Guid.NewGuid().ToString() + extension;
+                fileName = Guid.NewGuid().ToString() + extension;
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -552,8 +575,8 @@ namespace Chores.Controllers
                     await userUpdate.ProfilePicture.CopyToAsync(stream);
                 }
 
-                // שמירה של הנתיב היחסי במסד הנתונים
-                user.ProfilePicture = $"uploads/{fileName}";
+                // שמירה של שם הקובץ בלבד במסד הנתונים
+                user.ProfilePicture = fileName;
             }
 
             try
@@ -566,8 +589,11 @@ namespace Chores.Controllers
                     ? $"{Request.Scheme}://{Request.Host}"
                     : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
-                var fullUri = $"{baseUrl}/{user.ProfilePicture}";
-
+                string fullUri = null;
+                if (!string.IsNullOrEmpty(user.ProfilePicture))
+                {
+                    fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+                }
                 return Ok(new
                 {
                     user.Id,
@@ -580,6 +606,7 @@ namespace Chores.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
 
 
 

@@ -47,16 +47,16 @@ console.log(imageUri)
       }
   
       const res = await fetch(`${baseUrl}/Users/editUserProfilePicAndName`, {
-        method: "PUT",
+        method: "POST",
         body: formData,
       });
-  
+      
       if (!res.ok) throw new Error("עדכון הפרופיל נכשל");
   
       const updatedUser = await res.json();
   
       updateUser(updatedUser); // ✅ מעדכן את הקונטקסט
-  
+      console.log("dddddddd",updatedUser)
       Alert.alert("הצלחה", "הפרופיל עודכן בהצלחה");
       router.push("/ProfileScreen");
     } catch (error) {
