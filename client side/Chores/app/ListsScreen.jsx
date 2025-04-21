@@ -77,15 +77,15 @@ const ListsScreen = () => {
   };
 
   const handleOptionSelect = (option) => {
-    if (option === "edit") {
+    if (option.action === "edit") {
       optionsModalRef.current?.close();
       setTimeout(() => {
         editModalRef.current?.open();
       }, 300);
-    } if (option === "delete") {
+    } if (option.action === "delete") {
       handleDeletePress()
     }
-    else if (option === "copy") {
+    else if (option.action === "copy") {
       optionsCopyModalRef.current?.open();
       optionsModalRef.current?.close();
     }

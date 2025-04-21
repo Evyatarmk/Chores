@@ -1,5 +1,6 @@
 ﻿using Chores.Data;
 using Chores.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,6 +21,7 @@ namespace Chores.Controllers
 
         // GET: api/home/{homeId}/categories
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetCategoriesByHome(string homeId)
         {
             var categories = await _context.Categories
@@ -31,6 +33,7 @@ namespace Chores.Controllers
 
         // POST: api/home/{homeId}/categories
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateCategory(string homeId, [FromBody] Category category)
         {
             category.Id = Guid.NewGuid().ToString();
@@ -43,23 +46,37 @@ namespace Chores.Controllers
 
         // PUT: api/home/{homeId}/categories/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(string homeId, string id, [FromBody] string name)
+        [Authorize]
+        public async Task<IActionResult> UpdateCategory(string homeId, string id, [FromBody] string newName)
         {
             var category = await _context.Categories
                 .FirstOrDefaultAsync(c => c.Id == id && c.HomeId == homeId);
 
             if (category == null)
-                return NotFound();
+                return NotFound("Category not found");
 
-            category.Name = name;
+            var oldName = category.Name;
+            category.Name = newName;
+
+            // עדכון כל הרשימות שהיו שייכות לקטגוריה הישנה
+            var listsToUpdate = await _context.Lists
+                .Where(l => l.Category == oldName && l.HomeId == homeId)
+                .ToListAsync();
+
+            foreach (var list in listsToUpdate)
+            {
+                list.Category = newName;
+            }
 
             await _context.SaveChangesAsync();
 
             return Ok(category);
         }
 
+
         // DELETE: api/homes/{homeId}/categories/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCategory(string homeId, string id)
         {
             var category = await _context.Categories
