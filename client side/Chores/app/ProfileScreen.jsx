@@ -149,10 +149,10 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   userImage: {
-    width: 60,
-    height: 60,
+    width: 150,
+    height: 150,
     marginLeft: 10,
-    borderRadius: 30,
+    borderRadius: 100,
     backgroundColor: "#ddd",
   },
   editIcon: {
