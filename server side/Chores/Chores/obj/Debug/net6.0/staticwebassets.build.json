@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "zUWPmeV1UUoJMcsUftuL1r5h/mv8oC9wu9EoQVPFROE=",
+  "Hash": "Jg0gsUvcod4nGRVqGzyRDcMAwQ5ow6ETOoR3RiKy5+4=",
   "Source": "Chores",
   "BasePath": "_content/Chores",
   "Mode": "Default",
@@ -141,6 +141,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\392d6d32-f82b-4c12-8683-804203fa2184.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\4acffa0c-b159-43b4-8681-1ce11bf38fd0.jpeg",
+      "SourceId": "Chores",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\",
+      "BasePath": "_content/Chores",
+      "RelativePath": "uploads/4acffa0c-b159-43b4-8681-1ce11bf38fd0#[.{fingerprint}]?.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "24klap2052",
+      "Integrity": "Esekr5rX/t838yQbjhl9//WBE5lDPP4cs/29+jReXtA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\4acffa0c-b159-43b4-8681-1ce11bf38fd0.jpeg"
     },
     {
       "Identity": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\5f31b506-ad34-4673-8453-0901a22144b8.jpg",
@@ -1053,6 +1074,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-m25HtT1OptUrxKPkO95tC9kqHJrPxTPNS+gcOr44snY="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/4acffa0c-b159-43b4-8681-1ce11bf38fd0.24klap2052.jpeg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\4acffa0c-b159-43b4-8681-1ce11bf38fd0.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3764403"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Esekr5rX/t838yQbjhl9//WBE5lDPP4cs/29+jReXtA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 21 Apr 2025 11:14:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "24klap2052"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/4acffa0c-b159-43b4-8681-1ce11bf38fd0.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Esekr5rX/t838yQbjhl9//WBE5lDPP4cs/29+jReXtA="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/4acffa0c-b159-43b4-8681-1ce11bf38fd0.jpeg",
+      "AssetFile": "C:\\Users\\ronik\\OneDrive\\Desktop\\Chores\\server side\\Chores\\Chores\\wwwroot\\uploads\\4acffa0c-b159-43b4-8681-1ce11bf38fd0.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3764403"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Esekr5rX/t838yQbjhl9//WBE5lDPP4cs/29+jReXtA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 21 Apr 2025 11:14:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Esekr5rX/t838yQbjhl9//WBE5lDPP4cs/29+jReXtA="
         }
       ]
     },

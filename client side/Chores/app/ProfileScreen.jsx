@@ -82,26 +82,26 @@ const ProfileScreen = () => {
               showValuesOnTopOfBars={true}
               yAxisLabel=""
               chartConfig={{
-                backgroundColor: "#4c669f",
-                backgroundGradientFrom: "#6a11cb",
-                backgroundGradientTo: "#2575fc",
+                backgroundColor: "#ffffff", // רקע לבן
+                backgroundGradientFrom: "#ffffff", // ללא גרדיאנט
+                backgroundGradientTo: "#ffffff",   // ללא גרדיאנט
                 decimalPlaces: 0,
                 barPercentage: 0.8,
-                fillShadowGradient: '#45455', // צבע העמודות
-                fillShadowGradientOpacity: 5,   // לא שקוף
-                color: (opacity = 1) => `rgba(10, 10, 10, ${opacity})`, // צבע קווי גריד וטקסט
-                labelColor: (opacity = 1) => `rgba(10, 15, 255, ${opacity})`,
+                fillShadowGradient: "#4c669f", // צבע עמודות
+                fillShadowGradientOpacity: 1,  // אטום לגמרי
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // צבע טקסטים וקווי גריד – שחור
+                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // צבע תוויות – שחור
                 style: {
                   borderRadius: 16,
                 },
                 propsForBackgroundLines: {
-                  stroke: "#e3e3e3",
+                  stroke: "#cccccc", // קווים בהירים
                   strokeDasharray: "",
                 },
               }}
               verticalLabelRotation={25}
-              
             />
+
 
           ) : (
             <Text>אין נתונים להצגה</Text> // "No data to display"
