@@ -31,6 +31,7 @@ const TaskEditScreen = () => {
   const currentTime = new Date();
   currentTime.setMinutes(Math.floor(currentTime.getMinutes() / 5) * 5); // Round down to nearest 5 minutes
   const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const [isEvent, setIsEvent] = useState( mytask.category=="משימה"?false:true); // Function to toggle date picker
 
   const [toEditTaskData, setTaskData] = useState({
     title: mytask.title || "",
@@ -124,10 +125,23 @@ const TaskEditScreen = () => {
   };
 
   const handleInputChange = (field, value) => {
-    setTaskData((prevState) => ({
-      ...prevState,
-      [field]: value,  // עדכון הערך של השדה המתאים
-    }));
+    if(value=="משימה"){
+      setIsEvent(false)
+      setTaskData((prevState) => ({
+        ...prevState,
+        [field]: value,
+        maxParticipants: mytask.participants.length||1 // עדכון הערך של השדה המתאים
+      }));
+    }
+    else{
+      setIsEvent(true)
+      setTaskData((prevState) => ({
+        ...prevState,
+        [field]: value,
+        maxParticipants: -1 // עדכון הערך של השדה המתאים
+      }));
+    }
+   
   };
 
 
@@ -180,6 +194,8 @@ const TaskEditScreen = () => {
           placeholderTextColor="#ccc"
         /> */}
 
+
+        {!isEvent?
         <TextInput
           style={styles.input}
           value={toEditTaskData.maxParticipants.toString()}
@@ -187,7 +203,8 @@ const TaskEditScreen = () => {
           placeholder="Max Participants"
           placeholderTextColor="#ccc"
           keyboardType="numeric"
-        />
+        />:null}
+
 
         <ItemSelector
           items={categories}

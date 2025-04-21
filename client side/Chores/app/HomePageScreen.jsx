@@ -49,8 +49,22 @@ export default function HomePageScreen() {
     optionsModalRef.current?.open();
   };
 
-  const displayedTasks = activeTab === "myTasks" ? myTasks : availableTasksForNextMonth;
-  const sectionTitle = activeTab === "myTasks" ? "המשימות שלי לשבוע הקרוב" : "משימות ואירועים זמינים החודש";
+  const sortedMyTasks = [...myTasks].sort((a, b) => {
+    // שלב 1: לפי האם בוצע
+    if (a.status !== b.status) {
+      return a.status ? 1 : -1; // משימות שבוצעו עוברות למטה
+    }
+  
+    // שלב 2: אם אותו סטטוס, מיון לפי סוג (משימה לפני אירוע)
+    if (a.category !== b.category) {
+      return a.category === "משימה" ? -1 : 1;
+    }
+  
+    return 0; // אותו סטטוס ואותו סוג
+  });
+  
+  const displayedTasks = activeTab === "myTasks" ? sortedMyTasks : availableTasksForNextMonth;
+    const sectionTitle = activeTab === "myTasks" ? "המשימות שלי לשבוע הקרוב" : "משימות ואירועים זמינים החודש";
 
   return (
     <PageWithMenu>

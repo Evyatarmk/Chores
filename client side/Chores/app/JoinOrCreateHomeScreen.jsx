@@ -4,6 +4,7 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import ErrorNotification from "./Components/ErrorNotification";
 import { Icon } from '@rneui/base';
+import { ActivityIndicator } from "react-native-web";
 
 const JoinOrCreateHomeScreen = () => {
   const router = useRouter();
@@ -12,6 +13,8 @@ const JoinOrCreateHomeScreen = () => {
   const [homeName, setHomeName] = useState("");
  const [errorMessage, setErrorMessage] = useState('');
     const [errorVisible, setErrorVisible] = useState(false);
+    const [loadingJoin, setLoadingJoin] = useState(false);
+const [loadingCreate, setLoadingCreate] = useState(false);
     const handleCloseError = () => {
       setErrorMessage("")
       setErrorVisible(false)
@@ -22,8 +25,9 @@ const JoinOrCreateHomeScreen = () => {
       setErrorVisible(true)
       return;
     }
-    let status=await joinHome(code, newUser);
-    if (status) {
+    setLoadingJoin(true);
+    let status = await joinHome(code, newUser);
+    setLoadingJoin(false);    if (status) {
       router.push("/HomePageScreen");
     }
   };
@@ -35,8 +39,9 @@ const JoinOrCreateHomeScreen = () => {
 
       return;
     }
-    let status=await setNewHome(homeName, newUser)
-    if (status) {
+    setLoadingCreate(true);
+    let status = await setNewHome(homeName, newUser);
+    setLoadingCreate(false);    if (status) {
       router.push("/HomePageScreen");
     } else {
       setErrorMessage("משהו לא עבד אנא נסה שוב");
@@ -60,9 +65,13 @@ const JoinOrCreateHomeScreen = () => {
         value={code}
         onChangeText={setCode}
       />
-      <TouchableOpacity style={styles.button} onPress={handleJoinHome}>
-        <Text style={styles.buttonText}>הצטרף</Text>
-      </TouchableOpacity>
+     <TouchableOpacity style={styles.button} onPress={handleJoinHome} disabled={loadingJoin}>
+  {loadingJoin ? (
+    <ActivityIndicator size="small" color="#fff" />
+  ) : (
+    <Text style={styles.buttonText}>הצטרף</Text>
+  )}
+</TouchableOpacity>
 
       <Text style={styles.separator}>או</Text>
 
@@ -73,9 +82,13 @@ const JoinOrCreateHomeScreen = () => {
         value={homeName}
         onChangeText={setHomeName}
       />
-      <TouchableOpacity style={styles.button} onPress={handleCreateHome}>
-        <Text style={styles.buttonText}>צור בית</Text>
-      </TouchableOpacity>
+     <TouchableOpacity style={styles.button} onPress={handleCreateHome} disabled={loadingCreate}>
+  {loadingCreate ? (
+    <ActivityIndicator size="small" color="#fff" />
+  ) : (
+    <Text style={styles.buttonText}>צור בית</Text>
+  )}
+</TouchableOpacity>
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
 
     </View>

@@ -50,15 +50,20 @@ const myThisWeek = tasks.filter(task =>
       const today = new Date();
       const oneMonthFromNow = new Date();
       oneMonthFromNow.setDate(today.getDate() + 30);
-    
+      console.log("tasks",tasks)
+      console.log("user",user)
       const available = tasks.filter(task => {
         const start = new Date(task.startDate);
         return (
           start >= today &&
           start <= oneMonthFromNow &&
-          (task.participants?.length ?? 0) === 0
+          (
+            (task.participants?.length < task?.maxParticipants || task?.maxParticipants === -1) &&
+            !task.participants?.some(p => p.id === user.id)
+          )
         );
       });
+      
     
       setMyTasks(myThisWeek);     
        setAvailableTasksForNextMonth(available);
