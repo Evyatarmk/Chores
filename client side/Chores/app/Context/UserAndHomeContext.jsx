@@ -201,9 +201,8 @@ export const UserAndHomeProvider = ({ children }) => {
   
       if (response.ok) {
         const data = await response.json();
-        const { newAccessToken, refreshToken } = data;
-  
-        await AsyncStorage.setItem('accessToken', newAccessToken);
+        const { accessToken, refreshToken } = data;
+        await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
   
         setUser(data.user);
@@ -234,9 +233,10 @@ export const UserAndHomeProvider = ({ children }) => {
   
       if (response.ok) {
         const data = await response.json();
-        const { newAccessToken, refreshToken } = data;
-  
-        await AsyncStorage.setItem('accessToken', newAccessToken);
+        const { accessToken, refreshToken } = data;
+        console.log("sssssssssssss",data)
+
+        await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
   
         setUser(data.user);
