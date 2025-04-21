@@ -124,7 +124,7 @@ const myThisWeek = tasks.filter(task =>
 
        
         // עדכון הסטייטים
-        setTasks(data);
+        setTasks([...data]);
     
       } catch (error) {
         console.error("שגיאה בקבלת משימות:", error);
@@ -412,7 +412,14 @@ const removeTaskForDate = async (taskId) => {
   
   
   const editTask = async (taskId, updatedTask) => {
-    console.log("Editing task:", taskId, updatedTask);
+    const originalTask = tasks.find(task => task.id === taskId);
+  
+    // עדכון הממשק המקומי באופן אופטימי
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, ...updatedTask } : task
+      )
+    );
   
     try {
       const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
@@ -428,14 +435,19 @@ const removeTaskForDate = async (taskId) => {
       }
   
       console.log(`Task ${taskId} edited successfully`);
-  
-      // Refresh the task list or UI
-      fetchTasks();
     } catch (error) {
-      setErrorMessage("שגיאה בעריכת משימה אנא נסה שוב");
+      // החזרת הממשק המקומי למצבו המקורי במקרה של כישלון
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === taskId ? originalTask : task
+        )
+      );
+  
+      setErrorMessage("שגיאה בעריכת משימה. אנא נסה שוב.");
       setErrorVisible(true);
     }
   };
+  
   
 
 

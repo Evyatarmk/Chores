@@ -25,11 +25,15 @@ const TaskDetailsScreen = () => {
   useEffect(() => {
     if (date && taskId) {
       const tasksForDate = getTasksForDate(date);
-      console.log(tasksForDate)
+      console.log("lkkkk")
       const fetchedTask = tasksForDate.find(task => String(task.id) === String(taskId));
       if (fetchedTask) setTaskData(fetchedTask);
     }
   }, [date, taskId,tasks]);
+  useEffect(() => {
+      const fetchedTask = tasks.find(task => String(task.id) === String(taskId));
+      if (fetchedTask) setTaskData(fetchedTask);
+  }, [tasks]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
