@@ -22,9 +22,6 @@ const DatePickerForTasks = ({ onDateSelect, showModal, setShowModal, selectedDat
 
   return (
     <>
-      <TouchableOpacity style={styles.dateButton} onPress={() => setShowModal(true)}>
-        <Text style={styles.dateButtonText}>{initialDate || "ללא תאריך"}</Text>
-      </TouchableOpacity>
 
       <Modal transparent={true} animationType="slide" visible={showModal} onRequestClose={() => setShowModal(false)}>
         <View style={styles.modalOverlay}>

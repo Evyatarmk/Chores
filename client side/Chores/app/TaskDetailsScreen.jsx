@@ -14,7 +14,7 @@ const Tag = ({ label, color }) => (
 const TaskDetailsScreen = () => {
   const router = useRouter();
   const { taskId, date } = useLocalSearchParams();
-  const { getTasksForDate ,tasks} = useTasks();
+  const { getTasksForDate, tasks } = useTasks();
 
   const [taskData, setTaskData] = useState(null);
 
@@ -29,10 +29,10 @@ const TaskDetailsScreen = () => {
       const fetchedTask = tasksForDate.find(task => String(task.id) === String(taskId));
       if (fetchedTask) setTaskData(fetchedTask);
     }
-  }, [date, taskId,tasks]);
+  }, [date, taskId, tasks]);
   useEffect(() => {
-      const fetchedTask = tasks.find(task => String(task.id) === String(taskId));
-      if (fetchedTask) setTaskData(fetchedTask);
+    const fetchedTask = tasks.find(task => String(task.id) === String(taskId));
+    if (fetchedTask) setTaskData(fetchedTask);
   }, [tasks]);
 
   return (
@@ -77,16 +77,16 @@ const TaskDetailsScreen = () => {
           <Text style={styles.label}>
             סטטוס
           </Text>
-          <View style={{ alignSelf: "flex-end"}}>
-  <Tag
-    label={taskData?.status ? "בוצע" : "לא בוצע"}
-    color={
-      taskData?.status
-        ? { bg: "#D1FAE5", text: "#065F46" }
-        : { bg: "#FEE2E2", text: "#991B1B" }
-    }
-  />
-</View>
+          <View style={{ alignSelf: "flex-end" }}>
+            <Tag
+              label={taskData?.status ? "בוצע" : "לא בוצע"}
+              color={
+                taskData?.status
+                  ? { bg: "#D1FAE5", text: "#065F46" }
+                  : { bg: "#FEE2E2", text: "#991B1B" }
+              }
+            />
+          </View>
         </View>
       )}
 
@@ -95,10 +95,22 @@ const TaskDetailsScreen = () => {
           תאריך
         </Text>
         <Text style={styles.value}>
-          {taskData?.startDate && taskData?.endDate
-            ? `${taskData.startDate} - ${taskData.endDate}`
-            : "תאריך לא זמין"}
+          {taskData?.startDate && taskData?.endDate ? (() => {
+            const start = new Date(taskData.startDate).toLocaleDateString('he-IL', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            });
+            const end = new Date(taskData.endDate).toLocaleDateString('he-IL', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            });
+
+            return start === end ? start : `${start} - ${end}`;
+          })() : "תאריך לא זמין"}
         </Text>
+
       </View>
 
       <View style={styles.detailRow}>

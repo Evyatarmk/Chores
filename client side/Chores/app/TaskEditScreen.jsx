@@ -31,7 +31,7 @@ const TaskEditScreen = () => {
   const currentTime = new Date();
   currentTime.setMinutes(Math.floor(currentTime.getMinutes() / 5) * 5); // Round down to nearest 5 minutes
   const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  const [isEvent, setIsEvent] = useState( mytask.category=="משימה"?false:true); // Function to toggle date picker
+  const [isEvent, setIsEvent] = useState(mytask.category == "משימה" ? false : true); // Function to toggle date picker
 
   const [toEditTaskData, setTaskData] = useState({
     title: mytask.title || "",
@@ -125,15 +125,15 @@ const TaskEditScreen = () => {
   };
 
   const handleInputChange = (field, value) => {
-    if(value=="משימה"){
+    if (value == "משימה") {
       setIsEvent(false)
       setTaskData((prevState) => ({
         ...prevState,
         [field]: value,
-        maxParticipants: mytask.participants.length||1 // עדכון הערך של השדה המתאים
+        maxParticipants: mytask.participants.length || 1 // עדכון הערך של השדה המתאים
       }));
     }
-    else{
+    else {
       setIsEvent(true)
       setTaskData((prevState) => ({
         ...prevState,
@@ -141,7 +141,7 @@ const TaskEditScreen = () => {
         maxParticipants: -1 // עדכון הערך של השדה המתאים
       }));
     }
-   
+
   };
 
 
@@ -163,13 +163,13 @@ const TaskEditScreen = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
-     {/* כותרת המסך */}
-           <View style={styles.header}>
-             <TouchableOpacity onPress={() => router.back()}>
-               <Ionicons name="close" size={28} color="black" />
-             </TouchableOpacity>
-             <Text style={styles.headerTitle}>עריכת משימה</Text>
-           </View>
+      {/* כותרת המסך */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="close" size={28} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>עריכת משימה</Text>
+      </View>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -186,24 +186,18 @@ const TaskEditScreen = () => {
           placeholder="תיאור"
           placeholderTextColor="#ccc"
         />
-        {/* <TextInput
-          style={styles.input}
-          value={toEditTaskData.category}
-          onChangeText={(text) => setTaskData({ ...toEditTaskData, category: text })}
-          placeholder="Category"
-          placeholderTextColor="#ccc"
-        /> */}
 
 
-        {!isEvent?
-        <TextInput
-          style={styles.input}
-          value={toEditTaskData.maxParticipants.toString()}
-          onChangeText={(text) => setTaskData({ ...toEditTaskData, maxParticipants: text.replace(/[^0-9]/g, '') })}
-          placeholder="Max Participants"
-          placeholderTextColor="#ccc"
-          keyboardType="numeric"
-        />:null}
+
+        {!isEvent ?
+          <TextInput
+            style={styles.input}
+            value={toEditTaskData.maxParticipants.toString()}
+            onChangeText={(text) => setTaskData({ ...toEditTaskData, maxParticipants: text.replace(/[^0-9]/g, '') })}
+            placeholder="Max Participants"
+            placeholderTextColor="#ccc"
+            keyboardType="numeric"
+          /> : null}
 
 
         <ItemSelector
@@ -213,35 +207,59 @@ const TaskEditScreen = () => {
           firstItem="משימה"
         />
 
-        <Text>זמן התחלה</Text>
+        <Text style={styles.times}>זמן התחלה</Text>
         <View style={styles.dateAndTimeContianer}>
-          <TouchableOpacity onPress={() => setShowStartDatePicker(true)} />
-          <DatePickerForTasks
-            showModal={showStartDatePicker}
-            setShowModal={setShowStartDatePicker}
-            selectedDate={toEditTaskData.startDate}
-            onDateSelect={handleStartDateSelect}
-          />
-          <TimePickerButton
-            initialTime={toEditTaskData.startTime}
-            onConfirm={handleStartTimeSelect}
-          />
+          <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
+            <Text style={styles.dateText}>
+              {new Date(toEditTaskData.startDate).toLocaleDateString("he-IL", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.timePickerBox}>
+            <TimePickerButton
+              initialTime={toEditTaskData.startTime}
+              onConfirm={handleStartTimeSelect}
+            />
+          </View>
         </View>
 
-        <Text>זמן סיום</Text>
+        <DatePickerForTasks
+          showModal={showStartDatePicker}
+          setShowModal={setShowStartDatePicker}
+          selectedDate={toEditTaskData.startDate}
+          onDateSelect={handleStartDateSelect}
+        />
+
+        <Text style={styles.times}>זמן סיום</Text>
         <View style={styles.dateAndTimeContianer}>
-          <TouchableOpacity onPress={() => setShowEndDatePicker(true)} />
-          <DatePickerForTasks
-            showModal={showEndDatePicker}
-            setShowModal={setShowEndDatePicker}
-            selectedDate={toEditTaskData.endDate}
-            onDateSelect={handleEndDateSelect}
-          />
-          <TimePickerButton
-            initialTime={toEditTaskData.endTime}
-            onConfirm={handleEndTimeSelect}
-          />
+          <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.datePickerButton}>
+            <Text style={styles.dateText}>
+              {new Date(toEditTaskData.endDate).toLocaleDateString("he-IL", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.timePickerBox}>
+            <TimePickerButton
+              initialTime={toEditTaskData.endTime}
+              onConfirm={handleEndTimeSelect}
+            />
+          </View>
         </View>
+
+        <DatePickerForTasks
+          showModal={showEndDatePicker}
+          setShowModal={setShowEndDatePicker}
+          selectedDate={toEditTaskData.endDate}
+          onDateSelect={handleEndDateSelect}
+        />
       </View>
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
@@ -307,13 +325,48 @@ const styles = StyleSheet.create({
   },
   dateAndTimeContianer: {
     flexDirection: "row-reverse",
-    backgroundColor: "#f0f0f0",
+    alignItems: "center",
     justifyContent: "space-between",
-    width: "100%",
-    alignItems: 'center',
-    marginBottom: 10,
-    marginLeft: 20
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    gap: 10, // רווח פנימי בין פריטים (אם לא נתמך – השתמשי ב־marginLeft על אחד מהם)
   },
+
+  datePickerButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    minWidth: 130,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 50,
+  },
+
+  dateText: {
+    fontSize: 16,
+    color: "#333",
+    textAlign: "right",
+    writingDirection: "rtl", // 💡 חשוב למובייל
+  },
+  timePickerBox: {
+    borderRadius: 8,
+    borderColor: "#ccc",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    minWidth: 80,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  times: {
+    textAlign: "center",
+    writingDirection: "rtl", // 💡 חשוב למובייל  
+    fontSize: 16,
+    fontWeight: "bold",
+    }
+
+
 });
 
 export default TaskEditScreen;
