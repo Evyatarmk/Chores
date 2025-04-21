@@ -53,7 +53,6 @@ const TasksListScreen = () => {
   };
 
   const openOptionsPanel = (list) => {
-    console.log(list)
     setCurrentList(list);
     optionsModalRef.current?.open();
   };

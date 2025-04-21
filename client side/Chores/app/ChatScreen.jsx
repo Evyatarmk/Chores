@@ -21,7 +21,6 @@ export default function ChatScreen() {
       console.warn("User has no house. Skipping chat loading.");
       return;
     }
-console.log(user)
     // כשנכנסים לצ'אט – עדכון זמן צפייה ואיפוס מונה
     const markAsSeen = async () => {
       await AsyncStorage.setItem(`lastSeen-${houseId}`, new Date().toISOString());

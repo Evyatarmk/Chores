@@ -24,7 +24,6 @@ const AddListItemsScreen = () => {
       try {
         const list =getList(listId)
         const itemHistory = await getItemHistoryByCategory(list.category); // מחכה לתוצאה
-        console.log("ddwdwdwdhhhhh",itemHistory)
         const ItemsToShow = itemHistory.map((item) => ({
           id: uuidv4(),
           name: item?.name,
@@ -35,7 +34,6 @@ const AddListItemsScreen = () => {
         }));
   
         const allItems = [...list.items, ...ItemsToShow];
-        console.log("allItems",allItems)
         const uniqueItems = allItems.filter((item, index, self) =>
           index === self.findIndex((t) =>
             t.name === item.name && t.description === item.description

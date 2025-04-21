@@ -72,13 +72,11 @@ const AddTaskScreen = () => {
     if (taskData.endDate == "" || taskData.endDate == null) {
       newItem = { ...newItem, endDate: taskData.startDate }
     }
-    console.log(newItem)
     // Add task for the selected date
     addTaskForDate(newItem, user.homeId);
 
     
 
-    console.log(tasks);
 
     // Navigate back after adding the task
     router.back();

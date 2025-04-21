@@ -55,7 +55,6 @@ export const StoriesProvider = ({ children }) => {
         return latestB - latestA;
       });
       sortStories(storiesData)
-      console.log(storiesData)
       setStories(sortStories(storiesData));
     } catch (error) {
       console.error("שגיאה בקבלת סיפורים:", error);

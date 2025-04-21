@@ -24,7 +24,6 @@ export const UserAndHomeProvider = ({ children }) => {
     setNewUser(newUser);
   };
   const register = (newUser) => {
-    console.log("נרשם בהצלחה:", newUser);
     setUser(newUser);
   };
   // פונקציה ליצירת token דמוי עם זמן תפוגה
@@ -71,9 +70,7 @@ export const UserAndHomeProvider = ({ children }) => {
 
         // הצגת הודעת השגיאה בהתאם לקוד הסטטוס
         if (response.status === 401) {
-          console.log('Unauthorized: ', errorData); // או הצגת הודעה למשתמש
         } else if (response.status === 404) {
-          console.log('Not Found: ', errorData); // או הצגת הודעה למשתמש
         }
 
         return false;

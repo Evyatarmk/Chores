@@ -25,7 +25,6 @@ const TaskDetailsScreen = () => {
   useEffect(() => {
     if (date && taskId) {
       const tasksForDate = getTasksForDate(date);
-      console.log("lkkkk")
       const fetchedTask = tasksForDate.find(task => String(task.id) === String(taskId));
       if (fetchedTask) setTaskData(fetchedTask);
     }

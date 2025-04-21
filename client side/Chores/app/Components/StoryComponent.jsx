@@ -56,7 +56,6 @@ const StoryComponent = () => {
   const { user } = useUserAndHome();
   const [modalVisible, setModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  console.log("storis",stories)
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchStories();

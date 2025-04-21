@@ -16,7 +16,6 @@ const EditProfileScreen = () => {
   const [imageUri, setImageUri] = useState(user.profilePicture);
 
 
-console.log(imageUri)
 const handleSave = async () => {
   if (!newName.trim() && !imageUri) {
     Alert.alert("שגיאה", "לא בוצע שינוי בשם או בתמונה");

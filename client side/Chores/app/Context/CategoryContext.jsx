@@ -31,8 +31,6 @@ const [errorMessage, setErrorMessage] = useState('');
     // עדכון ויזואלי מיידי
     const updatedCategories = [...categories, newCategory];
     setCategories(updatedCategories);
-  console.log(JSON.stringify( newCategory ))
-  console.log(updatedCategories)
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
         method: 'POST',
@@ -92,16 +90,12 @@ const [errorMessage, setErrorMessage] = useState('');
             body: JSON.stringify(updatedCategory.name),
         });
 
-        // Log the response to check status and response body
-        console.log('Response Status:', response.status);
-        console.log('Response Body:', await response.text());
 
         if (!response.ok) {
             throw new Error('Failed to update category');
         }
 
         const updatedData = await response.json();
-        console.log('Category updated successfully:', updatedData);
 
         // Optional: Refresh the categories list here if needed
 

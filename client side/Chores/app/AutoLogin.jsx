@@ -12,7 +12,6 @@ const AutoLogin = () => {
 
   useEffect(() => {
     const checkLogin = async () => {
-      console.log("Checking login data...");
 
       try {
         let accessToken = await AsyncStorage.getItem('accessToken');
@@ -38,7 +37,7 @@ const AutoLogin = () => {
   if (timeLeftInSeconds > 0) {
     const minutesLeft = Math.floor(timeLeftInSeconds / 60);
     const secondsLeft = Math.floor(timeLeftInSeconds % 60);
-    console.log(`🕒 Access token expires in ${minutesLeft} minutes and ${secondsLeft} seconds`);}
+   }
         if (decodedToken.exp < currentTime) {
           // 🔄 מנסה לרענן את הטוקן
           console.log("Access token expired, attempting to refresh...");

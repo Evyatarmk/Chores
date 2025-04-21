@@ -50,8 +50,6 @@ const myThisWeek = tasks.filter(task =>
       const today = new Date();
       const oneMonthFromNow = new Date();
       oneMonthFromNow.setDate(today.getDate() + 30);
-      console.log("tasks",tasks)
-      console.log("user",user)
       const available = tasks.filter(task => {
         const start = new Date(task.startDate);
         return (

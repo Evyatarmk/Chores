@@ -114,7 +114,6 @@ export const ListsProvider = ({ children }) => {
       ],
     },
   ]);
-  console.log(listsData)
 
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
@@ -165,7 +164,6 @@ export const ListsProvider = ({ children }) => {
   const addNewList = async (newList) => {
     // עדכון ה-state של המצרכים מיד לאחר יצירת הרשימה
     setListsData((prevData) => [newList, ...prevData]);
-    console.log(newList)
 
     try {
       if(newList.date=="")newList.date=null
@@ -235,7 +233,6 @@ export const ListsProvider = ({ children }) => {
       ...updatedList,
       date: updatedList.date === "" ? null : updatedList.date,
     };
-         console.log(updatedList)
         try {
       // שליחת הבקשה לשרת
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}`, {
