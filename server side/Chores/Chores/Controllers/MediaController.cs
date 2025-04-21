@@ -27,13 +27,18 @@ namespace Chores.Controllers
             if (home == null)
                 return NotFound("Home not found");
 
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/cgroup83/test2/tar1/uploads";
+                // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+                var isLocal = Request.Host.Host.Contains("localhost");
+                var baseUrl = isLocal
+                    ? $"{Request.Scheme}://{Request.Host}"
+                    : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
+
 
             var userMediaDtos = home.Users.Select(user => new UserMediaDto
             {
                 UserId = user.Id,
                 Username = user.Name,
-                ProfileImage = user.ProfilePicture,
+                ProfileImage = $"{baseUrl}/{user.ProfilePicture}",
                 Media = user.MediaItems.Select(media => new MediaItemDto
                 {
                     MediaId = media.Id,

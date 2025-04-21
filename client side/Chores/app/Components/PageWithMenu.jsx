@@ -16,6 +16,8 @@ import { usePathname } from "expo-router";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../FirebaseConfig";
 import { Timestamp } from "firebase/firestore";
+import { useApiUrl } from "../Context/ApiUrlProvider";
+
 
 const PageWithMenu = (props) => {
   const router = useRouter();
@@ -25,7 +27,19 @@ const PageWithMenu = (props) => {
   const { user, logout } = useUserAndHome(); // הוספת logout
   const { setUnreadCount, unreadCount } = useNotification();
 
+
   const currentPath = "/" + segments[0];
+
+  const { baseUrl } = useApiUrl(); // כבר קיים
+  
+  const getFullProfilePicture = () => {
+    if (!user?.profilePicture) return null;
+
+    return user.profilePicture.startsWith("http")
+      ? user.profilePicture
+      : `${baseUrl.replace("/api", "")}/${user.profilePicture}`;
+  };
+
 
   const toggleDrawer = () => {
     Animated.timing(drawerRight, {
@@ -82,12 +96,13 @@ const PageWithMenu = (props) => {
         >
           <Image
             source={
-              user?.profilePicture
-                ? { uri: user.profilePicture }
+              getFullProfilePicture()
+                ? { uri: getFullProfilePicture() }
                 : require("../images/userImage.jpg")
             }
             style={styles.userImage}
           />
+
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{user?.name}</Text>
             <Text style={styles.userEmail}>{user?.email}</Text>
@@ -283,28 +298,28 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     margin: 10,
   },
-  
+
   userImage: {
     width: 60,
     height: 60,
-    marginLeft:10,
+    marginLeft: 10,
     borderRadius: 30,
     backgroundColor: "#ddd",
   },
-  
+
   userInfo: {
     flex: 1,
   },
-  
+
   userName: {
-    textAlign:"right",
+    textAlign: "right",
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
   },
-  
+
   userEmail: {
-    textAlign:"right",
+    textAlign: "right",
     fontSize: 14,
     color: "#777",
   },
@@ -340,13 +355,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 10,
     textAlign: "center",
-    
+
   },
   activeDrawerItem: {
     backgroundColor: '#e0f0ff', // רקע בהיר
     borderRadius: 8,
   },
-  
+
   activeDrawerText: {
     color: '#007bff',
     fontWeight: 'bold',
@@ -354,11 +369,11 @@ const styles = StyleSheet.create({
   iconWrapper: {
     alignItems: "center",
     paddingHorizontal: 10,
-    padding:5,
-    width:80,
+    padding: 5,
+    width: 80,
     borderRadius: 20,
   },
-  
+
   activeIconWrapper: {
     backgroundColor: "#e0f0ff", // כחול
   },
@@ -376,7 +391,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopWidth: 1,
     borderTopColor: "#ddd",
-    paddingHorizontal:10
+    paddingHorizontal: 10
   },
   navButton: {
     padding: 10,

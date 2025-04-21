@@ -55,8 +55,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedCategory",
-        "Type": "Chores.Models.Category",
+        "Name": "name",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -864,15 +864,25 @@
   {
     "ContainingType": "Chores.Controllers.UsersController",
     "Method": "EditUserProfile",
-    "RelativePath": "api/Users/editUserProfilePic\u0026Name",
+    "RelativePath": "api/Users/editUserProfilePicAndName",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userUpdate",
-        "Type": "Chores.Models.UserUpdateDto",
-        "IsRequired": true
+        "Name": "Id",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicture",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

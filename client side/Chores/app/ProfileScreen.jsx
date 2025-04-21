@@ -35,7 +35,7 @@ const ProfileScreen = () => {
             name: `${item.month}/${item.year}`,
             completedTasks: item.completedTasks
           }));
-          
+
           setData(mappedData);
         })
         .catch((error) => console.error('Error fetching task data:', error));
@@ -52,9 +52,10 @@ const ProfileScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.profileCard}>
           <Image
-            source={user?.profilePicture ? { uri: user?.profilePicture } : require('./images/userImage.jpg')}
+            source={user?.profilePicture ? { uri: user.profilePicture } : require('./images/userImage.jpg')}
             style={styles.userImage}
           />
+
           <Text style={styles.name}>{user?.name}</Text>
           <Text style={styles.code}>קוד הבית: {home?.code}</Text>
           <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
@@ -66,39 +67,39 @@ const ProfileScreen = () => {
         <Text style={styles.subTitle}>משימות שבוצעו</Text>
         <View style={{ alignItems: 'center', paddingHorizontal: 20 }}>
           {data.length > 0 ? (
-         <BarChart
-         data={{
-           labels: data.map(item => item.name),
-           datasets: [
-             {
-               data: data.map(item => item.completedTasks),
-             },
-           ],
-         }}
-         width={screenWidth - 40}
-         height={260}
-         fromZero={true}
-         showValuesOnTopOfBars={true}
-         yAxisLabel=""
-         chartConfig={{
-           backgroundColor: "#4c669f",
-           backgroundGradientFrom: "#6a11cb",
-           backgroundGradientTo: "#2575fc",
-           decimalPlaces: 0,
-           barPercentage: 0.7,
-           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-           style: {
-             borderRadius: 16,
-           },
-           propsForBackgroundLines: {
-             stroke: "#e3e3e3",
-             strokeDasharray: "",
-           },
-         }}
-         verticalLabelRotation={25}
-       />
-       
+            <BarChart
+              data={{
+                labels: data.map(item => item.name),
+                datasets: [
+                  {
+                    data: data.map(item => item.completedTasks),
+                  },
+                ],
+              }}
+              width={screenWidth - 40}
+              height={260}
+              fromZero={true}
+              showValuesOnTopOfBars={true}
+              yAxisLabel=""
+              chartConfig={{
+                backgroundColor: "#4c669f",
+                backgroundGradientFrom: "#6a11cb",
+                backgroundGradientTo: "#2575fc",
+                decimalPlaces: 0,
+                barPercentage: 0.7,
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                style: {
+                  borderRadius: 16,
+                },
+                propsForBackgroundLines: {
+                  stroke: "#e3e3e3",
+                  strokeDasharray: "",
+                },
+              }}
+              verticalLabelRotation={25}
+            />
+
           ) : (
             <Text>אין נתונים להצגה</Text> // "No data to display"
           )}

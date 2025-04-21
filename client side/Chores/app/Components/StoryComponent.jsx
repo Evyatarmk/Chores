@@ -182,7 +182,7 @@ const StoryComponent = () => {
           }
         >
           <Image
-            source={item.profilePicture ? item.profilePicture : require('../images/userImage.jpg')}
+            source={item.profileImage ? item.profileImage : require('../images/userImage.jpg')}
             style={styles.profileImage}
           />
         </View>

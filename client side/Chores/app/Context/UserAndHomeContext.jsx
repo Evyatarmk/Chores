@@ -281,36 +281,18 @@ export const UserAndHomeProvider = ({ children }) => {
     setHome(updatedHome);
   };
 
-  const updateUser = async (newName, newPicture) => {
-    try {
-      const response = await fetch(`${baseUrl}/Users/editUserProfilePic&Name`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          Id: user.id,
-          Name: newName,
-          profilePicture: newPicture,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update user');
-      }
-
-      setUser(prev => ({
-        ...prev,
-        name: newName,
-        profilePicture: newPicture
-      }));
-
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
+  const updateUser = (updatedUser) => {
+    console.log("Updated user from server:", updatedUser); // בדיקה
+    setUser(prev => ({
+      ...prev,
+      ...updatedUser,
+      profilePicture: updatedUser.profilePicture ?? prev.profilePicture,
+    }));
   };
+  
+  
 
- 
+  
 
 
 

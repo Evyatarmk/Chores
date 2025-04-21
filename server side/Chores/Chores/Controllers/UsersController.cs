@@ -342,6 +342,14 @@ namespace Chores.Controllers
 
             await _context.Entry(user).ReloadAsync();
 
+            // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+            var isLocal = Request.Host.Host.Contains("localhost");
+            var baseUrl = isLocal
+                ? $"{Request.Scheme}://{Request.Host}"
+                : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
+
+            var fullUri = $"{baseUrl}/{user.ProfilePicture}";
+
             var userDto = new UserDto
             {
                 Id = user.Id,
@@ -349,7 +357,7 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId,
-                ProfilePicture = user.ProfilePicture
+                ProfilePicture = fullUri
             };
 
             HomeDto homeDto = null;
@@ -463,6 +471,14 @@ namespace Chores.Controllers
 
             if (user.Home == null)
                 return NotFound("Home not found for this user.");
+            // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+            var isLocal = Request.Host.Host.Contains("localhost");
+            var baseUrl = isLocal
+                ? $"{Request.Scheme}://{Request.Host}"
+                : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
+
+            var fullUri = $"{baseUrl}/{user.ProfilePicture}";
+
 
             // המרת הנתונים ל-DTO
             var userDto = new UserDto
@@ -472,7 +488,7 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId,
-                ProfilePicture = user.ProfilePicture
+                ProfilePicture = fullUri
             };
 
             var homeDto = new HomeDto
@@ -496,33 +512,76 @@ namespace Chores.Controllers
         }
 
 
-        [HttpPut("editUserProfilePic&Name")]
-        public async Task<IActionResult> EditUserProfile([FromBody] UserUpdateDto userUpdate)
+        [HttpPut("editUserProfilePicAndName")]
+        public async Task<IActionResult> EditUserProfile([FromForm] UserUpdateDto userUpdate)
         {
             if (userUpdate == null)
-            {
                 return BadRequest("Invalid user update data.");
-            }
 
             var user = await _context.Users.FindAsync(userUpdate.Id);
             if (user == null)
-            {
                 return NotFound("User not found.");
-            }
 
-            user.Name = userUpdate.Name;
-            user.ProfilePicture = userUpdate.ProfilePicture;
+            // שינוי שם רק אם התקבל
+            if (!string.IsNullOrEmpty(userUpdate.Name))
+                user.Name = userUpdate.Name;
+
+            // שינוי תמונת פרופיל אם התקבלה
+            if (userUpdate.ProfilePicture != null && userUpdate.ProfilePicture.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var extension = Path.GetExtension(userUpdate.ProfilePicture.FileName);
+                if (string.IsNullOrEmpty(extension))
+                {
+                    extension = userUpdate.ProfilePicture.ContentType switch
+                    {
+                        "image/jpeg" => ".jpg",
+                        "image/png" => ".png",
+                        _ => ".jpg"
+                    };
+                }
+
+                var fileName = Guid.NewGuid().ToString() + extension;
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await userUpdate.ProfilePicture.CopyToAsync(stream);
+                }
+
+                // שמירה של הנתיב היחסי במסד הנתונים
+                user.ProfilePicture = $"uploads/{fileName}";
+            }
 
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok("User updated successfully.");
+
+                // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+                var isLocal = Request.Host.Host.Contains("localhost");
+                var baseUrl = isLocal
+                    ? $"{Request.Scheme}://{Request.Host}"
+                    : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
+
+                var fullUri = $"{baseUrl}/{user.ProfilePicture}";
+
+                return Ok(new
+                {
+                    user.Id,
+                    user.Name,
+                    profilePicture = fullUri
+                });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
 
 
         [HttpPut("updateHomeId")]

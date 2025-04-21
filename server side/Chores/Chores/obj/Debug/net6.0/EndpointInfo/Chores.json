@@ -93,17 +93,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Category"
+                "type": "string"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Category"
+                "type": "string"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Category"
+                "type": "string"
               }
             }
           }
@@ -1555,26 +1555,39 @@
         }
       }
     },
-    "/api/Users/editUserProfilePic&Name": {
+    "/api/Users/editUserProfilePicAndName": {
       "put": {
         "tags": [
           "Users"
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpdateDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdateDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdateDto"
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "string"
+                  },
+                  "Name": {
+                    "type": "string"
+                  },
+                  "ProfilePicture": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Id": {
+                  "style": "form"
+                },
+                "Name": {
+                  "style": "form"
+                },
+                "ProfilePicture": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -2292,24 +2305,6 @@
             "items": {
               "$ref": "#/components/schemas/Task"
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserUpdateDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "profilePicture": {
-            "type": "string",
             "nullable": true
           }
         },
