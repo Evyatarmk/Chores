@@ -38,7 +38,7 @@ namespace Chores.Controllers
             {
                 UserId = user.Id,
                 Username = user.Name,
-                ProfileImage = $"{baseUrl}/{user.ProfilePicture}",
+                ProfileImage = string.IsNullOrWhiteSpace(user.ProfilePicture)? null: $"{baseUrl}/{user.ProfilePicture}",
                 Media = user.MediaItems.Select(media => new MediaItemDto
                 {
                     MediaId = media.Id,
