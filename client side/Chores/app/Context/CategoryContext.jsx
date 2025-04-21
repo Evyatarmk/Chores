@@ -4,6 +4,7 @@ import ErrorNotification from "../Components/ErrorNotification";
 import { fetchWithAuth } from "../Utils/fetchWithAuth";
 import { useApiUrl } from "./ApiUrlProvider";
 import { Alert } from "react-native";
+import { useLists } from "./ListsContext";
 
 const CategoryContext = createContext();
 
@@ -11,7 +12,8 @@ export const CategoryProvider = ({ children }) => {
   const [categories, setCategories] = useState(["קניות", "משימות", "טיולים", "אירועים", "בית", "עבודה"]);
   const { home ,user} = useUserAndHome();
     const { baseUrl } = useApiUrl();
-  
+    const { fetchListsData} = useLists();
+
 const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
 
@@ -22,6 +24,7 @@ const [errorMessage, setErrorMessage] = useState('');
   };
  
  
+
   const addCategory = async (newCategory) => {
 
    
@@ -79,31 +82,30 @@ const [errorMessage, setErrorMessage] = useState('');
     }
   };
 
+
   const updateCategory = async (updatedCategory) => {
-    
     try {
-        const response = await fetch(`${baseUrl}/home/${home.id}/categories/${updatedCategory.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedCategory.name),
-        });
-
-
-        if (!response.ok) {
-            throw new Error('Failed to update category');
-        }
-
-        const updatedData = await response.json();
-
-        // Optional: Refresh the categories list here if needed
-
+      const response = await fetch(`${baseUrl}/home/${home.id}/categories/${updatedCategory.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedCategory.name),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update category');
+      }
+  
+      const updatedData = await response.json();
+  
+      fetchListsData()
     } catch (error) {
-        console.error('Error updating category:', error);
-        Alert.alert('Error', 'Could not update the category. Please try again.');
+      console.error('Error updating category:', error);
+      Alert.alert('שגיאה', 'לא ניתן לעדכן את הקטגוריה, נסה שוב מאוחר יותר');
     }
-};
+  };
+  
 
 
   
