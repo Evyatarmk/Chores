@@ -30,8 +30,8 @@ namespace Chores.Controllers
                 // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
                 var isLocal = Request.Host.Host.Contains("localhost");
                 var baseUrl = isLocal
-                    ? $"{Request.Scheme}://{Request.Host}"
-                    : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
+                    ? $"{Request.Scheme}://{Request.Host}/uploads"
+                    : "https://proj.ruppin.ac.il/cgroup83/test2/tar1/uploads";
 
 
             var userMediaDtos = home.Users.Select(user => new UserMediaDto
