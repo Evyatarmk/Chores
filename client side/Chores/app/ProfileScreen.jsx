@@ -86,9 +86,11 @@ const ProfileScreen = () => {
                 backgroundGradientFrom: "#6a11cb",
                 backgroundGradientTo: "#2575fc",
                 decimalPlaces: 0,
-                barPercentage: 0.7,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                barPercentage: 0.8,
+                fillShadowGradient: '#45455', // צבע העמודות
+                fillShadowGradientOpacity: 5,   // לא שקוף
+                color: (opacity = 1) => `rgba(10, 10, 10, ${opacity})`, // צבע קווי גריד וטקסט
+                labelColor: (opacity = 1) => `rgba(10, 15, 255, ${opacity})`,
                 style: {
                   borderRadius: 16,
                 },
@@ -98,6 +100,7 @@ const ProfileScreen = () => {
                 },
               }}
               verticalLabelRotation={25}
+              
             />
 
           ) : (

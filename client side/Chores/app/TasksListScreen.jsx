@@ -122,6 +122,7 @@ const TasksListScreen = () => {
         <FlatList
           data={getTasksForDate(selectedDate)}
           keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ paddingBottom: 110 }}
           renderItem={({ item }) => (
             <TaskItem
               task={item}

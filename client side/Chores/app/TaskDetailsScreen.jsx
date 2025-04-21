@@ -41,10 +41,10 @@ const TaskDetailsScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="close" size={28} color="black" />
-          <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
-            <Icon name="edit" size={18} color="#fff" />
-          </TouchableOpacity>
+          <Ionicons name="close" size={30} color="#333" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.editIcon} onPress={handleEdit}>
+          <Icon name="edit" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
       <Text style={styles.headerTitle}>פרטי המשימה</Text>
@@ -66,27 +66,25 @@ const TaskDetailsScreen = () => {
 
       {/* Task Date */}
       <View style={styles.detailsContainer}>
-      <Text style={styles.date}>
-        תאריך: {taskData?.startDate && taskData?.endDate ? `${taskData.startDate} - ${taskData.endDate}` : "תאריך לא זמין"}
+        <Text style={styles.date}>
+          תאריך: {taskData?.startDate && taskData?.endDate ? `${taskData.startDate} - ${taskData.endDate}` : "תאריך לא זמין"}
         </Text>
-
       </View>
 
-
+      {/* Participants */}
       <View style={styles.detailsContainer}>
         <Text style={styles.participants}>
-          משתתפים: {taskData?.participants && taskData?.participants.length > 0
-            ? taskData?.participants.map(participant => participant.name).join(", ")
-            : "אין משתתפים"}
+          משתתפים: {taskData?.participants?.length > 0 ? taskData?.participants.map(p => p.name).join(", ") : "אין משתתפים"}
         </Text>
       </View>
 
-      {/* Task Max Participants */}
+      {/* Max Participants */}
       <View style={styles.detailsContainer}>
         <Text style={styles.maxParticipants}>
           מגבלת משתתפים: {taskData?.maxParticipants > 0 ? taskData.maxParticipants : "לא קיימת מגבלה"}
         </Text>
       </View>
+
     </View>
   );
 };
@@ -94,29 +92,35 @@ const TaskDetailsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#f2f2f2",
     padding: 20,
+    paddingTop: 40,
   },
   header: {
+    flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
-    textAlign: "center",
+    alignItems: "center",
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
   },
   detailsContainer: {
     marginBottom: 15,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    color: "#333",
   },
   description: {
     fontSize: 16,
     color: "#555",
+    lineHeight: 24,
   },
   category: {
     fontSize: 16,
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
     backgroundColor: "#4CAF50",
-    padding: 6,
+    padding: 8,
     borderRadius: 20,
     elevation: 3,
   },

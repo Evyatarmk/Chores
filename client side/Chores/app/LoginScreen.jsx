@@ -93,13 +93,13 @@ const LoginScreen = () => {
         />
       </View>
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 10 }} />
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>התחבר</Text>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+  {loading ? (
+    <ActivityIndicator size="small" color="#fff" />
+  ) : (
+    <Text style={styles.buttonText}>התחבר</Text>
+  )}
+</TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push("/RegisterScreen")}>
         <Text style={styles.link}>אין לך חשבון? הירשם כאן</Text>
