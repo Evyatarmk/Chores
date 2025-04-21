@@ -1,5 +1,6 @@
 ﻿using Chores.Data;
 using Chores.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace Chores.Controllers
             _context = context;
         }
         [HttpGet("home/{homeId}/media")]
+        [Authorize]
         public async Task<IActionResult> GetMediaForHome(string homeId)
         {
             var home = await _context.Homes
@@ -54,6 +56,7 @@ namespace Chores.Controllers
 
 
         [HttpPost("home/{homeId}/users/{userId}/media")]
+        [Authorize]
         public async Task<IActionResult> AddMediaItem(string homeId, string userId, [FromForm] CreateMediaItemDto dto)
         {
             // בדיקת בית
@@ -137,6 +140,7 @@ namespace Chores.Controllers
 
 
         [HttpDelete("home/{homeId}/users/{userId}/media/{mediaId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteMediaItem(string homeId, string userId, string mediaId)
         {
             // חיפוש הבית לפי ID

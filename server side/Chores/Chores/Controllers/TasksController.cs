@@ -126,6 +126,7 @@ namespace Chores.Controllers
         //Get
 
         [HttpGet("completedTasksPerMonth/{userId}/{homeId}")]
+        [Authorize]
         public async Task<IActionResult> GetCompletedTasksPerMonth(string userId, string homeId)
         {
             // Get the Home of the user, include Tasks and their Participants, and ensure the user is part of the home
@@ -195,6 +196,8 @@ namespace Chores.Controllers
 
 
         [HttpPost("{taskId}/participants/{userId}")]
+        [Authorize]
+
         public async Task<IActionResult> SignUpForTask(string taskId, string userId)
         {
             var task = await _context.Tasks
@@ -220,6 +223,8 @@ namespace Chores.Controllers
 
         // PUT: api/tasks/{id}
         [HttpPut("{id}")]
+        [Authorize]
+
         public async Task<IActionResult> PutTask(string id, [FromBody] UpdateTaskDto updatedTask)
         {
          
@@ -252,6 +257,8 @@ namespace Chores.Controllers
         //Put
 
         [HttpPut("markAsCompleted/{taskId}")]
+        [Authorize]
+
         public async Task<IActionResult> MarkTaskAsCompleted([FromBody] MarkTaskCompletedDto dto)
         {
             if (dto == null || string.IsNullOrEmpty(dto.TaskId) || string.IsNullOrEmpty(dto.UserId))
@@ -277,6 +284,8 @@ namespace Chores.Controllers
 
         // Put - סימון משימה כלא בוצעה
         [HttpPut("markAsNotCompleted/{taskId}")]
+        [Authorize]
+
         public async Task<IActionResult> MarkTaskAsNotCompleted([FromBody] MarkTaskCompletedDto dto)
         {
             if (dto == null || string.IsNullOrEmpty(dto.TaskId) || string.IsNullOrEmpty(dto.UserId))
@@ -303,6 +312,8 @@ namespace Chores.Controllers
 
         // DELETE: api/tasks/{id}
         [HttpDelete("{id}")]
+        [Authorize]
+
         public async Task<IActionResult> DeleteTask(string id)
         {
             var task = await _context.Tasks
@@ -320,6 +331,8 @@ namespace Chores.Controllers
 
 
         [HttpDelete("{taskId}/participants/{userId}")]
+        [Authorize]
+
         public async Task<IActionResult> SignOutFromTask(string taskId, string userId)
         {
             var task = await _context.Tasks

@@ -8,6 +8,7 @@ import NormalHeader from "./Components/NormalHeader";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PageWithMenu from "./Components/PageWithMenu";
 import { useApiUrl } from "./Context/ApiUrlProvider";
+import { fetchWithAuth } from "./Utils/fetchWithAuth";
 
 
 
@@ -27,7 +28,7 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     if (user?.id) {
-      fetch(`${baseUrl}/Tasks/completedTasksPerMonth/${user.id}/${home.id}`)
+      fetchWithAuth(`${baseUrl}/Tasks/completedTasksPerMonth/${user.id}/${home.id}`)
         .then((res) => res.json())
         .then((result) => {
           const mappedData = result.map(item => ({

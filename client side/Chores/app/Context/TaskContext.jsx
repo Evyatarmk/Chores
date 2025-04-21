@@ -184,7 +184,7 @@ const myThisWeek = tasks.filter(task =>
 
     const markTaskAsNotCompleted = async (taskId) => { 
       try {
-        const response = await fetch(`${baseUrl}/Tasks/markAsNotCompleted/${taskId}`, {
+        const response = await fetchWithAuth(`${baseUrl}/Tasks/markAsNotCompleted/${taskId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ TaskId: taskId, UserId: user.id }),
@@ -222,7 +222,7 @@ const myThisWeek = tasks.filter(task =>
       setAvailableTasksForNextMonth((prev) => [...prev, optimisticTask]);
     
       try {
-        const response = await fetch(`${baseUrl}/Tasks`, {
+        const response = await fetchWithAuth(`${baseUrl}/Tasks`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -297,7 +297,7 @@ const myThisWeek = tasks.filter(task =>
         }
       });  
       // קריאה לשרת
-      const response = await fetch(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
+      const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
         method: 'POST',
       });
   
@@ -329,7 +329,7 @@ const myThisWeek = tasks.filter(task =>
 
     console.log("Signing out user:", userId, "from task:", taskId);
     try {
-      const response = await fetch(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
+      const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
         method: 'DELETE',
       });
   
@@ -359,7 +359,7 @@ const removeTaskForDate = async (taskId) => {
   setTasks((prev) => prev.filter((t) => t.id !== taskId));
 
   try {
-    const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
+    const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}`, {
       method: 'DELETE',
     });
 
@@ -420,7 +420,7 @@ const removeTaskForDate = async (taskId) => {
     );
   
     try {
-      const response = await fetch(`${baseUrl}/Tasks/${taskId}`, {
+      const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

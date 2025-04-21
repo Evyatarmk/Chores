@@ -116,7 +116,7 @@ export const StoriesProvider = ({ children }) => {
     
       if (newStory.uri.startsWith('data:')) {
         // המרה של data:uri → Blob
-        const fetchRes = await fetch(newStory.uri);
+        const fetchRes = await fetchWithAuth(newStory.uri);
         const blob = await fetchRes.blob();
         formData.append('MediaFile', blob, fileName);
       } else {
@@ -131,7 +131,7 @@ export const StoriesProvider = ({ children }) => {
       formData.append('Type', newStory.type);
 
       // 3. שליחה לשרת
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${baseUrl}/Media/home/${home.id}/users/${user.id}/media`,
         {
           method: 'POST',
