@@ -163,13 +163,13 @@ const TaskEditScreen = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="close" size={28} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>עריכת משימה</Text>
-        <View style={{ width: 28 }} />
-      </View>
+     {/* כותרת המסך */}
+           <View style={styles.header}>
+             <TouchableOpacity onPress={() => router.back()}>
+               <Ionicons name="close" size={28} color="black" />
+             </TouchableOpacity>
+             <Text style={styles.headerTitle}>עריכת משימה</Text>
+           </View>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -255,7 +255,7 @@ const TaskEditScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#f2f2f2",
   },
   scrollContainer: {
     flexGrow: 1,
