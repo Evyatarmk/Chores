@@ -43,20 +43,32 @@ namespace Chores.Controllers
 
         // PUT: api/home/{homeId}/categories/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(string homeId, string id, [FromBody] string name)
+        public async Task<IActionResult> UpdateCategory(string homeId, string id, [FromBody] string newName)
         {
             var category = await _context.Categories
                 .FirstOrDefaultAsync(c => c.Id == id && c.HomeId == homeId);
 
             if (category == null)
-                return NotFound();
+                return NotFound("Category not found");
 
-            category.Name = name;
+            var oldName = category.Name;
+            category.Name = newName;
+
+            // עדכון כל הרשימות שהיו שייכות לקטגוריה הישנה
+            var listsToUpdate = await _context.Lists
+                .Where(l => l.Category == oldName && l.HomeId == homeId)
+                .ToListAsync();
+
+            foreach (var list in listsToUpdate)
+            {
+                list.Category = newName;
+            }
 
             await _context.SaveChangesAsync();
 
             return Ok(category);
         }
+
 
         // DELETE: api/homes/{homeId}/categories/{id}
         [HttpDelete("{id}")]

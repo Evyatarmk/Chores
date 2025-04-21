@@ -15,9 +15,9 @@ export default function RootLayout() {
     <ApiUrlProvider>
       <UserAndHomeProvider>
       <StoriesProvider>
-        <CategoryProvider>
           <TaskProvider>
             <ListsProvider>
+        <CategoryProvider>
               <ItemHistoryProvider>
               <AutoLogin/>
               <Stack
@@ -49,9 +49,9 @@ export default function RootLayout() {
                 <Stack.Screen name= "EditCategoryScreen"/>
               </Stack>
               </ItemHistoryProvider>
+        </CategoryProvider>
             </ListsProvider>
           </TaskProvider>
-        </CategoryProvider>
       </StoriesProvider>
       </UserAndHomeProvider>
     </ApiUrlProvider>

@@ -458,7 +458,7 @@ const removeTaskForDate = async (taskId) => {
 
 
   return (
-    <TaskContext.Provider value={{ tasks,tasksFormatted,myTasks,availableTasksForNextMonth,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask ,signOutOfTask,fetchTasks,markTaskAsNotCompleted ,markTaskAsCompleted}}>
+    <TaskContext.Provider value={{ tasks,fetchTasks,setTasks,tasksFormatted,myTasks,availableTasksForNextMonth,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask ,signOutOfTask,fetchTasks,markTaskAsNotCompleted ,markTaskAsCompleted}}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </TaskContext.Provider>
