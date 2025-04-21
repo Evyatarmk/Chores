@@ -17,53 +17,66 @@ const EditProfileScreen = () => {
 
 
 console.log(imageUri)
-  const handleSave = async () => {
-    if (!newName.trim() && !imageUri) {
-      Alert.alert("שגיאה", "לא בוצע שינוי בשם או בתמונה");
-      return;
+const handleSave = async () => {
+  if (!newName.trim() && !imageUri) {
+    Alert.alert("שגיאה", "לא בוצע שינוי בשם או בתמונה");
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    const fileName = imageUri?.split('/').pop();
+
+    const extension = fileName?.split('.').pop()?.toLowerCase();
+    let fileType = 'application/octet-stream';
+
+    if (extension === 'jpg' || extension === 'jpeg') {
+      fileType = 'image/jpeg';
+    } else if (extension === 'png') {
+      fileType = 'image/png';
+    } else if (extension === 'mp4') {
+      fileType = 'video/mp4';
+    } else if (extension === 'mov') {
+      fileType = 'video/quicktime';
     }
-  
-    try {
-      const formData = new FormData();
-      formData.append("Id", user.id);
-  
-      if (newName.trim()) {
-        formData.append("Name", newName);
-      }
-  
-      const currentFilename = user.profilePicture?.split("/")?.pop();
-      const selectedFilename = imageUri?.split("/")?.pop();
-  
-      // רק אם נבחרה תמונה חדשה - נצרף אותה
-      if (imageUri && selectedFilename !== currentFilename) {
-        const extension = selectedFilename.split(".").pop().toLowerCase();
-        const type = extension === "png" ? "image/png" : "image/jpeg";
-  
-        formData.append("ProfilePicture", {
-          uri: imageUri,
-          name: selectedFilename,
-          type,
-        });
-      }
-  
-      const res = await fetch(`${baseUrl}/Users/editUserProfilePicAndName`, {
-        method: "PUT",
-        body: formData,
+
+    console.log('✅ סיומת שזוהתה:', extension);
+    console.log('✅ סוג הקובץ שנשלח:', fileType);
+
+    if (imageUri.startsWith('data:')) {
+      const fetchRes = await fetch(imageUri);
+      const blob = await fetchRes.blob();
+      formData.append('MediaFile', blob, fileName);
+    } else {
+      formData.append('MediaFile', {
+        uri: imageUri,
+        name: fileName,
+        type: fileType,
       });
-  
-      if (!res.ok) throw new Error("עדכון הפרופיל נכשל");
-  
-      const updatedUser = await res.json();
-  
-      updateUser(updatedUser); // ✅ מעדכן את הקונטקסט
-  
-      Alert.alert("הצלחה", "הפרופיל עודכן בהצלחה");
-      router.push("/ProfileScreen");
-    } catch (error) {
-      console.error("שגיאה בעדכון:", error);
-      Alert.alert("שגיאה", "אירעה שגיאה בעדכון הפרופיל");
     }
-  };
+
+    formData.append("Id", user.id);
+    if (newName.trim()) {
+      formData.append("Name", newName);
+    }
+
+    const res = await fetch(`${baseUrl}/Users/editUserProfilePicAndName`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error("עדכון הפרופיל נכשל");
+
+    const updatedUser = await res.json();
+    updateUser(updatedUser);
+    Alert.alert("הצלחה", "הפרופיל עודכן בהצלחה");
+    router.push("/ProfileScreen");
+  } catch (error) {
+    console.error("❌ שגיאה בעדכון:", error);
+    Alert.alert("שגיאה", "אירעה שגיאה בעדכון הפרופיל");
+  }
+};
+
   
 
   const handleImageChange = async () => {
