@@ -61,6 +61,7 @@ const StoryComponent = () => {
     await fetchStories();
     setRefreshing(false);
   };
+  console.log(stories)
   const openStory = (user) => {
     if (user.media.length == 0) return;
     setCurrentUser(user);
@@ -181,7 +182,7 @@ const StoryComponent = () => {
           }
         >
           <Image
-            source={item.profileImage ? item.profileImage : require('../images/userImage.jpg')}
+            source={item.profileImage ? { uri: item.profileImage } : require('../images/userImage.jpg')}
             style={styles.profileImage}
           />
         </View>

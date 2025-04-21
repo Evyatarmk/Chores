@@ -13,7 +13,7 @@ const EditProfileScreen = () => {
   const { user, updateUser } = useUserAndHome();
   const { baseUrl } = useApiUrl();
   const [newName, setNewName] = useState(user?.name || "");
-  const [imageUri, setImageUri] = useState(user.profilePicture);
+  const [imageUri, setImageUri] = useState(user?.profilePicture);
 
 
 const handleSave = async () => {
