@@ -9,17 +9,19 @@ import { useRouter } from "expo-router";
 
 const SettingsScreen = () => {
   const router = useRouter();
+    const { user, logout,setUser, setHome } = useUserAndHome(); // הוספת logout
+  
 
   const settings = [
-    { title: "לעבור בית", onPress: () =>   router.push("/ChangeHomeScreen")},
-    { title: "הבית שלי", onPress: () => console.log("הבית שלי") },
+    { title: "החלף בית", onPress: () =>   router.push("/ChangeHomeScreen")},
+    {title: "עריכת קטגוריות", onPress: () =>   router.push("/EditCategoryScreen") },
     {
       title: "התנתק", onPress: () => {
         setUser(null);
         setHome(null);
+        logout();
       }
     },
-    {title: "עריכת קטגוריות", onPress: () =>   router.push("/EditCategoryScreen") }
   ];
 
   return (

@@ -27,8 +27,8 @@ const EditCategoryScreen = () => {
 
     const newCategory = {
       name: name,
-         id: uuidv4(),
-     homeId: home.id,
+      id: uuidv4(),
+      homeId: home.id,
     };
 
     addCategory(newCategory);
@@ -69,7 +69,7 @@ const EditCategoryScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <NormalHeader title="חזור" />
-      <Text style={styles.title}>Categories</Text>
+      <Text style={styles.title}>הוספת קטגוריה</Text>
 
       {categories.map((category) => (
         <View key={category.id} style={styles.row}>
@@ -86,17 +86,17 @@ const EditCategoryScreen = () => {
       ))}
 
       <View style={styles.form}>
-        <Text style={styles.label}>Category Name:</Text>
+        <Text style={styles.label}>שם הקטגוריה:</Text>
         <TextInput
           style={styles.input}
           value={name}
           onChangeText={setName}
-          placeholder="Enter category name"
+          placeholder="הקלד שם לקטגוריה"
         />
 
         <TouchableOpacity style={styles.addButton} onPress={handleAddCategory}>
           <Ionicons name="add-circle-outline" size={30} color="green" />
-          <Text style={styles.addButtonText}>Add Category</Text>
+          <Text style={styles.addButtonText}>הוסף קטגוריה</Text>
         </TouchableOpacity>
       </View>
 
@@ -178,6 +178,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     marginTop: 10,
+    marginBottom: 10,
+    alignItems: "center",
+    textAlign: "right",
+    writingDirection: "rtl", // 💡 חשוב למובייל 
+
   },
   input: {
     borderWidth: 1,

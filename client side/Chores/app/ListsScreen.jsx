@@ -30,8 +30,8 @@ const ListsScreen = () => {
   const [listsDataToShow, setListsDataToShow] = useState(null);
   const { categories, addCategory } = useCategories();
   const [showDatePicker, setShowDatePicker] = useState(false); // כאן מוגדרת הפונקציה
-    const { home } = useUserAndHome();
-  
+  const { home } = useUserAndHome();
+
   useEffect(() => {
     setListsDataToShow(listsData)
   }, [])
@@ -63,10 +63,10 @@ const ListsScreen = () => {
     setRefreshing(false);
   };
   const handleAddingCategory = (newCategoryName) => {
-    const newCategory={
+    const newCategory = {
       id: Date.now().toString(),
-      name:newCategoryName,
-      homeId:home.id
+      name: newCategoryName,
+      homeId: home.id
     }
     addCategory(newCategory)
   }
@@ -101,7 +101,7 @@ const ListsScreen = () => {
 
     optionsCopyModalRef.current?.close();
   };
-  
+
   const handleDelete = (listId) => {
     deleteList(listId);
     optionsModalRef.current?.close();
@@ -118,148 +118,148 @@ const ListsScreen = () => {
   const handleCategorySelect = (category) => {
     setCurrentList((prev) => prev ? { ...prev, category } : prev);
   };
-  
+
   const handleDateSelect = (date) => {
     setCurrentList((prev) => prev ? { ...prev, date } : prev);
   };
-  
+
   const handleNameChange = (name) => {
     setCurrentList((prev) => prev ? { ...prev, name } : prev);
   };
   return (
-   <PageWithMenu>
-    <GestureHandlerRootView style={styles.container}>
-      <NormalHeader title="הרשימות שלי" />
-      
-      <ItemSelector
-        items={categories.map(cat => cat.name)}
-        onSelect={setSelectedCategory}
-        defaultSelected="הכל"
-        firstItem="הכל"
-      />
-      <FlatList
-        data={listsDataToShow}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 110 }}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.listItem}
-            onPress={() =>{
-              router.push({
-                pathname: '/ListItemsScreen',
-                params: { listId: JSON.stringify(item.id) },
-              })
-            }
+    <PageWithMenu>
+      <GestureHandlerRootView style={styles.container}>
+        <NormalHeader title="הרשימות של הבית" />
+
+        <ItemSelector
+          items={categories.map(cat => cat.name)}
+          onSelect={setSelectedCategory}
+          defaultSelected="הכל"
+          firstItem="הכל"
+        />
+        <FlatList
+          data={listsDataToShow}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 110 }}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.listItem}
+              onPress={() => {
+                router.push({
+                  pathname: '/ListItemsScreen',
+                  params: { listId: JSON.stringify(item.id) },
+                })
+              }
+              }
+            >
+              <Text style={styles.listTitle}>{item.name}</Text>
+              <View style={styles.progressBarContainer}>
+                <ProgressBar
+                  totalItems={item.items.length}
+                  completedItems={item.items.filter((i) => i.isTaken).length}
+                />
+                <Text style={styles.itemSubtitle}>
+                  {item.items.filter((i) => i.isTaken).length}/{item.items.length}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.optionsButton}
+                onPress={() => openOptionsPanel(item)}
+              >
+                <Icon name="more-vert" size={24} color="#888" />
+              </TouchableOpacity>
+            </TouchableOpacity>
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Icon name="inbox" size={50} color="#ccc" />
+              {<Text style={styles.emptyText}>אין פריטים להצגה</Text>}
+            </View>
           }
-          >
-            <Text style={styles.listTitle}>{item.name}</Text>
-            <View style={styles.progressBarContainer}>
-              <ProgressBar
-                totalItems={item.items.length}
-                completedItems={item.items.filter((i) => i.isTaken).length}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#9Bd35A', '#689F38']} />
+          }
+        />
+        {/* מודל אפשרויות */}
+        <OptionsModal
+          optionsModalRef={optionsModalRef}
+          handleOptionSelect={handleOptionSelect}
+          options={options}
+        />
+        {/* מודל אפשרויות העתקה */}
+        <OptionsModal
+          optionsModalRef={optionsCopyModalRef}
+          handleOptionSelect={handleOptionCopySelect}
+          options={optionsCopy}
+        />
+
+        {/*מודל עריכת  */}
+        <Modalize
+          ref={editModalRef}
+          adjustToContentHeight
+          handlePosition="inside"
+          onOpen={() => {
+            setTimeout(() => inputRef.current?.focus(), 100);
+          }}
+        >
+          <View style={styles.panelHeader}>
+            <Text style={styles.panelTitle}>עריכת שם הרשימה</Text>
+            <TouchableOpacity onPress={() => editModalRef.current?.close()} style={styles.closeButton}>
+              <Icon name="close" size={20} color="#888" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.editPanelContent}>
+            <TextInput
+              ref={inputRef}
+              style={styles.input}
+              value={currentList?.name}
+              onChangeText={handleNameChange}
+              placeholder="הזן שם חדש"
+            />
+            <View style={styles.row}>
+              <SelectableDropdown
+                label="קטגוריה"
+                options={categories.map(cat => cat.name)}
+                selectedValue={currentList?.category}
+                onSelect={handleCategorySelect}
+                onAdding={handleAddingCategory}
+                allowAdding={true}
+                firstItem="ללא קטגוריה"
               />
-              <Text style={styles.itemSubtitle}>
-                {item.items.filter((i) => i.isTaken).length}/{item.items.length}
-              </Text>
+              {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
+              <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} TodayMinDate={true} />
             </View>
 
-            <TouchableOpacity
-              style={styles.optionsButton}
-              onPress={() => openOptionsPanel(item)}
-            >
-              <Icon name="more-vert" size={24} color="#888" />
-            </TouchableOpacity>
-          </TouchableOpacity>
-        )}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Icon name="inbox" size={50} color="#ccc" />
-            {<Text style={styles.emptyText}>אין פריטים להצגה</Text>}
+            <View style={styles.editButtons}>
+              <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
+                <Text style={styles.saveButtonText}>שמור</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => editModalRef.current?.close()} style={styles.cancelButton}>
+                <Text style={styles.cancelButtonText}>ביטול</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        }
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#9Bd35A', '#689F38']} />
-        }
-      />
-      {/* מודל אפשרויות */}
-      <OptionsModal
-        optionsModalRef={optionsModalRef}
-        handleOptionSelect={handleOptionSelect}
-        options={options}
-      />
-      {/* מודל אפשרויות העתקה */}
-      <OptionsModal
-        optionsModalRef={optionsCopyModalRef}
-        handleOptionSelect={handleOptionCopySelect}
-        options={optionsCopy}
-      />
-
-      {/*מודל עריכת  */}
-      <Modalize
-        ref={editModalRef}
-        adjustToContentHeight
-        handlePosition="inside"
-        onOpen={() => {
-          setTimeout(() => inputRef.current?.focus(), 100);
-        }}
-      >
-        <View style={styles.panelHeader}>
-          <Text style={styles.panelTitle}>עריכת שם הרשימה</Text>
-          <TouchableOpacity onPress={() => editModalRef.current?.close()} style={styles.closeButton}>
-            <Icon name="close" size={20} color="#888" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.editPanelContent}>
-          <TextInput
-            ref={inputRef}
-            style={styles.input}
-            value={currentList?.name}
-            onChangeText={handleNameChange }
-            placeholder="הזן שם חדש"
-          />
-          <View style={styles.row}>
-                  <SelectableDropdown
-                    label="קטגוריה"
-                    options={categories.map(cat => cat.name)}
-                    selectedValue={currentList?.category}
-                    onSelect={handleCategorySelect}
-                    onAdding={handleAddingCategory}
-                    allowAdding={true}
-                    firstItem="ללא קטגוריה"
-                  />
-                  {/* הצגת יומן לבחירת תאריך אם נבחר להציג */}
-                  <DatePicker onDateSelect={handleDateSelect} showModal={showDatePicker} setShowModal={setShowDatePicker} selectedDate={currentList?.date} TodayMinDate={true} />
-                </View>
-       
-          <View style={styles.editButtons}>
-            <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-              <Text style={styles.saveButtonText}>שמור</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => editModalRef.current?.close()} style={styles.cancelButton}>
-              <Text style={styles.cancelButtonText}>ביטול</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modalize>
-      <AlertModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        message="האם אתה בטוח שברצונך למחוק פריט זה?"
-        onConfirm={() => { handleDelete(currentList?.id); }}
-        confirmText="מחק"
-        cancelText="ביטול"
-      />
-    <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddListScreen" })}>
-        <Icon name="add" size={30} color="white" />
-      </TouchableOpacity>
-    </GestureHandlerRootView>
+        </Modalize>
+        <AlertModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          message="האם אתה בטוח שברצונך למחוק פריט זה?"
+          onConfirm={() => { handleDelete(currentList?.id); }}
+          confirmText="מחק"
+          cancelText="ביטול"
+        />
+        <TouchableOpacity style={styles.addButton} onPress={() => router.push({ pathname: "./AddListScreen" })}>
+          <Icon name="add" size={30} color="white" />
+        </TouchableOpacity>
+      </GestureHandlerRootView>
     </PageWithMenu>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1},
+  container: { flex: 1 },
   listItem: {
     padding: 16,
     backgroundColor: "#fff",
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "right",
   },
-  editButtons: { flexDirection: "row", justifyContent: "space-between", gap: 10,padding:10 },
+  editButtons: { flexDirection: "row", justifyContent: "space-between", gap: 10, padding: 10 },
   saveButton: { backgroundColor: "#007bff", padding: 10, borderRadius: 20, width: "50%", alignItems: "center" },
   saveButtonText: { color: "white", fontWeight: "bold" },
   cancelButton: { padding: 10, width: "50%", alignItems: "center", backgroundColor: "#ededed", borderRadius: 20 },
