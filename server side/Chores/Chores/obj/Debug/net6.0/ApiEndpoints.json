@@ -865,7 +865,7 @@
     "ContainingType": "Chores.Controllers.UsersController",
     "Method": "EditUserProfile",
     "RelativePath": "api/Users/editUserProfilePicAndName",
-    "HttpMethod": "PUT",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [

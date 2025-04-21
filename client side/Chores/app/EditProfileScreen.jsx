@@ -44,10 +44,10 @@ const handleSave = async () => {
 
     if (imageUri.startsWith('data:')) {
       const fetchRes = await fetch(imageUri);
-      const blob = await fetchRes.blob();
-      formData.append('MediaFile', blob, fileName);
+      const blob = await fetch(imageUri).then(r => r.blob());
+      formData.append('ProfilePicture', blob, fileName);
     } else {
-      formData.append('MediaFile', {
+      formData.append('ProfilePicture', {
         uri: imageUri,
         name: fileName,
         type: fileType,

@@ -1556,7 +1556,7 @@
       }
     },
     "/api/Users/editUserProfilePicAndName": {
-      "put": {
+      "post": {
         "tags": [
           "Users"
         ],
