@@ -61,6 +61,7 @@ const StoryComponent = () => {
     await fetchStories();
     setRefreshing(false);
   };
+  console.log(stories)
   const openStory = (user) => {
     if (user.media.length == 0) return;
     setCurrentUser(user);
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   username: {
     maxWidth: 60,
     fontSize: 14,
-    color:  "rgba(255, 255, 255, 0.9)",
+    color:  "#007bff",
   },
 
   modalContainer: {
