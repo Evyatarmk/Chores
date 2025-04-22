@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const TaskItem = ({ task, user, selectedDate, signUpForTask, signOutOfTask, markTaskAsCompleted, markTaskAsNotCompleted, openOptionsPanel, router }) => {
+ console.log(task)
   const isUserRegistered = task.participants.some(p => p.id === user?.id);
 const categoryColors = {
   משימה: "#90CAF9", // כחול נעים
@@ -72,9 +73,16 @@ const convertTo12HourFormat = (timeString) => {
             <Text style={styles.cancelRegisterText}>בטל הרשמה</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => signUpForTask(task.id, user.id)} style={styles.registerButton}>
-            <Text style={styles.registerText}>הירשם</Text>
-          </TouchableOpacity>
+          <TouchableOpacity
+          disabled={task.participants.length >= task.maxparticipants}
+          onPress={() => signUpForTask(task.id, user.id)}
+          style={[
+            styles.registerButton,
+            task.participants.length >= task.maxparticipants && { backgroundColor: 'gray' } // optional: make it look disabled
+          ]}
+        >
+          <Text style={styles.registerText}>הירשם</Text>
+        </TouchableOpacity>
         )}
 
         {isUserRegistered && task.category === "משימה" && (
