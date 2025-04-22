@@ -23,11 +23,10 @@ const TaskDetailsScreen = () => {
   };
   const convertTo12HourFormat = (timeString) => {
     if(!timeString)return
-    const [hours, minutes, seconds] = timeString.split(":");
+    const [hours, minutes] = timeString.split(":");
     const date = new Date();
     date.setHours(parseInt(hours, 10));
     date.setMinutes(parseInt(minutes, 10));
-    date.setSeconds(parseInt(seconds, 10));
     
     return date.toLocaleTimeString("he-IL", {
       hour: "2-digit",

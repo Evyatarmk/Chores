@@ -166,7 +166,8 @@ const TaskEditScreen = () => {
       endTime: toEditTaskData.endTime      
     };
 
-
+console.log(updatedTask)
+console.log(toEditTaskData)
     editTask(taskId, updatedTask);
     router.back();
   };
