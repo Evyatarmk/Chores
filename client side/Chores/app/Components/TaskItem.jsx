@@ -77,20 +77,25 @@ const convertTo12HourFormat = (timeString) => {
     </TouchableOpacity>
   ) : (
     <TouchableOpacity
-      disabled={task.participants.length >= parseInt(task.maxParticipants)} 
-      onPress={() => {
-      
-        signUpForTask(task.id, user.id);
-      }}
-      style={[
-        styles.registerButton,
-        task.participants.length >= parseInt(task.maxParticipants) && { backgroundColor: 'gray', opacity: 0.5 }
-      ]}
-    >
-      <Text style={styles.registerText}>
-        {task.participants.length >= task.maxparticipants ? "מלא" : "הירשם"}
-      </Text>
-    </TouchableOpacity>
+    disabled={
+      task.maxParticipants !== -1 && task.participants.length >= parseInt(task.maxParticipants)
+    }
+    onPress={() => {
+      signUpForTask(task.id, user.id);
+    }}
+    style={[
+      styles.registerButton,
+      task.maxParticipants !== -1 && task.participants.length >= parseInt(task.maxParticipants)
+        ? { backgroundColor: 'gray', opacity: 0.5 }
+        : {}
+    ]}
+  >
+    <Text style={styles.registerText}>
+      {task.maxParticipants !== -1 && task.participants.length >= parseInt(task.maxParticipants) 
+        ? "מלא" 
+        : "הירשם"}
+    </Text>
+  </TouchableOpacity>
   )}
 
   {isUserRegistered && task.category === "משימה" && (
