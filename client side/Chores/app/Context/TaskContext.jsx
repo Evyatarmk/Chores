@@ -18,7 +18,7 @@ export const TaskProvider = ({ children }) => {
   const { baseUrl } = useApiUrl();
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
- 
+ console.log(tasks)
     const handleCloseError = () => {
       setErrorMessage("")
       setErrorVisible(false)

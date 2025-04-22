@@ -28,16 +28,25 @@ const TaskEditScreen = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false); // Function to toggle date picker
   const [showEndDatePicker, setShowEndDatePicker] = useState(false); // Function to toggle date picker
 
-  const currentTime = new Date();
-  currentTime.setMinutes(Math.floor(currentTime.getMinutes() / 5) * 5); // Round down to nearest 5 minutes
-  const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const convertTo12HourFormat = (timeString) => {
+    const [hours, minutes, seconds] = timeString.split(":");
+    const date = new Date();
+    date.setHours(parseInt(hours, 10));
+    date.setMinutes(parseInt(minutes, 10));
+    date.setSeconds(parseInt(seconds, 10));
+    
+    return date.toLocaleTimeString("he-IL", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
   const [isEvent, setIsEvent] = useState(mytask.category == "משימה" ? false : true); // Function to toggle date picker
 
   const [toEditTaskData, setTaskData] = useState({
     title: mytask.title || "",
     description: mytask.description || "",
-    startTime: formattedTime,  // Start time
-    endTime: formattedTime,    // End time
+    startTime: convertTo12HourFormat(mytask.startTime),  // Start time
+    endTime: convertTo12HourFormat(mytask.endTime),    // End time
     startDate: mytask.startDate || new Date(),
     endDate: mytask.endDate || new Date(),
     category: mytask.category || "משימה",
@@ -146,7 +155,6 @@ const TaskEditScreen = () => {
 
 
   const handleSave = () => {
-    console.log(toEditTaskData)
     const updatedTask = {
       title: toEditTaskData.title,
       description: toEditTaskData.description,
@@ -154,8 +162,9 @@ const TaskEditScreen = () => {
       startDate: toEditTaskData.startDate,
       endDate: toEditTaskData.endDate,
       maxParticipants: parseInt(toEditTaskData.maxParticipants, 10),
+      startTime: toEditTaskData.startTime, 
+      endTime: toEditTaskData.endTime      
     };
-
 
 
     editTask(taskId, updatedTask);
@@ -285,12 +294,12 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   header: {
+    flexDirection:"row",
     width: "100%",
     height: 40,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "flex-start",
     marginBottom: 20,
-    position: "relative", // חשוב כדי לאפשר positioning פנימי
   },
   headerTitle: {
     textAlign: "center",
