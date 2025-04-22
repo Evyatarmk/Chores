@@ -82,9 +82,13 @@
         public string Category { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
         public int? MaxParticipants { get; set; }
 
         public string Color { get; set; }
+
+        public string StartTime { get; set; }  // Time in "HH:mm" format, e.g., "13:30"
+        public string EndTime { get; set; }    // Time in "HH:mm" format, e.g., "15:00"
     }
 
     public class UpdateTaskDto
@@ -97,7 +101,10 @@
         public DateTime EndDate { get; set; }
         public int MaxParticipants { get; set; }
 
-       
+        public string StartTime { get; set; }  
+        public string EndTime { get; set; }
+
+
     }
 
     public class TaskParticipantDto

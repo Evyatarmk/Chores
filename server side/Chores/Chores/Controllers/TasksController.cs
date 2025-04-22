@@ -165,11 +165,15 @@ namespace Chores.Controllers
 
         // POST: api/tasks
         [HttpPost]
-      
+
         public async Task<IActionResult> PostTask([FromBody] CreateTaskDto taskDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            // Parse the string time values to TimeSpan
+            TimeSpan startTime = TimeSpan.Parse(taskDto.StartTime);  // assuming taskDto.StartTime is a string like "13:30"
+            TimeSpan endTime = TimeSpan.Parse(taskDto.EndTime);      // assuming taskDto.EndTime is a string like "15:00"
 
             var task = new Models.Task
             {
@@ -183,9 +187,9 @@ namespace Chores.Controllers
                 MaxParticipants = taskDto.MaxParticipants,
 
                 Color = taskDto.Color,
-             
-                StartTime = TimeSpan.Zero,   // Default start time
-                EndTime = TimeSpan.Zero      // Default end time
+
+                StartTime = startTime,  // Set the parsed start time
+                EndTime = endTime       // Set the parsed end time
             };
 
             _context.Tasks.Add(task);
@@ -193,6 +197,7 @@ namespace Chores.Controllers
 
             return Ok(task);
         }
+
 
 
         [HttpPost("{taskId}/participants/{userId}")]
@@ -223,12 +228,10 @@ namespace Chores.Controllers
 
         // PUT: api/tasks/{id}
         [HttpPut("{id}")]
-        [Authorize]
+        
 
         public async Task<IActionResult> PutTask(string id, [FromBody] UpdateTaskDto updatedTask)
         {
-         
-
             var existingTask = await _context.Tasks
                 .Include(t => t.Participants)
                 .FirstOrDefaultAsync(t => t.Id == id);
@@ -240,14 +243,18 @@ namespace Chores.Controllers
             existingTask.Title = updatedTask.Title;
             existingTask.Description = updatedTask.Description;
             existingTask.Category = updatedTask.Category;
-      
+
             existingTask.StartDate = updatedTask.StartDate;
             existingTask.EndDate = updatedTask.EndDate;
-           
-           
-            existingTask.MaxParticipants = updatedTask.MaxParticipants;
-          
 
+            // Parse the string time values to TimeSpan
+            if (!string.IsNullOrEmpty(updatedTask.StartTime))
+                existingTask.StartTime = TimeSpan.Parse(updatedTask.StartTime);  // assuming it's in "HH:mm" format like "13:30"
+
+            if (!string.IsNullOrEmpty(updatedTask.EndTime))
+                existingTask.EndTime = TimeSpan.Parse(updatedTask.EndTime);  // assuming it's in "HH:mm" format like "15:00"
+
+            existingTask.MaxParticipants = updatedTask.MaxParticipants;
 
             await _context.SaveChangesAsync();
 
