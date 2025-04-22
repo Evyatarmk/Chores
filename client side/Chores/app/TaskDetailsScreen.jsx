@@ -22,12 +22,12 @@ const TaskDetailsScreen = () => {
     router.push({ pathname: "./TaskEditScreen", params: { taskId, date } });
   };
   const convertTo12HourFormat = (timeString) => {
-    if(!timeString)return
+    if (!timeString) return
     const [hours, minutes] = timeString.split(":");
     const date = new Date();
     date.setHours(parseInt(hours, 10));
     date.setMinutes(parseInt(minutes, 10));
-    
+
     return date.toLocaleTimeString("he-IL", {
       hour: "2-digit",
       minute: "2-digit",
@@ -105,38 +105,38 @@ const TaskDetailsScreen = () => {
           תאריך
         </Text>
         <Text style={styles.value}>
-  {(() => {
-    const startDateObj = new Date(taskData?.startDate);
-    const endDateObj = new Date(taskData?.endDate);
+          {(() => {
+            const startDateObj = new Date(taskData?.startDate);
+            const endDateObj = new Date(taskData?.endDate);
 
-    const startDateStr = startDateObj.toLocaleDateString("he-IL", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    });
+            const startDateStr = startDateObj.toLocaleDateString("he-IL", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            });
 
-    const endDateStr = endDateObj.toLocaleDateString("he-IL", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    });
+            const endDateStr = endDateObj.toLocaleDateString("he-IL", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            });
 
-    const sameDate = startDateObj.toDateString() === endDateObj.toDateString();
-    const sameTime = taskData?.startTime === taskData?.endTime;
+            const sameDate = startDateObj.toDateString() === endDateObj.toDateString();
+            const sameTime = taskData?.startTime === taskData?.endTime;
 
-    const formattedStartTime = convertTo12HourFormat(taskData?.startTime);
-    const formattedEndTime = convertTo12HourFormat(taskData?.endTime);
+            const formattedStartTime = convertTo12HourFormat(taskData?.startTime);
+            const formattedEndTime = convertTo12HourFormat(taskData?.endTime);
 
-    if (sameDate && sameTime) {
-      return `${startDateStr}\nבשעה ${formattedStartTime}`;
-    }
+            if (sameDate && sameTime) {
+              return `${startDateStr}\nבשעה ${formattedStartTime}`;
+            }
 
-    if (sameDate) {
-      return `${startDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
-    }
+            if (sameDate) {
+              return `${startDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
+            }
 
-    return `${startDateStr} - ${endDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
-  })()}
+            return `${startDateStr} - ${endDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
+          })()}
         </Text>
 
       </View>

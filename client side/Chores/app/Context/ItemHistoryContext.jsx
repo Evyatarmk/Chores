@@ -22,7 +22,7 @@ export const ItemHistoryProvider = ({ children }) => {
   const addItemHistory = async (newItemHistory) => {
     // שמירת המצב הקודם למקרה של שגיאה
     const prevItemHistory = [...itemHistory];
-    
+
     // עדכון ויזואלי מיידי
     const updatedItemHistory = [...itemHistory, newItemHistory];
     setItemHistory(updatedItemHistory);
@@ -58,17 +58,17 @@ export const ItemHistoryProvider = ({ children }) => {
       }
 
       const data = await response.json();
-      return(data);
+      return (data);
     } catch (error) {
       console.error("שגיאה בקבלת היסטוריית פריטים:", error);
       setErrorMessage("לא ניתן לטעון היסטוריית פריטים, אנא נסה שוב מאוחר יותר");
       setErrorVisible(true);
-      
+
     }
   };
 
   return (
-    <ItemHistoryContext.Provider value={{itemHistory, getItemHistoryByCategory, addItemHistory }}>
+    <ItemHistoryContext.Provider value={{ itemHistory, getItemHistoryByCategory, addItemHistory }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </ItemHistoryContext.Provider>

@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { useApiUrl } from "../Context/ApiUrlProvider";
 
 export const fetchWithAuth = async (url, options = {}, baseUrl) => {
   try {

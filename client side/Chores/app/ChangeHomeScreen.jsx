@@ -7,7 +7,7 @@ import { Icon } from "@rneui/base";
 
 const ChangeHomeScreen = () => {
   const router = useRouter();
-  const { user, changeToNewHome,changeToExistingHome } = useUserAndHome();
+  const { user, changeToNewHome, changeToExistingHome } = useUserAndHome();
   const [code, setCode] = useState("");
   const [homeName, setHomeName] = useState("");
   const [errorMessage, setErrorMessage] = useState('');

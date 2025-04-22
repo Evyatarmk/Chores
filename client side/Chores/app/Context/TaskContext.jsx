@@ -298,6 +298,7 @@ export const TaskProvider = ({ children }) => {
       // קריאה לשרת
       const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
         method: 'POST',
+        baseUrl
       });
 
       if (!response.ok) {
@@ -350,13 +351,13 @@ export const TaskProvider = ({ children }) => {
 
   const removeTaskForDate = async (taskId) => {
     console.log("Removing task", taskId);
-  
+
     // שמירה על המצב הקודם
     const previousTasks = [...tasks];
-  
+
     // עדכון מיידי במסך
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
-  
+
     try {
       const response = await fetchWithAuth(
         `${baseUrl}/Tasks/${taskId}`,
@@ -368,19 +369,19 @@ export const TaskProvider = ({ children }) => {
         },
         baseUrl                      // ← הוסף פה את ה־baseUrl
       );
-  
+
       if (!response.ok) {
         throw new Error(`Failed to delete task: ${response.status}`);
       }
-  
+
       console.log(`Task ${taskId} deleted successfully`);
       // אין צורך לרענן שוב – הסטייט עודכן אופטימית
     } catch (error) {
       console.error('Error deleting task:', error);
-  
+
       // שחזור המצב הקודם במקרה של כישלון
       setTasks(previousTasks);
-  
+
       setErrorMessage("הייתה בעיה במחיקת המשימה. נסה שוב מאוחר יותר.");
       setErrorVisible(true);
     }
@@ -443,7 +444,7 @@ export const TaskProvider = ({ children }) => {
           task.id === taskId ? originalTask : task
         )
       );
-      
+
       setErrorMessage("שגיאה בעריכת משימה. אנא בדוק שכל הערכים שהזנת תקינים!");
       setErrorVisible(true);
     }

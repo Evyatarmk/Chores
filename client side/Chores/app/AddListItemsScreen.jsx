@@ -6,7 +6,7 @@ import ClearableInput from "./Components/ClearableInput";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useLists } from "./Context/ListsContext";
 import { useItemHistory } from "./Context/ItemHistoryContext";
-import { v4 as uuidv4 } from "uuid"; // נדרשת חבילה זו
+import { v4 as uuidv4 } from "uuid"; 
 
 const AddListItemsScreen = () => {
   const router = useRouter();
