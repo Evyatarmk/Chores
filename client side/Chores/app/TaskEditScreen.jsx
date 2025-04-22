@@ -168,7 +168,7 @@ const TaskEditScreen = () => {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="close" size={28} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>עריכת משימה</Text>
+        <Text style={styles.headerTitle}>עריכת {mytask.category}</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -283,13 +283,18 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   header: {
-    flexDirection: "row",
     width: "100%",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingBottom: 20,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    marginBottom: 20,
+    position: "relative", // חשוב כדי לאפשר positioning פנימי
   },
   headerTitle: {
+    position: "absolute", // מיקום עצמאי שלא תלוי בשאר האלמנטים
+    left: 0,
+    right: 0,
+    textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
   },
@@ -326,14 +331,11 @@ const styles = StyleSheet.create({
   dateAndTimeContianer: {
     flexDirection: "row-reverse",
     alignItems: "center",
-    justifyContent: "space-between",
     backgroundColor: "#f0f0f0",
-    padding: 10,
+    justifyContent: "space-between",
     borderRadius: 10,
     marginBottom: 15,
-    gap: 10, // רווח פנימי בין פריטים (אם לא נתמך – השתמשי ב־marginLeft על אחד מהם)
   },
-
   datePickerButton: {
     paddingVertical: 8,
     paddingHorizontal: 12,

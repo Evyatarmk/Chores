@@ -104,7 +104,7 @@ const TasksListScreen = () => {
   return (
     <PageWithMenu>
       <GestureHandlerRootView style={styles.container}>
-        <NormalHeader title="המשימות של הבית" />
+        <NormalHeader title="לוח משימות ואירועים" />
 
         <View style={{ marginBottom: 20 }}>
   <Calendar

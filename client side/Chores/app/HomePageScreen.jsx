@@ -64,7 +64,7 @@ export default function HomePageScreen() {
   });
   
   const displayedTasks = activeTab === "myTasks" ? sortedMyTasks : availableTasksForNextMonth;
-    const sectionTitle = activeTab === "myTasks" ? "המשימות שלי לשבוע הקרוב" : "משימות ואירועים זמינים החודש";
+    const sectionTitle = activeTab === "myTasks" ? "משימות ואירועים שלי לשבוע הקרוב" : "משימות ואירועים זמינים החודש";
 
   return (
     <PageWithMenu>
