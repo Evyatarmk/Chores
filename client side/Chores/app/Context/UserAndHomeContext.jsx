@@ -234,7 +234,6 @@ export const UserAndHomeProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         const { accessToken, refreshToken } = data;
-        console.log("sssssssssssss",data)
 
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
@@ -279,7 +278,6 @@ export const UserAndHomeProvider = ({ children }) => {
   };
 
   const updateUser = (updatedUser) => {
-    console.log("Updated user from server:", updatedUser); // בדיקה
     setUser(prev => ({
       ...prev,
       ...updatedUser,

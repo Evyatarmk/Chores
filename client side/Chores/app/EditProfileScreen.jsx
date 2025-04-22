@@ -39,8 +39,6 @@ const handleSave = async () => {
       fileType = 'video/quicktime';
     }
 
-    console.log('✅ סיומת שזוהתה:', extension);
-    console.log('✅ סוג הקובץ שנשלח:', fileType);
 
     if (imageUri.startsWith('data:')) {
       const fetchRes = await fetch(imageUri);

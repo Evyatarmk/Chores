@@ -4,7 +4,7 @@ import { useUserAndHome } from "./Context/UserAndHomeContext";
 import { useRouter } from "expo-router";
 import ErrorNotification from "./Components/ErrorNotification";
 import { Icon } from '@rneui/base';
-import { ActivityIndicator } from "react-native-web";
+import { ActivityIndicator } from "react-native";
 
 const JoinOrCreateHomeScreen = () => {
   const router = useRouter();

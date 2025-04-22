@@ -55,7 +55,6 @@ const AddTaskScreen = () => {
       alert("You must be logged in to add a task.");
       return;
     }
-    console.log(taskData)
 
     if (!taskData.title) {
       alert("Please enter a title for the task.");
