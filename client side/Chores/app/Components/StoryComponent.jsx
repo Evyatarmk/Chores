@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
   username: {
     maxWidth: 60,
     fontSize: 14,
-    color:  "rgba(0,0,0,0.9)",
+    color:  "rgba(255, 255, 255, 0.9)",
   },
 
   modalContainer: {

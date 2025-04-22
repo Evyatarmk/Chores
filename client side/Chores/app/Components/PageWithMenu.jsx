@@ -18,8 +18,6 @@ import { db } from "../FirebaseConfig";
 import { Timestamp } from "firebase/firestore";
 import { useApiUrl } from "../Context/ApiUrlProvider";
 
-
-
 const PageWithMenu = (props) => {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -40,7 +38,6 @@ const PageWithMenu = (props) => {
       ? user.profilePicture
       : `${baseUrl.replace("/api", "")}/${user.profilePicture}`;
   };
-
 
   const toggleDrawer = () => {
     Animated.timing(drawerRight, {
@@ -63,8 +60,8 @@ const PageWithMenu = (props) => {
   // תפריט דינמי לפי מצב המשתמש
   const dynamicMenuItems = [
     { screen: "/HomePageScreen", label: "דף הבית" },
-    { screen: "/ListsScreen", label: "רשימות" },
     { screen: "/TasksListScreen", label: "לוח משימות ואירועים" },
+    { screen: "/ListsScreen", label: "רשימות" },
     { screen: "/ChatScreen", label: "צ'אט" },
     { screen: "/ProfileScreen", label: "אזור אישי" },
     { screen: "/SettingsScreen", label: "הגדרות" },

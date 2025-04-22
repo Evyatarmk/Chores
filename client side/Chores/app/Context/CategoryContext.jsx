@@ -114,6 +114,7 @@ const [errorMessage, setErrorMessage] = useState('');
 
   
   const fetchCategories = async () => {
+      if (!home?.id || !user) return;
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
         method: 'GET',
@@ -139,7 +140,7 @@ const [errorMessage, setErrorMessage] = useState('');
     if (home && user) {
       fetchCategories();
     }
-  }, [home, user,categories]);
+  }, [home, user]);
   return (
     <CategoryContext.Provider value={{ categories, addCategory ,deleteCategory,updateCategory}}>
       {children}
