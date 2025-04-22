@@ -111,14 +111,14 @@ const ProfileScreen = () => {
         <Text style={styles.subTitle}>חברי הבית</Text>
         <View style={styles.membersList}>
           {home?.members?.length > 0 ? (
-            home.members.map((member) => (
-              <View key={member.id} style={styles.memberItem}>
-                <Text style={styles.memberName}>{member.name}</Text>
-                <Text style={styles.memberRole}>
-                  {member.id === user.id ? "אתה" : member.role === "admin" ? "מנהל" : "חבר"}
-                </Text>
-              </View>
-            ))
+          home.members.map((member, index) => (
+            <View key={member.id ? member.id : index} style={styles.memberItem}>
+              <Text style={styles.memberName}>{member.name}</Text>
+              <Text style={styles.memberRole}>
+                {member.id === user.id ? "אתה" : member.role === "admin" ? "מנהל" : "חבר"}
+              </Text>
+            </View>
+          ))
           ) : (
             <Text style={styles.noMembers}>אין חברים בבית</Text>
           )}
