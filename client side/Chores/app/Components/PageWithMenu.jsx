@@ -64,7 +64,7 @@ const PageWithMenu = (props) => {
   const dynamicMenuItems = [
     { screen: "/HomePageScreen", label: "דף הבית" },
     { screen: "/ListsScreen", label: "רשימות" },
-    { screen: "/TasksListScreen", label: "משימות" },
+    { screen: "/TasksListScreen", label: "לוח משימות ואירועים" },
     { screen: "/ChatScreen", label: "צ'אט" },
     { screen: "/ProfileScreen", label: "אזור אישי" },
     { screen: "/SettingsScreen", label: "הגדרות" },

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, TextInput, Button, FlatList, Text, StyleSheet, ImageBackground, Image } from 'react-native';
+import { View, TextInput, Button, FlatList, Text, StyleSheet, ImageBackground, Image, TouchableOpacity } from 'react-native';
 import PageWithMenu from './Components/PageWithMenu';
 import { useUserAndHome } from './Context/UserAndHomeContext';
 import { db } from './FirebaseConfig';
@@ -7,6 +7,7 @@ import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firesto
 import moment from 'moment';
 import { useNotification } from './Context/NotificationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function ChatScreen() {
   const { user } = useUserAndHome();
@@ -140,13 +141,16 @@ export default function ChatScreen() {
               />
 
               <View style={styles.inputContainer}>
+                <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+                  <Icon name="send" size={20} color="#fff" />
+                </TouchableOpacity>
+
                 <TextInput
                   value={inputText}
                   onChangeText={setInputText}
-                  placeholder="Type a message..."
+                  placeholder="הקלד הודעה כאן..."
                   style={styles.input}
                 />
-                <Button title="Send" onPress={handleSend} color='#284b6b'  />
               </View>
             </>
           )}
@@ -177,6 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     maxWidth: '75%',
     alignSelf: 'flex-start',
+
   },
   profilePic: {
     width: 32,
@@ -203,6 +208,7 @@ const styles = StyleSheet.create({
     borderTopColor: 'white',
     borderBottomColor: 'white',
     borderBottomWidth: 10,
+    paddingLeft: 5,
   },
   input: {
     flex: 1,
@@ -228,7 +234,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   sentMessage: {
-    backgroundColor: '#dcf8c6',
+    backgroundColor: '#90CAF9',
     alignSelf: 'flex-end',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 0,
@@ -236,7 +242,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   receivedMessage: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#D1C4E9',
     alignSelf: 'flex-start',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 20,
@@ -254,4 +260,24 @@ const styles = StyleSheet.create({
     color: '#555',
     textAlign: 'center',
   },
+  sendButton: {
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginLeft: 8,
+    marginRight: 4,
+
+
+  },
+
+  sendButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+
 });
