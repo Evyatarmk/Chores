@@ -315,12 +315,6 @@ const AddTaskScreen = () => {
           </View>
         </View>
 
-        <DatePickerForTasks
-          showModal={showEndDatePicker}
-          setShowModal={setShowEndDatePicker}
-          selectedDate={taskData?.endDate}
-          onDateSelect={handleEndDateSelect}
-        />
       </View>
 
         {/* Buttons */}
