@@ -146,6 +146,7 @@ const TaskEditScreen = () => {
 
 
   const handleSave = () => {
+    console.log(toEditTaskData)
     const updatedTask = {
       title: toEditTaskData.title,
       description: toEditTaskData.description,

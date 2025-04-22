@@ -60,7 +60,7 @@ const myThisWeek = tasks.filter(task =>
           (start <= today && end >= oneMonthFromNow); // מכסה טווח שכולל את כל החודש
       
         const isNotFull = task.participants?.length < task?.maxParticipants || task?.maxParticipants === -1;
-        const isNotJoined = !task.participants?.some(p => p.id === user.id);
+        const isNotJoined = !task.participants?.some(p => p.id === user?.id);
       
         return isInDateRange && isNotFull && isNotJoined;
       });

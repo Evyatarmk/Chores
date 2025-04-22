@@ -20,7 +20,6 @@ const convertTo12HourFormat = (timeString) => {
     minute: "2-digit",
   });
 };
-
   return (
     <TouchableOpacity
       style={styles.taskItem}
