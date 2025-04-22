@@ -350,31 +350,37 @@ export const TaskProvider = ({ children }) => {
 
   const removeTaskForDate = async (taskId) => {
     console.log("Removing task", taskId);
-
+  
     // שמירה על המצב הקודם
     const previousTasks = [...tasks];
-
+  
     // עדכון מיידי במסך
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
-
+  
     try {
-      const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}`, {
-        method: 'DELETE',
-      });
-
+      const response = await fetchWithAuth(
+        `${baseUrl}/Tasks/${taskId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        },
+        baseUrl                      // ← הוסף פה את ה־baseUrl
+      );
+  
       if (!response.ok) {
-        throw new Error('Failed to delete task');
+        throw new Error(`Failed to delete task: ${response.status}`);
       }
-
+  
       console.log(`Task ${taskId} deleted successfully`);
-      fetchTasks(); // רענון רשימת משימות מהשרת
+      // אין צורך לרענן שוב – הסטייט עודכן אופטימית
     } catch (error) {
       console.error('Error deleting task:', error);
-
-      // שחזור המצב הקודם במקרה של שגיאה
+  
+      // שחזור המצב הקודם במקרה של כישלון
       setTasks(previousTasks);
-
-      // הצגת הודעת שגיאה
+  
       setErrorMessage("הייתה בעיה במחיקת המשימה. נסה שוב מאוחר יותר.");
       setErrorVisible(true);
     }
