@@ -292,9 +292,6 @@ const styles = StyleSheet.create({
     position: "relative", // חשוב כדי לאפשר positioning פנימי
   },
   headerTitle: {
-    position: "absolute", // מיקום עצמאי שלא תלוי בשאר האלמנטים
-    left: 0,
-    right: 0,
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",

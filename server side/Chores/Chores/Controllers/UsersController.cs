@@ -73,7 +73,17 @@ namespace Chores.Controllers
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1); // תוקף לשנה
             await _context.SaveChangesAsync();
+            // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+            var isLocal = Request.Host.Host.Contains("localhost");
+            var baseUrl = isLocal
+                ? $"{Request.Scheme}://{Request.Host}"
+                : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
+            string fullUri = null;
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+            }
             // המרת המידע ל-DTO
             var userDto = new UserDto
             {
@@ -82,7 +92,7 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId,
-                ProfilePicture = user.ProfilePicture // אם יש תמונת פרופיל
+                ProfilePicture = fullUri // אם יש תמונת פרופיל
             };
 
             // המרת רשימת החברים לבית ל-MemberDto
@@ -160,7 +170,17 @@ namespace Chores.Controllers
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1); // תוקף לשנה
             await _context.SaveChangesAsync();
+            // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+            var isLocal = Request.Host.Host.Contains("localhost");
+            var baseUrl = isLocal
+                ? $"{Request.Scheme}://{Request.Host}"
+                : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
+            string fullUri = null;
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+            }
             // המרת המידע ל-DTO
             var userDto = new UserDto
             {
@@ -169,7 +189,7 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId,
-                ProfilePicture = user.ProfilePicture // אם יש תמונת פרופיל
+                ProfilePicture = fullUri // אם יש תמונת פרופיל
             };
 
             // המרת רשימת החברים לבית ל-MemberDto
@@ -226,7 +246,17 @@ namespace Chores.Controllers
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1);
             await _context.SaveChangesAsync();
+            // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+            var isLocal = Request.Host.Host.Contains("localhost");
+            var baseUrl = isLocal
+                ? $"{Request.Scheme}://{Request.Host}"
+                : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
+            string fullUri = null;
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+            }
             var userDto = new UserDto
             {
                 Id = user.Id,
@@ -234,7 +264,7 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId,
-                ProfilePicture = user.ProfilePicture
+                ProfilePicture = fullUri
             };
 
             var homeDto = new HomeDto
@@ -288,7 +318,17 @@ namespace Chores.Controllers
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiry = DateTime.UtcNow.AddYears(1);
             await _context.SaveChangesAsync();
+            // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+            var isLocal = Request.Host.Host.Contains("localhost");
+            var baseUrl = isLocal
+                ? $"{Request.Scheme}://{Request.Host}"
+                : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
+            string fullUri = null;
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+            }
             var userDto = new UserDto
             {
                 Id = user.Id,
@@ -296,7 +336,7 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId,
-                ProfilePicture = user.ProfilePicture
+                ProfilePicture = fullUri
             };
 
             var homeDto = new HomeDto
@@ -646,7 +686,17 @@ namespace Chores.Controllers
             }
 
             await _context.SaveChangesAsync(); // Save changes to the database
+                                               // קביעת base URL לפי סביבת העבודה (לוקאלית או פרודקשן)
+            var isLocal = Request.Host.Host.Contains("localhost");
+            var baseUrl = isLocal
+                ? $"{Request.Scheme}://{Request.Host}"
+                : "https://proj.ruppin.ac.il/cgroup83/test2/tar1";
 
+            string fullUri = null;
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                fullUri = $"{baseUrl}/uploads/{user.ProfilePicture}";
+            }
             // Return success with the updated user data
             var userDto = new UserDto
             {
@@ -655,7 +705,7 @@ namespace Chores.Controllers
                 Email = user.Email,
                 Role = user.Role,
                 HomeId = user.HomeId, // Return updated HomeId (could be null)
-                ProfilePicture = user.ProfilePicture
+                ProfilePicture = fullUri
             };
 
             return Ok(new { success = true, message = "Home updated successfully.", user = userDto });
