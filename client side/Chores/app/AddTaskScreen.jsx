@@ -83,8 +83,8 @@ const AddTaskScreen = () => {
     if (taskData.startDate && taskData.category=="אירוע") {
       await scheduleNotificationOneDayBefore(
         taskData.startDate,
-        `Upcoming Task: ${taskData.title}`,
-        `Don't forget: ${taskData.title} starts tomorrow!`
+        `תזכורת: : ${taskData.title}`,
+        `לא לשכוח, ${taskData.title} !מתקיים מחר`
       );
     }
     

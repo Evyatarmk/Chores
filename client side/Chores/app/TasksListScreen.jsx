@@ -107,17 +107,17 @@ const TasksListScreen = () => {
         <NormalHeader title="לוח משימות ואירועים" />
 
         <View style={{ marginBottom: 20 }}>
-  <Calendar
-    markedDates={renderMarkedDates()}
-    markingType="multi-period"
-    onDayPress={(day) => setSelectedDate(day.dateString)}
-    theme={{
-      selectedDayBackgroundColor: "#1E90FF",
-      todayTextColor: "#1E90FF",
-      arrowColor: "#1E90FF",
-    }}
-  />
-</View>
+          <Calendar
+            markedDates={renderMarkedDates()}
+            markingType="multi-period"
+            onDayPress={(day) => setSelectedDate(day.dateString)}
+            theme={{
+              selectedDayBackgroundColor: "#1E90FF",
+              todayTextColor: "#1E90FF",
+              arrowColor: "#1E90FF",
+            }}
+          />
+        </View>
         <FlatList
           data={getTasksForDate(selectedDate)}
           keyExtractor={(item) => item.id.toString()}
@@ -131,19 +131,19 @@ const TasksListScreen = () => {
               signOutOfTask={signOutOfTask}
               markTaskAsCompleted={markTaskAsCompleted}
               markTaskAsNotCompleted={markTaskAsNotCompleted}
-              openOptionsPanel={()=>openOptionsPanel(item)}
+              openOptionsPanel={() => openOptionsPanel(item)}
               router={router}
             />
           )}
-         
-          
+
+
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>אין משימות ליום זה</Text>
             </View>
           }
         />
-       
+
 
         <OptionsModal
           optionsModalRef={optionsModalRef}
@@ -159,8 +159,8 @@ const TasksListScreen = () => {
           confirmText="מחק"
           cancelText="ביטול"
         />
-   
-         <TouchableOpacity
+
+        <TouchableOpacity
           style={styles.addButton}
           onPress={() => router.push({ pathname: "./AddTaskScreen", params: { day: selectedDate } })}
         >
