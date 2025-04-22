@@ -16,7 +16,51 @@ const categoryColors = {
         <View style={[styles.sideBar, { backgroundColor: categoryColors[task.category] || "#ccc" }]} />
 
       <Text style={styles.taskTitle}>{task.title}</Text>
-      <Text style={styles.taskDescription}>{task.description}</Text>
+      <Text style={styles.dateText}>
+  {new Date(task.startDate).toLocaleDateString("he-IL", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  })}
+
+  {task.endDate &&
+    (new Date(task.startDate).toDateString() !== new Date(task.endDate).toDateString() ? (
+      <>
+        {" - "}
+        {new Date(task.endDate).toLocaleDateString("he-IL", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })}
+      </>
+    ) : null)}
+
+{"\n"}בשעה{" "}
+
+  {(() => {
+    const startTime = new Date(task.startDate).toLocaleTimeString("he-IL", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const endTime = new Date(task.endDate).toLocaleTimeString("he-IL", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    if (
+      !task.endDate ||
+      (new Date(task.startDate).toDateString() === new Date(task.endDate).toDateString() &&
+        startTime === endTime)
+    ) {
+      return startTime;
+    } else {
+      return `${startTime} - ${endTime}`;
+    }
+  })()}
+</Text>
+
+      <Text style={styles.taskDescription}numberOfLines={1}
+  ellipsizeMode="tail">{task.description}</Text>
 
       <View style={styles.buttonRow}>
         {isUserRegistered ? (
@@ -67,6 +111,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  dateText: {
+    textAlign: "right",
+    fontSize: 13,
+    color: "#999",
+    marginBottom: 6,
+  },
   taskItem: {
     padding: 16,
     backgroundColor: "#fff",
@@ -87,9 +137,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   taskDescription: {
-    textAlign: "right",
     fontSize: 14,
     color: "#666",
+    textAlign: "right", 
+    paddingLeft:150
   },
   registerButton: {
     backgroundColor: '#e0f0ff',
