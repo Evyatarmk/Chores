@@ -397,7 +397,6 @@ export const TaskProvider = ({ children }) => {
       console.log("No tasks found for this date:", formattedDate);
       return null;
     }
-    console.log(taskId)
     // Find the specific task by taskId
     const foundTask = tasksForDate.find(task => task.id === taskId);
 

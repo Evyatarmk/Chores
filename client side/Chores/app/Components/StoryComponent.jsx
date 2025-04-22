@@ -61,7 +61,6 @@ const StoryComponent = () => {
     await fetchStories();
     setRefreshing(false);
   };
-  console.log(stories)
   const openStory = (user) => {
     if (user.media.length == 0) return;
     setCurrentUser(user);

@@ -112,8 +112,6 @@ export const StoriesProvider = ({ children }) => {
         fileType = 'video/quicktime';
       }
 
-      console.log('הסיומת שזוהתה:', extension);
-      console.log('סוג הקובץ שנשלח:', fileType);
 
       if (newStory.uri.startsWith('data:')) {
         const fetchRes = await fetch(newStory.uri);
