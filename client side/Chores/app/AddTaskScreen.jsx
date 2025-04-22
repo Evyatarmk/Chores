@@ -77,8 +77,10 @@ const AddTaskScreen = () => {
     }
     // Add task for the selected date
     addTaskForDate(newItem, user.homeId);
+
+  
    
-    if (taskData.startDate) {
+    if (taskData.startDate && taskData.category=="אירוע") {
       await scheduleNotificationOneDayBefore(
         taskData.startDate,
         `Upcoming Task: ${taskData.title}`,
