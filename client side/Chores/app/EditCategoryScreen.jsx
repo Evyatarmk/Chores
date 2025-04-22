@@ -6,6 +6,7 @@ import NormalHeader from "./Components/NormalHeader";
 import AlertModal from "./Components/AlertModal";
 import { useUserAndHome } from './Context/UserAndHomeContext';
 import { v4 as uuidv4 } from 'uuid';
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const EditCategoryScreen = () => {
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
@@ -68,22 +69,24 @@ const EditCategoryScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <NormalHeader title="חזור" />
-      <Text style={styles.title}>הוספת קטגוריה</Text>
+      <NormalHeader title="עריכת קטגוריות" />
 
       {categories.map((category) => (
-        <View key={category.id} style={styles.row}>
-          <Text style={styles.categoryText}>{category.name}</Text>
+  <View key={category.id} style={styles.row}>
+    <Text style={styles.categoryText}>{category.name}</Text>
 
-          <TouchableOpacity onPress={() => handleEditCategory(category)}>
-            <Ionicons name="create-outline" size={24} color="blue" />
-          </TouchableOpacity>
+    <View style={styles.iconContainer}>
+      <TouchableOpacity onPress={() => handleEditCategory(category)}>
+      <Icon name={"edit"} size={30} color={ '#000'} style={styles.optionIcon} />
+      </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => handleDeleteCategory(category.id)}>
-            <Ionicons name="trash-outline" size={24} color="red" />
-          </TouchableOpacity>
-        </View>
-      ))}
+      <TouchableOpacity onPress={() => handleDeleteCategory(category.id)}>
+            <Icon name={"delete"} size={30} color={ "#ff4444"} style={styles.optionIcon} />
+      </TouchableOpacity>
+    </View>
+  </View>
+))}
+
 
       <View style={styles.form}>
         <Text style={styles.label}>שם הקטגוריה:</Text>
@@ -95,7 +98,6 @@ const EditCategoryScreen = () => {
         />
 
         <TouchableOpacity style={styles.addButton} onPress={handleAddCategory}>
-          <Ionicons name="add-circle-outline" size={30} color="green" />
           <Text style={styles.addButtonText}>הוסף קטגוריה</Text>
         </TouchableOpacity>
       </View>
@@ -148,59 +150,80 @@ const EditCategoryScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#f8f8f8",
+    paddingHorizontal:5 // אפור בהיר רגוע
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: "#333",
   },
   row: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
     alignItems: "center",
-    justifyContent: "flex-end",
-    width: "100%",
-    marginTop: 15,
-    gap: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingBottom: 10,
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 15,
+    marginVertical: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
   },
+  
   categoryText: {
-    flex: 1,
     fontSize: 18,
+    color: "#333",
+    flex: 1,
+    textAlign: "right",
+    writingDirection: "rtl",
+  },
+  
+  iconContainer: {
+    flexDirection: "row",
+    gap: 10,
+    marginLeft: 5,
   },
   form: {
     marginTop: 30,
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
   },
   label: {
     fontSize: 18,
-    marginTop: 10,
-    marginBottom: 10,
-    alignItems: "center",
+    marginBottom: 8,
     textAlign: "right",
-    writingDirection: "rtl", // 💡 חשוב למובייל 
-
+    color: "#333",
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 12,
     padding: 10,
-    marginTop: 5,
+    fontSize: 16,
+    backgroundColor: "#fafafa",
   },
   addButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
+    backgroundColor: "#e6f2ff",
+    paddingVertical: 10,
+    borderRadius: 15,
   },
   addButtonText: {
     marginLeft: 10,
     fontSize: 18,
-    color: 'green',
+    color: '#007AFF',
   },
   overlay: {
     flex: 1,
@@ -211,7 +234,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '80%',
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 20,
     alignItems: "center",
   },
@@ -230,8 +253,8 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     padding: 10,
-    backgroundColor: 'green',
-    borderRadius: 5,
+    backgroundColor: '#007AFF',
+    borderRadius: 10,
   },
   cancelText: {
     color: 'red',
@@ -242,5 +265,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
 
 export default EditCategoryScreen;

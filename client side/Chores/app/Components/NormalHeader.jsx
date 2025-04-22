@@ -19,7 +19,7 @@ const NormalHeader = ({ title, onOptionPress, targetScreen }) => {
     <View style={styles.header}>
       {/* כפתור חזור */}
       <TouchableOpacity onPress={() => handleNavigate()} style={styles.backButton}>
-        <Icon name="arrow-back" size={24} color="#333" />
+      <Icon name="arrow-forward" size={24} color="#333" />
       </TouchableOpacity>
 
       {/* כותרת */}
@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
     flexDirection: "row-reverse",
     alignItems: 'center',
     padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc', // צבע עדין לקו
   },
   backButton: {
     padding: 5,

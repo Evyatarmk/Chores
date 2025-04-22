@@ -164,6 +164,7 @@ const TaskEditScreen = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
       {/* כותרת המסך */}
+      
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="close" size={28} color="black" />
@@ -199,7 +200,7 @@ const TaskEditScreen = () => {
             keyboardType="numeric"
           /> : null}
 
-
+ <View style={styles.column}>
         <ItemSelector
           items={categories}
           onSelect={(category) => handleInputChange("category", category)}
@@ -261,7 +262,7 @@ const TaskEditScreen = () => {
           onDateSelect={handleEndDateSelect}
         />
       </View>
-
+      </View>
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>שמור</Text>
       </TouchableOpacity>
@@ -273,7 +274,7 @@ const TaskEditScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#f8f8f8",
   },
   scrollContainer: {
     flexGrow: 1,
@@ -325,13 +326,11 @@ const styles = StyleSheet.create({
   },
   dateAndTimeContianer: {
     flexDirection: "row-reverse",
-    alignItems: "center",
-    justifyContent: "space-between",
     backgroundColor: "#f0f0f0",
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 15,
-    gap: 10, // רווח פנימי בין פריטים (אם לא נתמך – השתמשי ב־marginLeft על אחד מהם)
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: 'center',
+    marginBottom: 10,
   },
 
   datePickerButton: {
@@ -360,12 +359,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   times: {
-    textAlign: "center",
     writingDirection: "rtl", // 💡 חשוב למובייל  
     fontSize: 16,
     fontWeight: "bold",
-    }
-
+    },
+    column: {
+      flexDirection: "column",
+      alignItems: "flex-end",
+      width: "100%",
+      gap: 10,
+    },
 
 });
 

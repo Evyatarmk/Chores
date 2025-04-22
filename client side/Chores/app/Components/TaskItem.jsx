@@ -4,12 +4,17 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const TaskItem = ({ task, user, selectedDate, signUpForTask, signOutOfTask, markTaskAsCompleted, markTaskAsNotCompleted, openOptionsPanel, router }) => {
   const isUserRegistered = task.participants.some(p => p.id === user?.id);
-
+const categoryColors = {
+  משימה: "#90CAF9", // כחול נעים
+  אירוע: "#D1C4E9", // סגול רך
+};
   return (
     <TouchableOpacity
       style={styles.taskItem}
       onPress={() => router.push({ pathname: "./TaskDetailsScreen", params: { taskId: task.id, date: selectedDate } })}
     >
+        <View style={[styles.sideBar, { backgroundColor: categoryColors[task.category] || "#ccc" }]} />
+
       <Text style={styles.taskTitle}>{task.title}</Text>
       <Text style={styles.taskDescription}>{task.description}</Text>
 
@@ -62,7 +67,6 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
   },
   taskItem: {
     padding: 16,
@@ -87,23 +91,20 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: 14,
     color: "#666",
-    marginBottom: 8,
   },
   registerButton: {
     backgroundColor: "#4CAF50",
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 20,
+    borderRadius: 10,
     alignSelf: "flex-start",
-    marginTop: 8,
   },
   cancelRegisterButton: {
     backgroundColor: "#ff4444",
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 20,
+    borderRadius: 10,
     alignSelf: "flex-start",
-    marginTop: 8,
   },
   registerText: {
     color: "white",
@@ -141,6 +142,16 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
+  sideBar: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 6,
+    height: "100%",
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  
 });
 
 export default TaskItem;

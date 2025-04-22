@@ -52,14 +52,17 @@ const myThisWeek = tasks.filter(task =>
       oneMonthFromNow.setDate(today.getDate() + 30);
       const available = tasks.filter(task => {
         const start = new Date(task.startDate);
-        return (
-          start >= today &&
-          start <= oneMonthFromNow &&
-          (
-            (task.participants?.length < task?.maxParticipants || task?.maxParticipants === -1) &&
-            !task.participants?.some(p => p.id === user.id)
-          )
-        );
+        const end = new Date(task.endDate);
+      
+        const isInDateRange =
+          (start >= today && start <= oneMonthFromNow) || 
+          (end >= today && end <= oneMonthFromNow) ||
+          (start <= today && end >= oneMonthFromNow); // מכסה טווח שכולל את כל החודש
+      
+        const isNotFull = task.participants?.length < task?.maxParticipants || task?.maxParticipants === -1;
+        const isNotJoined = !task.participants?.some(p => p.id === user.id);
+      
+        return isInDateRange && isNotFull && isNotJoined;
       });
       
     
