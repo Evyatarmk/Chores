@@ -146,20 +146,8 @@ export const StoriesProvider = ({ children }) => {
         uploadDate: data.uploadDate,
         uploadTime: data.uploadTime,
       };
+      fetchStories()
 
-      setStories((current) =>
-        filterExpiredStories(sortStories(
-          current.map((story) => {
-            if (story.userId !== user.id) return story;
-            return {
-              ...story,
-              media: story.media.map((m) =>
-                m === newStory ? updatedStory : m
-              ),
-            };
-          })
-        ))
-      );
     } catch (err) {
       console.error('שגיאה בהעלאת סיפור:', err);
       setStories(prevStories);
