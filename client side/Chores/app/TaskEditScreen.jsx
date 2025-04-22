@@ -233,7 +233,7 @@ console.log(toEditTaskData)
 
           <View style={styles.timePickerBox}>
             <TimePickerButton
-              initialTime={task.startTime}
+              initialTime={toEditTaskData.startTime}
               onConfirm={handleStartTimeSelect}
             />
           </View>
@@ -260,7 +260,7 @@ console.log(toEditTaskData)
 
           <View style={styles.timePickerBox}>
             <TimePickerButton
-              initialTime={task.endTime}
+              initialTime={toEditTaskData.endTime}
               onConfirm={handleEndTimeSelect}
             />
           </View>
