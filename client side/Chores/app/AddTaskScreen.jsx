@@ -10,6 +10,7 @@ import ItemSelector from "./Components/ItemSelector";
 import ClearableInput from "./Components/ClearableInput";
 import TimePickerButton from "./Components/TimePickerButton";
 import DatePickerForTasks from "./Components/DatePickerForTasks";
+import { useNotification } from "./Context/NotificationContext";
 
 const AddTaskScreen = () => {
   const inputRef = useRef(null);
@@ -20,6 +21,8 @@ const AddTaskScreen = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false); // Function to toggle date picker
   const [showEndDatePicker, setShowEndDatePicker] = useState(false); // Function to toggle date picker
   const [isEvent, setIsEvent] = useState(true); // Function to toggle date picker
+
+ const { scheduleNotificationOneDayBefore } = useNotification();
   // Update homeId when user changes
   useEffect(() => {
     setTaskData((prevState) => ({
@@ -47,7 +50,7 @@ const AddTaskScreen = () => {
   });
   const categories = ["משימה", "אירוע"]; // Available categories
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (!user || !user.homeId) {
       alert("You must be logged in to add a task.");
       return;
@@ -74,7 +77,14 @@ const AddTaskScreen = () => {
     }
     // Add task for the selected date
     addTaskForDate(newItem, user.homeId);
-
+   
+    if (taskData.startDate) {
+      await scheduleNotificationOneDayBefore(
+        taskData.startDate,
+        `Upcoming Task: ${taskData.title}`,
+        `Don't forget: ${taskData.title} starts tomorrow!`
+      );
+    }
     
 
 
