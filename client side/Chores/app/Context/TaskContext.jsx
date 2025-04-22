@@ -159,7 +159,7 @@ export const TaskProvider = ({ children }) => {
       const response = await fetchWithAuth(`${baseUrl}/Tasks/markAsCompleted/${taskId}`, {
         method: "PUT",
         body: JSON.stringify({ TaskId: taskId, UserId: user.id }),
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error("שגיאה בסימון משימה כבוצעה");
@@ -187,7 +187,7 @@ export const TaskProvider = ({ children }) => {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ TaskId: taskId, UserId: user.id }),
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error("שגיאה בסימון משימה כלא בוצעה");
@@ -227,7 +227,7 @@ export const TaskProvider = ({ children }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newTask),
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error('Failed to add task');
@@ -298,7 +298,7 @@ export const TaskProvider = ({ children }) => {
       // קריאה לשרת
       const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
         method: 'POST',
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -330,7 +330,7 @@ export const TaskProvider = ({ children }) => {
     try {
       const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}/participants/${userId}`, {
         method: 'DELETE',
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -360,7 +360,7 @@ export const TaskProvider = ({ children }) => {
     try {
       const response = await fetchWithAuth(`${baseUrl}/Tasks/${taskId}`, {
         method: 'DELETE',
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error('Failed to delete task');
@@ -423,7 +423,7 @@ export const TaskProvider = ({ children }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedTask),
-      });
+      }, baseUrl);
 
       if (!response.ok) {
         throw new Error('Failed to edit task');

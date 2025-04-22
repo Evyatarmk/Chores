@@ -48,6 +48,7 @@ const ListsScreen = () => {
 
   const options = [
     { icon: "edit", text: "ערוך", action: "edit" },
+    { icon: "content-copy", text: "העתק", action: "copy", iconColor: "#007bff" },
     { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
     // אפשר להוסיף עוד אפשרויות עם אייקונים אחרים
   ];
@@ -90,11 +91,11 @@ const ListsScreen = () => {
     }
   };
   const handleOptionCopySelect = (option) => {
-    if (option === "allItems") {
+    if (option.action === "allItems") {
       copyAllItems(currentList.id);
-    } else if (option === "purchasedItems") {
+    } else if (option.action === "purchasedItems") {
       copyPurchasedItems(currentList.id);
-    } else if (option === "unpurchasedItems") {
+    } else if (option.action === "unpurchasedItems") {
       copyUnpurchasedItems(currentList.id);
     }
 

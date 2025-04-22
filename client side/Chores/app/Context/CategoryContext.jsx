@@ -91,7 +91,7 @@ const [errorMessage, setErrorMessage] = useState('');
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedCategory.name),
-      });
+      }, baseUrl);
   
       if (!response.ok) {
         throw new Error('Failed to update category');

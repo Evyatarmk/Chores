@@ -38,10 +38,10 @@ const ListItemsScreen = () => {
     { icon: "delete", text: "מחיקת פריטים שנעשו", action: "delete", iconColor: "#ff4444" },
   ];
   const handleOptionSelect = (option) => {
-    if (option === "uncheckAllItems") {
+    if (option.action === "uncheckAllItems") {
       uncheckAllItems(listId)
       optionsModalRef.current?.close();
-    } if (option === "delete") {
+    } if (option.action === "delete") {
       setModalClearCheckedItemsVisible(true)
     }
   };

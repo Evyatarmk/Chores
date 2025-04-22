@@ -43,7 +43,6 @@ export const fetchWithAuth = async (url, options = {}, baseUrl) => {
     return response;
   } catch (error) {
     console.error("שגיאה ב-fetchWithAuth", error);
-    await AsyncStorage.clear();
     router.push("/LoginScreen");
   }
 };

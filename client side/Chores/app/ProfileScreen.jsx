@@ -28,19 +28,23 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     if (user?.id) {
-      fetchWithAuth(`${baseUrl}/Tasks/completedTasksPerMonth/${user.id}/${home.id}`)
-        .then((res) => res.json())
+      const url = `${baseUrl}/Tasks/completedTasksPerMonth/${user.id}/${home.id}`;
+      
+      fetchWithAuth(url, {}, baseUrl)
+        .then((res) => res?.json())
         .then((result) => {
+          if (!result) return;
+  
           const mappedData = result.map(item => ({
             name: `${item.month}/${item.year}`,
             completedTasks: item.completedTasks
           }));
-
+  
           setData(mappedData);
         })
         .catch((error) => console.error('Error fetching task data:', error));
     }
-  }, [user?.id]);
+  }, [user?.id, home?.id, baseUrl]);
 
 
 
