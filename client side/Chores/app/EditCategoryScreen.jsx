@@ -72,20 +72,20 @@ const EditCategoryScreen = () => {
       <NormalHeader title="עריכת קטגוריות" />
 
       {categories.map((category) => (
-  <View key={category.id} style={styles.row}>
-    <Text style={styles.categoryText}>{category.name}</Text>
+        <View key={category.id} style={styles.row}>
+          <Text style={styles.categoryText}>{category.name}</Text>
 
-    <View style={styles.iconContainer}>
-      <TouchableOpacity onPress={() => handleEditCategory(category)}>
-      <Icon name={"edit"} size={30} color={ '#000'} style={styles.optionIcon} />
-      </TouchableOpacity>
+          <View style={styles.iconContainer}>
+            <TouchableOpacity onPress={() => handleEditCategory(category)}>
+              <Icon name={"edit"} size={30} color={'#000'} style={styles.optionIcon} />
+            </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleDeleteCategory(category.id)}>
-            <Icon name={"delete"} size={30} color={ "#ff4444"} style={styles.optionIcon} />
-      </TouchableOpacity>
-    </View>
-  </View>
-))}
+            <TouchableOpacity onPress={() => handleDeleteCategory(category.id)}>
+              <Icon name={"delete"} size={30} color={"#ff4444"} style={styles.optionIcon} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      ))}
 
 
       <View style={styles.form}>
@@ -151,7 +151,7 @@ const EditCategoryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f8f8f8",
-    paddingHorizontal:5 // אפור בהיר רגוע
+    paddingHorizontal: 5 // אפור בהיר רגוע
   },
   title: {
     fontSize: 24,
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 2,
   },
-  
+
   categoryText: {
     fontSize: 18,
     color: "#333",
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     writingDirection: "rtl",
   },
-  
+
   iconContainer: {
     flexDirection: "row",
     gap: 10,

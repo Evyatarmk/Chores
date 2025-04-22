@@ -363,18 +363,17 @@ export const TaskProvider = ({ children }) => {
       }, baseUrl);
 
       if (!response.ok) {
-        throw new Error('Failed to delete task');
+        throw new Error(`Failed to delete task: ${response.status}`);
       }
 
       console.log(`Task ${taskId} deleted successfully`);
-      fetchTasks(); // רענון רשימת משימות מהשרת
+      // אין צורך לרענן שוב – הסטייט עודכן אופטימית
     } catch (error) {
       console.error('Error deleting task:', error);
 
-      // שחזור המצב הקודם במקרה של שגיאה
+      // שחזור המצב הקודם במקרה של כישלון
       setTasks(previousTasks);
 
-      // הצגת הודעת שגיאה
       setErrorMessage("הייתה בעיה במחיקת המשימה. נסה שוב מאוחר יותר.");
       setErrorVisible(true);
     }
@@ -437,7 +436,7 @@ export const TaskProvider = ({ children }) => {
           task.id === taskId ? originalTask : task
         )
       );
-      
+
       setErrorMessage("שגיאה בעריכת משימה. אנא בדוק שכל הערכים שהזנת תקינים!");
       setErrorVisible(true);
     }

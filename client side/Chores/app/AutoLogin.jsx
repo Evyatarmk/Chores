@@ -34,10 +34,10 @@ const AutoLogin = () => {
         const currentTime = Date.now() / 1000;
         const timeLeftInSeconds = decodedToken.exp - currentTime;
 
-  if (timeLeftInSeconds > 0) {
-    const minutesLeft = Math.floor(timeLeftInSeconds / 60);
-    const secondsLeft = Math.floor(timeLeftInSeconds % 60);
-   }
+        if (timeLeftInSeconds > 0) {
+          const minutesLeft = Math.floor(timeLeftInSeconds / 60);
+          const secondsLeft = Math.floor(timeLeftInSeconds % 60);
+        }
         if (decodedToken.exp < currentTime) {
           // 🔄 מנסה לרענן את הטוקן
           console.log("Access token expired, attempting to refresh...");
@@ -81,7 +81,7 @@ const AutoLogin = () => {
         setHome(data.home);
 
         router.push("/HomePageScreen");
-            } catch (error) {
+      } catch (error) {
         console.error("Error checking login data", error);
         router.push("/LoginScreen");
       }

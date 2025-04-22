@@ -10,11 +10,11 @@ const CategoryContext = createContext();
 
 export const CategoryProvider = ({ children }) => {
   const [categories, setCategories] = useState(["קניות", "משימות", "טיולים", "אירועים", "בית", "עבודה"]);
-  const { home ,user} = useUserAndHome();
-    const { baseUrl } = useApiUrl();
-    const { fetchListsData} = useLists();
+  const { home, user } = useUserAndHome();
+  const { baseUrl } = useApiUrl();
+  const { fetchListsData } = useLists();
 
-const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
 
 
@@ -22,13 +22,13 @@ const [errorMessage, setErrorMessage] = useState('');
     setErrorMessage("")
     setErrorVisible(false)
   };
- 
- 
+
+
 
   const addCategory = async (newCategory) => {
 
-   
-  
+
+
     // שמירת המצב הקודם למקרה של שגיאה
     const prevCategories = [...categories];
     // עדכון ויזואלי מיידי
@@ -37,16 +37,16 @@ const [errorMessage, setErrorMessage] = useState('');
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
         method: 'POST',
-        body: JSON.stringify( newCategory ),
+        body: JSON.stringify(newCategory),
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("שגיאה ביצירת קטגוריה");
       }
-  
+
       // לא צריך לעדכן שוב את הסטייט אם כבר הוספנו ויזואלית
       // אבל אם אתה רוצה להיות מדויק - תוכל לעדכן עם הנתונים שחזרו
-  
+
     } catch (error) {
       console.error("שגיאה בהוספת קטגוריה:", error);
       setCategories(prevCategories); // שחזור למצב הקודם
@@ -58,22 +58,22 @@ const [errorMessage, setErrorMessage] = useState('');
   const deleteCategory = async (categoryId) => {
     // שמירת המצב הקודם למקרה של שגיאה
     const prevCategories = [...categories];
-  
+
     // עדכון ויזואלי מיידי
     const updatedCategories = categories.filter(c => c.id !== categoryId);
     setCategories(updatedCategories);
-  
+
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories/${categoryId}`, {
         method: 'DELETE',
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("שגיאה במחיקת הקטגוריה");
       }
-  
+
       // אם הצליח - סבבה, אין צורך לעדכן שוב
-  
+
     } catch (error) {
       console.error("שגיאה במחיקת קטגוריה:", error);
       setCategories(prevCategories); // שחזור למצב הקודם
@@ -96,7 +96,7 @@ const [errorMessage, setErrorMessage] = useState('');
       if (!response.ok) {
         throw new Error('Failed to update category');
       }
-  
+
       const updatedData = await response.json();
       fetchCategories()
       fetchListsData()
@@ -105,29 +105,29 @@ const [errorMessage, setErrorMessage] = useState('');
       Alert.alert('שגיאה', 'לא ניתן לעדכן את הקטגוריה, נסה שוב מאוחר יותר');
     }
   };
-  
 
 
-  
-  
 
 
-  
+
+
+
+
   const fetchCategories = async () => {
-      if (!home?.id || !user) return;
+    if (!home?.id || !user) return;
     try {
       const response = await fetchWithAuth(`${baseUrl}/home/${home.id}/categories`, {
         method: 'GET',
       }, baseUrl);
-  
+
       if (!response || !response.ok) {
         throw new Error("שגיאה בקבלת קטגוריות");
       }
-  
+
       const data = await response.json();
-  
+
       setCategories(data);
-  
+
     } catch (error) {
       console.error("שגיאה בקבלת קטגוריות:", error);
       setErrorMessage("לא ניתן לטעון קטגוריות, אנא נסה שוב מאוחר יותר");
@@ -142,7 +142,7 @@ const [errorMessage, setErrorMessage] = useState('');
     }
   }, [home, user]);
   return (
-    <CategoryContext.Provider value={{ categories, addCategory ,deleteCategory,updateCategory}}>
+    <CategoryContext.Provider value={{ categories, addCategory, deleteCategory, updateCategory }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
 

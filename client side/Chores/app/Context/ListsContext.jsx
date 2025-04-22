@@ -3,20 +3,20 @@ import { useApiUrl } from "./ApiUrlProvider";
 import ErrorNotification from "../Components/ErrorNotification";
 import { useUserAndHome } from "./UserAndHomeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { fetchWithAuth } from "../Utils/fetchWithAuth"; 
+import { fetchWithAuth } from "../Utils/fetchWithAuth";
 
 const ListsContext = createContext();
 export const useLists = () => useContext(ListsContext);
 export const ListsProvider = ({ children }) => {
   const { baseUrl } = useApiUrl();
-  const { home ,user} = useUserAndHome();
+  const { home, user } = useUserAndHome();
 
 
   const [listsData, setListsData] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState('');
   const [errorVisible, setErrorVisible] = useState(false);
-  
+
   const handleCloseError = () => {
     setErrorMessage("")
     setErrorVisible(false)
@@ -26,11 +26,11 @@ export const ListsProvider = ({ children }) => {
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}`, {
         method: 'GET',
       }, baseUrl);
-  
+
       if (!response || !response.ok) {
         throw new Error("שגיאה בהורדת נתונים");
       }
-  
+
       const data = await response.json();
 
       if (data.length === 0) {
@@ -38,10 +38,10 @@ export const ListsProvider = ({ children }) => {
       } else {
         const cleanedData = data.map((list) =>
           list.date == null ? { ...list, date: "" } : list
-        );       
+        );
         setListsData(cleanedData);
-      }  
-      } catch (error) {
+      }
+    } catch (error) {
       console.error("שגיאה בקבלת נתוני רשימות:", error);
       setErrorMessage("הייתה בעיה בהתחברות לשרת, אנא נסה שוב מאוחר יותר");
       setErrorVisible(true);
@@ -65,7 +65,7 @@ export const ListsProvider = ({ children }) => {
     setListsData((prevData) => [newList, ...prevData]);
 
     try {
-      if(newList.date=="")newList.date=null
+      if (newList.date == "") newList.date = null
       // שליחה לשרת עם הבקשה ליצור רשימה חדשה
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}`, {
         method: 'POST',
@@ -78,11 +78,11 @@ export const ListsProvider = ({ children }) => {
 
       // קבלת התשובה מהשרת (הנתונים של הרשימה החדשה)
       const serverList = await response.json();
-      serverList.date=serverList.date==null?"":serverList.date
+      serverList.date = serverList.date == null ? "" : serverList.date
       // עדכון הרשימה עם ה-ID שנשלח מהשרת (אם ה-ID שונה מה-local ID)
       setListsData((prevData) =>
         prevData.map((list) =>
-          list.id === newList.id ? {...serverList} : list
+          list.id === newList.id ? { ...serverList } : list
         )
       );
     } catch (error) {
@@ -121,7 +121,7 @@ export const ListsProvider = ({ children }) => {
   const updateList = async (listId, updatedList) => {
     // שמירת הנתונים הישנים למקרה של שגיאה
     const oldList = listsData.find(list => list.id === listId);
-  
+
     // עדכון הסטייט לנתונים החדשים באופן מיידי
     setListsData(prevData =>
       prevData.map(list =>
@@ -132,218 +132,218 @@ export const ListsProvider = ({ children }) => {
       ...updatedList,
       date: updatedList.date === "" ? null : updatedList.date,
     };
-        try {
+    try {
       // שליחת הבקשה לשרת
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}`, {
         method: 'PUT',
         body: JSON.stringify(updatedListSafe), // שולח את כל הנתונים המעודכנים
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error('Failed to update list list');
       }
     } catch (error) {
       setErrorMessage("הייתה בעיה בעדכון הרשימה");
       setErrorVisible(true);
-  
+
       // שחזור הנתונים במקרה של כישלון
       setListsData(prevData =>
         prevData.map(list => (list.id === listId ? oldList : list))
       );
     }
   };
-  
-  
+
+
   const updateItemStatus = async (listId, itemId, currentStatus) => {
     const newStatus = !currentStatus; // היפוך הסטטוס
-  
+
     // עדכון מקומי לשיפור חוויית המשתמש
     const updatedListsData = listsData.map((list) =>
       list.id === listId
         ? {
-            ...list,
-            items: list.items.map((item) =>
-              item.id === itemId ? { ...item, isTaken: newStatus } : item
-            ),
-          }
+          ...list,
+          items: list.items.map((item) =>
+            item.id === itemId ? { ...item, isTaken: newStatus } : item
+          ),
+        }
         : list
     );
-  
+
     setListsData(updatedListsData);
-  try {
+    try {
       // קריאה לשרת עם הסטטוס החדש ב-URL
-        const response = await fetchWithAuth(
+      const response = await fetchWithAuth(
         `${baseUrl}/Lists/home/${home.id}/List/${listId}/Item/${itemId}/status/${newStatus}`,
         {
           method: "PUT",
         }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("Failed to update item status");
       }
     } catch (error) {
       console.error("Error updating item status:", error);
-  
+
       // שחזור הנתונים במקרה של כישלון
       setListsData((prevData) =>
         prevData.map((list) =>
           list.id === listId
             ? {
-                ...list,
-                items: list.items.map((item) =>
-                  item.id === itemId ? { ...item, isTaken: currentStatus } : item
-                ),
-              }
+              ...list,
+              items: list.items.map((item) =>
+                item.id === itemId ? { ...item, isTaken: currentStatus } : item
+              ),
+            }
             : list
         )
       );
-  
+
       // הצגת הודעת שגיאה
       setErrorMessage("הייתה בעיה בעדכון הסטטוס, אנא נסה שוב");
       setErrorVisible(true);
     }
   };
-  
+
   const updateItemField = async (listId, updatedItem) => {
     const oldItem = listsData
       .find(list => list.id === listId)
       ?.items.find(item => item.id === updatedItem.id);
-  
+
     // עדכון מיידי של הסטייט
     setListsData(prevData =>
       prevData.map(list =>
         list.id === listId
           ? {
-              ...list,
-              items: list.items.map(item =>
-                item.id === updatedItem.id ? { ...item, ...updatedItem } : item
-              ),
-            }
+            ...list,
+            items: list.items.map(item =>
+              item.id === updatedItem.id ? { ...item, ...updatedItem } : item
+            ),
+          }
           : list
       )
     );
-  
+
     try {
       // שליחת הבקשה לשרת
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/item/${updatedItem.id}`, {
         method: 'PUT',
         body: JSON.stringify(updatedItem),
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("Failed to update item");
       }
     } catch (error) {
       setErrorMessage("הייתה בעיה בעדכון הפריט");
       setErrorVisible(true);
-  
+
       // שחזור הפריט הישן אם הייתה שגיאה
       setListsData(prevData =>
         prevData.map(list =>
           list.id === listId
             ? {
-                ...list,
-                items: list.items.map(item =>
-                  item.id === updatedItem.id ? oldItem : item
-                ),
-              }
+              ...list,
+              items: list.items.map(item =>
+                item.id === updatedItem.id ? oldItem : item
+              ),
+            }
             : list
         )
       );
     }
   };
-  
+
   const deleteItem = async (listId, ItemId) => {
     // שמירת הפריט הישן כדי לשחזר במקרה של שגיאה
     const oldItem = listsData
       .find(list => list.id === listId)
       ?.items.find(item => item.id === ItemId);
-  
+
     // עדכון הסטייט מיידית על ידי הסרת הפריט
     setListsData(prevData =>
       prevData.map(list =>
         list.id === listId
           ? {
-              ...list,
-              items: list.items.filter(item => item.id !== ItemId),
-            }
+            ...list,
+            items: list.items.filter(item => item.id !== ItemId),
+          }
           : list
       )
     );
-  
+
     try {
       // שליחת הבקשה לשרת למחיקת הפריט
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/item/${ItemId}`, {
         method: 'DELETE',
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("Failed to delete item");
       }
     } catch (error) {
       setErrorMessage("הייתה בעיה בהסרת הפריט");
       setErrorVisible(true);
-  
+
       // שחזור הפריט הישן אם הייתה שגיאה
       setListsData(prevData =>
         prevData.map(list =>
           list.id === listId
             ? {
-                ...list,
-                items: [...list.items, oldItem], // החזרת הפריט
-              }
+              ...list,
+              items: [...list.items, oldItem], // החזרת הפריט
+            }
             : list
         )
       );
     }
   };
-  
+
   const updateOrAddItems = async (listId, newItems) => {
     // שמירת הרשימה הקודמת כדי לשחזר במקרה של שגיאה
     const oldList = listsData.find(list => list.id === listId);
-  
+
     // עדכון הסטייט מיידית על ידי שינוי או הוספת פריטים
     setListsData(prevData =>
       prevData.map(list =>
         list.id === listId
           ? {
-              ...list,
-              items: newItems.reduce((updatedItems, newItem) => {
-                const existingItemIndex = updatedItems.findIndex(item => item.id === newItem.id);
-  
-                if (existingItemIndex !== -1) {
-                  // אם הפריט קיים, נעדכן את הכמות או נמחק אותו אם הכמות היא 0
-                  if (newItem.quantity === 0) {
-                    return updatedItems.filter(item => item.id !== newItem.id);
-                  } else {
-                    updatedItems[existingItemIndex] = {
-                      ...updatedItems[existingItemIndex],
-                      quantity: newItem.quantity,
-                    };
-                  }
-                } else if (newItem.quantity > 0) {
-                  // אם הפריט לא קיים וכמותו גדולה מאפס, נוסיף אותו
-                  updatedItems.push(newItem);
+            ...list,
+            items: newItems.reduce((updatedItems, newItem) => {
+              const existingItemIndex = updatedItems.findIndex(item => item.id === newItem.id);
+
+              if (existingItemIndex !== -1) {
+                // אם הפריט קיים, נעדכן את הכמות או נמחק אותו אם הכמות היא 0
+                if (newItem.quantity === 0) {
+                  return updatedItems.filter(item => item.id !== newItem.id);
+                } else {
+                  updatedItems[existingItemIndex] = {
+                    ...updatedItems[existingItemIndex],
+                    quantity: newItem.quantity,
+                  };
                 }
-  
-                return updatedItems;
-              }, [...list.items]), // שמירת הרשימה המקורית
-            }
+              } else if (newItem.quantity > 0) {
+                // אם הפריט לא קיים וכמותו גדולה מאפס, נוסיף אותו
+                updatedItems.push(newItem);
+              }
+
+              return updatedItems;
+            }, [...list.items]), // שמירת הרשימה המקורית
+          }
           : list
       )
     );
-  
+
     try {
       // שליחת הבקשה לשרת לעדכון או הוספת פריטים
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/items`, {
         method: 'PUT', // עדכון פריטים
         body: JSON.stringify(newItems),
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("Failed to update or add items");
       }
-  
+
       // אם הבקשה הצליחה, נעדכן את הסטייט עם הרשימה המעודכנת
       const updatedList = await response.json(); // מקבלים את הרשימה המעודכנת מהשרת
       setListsData(prevData =>
@@ -354,7 +354,7 @@ export const ListsProvider = ({ children }) => {
     } catch (error) {
       setErrorMessage("הייתה בעיה בעדכון או בהוספת הפריטים");
       setErrorVisible(true);
-  
+
       // שחזור הרשימה במקרה של כישלון
       setListsData(prevData =>
         prevData.map(list =>
@@ -365,38 +365,38 @@ export const ListsProvider = ({ children }) => {
       );
     }
   };
-  
-  
+
+
 
   const clearCheckedItems = async (listId) => {
     // שמירת הרשימה הקודמת כדי לשחזר במקרה של שגיאה
     const oldList = listsData.find(list => list.id === listId);
-  
+
     // עדכון הסטייט מיידית כדי להסיר פריטים שנלקחו
     setListsData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
-              ...list,
-              items: list.items.filter((item) => !item.isTaken), // מסננים את הפריטים שנלקחו
-            }
+            ...list,
+            items: list.items.filter((item) => !item.isTaken), // מסננים את הפריטים שנלקחו
+          }
           : list
       )
     );
-  
+
     try {
       // שליחת הבקשה לשרת לעדכון או מחיקת הפריטים שנלקחו
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/clearCheckedItems`, {
         method: 'PUT', // עדכון פריטים
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("Failed to clear checked items");
       }
     } catch (error) {
       setErrorMessage("הייתה בעיה בהסרת הפריטים שנלקחו");
       setErrorVisible(true);
-  
+
       // שחזור הרשימה במקרה של כישלון
       setListsData((prevData) =>
         prevData.map((list) =>
@@ -405,37 +405,37 @@ export const ListsProvider = ({ children }) => {
       );
     }
   };
-  
+
 
   const uncheckAllItems = async (listId) => {
     // שמירת הרשימה הקודמת כדי לשחזר במקרה של שגיאה
     const oldList = listsData.find(list => list.id === listId);
-  
+
     // עדכון הסטייט מיידית כך שכל הפריטים יהיו לא מסומנים
     setListsData((prevData) =>
       prevData.map((list) =>
         list.id === listId
           ? {
-              ...list,
-              items: list.items.map((item) => ({ ...item, isTaken: false })), // עדכון כל הפריטים
-            }
+            ...list,
+            items: list.items.map((item) => ({ ...item, isTaken: false })), // עדכון כל הפריטים
+          }
           : list
       )
     );
-  
+
     try {
       // שליחת הבקשה לשרת לעדכון מצב של כל הפריטים
       const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/uncheckAllItems`, {
         method: 'PUT', // עדכון מצב כל הפריטים
       }, baseUrl);
-  
+
       if (!response.ok) {
         throw new Error("Failed to uncheck all items");
       }
     } catch (error) {
       setErrorMessage("הייתה בעיה בהסרת סימון הפריטים");
       setErrorVisible(true);
-  
+
       // שחזור הרשימה במקרה של כישלון
       setListsData((prevData) =>
         prevData.map((list) =>
@@ -444,131 +444,131 @@ export const ListsProvider = ({ children }) => {
       );
     }
   };
-  
-// פונקציה להעתקת כל הפריטים
-const copyAllItems = async (listId) => {
-  const list = getList(listId);
-  const items = list.items.map(item => ({
-    ...item,
-    isTaken: false, // שינוי ערך isTaken ל-false
-  }));
 
-  const newList = {
-    name: list.name + "-העתק",
-    category: list.category,
-    date: list.date,
-    items: [...items],
-  };
-
-  // שמירת המצב הקודם של הסטייט כדי לשחזר במקרה של כישלון
-  const previousState = [...listsData];
-
-  try {
-    // שליחת הבקשה לשרת להעתקת כל הפריטים
-    const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyAllItems`, {
-      method: 'POST',
-    }, baseUrl);
-
-    if (!response.ok) {
-      throw new Error("Failed to copy all items");
-    }
-
-    const newListData = await response.json(); // קבלת הרשימה החדשה מהשרת
-
-    // עדכון הסטייט עם הרשימה החדשה
-    setListsData((prevData) => [newListData, ...prevData]);
-
-  } catch (error) {
-    setErrorMessage("הייתה בעיה בהעתקת כל הפריטים");
-    setErrorVisible(true);
-
-    // שחזור המצב הקודם במקרה של כישלון
-    setListsData(previousState);
-  }
-};
-
-// פונקציה להעתקת פריטים שנרכשו והגדרת isTaken כ-false
-const copyPurchasedItems = async (listId) => {
-  const list = getList(listId);
-  const purchasedItems = list.items
-    .filter(item => item.isTaken)
-    .map(item => ({
+  // פונקציה להעתקת כל הפריטים
+  const copyAllItems = async (listId) => {
+    const list = getList(listId);
+    const items = list.items.map(item => ({
       ...item,
       isTaken: false, // שינוי ערך isTaken ל-false
     }));
 
-  const newList = {
-    name: list.name + "-העתק",
-    category: list.category,
-    date: list.date,
-    items: [...purchasedItems],
+    const newList = {
+      name: list.name + "-העתק",
+      category: list.category,
+      date: list.date,
+      items: [...items],
+    };
+
+    // שמירת המצב הקודם של הסטייט כדי לשחזר במקרה של כישלון
+    const previousState = [...listsData];
+
+    try {
+      // שליחת הבקשה לשרת להעתקת כל הפריטים
+      const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyAllItems`, {
+        method: 'POST',
+      }, baseUrl);
+
+      if (!response.ok) {
+        throw new Error("Failed to copy all items");
+      }
+
+      const newListData = await response.json(); // קבלת הרשימה החדשה מהשרת
+
+      // עדכון הסטייט עם הרשימה החדשה
+      setListsData((prevData) => [newListData, ...prevData]);
+
+    } catch (error) {
+      setErrorMessage("הייתה בעיה בהעתקת כל הפריטים");
+      setErrorVisible(true);
+
+      // שחזור המצב הקודם במקרה של כישלון
+      setListsData(previousState);
+    }
   };
 
-  // שמירת המצב הקודם של הסטייט כדי לשחזר במקרה של כישלון
-  const previousState = [...listsData];
+  // פונקציה להעתקת פריטים שנרכשו והגדרת isTaken כ-false
+  const copyPurchasedItems = async (listId) => {
+    const list = getList(listId);
+    const purchasedItems = list.items
+      .filter(item => item.isTaken)
+      .map(item => ({
+        ...item,
+        isTaken: false, // שינוי ערך isTaken ל-false
+      }));
 
-  try {
-    const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyPurchasedItems`, {
-      method: 'POST',
-      body: JSON.stringify(newList),
-    }, baseUrl);
+    const newList = {
+      name: list.name + "-העתק",
+      category: list.category,
+      date: list.date,
+      items: [...purchasedItems],
+    };
 
-    if (!response.ok) {
-      throw new Error("Failed to copy purchased items");
+    // שמירת המצב הקודם של הסטייט כדי לשחזר במקרה של כישלון
+    const previousState = [...listsData];
+
+    try {
+      const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyPurchasedItems`, {
+        method: 'POST',
+        body: JSON.stringify(newList),
+      }, baseUrl);
+
+      if (!response.ok) {
+        throw new Error("Failed to copy purchased items");
+      }
+
+      const newListData = await response.json(); // קבלת הרשימה החדשה מהשרת
+
+      setListsData((prevData) => [newListData, ...prevData]);
+
+    } catch (error) {
+      setErrorMessage("הייתה בעיה בהעתקת פריטים שנרכשו");
+      setErrorVisible(true);
+
+      // שחזור המצב הקודם במקרה של כישלון
+      setListsData(previousState);
     }
-
-    const newListData = await response.json(); // קבלת הרשימה החדשה מהשרת
-
-    setListsData((prevData) => [newListData, ...prevData]);
-
-  } catch (error) {
-    setErrorMessage("הייתה בעיה בהעתקת פריטים שנרכשו");
-    setErrorVisible(true);
-
-    // שחזור המצב הקודם במקרה של כישלון
-    setListsData(previousState);
-  }
-};
-
-// פונקציה להעתקת פריטים שלא נרכשו
-const copyUnpurchasedItems = async (listId) => {
-  const list = getList(listId);
-  const unpurchasedItems = list.items.filter(item => !item.isTaken);
-
-  const newList = {
-    name: list.name + "-העתק",
-    category: list.category,
-    date: list.date,
-    items: [...unpurchasedItems],
   };
 
-  // שמירת המצב הקודם של הסטייט כדי לשחזר במקרה של כישלון
-  const previousState = [...listsData];
+  // פונקציה להעתקת פריטים שלא נרכשו
+  const copyUnpurchasedItems = async (listId) => {
+    const list = getList(listId);
+    const unpurchasedItems = list.items.filter(item => !item.isTaken);
 
-  try {
-    // שליחת הבקשה לשרת להעתקת פריטים שלא נרכשו
-    const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyUnpurchasedItems`, {
-      method: 'POST',
-      body: JSON.stringify(newList),
-    }, baseUrl);
+    const newList = {
+      name: list.name + "-העתק",
+      category: list.category,
+      date: list.date,
+      items: [...unpurchasedItems],
+    };
 
-    if (!response.ok) {
-      throw new Error("Failed to copy unpurchased items");
+    // שמירת המצב הקודם של הסטייט כדי לשחזר במקרה של כישלון
+    const previousState = [...listsData];
+
+    try {
+      // שליחת הבקשה לשרת להעתקת פריטים שלא נרכשו
+      const response = await fetchWithAuth(`${baseUrl}/Lists/home/${home.id}/list/${listId}/copyUnpurchasedItems`, {
+        method: 'POST',
+        body: JSON.stringify(newList),
+      }, baseUrl);
+
+      if (!response.ok) {
+        throw new Error("Failed to copy unpurchased items");
+      }
+
+      const newListData = await response.json(); // קבלת הרשימה החדשה מהשרת
+
+      // עדכון הסטייט עם הרשימה החדשה
+      setListsData((prevData) => [newListData, ...prevData]);
+
+    } catch (error) {
+      setErrorMessage("הייתה בעיה בהעתקת פריטים שלא נרכשו");
+      setErrorVisible(true);
+
+      // שחזור המצב הקודם במקרה של כישלון
+      setListsData(previousState);
     }
-
-    const newListData = await response.json(); // קבלת הרשימה החדשה מהשרת
-
-    // עדכון הסטייט עם הרשימה החדשה
-    setListsData((prevData) => [newListData, ...prevData]);
-
-  } catch (error) {
-    setErrorMessage("הייתה בעיה בהעתקת פריטים שלא נרכשו");
-    setErrorVisible(true);
-
-    // שחזור המצב הקודם במקרה של כישלון
-    setListsData(previousState);
-  }
-};
+  };
 
 
 
@@ -576,7 +576,7 @@ const copyUnpurchasedItems = async (listId) => {
 
 
   return (
-    <ListsContext.Provider value={{ listsData,fetchListsData, updateOrAddItems, updateList, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList,clearCheckedItems, uncheckAllItems,copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
+    <ListsContext.Provider value={{ listsData, fetchListsData, updateOrAddItems, updateList, updateItemField, deleteList, deleteItem, getList, updateItemStatus, addNewList, clearCheckedItems, uncheckAllItems, copyAllItems, copyPurchasedItems, copyUnpurchasedItems }}>
       {children}
       <ErrorNotification message={errorMessage} visible={errorVisible} onClose={handleCloseError} />
     </ListsContext.Provider>

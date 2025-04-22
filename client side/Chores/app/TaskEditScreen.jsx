@@ -34,7 +34,7 @@ const TaskEditScreen = () => {
     date.setHours(parseInt(hours, 10));
     date.setMinutes(parseInt(minutes, 10));
     date.setSeconds(parseInt(seconds, 10));
-    
+
     return date.toLocaleTimeString("he-IL", {
       hour: "2-digit",
       minute: "2-digit",
@@ -162,8 +162,8 @@ const TaskEditScreen = () => {
       startDate: toEditTaskData.startDate,
       endDate: toEditTaskData.endDate,
       maxParticipants: parseInt(toEditTaskData.maxParticipants, 10),
-      startTime: toEditTaskData.startTime, 
-      endTime: toEditTaskData.endTime      
+      startTime: toEditTaskData.startTime,
+      endTime: toEditTaskData.endTime
     };
 
     editTask(taskId, updatedTask);
@@ -173,7 +173,7 @@ const TaskEditScreen = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
       {/* כותרת המסך */}
-      
+
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="close" size={28} color="black" />
@@ -209,68 +209,68 @@ const TaskEditScreen = () => {
             keyboardType="numeric"
           /> : null}
 
- <View style={styles.column}>
-        <ItemSelector
-          items={categories}
-          onSelect={(category) => handleInputChange("category", category)}
-          defaultSelected={toEditTaskData.category}
-          firstItem="משימה"
-        />
+        <View style={styles.column}>
+          <ItemSelector
+            items={categories}
+            onSelect={(category) => handleInputChange("category", category)}
+            defaultSelected={toEditTaskData.category}
+            firstItem="משימה"
+          />
 
-        <Text style={styles.times}>זמן התחלה</Text>
-        <View style={styles.dateAndTimeContianer}>
-          <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
-            <Text style={styles.dateText}>
-              {new Date(toEditTaskData.startDate).toLocaleDateString("he-IL", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              })}
-            </Text>
-          </TouchableOpacity>
+          <Text style={styles.times}>זמן התחלה</Text>
+          <View style={styles.dateAndTimeContianer}>
+            <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
+              <Text style={styles.dateText}>
+                {new Date(toEditTaskData.startDate).toLocaleDateString("he-IL", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </Text>
+            </TouchableOpacity>
 
-          <View style={styles.timePickerBox}>
-            <TimePickerButton
-              initialTime={toEditTaskData.startTime}
-              onConfirm={handleStartTimeSelect}
-            />
+            <View style={styles.timePickerBox}>
+              <TimePickerButton
+                initialTime={toEditTaskData.startTime}
+                onConfirm={handleStartTimeSelect}
+              />
+            </View>
           </View>
-        </View>
 
-        <DatePickerForTasks
-          showModal={showStartDatePicker}
-          setShowModal={setShowStartDatePicker}
-          selectedDate={toEditTaskData.startDate}
-          onDateSelect={handleStartDateSelect}
-        />
+          <DatePickerForTasks
+            showModal={showStartDatePicker}
+            setShowModal={setShowStartDatePicker}
+            selectedDate={toEditTaskData.startDate}
+            onDateSelect={handleStartDateSelect}
+          />
 
-        <Text style={styles.times}>זמן סיום</Text>
-        <View style={styles.dateAndTimeContianer}>
-          <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.datePickerButton}>
-            <Text style={styles.dateText}>
-              {new Date(toEditTaskData.endDate).toLocaleDateString("he-IL", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              })}
-            </Text>
-          </TouchableOpacity>
+          <Text style={styles.times}>זמן סיום</Text>
+          <View style={styles.dateAndTimeContianer}>
+            <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.datePickerButton}>
+              <Text style={styles.dateText}>
+                {new Date(toEditTaskData.endDate).toLocaleDateString("he-IL", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </Text>
+            </TouchableOpacity>
 
-          <View style={styles.timePickerBox}>
-            <TimePickerButton
-              initialTime={toEditTaskData.endTime}
-              onConfirm={handleEndTimeSelect}
-            />
+            <View style={styles.timePickerBox}>
+              <TimePickerButton
+                initialTime={toEditTaskData.endTime}
+                onConfirm={handleEndTimeSelect}
+              />
+            </View>
           </View>
-        </View>
 
-        <DatePickerForTasks
-          showModal={showEndDatePicker}
-          setShowModal={setShowEndDatePicker}
-          selectedDate={toEditTaskData.endDate}
-          onDateSelect={handleEndDateSelect}
-        />
-      </View>
+          <DatePickerForTasks
+            showModal={showEndDatePicker}
+            setShowModal={setShowEndDatePicker}
+            selectedDate={toEditTaskData.endDate}
+            onDateSelect={handleEndDateSelect}
+          />
+        </View>
       </View>
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>שמור</Text>
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   header: {
-    flexDirection:"row",
+    flexDirection: "row",
     width: "100%",
     height: 40,
     justifyContent: "space-between",
@@ -372,13 +372,13 @@ const styles = StyleSheet.create({
     writingDirection: "rtl", // 💡 חשוב למובייל  
     fontSize: 16,
     fontWeight: "bold",
-    },
-    column: {
-      flexDirection: "column",
-      alignItems: "flex-end",
-      width: "100%",
-      gap: 10,
-    },
+  },
+  column: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    width: "100%",
+    gap: 10,
+  },
 
 });
 

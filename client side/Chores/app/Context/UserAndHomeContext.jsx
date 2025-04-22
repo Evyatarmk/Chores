@@ -198,20 +198,20 @@ export const UserAndHomeProvider = ({ children }) => {
         method: 'POST',
         body: JSON.stringify({ HomeName: homeName }),  // שולחים את השם כ-JSON
       }, baseUrl);
-  
+
       if (response.ok) {
         const data = await response.json();
         const { accessToken, refreshToken } = data;
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
-  
+
         setUser(data.user);
         setHome(data.home);
         return true;
       } else {
         const errorText = await response.text();
         console.warn('שגיאה מהשרת:', errorText);
-  
+
         const translatedMessage = getHebrewErrorMessage(errorText);
         setErrorMessage(translatedMessage);
         setErrorVisible(true);
@@ -230,21 +230,21 @@ export const UserAndHomeProvider = ({ children }) => {
         method: 'POST',
         body: JSON.stringify({ HomeCode: homeCode }),  // שולחים את הקוד כ-JSON
       }, baseUrl);
-  
+
       if (response.ok) {
         const data = await response.json();
         const { accessToken, refreshToken } = data;
 
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
-  
+
         setUser(data.user);
         setHome(data.home);
         return true;
       } else {
         const errorText = await response.text();
         console.warn('שגיאה מהשרת:', errorText);
-  
+
         const translatedMessage = getHebrewErrorMessage(errorText);
         setErrorMessage(translatedMessage);
         setErrorVisible(true);
@@ -257,7 +257,7 @@ export const UserAndHomeProvider = ({ children }) => {
       return false;
     }
   };
-  
+
 
   const getHebrewErrorMessage = (serverMessage) => {
     switch (serverMessage) {
@@ -284,10 +284,10 @@ export const UserAndHomeProvider = ({ children }) => {
       profilePicture: updatedUser.profilePicture ?? prev.profilePicture,
     }));
   };
-  
-  
 
-  
+
+
+
 
 
 

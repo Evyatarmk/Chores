@@ -61,22 +61,22 @@ export const StoriesProvider = ({ children }) => {
     return storiesToSort.sort((a, b) => {
       // אם לשני המשתמשים אין בכלל מדיה – לא משנים את הסדר
       if (a.media.length === 0 && b.media.length === 0) return 0;
-  
+
       // אם למשתמש הראשון אין מדיה – נדחוף אותו לסוף
       if (a.media.length === 0) return 1;
-  
+
       // אם למשתמש השני אין מדיה – נדחוף אותו לסוף
       if (b.media.length === 0) return -1;
-  
+
       // יוצרים תאריכים מהמדיה הכי חדשה של כל משתמש (נניח שהמדיה ממוספרת מהחדשה לישנה)
       const latestA = new Date(`${a.media[0].uploadDate} ${a.media[0].uploadTime}`);
       const latestB = new Date(`${b.media[0].uploadDate} ${b.media[0].uploadTime}`);
-  
+
       // ממיינים מהחדש לישן – המשתמש עם המדיה החדשה יותר יבוא ראשון
       return latestB - latestA;
     });
   };
-  
+
 
   const filterExpiredStories = (storiesList) => {
     const now = new Date();
