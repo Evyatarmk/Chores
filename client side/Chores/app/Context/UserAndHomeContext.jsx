@@ -76,7 +76,6 @@ export const UserAndHomeProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      console.error('Error during login:', error);
       return false;
     }
   };
@@ -139,7 +138,6 @@ export const UserAndHomeProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      console.error('שגיאה כללית ב-fetch:', error.message);
       setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
       setErrorVisible(true);
       return false;
@@ -186,7 +184,6 @@ export const UserAndHomeProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      console.error('שגיאה כללית ב-fetch:', error.message);
       setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
       setErrorVisible(true);
       return false;
@@ -218,7 +215,6 @@ export const UserAndHomeProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      console.error('שגיאה כללית ב-fetch:', error.message);
       setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
       setErrorVisible(true);
       return false;
@@ -251,7 +247,6 @@ export const UserAndHomeProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      console.error('שגיאה כללית ב-fetch:', error.message);
       setErrorMessage("אירעה שגיאה כללית. נסה שוב.");
       setErrorVisible(true);
       return false;
