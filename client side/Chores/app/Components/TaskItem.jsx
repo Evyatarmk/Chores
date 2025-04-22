@@ -4,19 +4,68 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const TaskItem = ({ task, user, selectedDate, signUpForTask, signOutOfTask, markTaskAsCompleted, markTaskAsNotCompleted, openOptionsPanel, router }) => {
   const isUserRegistered = task.participants.some(p => p.id === user?.id);
-
+const categoryColors = {
+  משימה: "#90CAF9", // כחול נעים
+  אירוע: "#D1C4E9", // סגול רך
+};
   return (
     <TouchableOpacity
       style={styles.taskItem}
       onPress={() => router.push({ pathname: "./TaskDetailsScreen", params: { taskId: task.id, date: selectedDate } })}
     >
+        <View style={[styles.sideBar, { backgroundColor: categoryColors[task.category] || "#ccc" }]} />
+
       <Text style={styles.taskTitle}>{task.title}</Text>
-      <Text style={styles.taskDescription}>{task.description}</Text>
+      <Text style={styles.dateText}>
+  {new Date(task.startDate).toLocaleDateString("he-IL", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  })}
+
+  {task.endDate &&
+    (new Date(task.startDate).toDateString() !== new Date(task.endDate).toDateString() ? (
+      <>
+        {" - "}
+        {new Date(task.endDate).toLocaleDateString("he-IL", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })}
+      </>
+    ) : null)}
+
+{"\n"}בשעה{" "}
+
+  {(() => {
+    const startTime = new Date(task.startDate).toLocaleTimeString("he-IL", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const endTime = new Date(task.endDate).toLocaleTimeString("he-IL", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    if (
+      !task.endDate ||
+      (new Date(task.startDate).toDateString() === new Date(task.endDate).toDateString() &&
+        startTime === endTime)
+    ) {
+      return startTime;
+    } else {
+      return `${startTime} - ${endTime}`;
+    }
+  })()}
+</Text>
+
+      <Text style={styles.taskDescription}numberOfLines={1}
+  ellipsizeMode="tail">{task.description}</Text>
 
       <View style={styles.buttonRow}>
         {isUserRegistered ? (
           <TouchableOpacity onPress={() => signOutOfTask(task.id, user.id)} style={styles.cancelRegisterButton}>
-            <Text style={styles.registerText}>בטל הרשמה</Text>
+            <Text style={styles.cancelRegisterText}>בטל הרשמה</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={() => signUpForTask(task.id, user.id)} style={styles.registerButton}>
@@ -34,14 +83,13 @@ const TaskItem = ({ task, user, selectedDate, signUpForTask, signOutOfTask, mark
               }
             }}
             style={[
-              styles.registerButton,
+              task.status ? styles.cancelRegisterButton:styles.registerButton ,
               {
-                backgroundColor: task.status ? "#FF5722" : "#2196F3",
                 marginLeft: 10, // רווח בין הכפתורים
               },
             ]}
           >
-            <Text style={styles.registerText}>
+            <Text style={task.status ? styles.cancelRegisterText:styles.registerText }>
               {task.status ? "סמן כלא בוצע" : "סמן כבוצע"}
             </Text>
           </TouchableOpacity>
@@ -62,7 +110,12 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+  },
+  dateText: {
+    textAlign: "right",
+    fontSize: 13,
+    color: "#999",
+    marginBottom: 6,
   },
   taskItem: {
     padding: 16,
@@ -84,29 +137,42 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   taskDescription: {
-    textAlign: "right",
     fontSize: 14,
     color: "#666",
-    marginBottom: 8,
+    textAlign: "right", 
+    paddingLeft:150
   },
   registerButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: '#e0f0ff',
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 20,
     alignSelf: "flex-start",
-    marginTop: 8,
+    shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 3, // לאנדרואיד
   },
   cancelRegisterButton: {
-    backgroundColor: "#ff4444",
+    backgroundColor:  "#EF9A9A",
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 20,
     alignSelf: "flex-start",
-    marginTop: 8,
+    shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 3, // לאנדרואיד
   },
   registerText: {
-    color: "white",
+    color: '#007bff',
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  cancelRegisterText: {
+    color:'#e53935',
     fontSize: 14,
     fontWeight: "bold",
   },
@@ -141,6 +207,16 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
+  sideBar: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 6,
+    height: "100%",
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  
 });
 
 export default TaskItem;

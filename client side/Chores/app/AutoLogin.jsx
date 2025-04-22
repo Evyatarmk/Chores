@@ -80,8 +80,8 @@ const AutoLogin = () => {
         setUser(data.user);
         setHome(data.home);
 
-        router.push("/");
-      } catch (error) {
+        router.push("/HomePageScreen");
+            } catch (error) {
         console.error("Error checking login data", error);
         router.push("/LoginScreen");
       }

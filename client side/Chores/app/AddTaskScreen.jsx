@@ -10,6 +10,7 @@ import ItemSelector from "./Components/ItemSelector";
 import ClearableInput from "./Components/ClearableInput";
 import TimePickerButton from "./Components/TimePickerButton";
 import DatePickerForTasks from "./Components/DatePickerForTasks";
+import { useNotification } from "./Context/NotificationContext";
 
 const AddTaskScreen = () => {
   const inputRef = useRef(null);
@@ -20,6 +21,8 @@ const AddTaskScreen = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false); // Function to toggle date picker
   const [showEndDatePicker, setShowEndDatePicker] = useState(false); // Function to toggle date picker
   const [isEvent, setIsEvent] = useState(true); // Function to toggle date picker
+
+ const { scheduleNotificationOneDayBefore } = useNotification();
   // Update homeId when user changes
   useEffect(() => {
     setTaskData((prevState) => ({
@@ -47,7 +50,7 @@ const AddTaskScreen = () => {
   });
   const categories = ["משימה", "אירוע"]; // Available categories
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (!user || !user.homeId) {
       alert("You must be logged in to add a task.");
       return;
@@ -75,7 +78,16 @@ const AddTaskScreen = () => {
     // Add task for the selected date
     addTaskForDate(newItem, user.homeId);
 
-
+  
+   
+    if (taskData.startDate && taskData.category=="אירוע") {
+      await scheduleNotificationOneDayBefore(
+        taskData.startDate,
+        `Upcoming Task: ${taskData.title}`,
+        `Don't forget: ${taskData.title} starts tomorrow!`
+      );
+    }
+    
 
 
     // Navigate back after adding the task
@@ -248,51 +260,23 @@ const AddTaskScreen = () => {
             defaultSelected={taskData.category}
             firstItem="משימה"
           />
-          <Text style={styles.times}>זמן התחלה</Text>
-          <View style={styles.dateAndTimeContianer}>
-            <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
-              <Text style={styles.dateText}>
-                {new Date(taskData.startDate).toLocaleDateString("he-IL", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </Text>
-            </TouchableOpacity>
+           <Text style={styles.times}>זמן התחלה</Text>
+        <View style={styles.dateAndTimeContianer}>
+          <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
+            <Text style={styles.dateText}>
+              {new Date(taskData?.startDate).toLocaleDateString("he-IL", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            </Text>
+          </TouchableOpacity>
 
-            <View style={styles.timePickerBox}>
-              <TimePickerButton
-                onConfirm={handleStartTimeSelect}
-                initialTime={taskData.startTime}
-              />
-            </View>
-          </View>
-
-          <DatePickerForTasks
-            showModal={showStartDatePicker}
-            setShowModal={setShowStartDatePicker}
-            selectedDate={taskData.startDate}
-            onDateSelect={handleStartDateSelect}
-          />
-
-          <Text style={styles.times}>זמן סיום</Text>
-          <View style={styles.dateAndTimeContianer}>
-            <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.datePickerButton}>
-              <Text style={styles.dateText}>
-                {new Date(taskData.endDate).toLocaleDateString("he-IL", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </Text>
-            </TouchableOpacity>
-
-            <View style={styles.timePickerBox}>
-              <TimePickerButton
-                onConfirm={handleEndTimeSelect}
-                initialTime={taskData.endTime}
-              />
-            </View>
+          <View style={styles.timePickerBox}>
+            <TimePickerButton
+              initialTime={taskData?.startTime}
+              onConfirm={handleStartTimeSelect}
+            />
           </View>
 
           <DatePickerForTasks
@@ -302,6 +286,41 @@ const AddTaskScreen = () => {
             onDateSelect={handleEndDateSelect}
           />
         </View>
+
+        <DatePickerForTasks
+          showModal={showStartDatePicker}
+          setShowModal={setShowStartDatePicker}
+          selectedDate={taskData?.startDate}
+          onDateSelect={handleStartDateSelect}
+        />
+
+        <Text style={styles.times}>זמן סיום</Text>
+        <View style={styles.dateAndTimeContianer}>
+          <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.datePickerButton}>
+            <Text style={styles.dateText}>
+              {new Date(taskData?.endDate).toLocaleDateString("he-IL", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.timePickerBox}>
+            <TimePickerButton
+              initialTime={taskData?.endTime}
+              onConfirm={handleEndTimeSelect}
+            />
+          </View>
+        </View>
+
+        <DatePickerForTasks
+          showModal={showEndDatePicker}
+          setShowModal={setShowEndDatePicker}
+          selectedDate={taskData?.endDate}
+          onDateSelect={handleEndDateSelect}
+        />
+      </View>
 
         {/* Buttons */}
         <View style={styles.editButtons}>
@@ -326,23 +345,14 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 80, // Add padding for the button to be above the keyboard
   },
-  dateAndTimeContianer: {
-    flexDirection: "row-reverse",
-    backgroundColor: "#f0f0f0",
-    justifyContent: "space-between",
-    width: "100%",
-    alignItems: 'center',
-    marginBottom: 10,
-    marginLeft: 20
-  },
   header: {
+    flexDirection: "row",
     width: "100%",
-    height: 40,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    marginBottom: 20,
-    position: "relative", // חשוב כדי לאפשר positioning פנימי
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingBottom: 20,
   },
+ 
   headerTitle: {
     position: "absolute", // מיקום עצמאי שלא תלוי בשאר האלמנטים
     left: 0,
@@ -359,6 +369,11 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "relative",
   },
+  times: {
+    writingDirection: "rtl", // 💡 חשוב למובייל  
+    fontSize: 16,
+    fontWeight: "bold",
+    },
   column: {
     flexDirection: "column",
     alignItems: "flex-end",
@@ -401,12 +416,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "white",
   },
-  times: {
-    textAlign: "center",
-    writingDirection: "rtl", // 💡 חשוב למובייל  
-    fontSize: 16,
-    fontWeight: "bold",
+  dateAndTimeContianer: {
+    flexDirection: "row-reverse",
+    backgroundColor: "#f0f0f0",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: 'center',
+    marginBottom: 10,
+    marginLeft: 20
   },
+
   datePickerButton: {
     paddingVertical: 8,
     paddingHorizontal: 12,
@@ -415,6 +434,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 50,
+  },
+
+  dateText: {
+    fontSize: 16,
+    color: "#333",
+    textAlign: "right",
+    writingDirection: "rtl", // 💡 חשוב למובייל
   },
   timePickerBox: {
     borderRadius: 8,
@@ -425,12 +451,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  dateText: {
+  times: {
+    writingDirection: "rtl", // 💡 חשוב למובייל  
     fontSize: 16,
-    color: "#333",
-    textAlign: "right",
-    writingDirection: "rtl", // 💡 חשוב למובייל
-  },
+    fontWeight: "bold",
+    }
 });
 
 export default AddTaskScreen;

@@ -65,9 +65,9 @@ const PageWithMenu = (props) => {
     { screen: "/HomePageScreen", label: "דף הבית" },
     { screen: "/ListsScreen", label: "רשימות" },
     { screen: "/TasksListScreen", label: "משימות" },
+    { screen: "/ChatScreen", label: "צ'אט" },
     { screen: "/ProfileScreen", label: "אזור אישי" },
     { screen: "/SettingsScreen", label: "הגדרות" },
-    { screen: "/ChatScreen", label: "צ'אט" },
     user
       ? { screen: "/Logout", label: "התנתק" }
       : { screen: "/LoginScreen", label: "התחבר" },
@@ -269,6 +269,7 @@ const PageWithMenu = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f5f5f5",
   },
   overlay: {
     position: "absolute",
