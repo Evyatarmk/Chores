@@ -21,7 +21,19 @@ const TaskDetailsScreen = () => {
   const handleEdit = () => {
     router.push({ pathname: "./TaskEditScreen", params: { taskId, date } });
   };
-
+  const convertTo12HourFormat = (timeString) => {
+    if(!timeString)return
+    const [hours, minutes, seconds] = timeString.split(":");
+    const date = new Date();
+    date.setHours(parseInt(hours, 10));
+    date.setMinutes(parseInt(minutes, 10));
+    date.setSeconds(parseInt(seconds, 10));
+    
+    return date.toLocaleTimeString("he-IL", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
   useEffect(() => {
     if (date && taskId) {
       const tasksForDate = getTasksForDate(date);
@@ -94,20 +106,38 @@ const TaskDetailsScreen = () => {
           תאריך
         </Text>
         <Text style={styles.value}>
-          {taskData?.startDate && taskData?.endDate ? (() => {
-            const start = new Date(taskData.startDate).toLocaleDateString('he-IL', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
-            });
-            const end = new Date(taskData.endDate).toLocaleDateString('he-IL', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
-            });
+  {(() => {
+    const startDateObj = new Date(taskData?.startDate);
+    const endDateObj = new Date(taskData?.endDate);
 
-            return start === end ? start : `${start} - ${end}`;
-          })() : "תאריך לא זמין"}
+    const startDateStr = startDateObj.toLocaleDateString("he-IL", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+
+    const endDateStr = endDateObj.toLocaleDateString("he-IL", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+
+    const sameDate = startDateObj.toDateString() === endDateObj.toDateString();
+    const sameTime = taskData?.startTime === taskData?.endTime;
+
+    const formattedStartTime = convertTo12HourFormat(taskData?.startTime);
+    const formattedEndTime = convertTo12HourFormat(taskData?.endTime);
+
+    if (sameDate && sameTime) {
+      return `${startDateStr}\nבשעה ${formattedStartTime}`;
+    }
+
+    if (sameDate) {
+      return `${startDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
+    }
+
+    return `${startDateStr} - ${endDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
+  })()}
         </Text>
 
       </View>

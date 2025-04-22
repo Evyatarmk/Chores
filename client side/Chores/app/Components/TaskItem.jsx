@@ -8,6 +8,19 @@ const categoryColors = {
   משימה: "#90CAF9", // כחול נעים
   אירוע: "#D1C4E9", // סגול רך
 };
+const convertTo12HourFormat = (timeString) => {
+  const [hours, minutes, seconds] = timeString.split(":");
+  const date = new Date();
+  date.setHours(parseInt(hours, 10));
+  date.setMinutes(parseInt(minutes, 10));
+  date.setSeconds(parseInt(seconds, 10));
+  
+  return date.toLocaleTimeString("he-IL", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
   return (
     <TouchableOpacity
       style={styles.taskItem}
@@ -17,47 +30,40 @@ const categoryColors = {
 
       <Text style={styles.taskTitle}>{task.title}</Text>
       <Text style={styles.dateText}>
-  {new Date(task.startDate).toLocaleDateString("he-IL", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  })}
-
-  {task.endDate &&
-    (new Date(task.startDate).toDateString() !== new Date(task.endDate).toDateString() ? (
-      <>
-        {" - "}
-        {new Date(task.endDate).toLocaleDateString("he-IL", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })}
-      </>
-    ) : null)}
-
-{"\n"}בשעה{" "}
-
   {(() => {
-    const startTime = new Date(task.startDate).toLocaleTimeString("he-IL", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const endTime = new Date(task.endDate).toLocaleTimeString("he-IL", {
-      hour: "2-digit",
-      minute: "2-digit",
+    const startDateObj = new Date(task.startDate);
+    const endDateObj = new Date(task.endDate);
+
+    const startDateStr = startDateObj.toLocaleDateString("he-IL", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     });
 
-    if (
-      !task.endDate ||
-      (new Date(task.startDate).toDateString() === new Date(task.endDate).toDateString() &&
-        startTime === endTime)
-    ) {
-      return startTime;
-    } else {
-      return `${startTime} - ${endTime}`;
+    const endDateStr = endDateObj.toLocaleDateString("he-IL", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+
+    const sameDate = startDateObj.toDateString() === endDateObj.toDateString();
+    const sameTime = task.startTime === task.endTime;
+
+    const formattedStartTime = convertTo12HourFormat(task.startTime);
+    const formattedEndTime = convertTo12HourFormat(task.endTime);
+
+    if (sameDate && sameTime) {
+      return `${startDateStr}\nבשעה ${formattedStartTime}`;
     }
+
+    if (sameDate) {
+      return `${startDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
+    }
+
+    return `${startDateStr} - ${endDateStr}\nבשעה ${formattedStartTime} - ${formattedEndTime}`;
   })()}
 </Text>
+
 
       <Text style={styles.taskDescription}numberOfLines={1}
   ellipsizeMode="tail">{task.description}</Text>

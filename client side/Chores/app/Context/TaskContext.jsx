@@ -87,8 +87,8 @@ const myThisWeek = tasks.filter(task =>
               description: task.description,
               startDate: task.startDate.split("T")[0],
               endDate: task.endDate.split("T")[0],
-              startTime: convertTo12HourFormat(task.startTime),
-              endTime: convertTo12HourFormat(task.endTime),
+              startTime: task.startTime,
+              endTime: task.endTime,
               homeId: task.homeId,
               category: task.category,
               status:task.status,
@@ -136,16 +136,7 @@ const myThisWeek = tasks.filter(task =>
     
 
 
-    const convertTo12HourFormat = (timeString) => {
-      const [hours, minutes, seconds] = timeString.split(":"); // Split time string into components
-      const date = new Date();
-      date.setHours(parseInt(hours, 10));
-      date.setMinutes(parseInt(minutes, 10));
-      date.setSeconds(parseInt(seconds, 10));
-      
-      // Use toLocaleTimeString to format in 12-hour format
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-    };
+
     
 
     const markTaskAsCompleted = async (taskId) => {
