@@ -49,7 +49,7 @@ const TaskDetailsScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>פרטי משימה</Text>
+        <Text style={styles.headerTitle}>פרטי {taskData?.category}</Text>
         <View style={styles.headerButtons}>
           <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="close" size={28} color="#333" />
