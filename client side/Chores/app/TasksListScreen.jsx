@@ -23,8 +23,8 @@ const TasksListScreen = () => {
   const optionsModalRef = useRef(null);
 
   const categoryColors = {
-    משימה: "#42A5F5", // כחול נעים
-    אירוע: "#AB47BC", // סגול רך
+    משימה: "#90CAF9", // כחול נעים
+    אירוע: "#D1C4E9", // סגול רך
   };
   const DEFAULT_CATEGORY_COLOR = "#90CAF9";
 
