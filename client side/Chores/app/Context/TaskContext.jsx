@@ -442,15 +442,6 @@ const removeTaskForDate = async (taskId) => {
   
   
 
-
-
- 
-
-
-
-
-
-
   return (
     <TaskContext.Provider value={{ tasks,fetchTasks,setTasks,tasksFormatted,myTasks,availableTasksForNextMonth,getTask, addTaskForDate, getTasksForDate, removeTaskForDate, editTask,signUpForTask ,signOutOfTask,fetchTasks,markTaskAsNotCompleted ,markTaskAsCompleted}}>
       {children}
