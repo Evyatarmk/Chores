@@ -43,7 +43,8 @@ export const CategoryProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error("שגיאה ביצירת קטגוריה");
       }
-
+      fetchCategories()
+      fetchListsData()
       // לא צריך לעדכן שוב את הסטייט אם כבר הוספנו ויזואלית
       // אבל אם אתה רוצה להיות מדויק - תוכל לעדכן עם הנתונים שחזרו
 
