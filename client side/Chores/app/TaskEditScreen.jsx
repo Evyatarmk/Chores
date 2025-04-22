@@ -45,8 +45,8 @@ const TaskEditScreen = () => {
   const [toEditTaskData, setTaskData] = useState({
     title: mytask.title || "",
     description: mytask.description || "",
-    startTime: convertTo12HourFormat(mytask.startTime),  // Start time
-    endTime: convertTo12HourFormat(mytask.endTime),    // End time
+    startTime: mytask.startTime,
+    endTime: mytask.endTime,
     startDate: mytask.startDate || new Date(),
     endDate: mytask.endDate || new Date(),
     category: mytask.category || "משימה",
