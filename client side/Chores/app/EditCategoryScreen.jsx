@@ -210,6 +210,8 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     backgroundColor: "#fafafa",
+    width: "100%",
+
   },
   addButton: {
     flexDirection: "row",
