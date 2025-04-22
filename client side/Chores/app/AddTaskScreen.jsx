@@ -83,8 +83,8 @@ const AddTaskScreen = () => {
     if (taskData.startDate && taskData.category=="אירוע") {
       await scheduleNotificationOneDayBefore(
         taskData.startDate,
-        `Upcoming Task: ${taskData.title}`,
-        `Don't forget: ${taskData.title} starts tomorrow!`
+        `תזכורת: : ${taskData.title}`,
+        `לא לשכוח, ${taskData.title} !מתקיים מחר`
       );
     }
     
@@ -354,9 +354,6 @@ const styles = StyleSheet.create({
   },
  
   headerTitle: {
-    position: "absolute", // מיקום עצמאי שלא תלוי בשאר האלמנטים
-    left: 0,
-    right: 0,
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",

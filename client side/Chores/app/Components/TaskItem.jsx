@@ -59,6 +59,7 @@ const categoryColors = {
   })()}
 </Text>
 
+
       <Text style={styles.taskDescription}numberOfLines={1}
   ellipsizeMode="tail">{task.description}</Text>
 
