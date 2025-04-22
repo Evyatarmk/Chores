@@ -11,7 +11,7 @@ const ProgressBar = ({ totalItems, completedItems }) => {
         progress={progress} 
         width={null} 
         height={8} 
-        color="#28a745" 
+        color="#90CAF9" 
         unfilledColor="#ddd" 
         borderWidth={0} 
         animationType="spring"
@@ -19,7 +19,6 @@ const ProgressBar = ({ totalItems, completedItems }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   progressContainer: { flex: 1,},
 });
