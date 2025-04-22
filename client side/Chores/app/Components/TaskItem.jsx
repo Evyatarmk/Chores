@@ -77,11 +77,14 @@ const convertTo12HourFormat = (timeString) => {
     </TouchableOpacity>
   ) : (
     <TouchableOpacity
-      disabled={task.participants.length >= task.maxparticipants} // <<< BLOCKS pressing
-      onPress={() => signUpForTask(task.id, user.id)}
+      disabled={task.participants.length >= parseInt(task.maxParticipants)} 
+      onPress={() => {
+      
+        signUpForTask(task.id, user.id);
+      }}
       style={[
         styles.registerButton,
-        task.participants.length >= task.maxparticipants && { backgroundColor: 'gray', opacity: 0.5 }
+        task.participants.length >= parseInt(task.maxParticipants) && { backgroundColor: 'gray', opacity: 0.5 }
       ]}
     >
       <Text style={styles.registerText}>
