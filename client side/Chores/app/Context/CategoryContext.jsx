@@ -98,7 +98,7 @@ const [errorMessage, setErrorMessage] = useState('');
       }
   
       const updatedData = await response.json();
-  
+      fetchCategories()
       fetchListsData()
     } catch (error) {
       console.error('Error updating category:', error);

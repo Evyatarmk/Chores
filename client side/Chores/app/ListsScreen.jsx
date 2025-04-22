@@ -48,7 +48,6 @@ const ListsScreen = () => {
 
   const options = [
     { icon: "edit", text: "ערוך", action: "edit" },
-    { icon: "content-copy", text: "העתק", action: "copy", iconColor: "#007bff" },
     { icon: "delete", text: "מחיקה", action: "delete", iconColor: "#ff4444" },
     // אפשר להוסיף עוד אפשרויות עם אייקונים אחרים
   ];
