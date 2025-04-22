@@ -67,46 +67,49 @@ const convertTo12HourFormat = (timeString) => {
       <Text style={styles.taskDescription}numberOfLines={1}
   ellipsizeMode="tail">{task.description}</Text>
 
-      <View style={styles.buttonRow}>
-        {isUserRegistered ? (
-          <TouchableOpacity onPress={() => signOutOfTask(task.id, user.id)} style={styles.cancelRegisterButton}>
-            <Text style={styles.cancelRegisterText}>בטל הרשמה</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-          disabled={task.participants.length >= task.maxparticipants}
-          onPress={() => signUpForTask(task.id, user.id)}
-          style={[
-            styles.registerButton,
-            task.participants.length >= task.maxparticipants && { backgroundColor: 'gray' } // optional: make it look disabled
-          ]}
-        >
-          <Text style={styles.registerText}>הירשם</Text>
-        </TouchableOpacity>
-        )}
+<View style={styles.buttonRow}>
+  {isUserRegistered ? (
+    <TouchableOpacity 
+      onPress={() => signOutOfTask(task.id, user.id)} 
+      style={styles.cancelRegisterButton}
+    >
+      <Text style={styles.cancelRegisterText}>בטל הרשמה</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity
+      disabled={task.participants.length >= task.maxparticipants} // <<< BLOCKS pressing
+      onPress={() => signUpForTask(task.id, user.id)}
+      style={[
+        styles.registerButton,
+        task.participants.length >= task.maxparticipants && { backgroundColor: 'gray', opacity: 0.5 }
+      ]}
+    >
+      <Text style={styles.registerText}>
+        {task.participants.length >= task.maxparticipants ? "מלא" : "הירשם"}
+      </Text>
+    </TouchableOpacity>
+  )}
 
-        {isUserRegistered && task.category === "משימה" && (
-          <TouchableOpacity
-            onPress={() => {
-              if (task.status) {
-                markTaskAsNotCompleted(task.id);
-              } else {
-                markTaskAsCompleted(task.id);
-              }
-            }}
-            style={[
-              task.status ? styles.cancelRegisterButton:styles.registerButton ,
-              {
-                marginLeft: 10, // רווח בין הכפתורים
-              },
-            ]}
-          >
-            <Text style={task.status ? styles.cancelRegisterText:styles.registerText }>
-              {task.status ? "סמן כלא בוצע" : "סמן כבוצע"}
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
+  {isUserRegistered && task.category === "משימה" && (
+    <TouchableOpacity
+      onPress={() => {
+        if (task.status) {
+          markTaskAsNotCompleted(task.id);
+        } else {
+          markTaskAsCompleted(task.id);
+        }
+      }}
+      style={[
+        task.status ? styles.cancelRegisterButton : styles.registerButton,
+        { marginLeft: 10 }
+      ]}
+    >
+      <Text style={task.status ? styles.cancelRegisterText : styles.registerText}>
+        {task.status ? "סמן כלא בוצע" : "סמן כבוצע"}
+      </Text>
+    </TouchableOpacity>
+  )}
+</View>
 
       <TouchableOpacity style={styles.optionsButton} onPress={() => openOptionsPanel(task)}>
         <Icon name="more-vert" size={24} color="#888" />
