@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const TaskItem = ({ task, user, selectedDate, signUpForTask, signOutOfTask, markTaskAsCompleted, markTaskAsNotCompleted, openOptionsPanel, router }) => {
  console.log(task)
   const isUserRegistered = task.participants.some(p => p.id === user?.id);
+  
 const categoryColors = {
   משימה: "#90CAF9", // כחול נעים
   אירוע: "#D1C4E9", // סגול רך
