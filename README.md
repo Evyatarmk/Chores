@@ -24,24 +24,28 @@
 
 ### 🧾 Tasks & Events in Calendar
 
-![Tasks Screen](screenshots/tasks.jpeg)
+<p align="center">
+  <img src="screenshots/tasks.jpeg" alt="Tasks Screen" width="300"/>
+</p>
 
 ---
 
 ### 🏠 Home Screen
 
-![Home Screen 1](screenshots/home1.jpeg)
-![Home Screen 2](screenshots/home2.jpeg)
+<p align="center">
+  <img src="screenshots/home1.jpeg" alt="Home Screen 1" width="300" style="margin-right: 10px;"/>
+  <img src="screenshots/home2.jpeg" alt="Home Screen 2" width="300"/>
+</p>
 
 ---
 
 ### 📋 Lists Screen
 
-![Lists Screen](screenshots/lists.jpeg)
+<p align="center">
+  <img src="screenshots/lists.jpeg" alt="Lists Screen" width="300"/>
+</p>
 
 ---
-
-
 ## 🏁 Getting Started
 
 To run the app locally:
