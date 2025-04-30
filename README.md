@@ -22,28 +22,22 @@
 
 # 📷 Screenshots
 
-### 🔐 Login Screen
-
-![Login Screen](screenshots/login.png)
-
----
-
 ### 🧾 Tasks & Events in Calendar
 
-![Tasks Screen](screenshots/tasks.png)
+![Tasks Screen](screenshots/tasks.jpng)
 
 ---
 
 ### 🏠 Home Screen
 
-![Home Screen 1](screenshots/home1.png)
-![Home Screen 2](screenshots/home2.png)
+![Home Screen 1](screenshots/home1.jpng)
+![Home Screen 2](screenshots/home2.jpng)
 
 ---
 
 ### 📋 Lists Screen
 
-![Lists Screen](screenshots/lists.png)
+![Lists Screen](screenshots/lists.jpng)
 
 ---
 
