@@ -24,20 +24,20 @@
 
 ### 🧾 Tasks & Events in Calendar
 
-![Tasks Screen](screenshots/tasks.jpng)
+![Tasks Screen](screenshots/tasks.jpeg)
 
 ---
 
 ### 🏠 Home Screen
 
-![Home Screen 1](screenshots/home1.jpng)
-![Home Screen 2](screenshots/home2.jpng)
+![Home Screen 1](screenshots/home1.jpeg)
+![Home Screen 2](screenshots/home2.jpeg)
 
 ---
 
 ### 📋 Lists Screen
 
-![Lists Screen](screenshots/lists.jpng)
+![Lists Screen](screenshots/lists.jpeg)
 
 ---
 
