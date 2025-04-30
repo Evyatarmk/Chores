@@ -24,26 +24,26 @@
 
 ### 🧾 Tasks & Events in Calendar
 
-<p align="center">
-  <img src="screenshots/tasks.jpeg" alt="Tasks Screen" width="300"/>
-</p>
+<img src="screenshots/tasks.jpeg" alt="Tasks Screen" width="300" style="float: left; margin-right: 20px;"/>
+
+<br clear="all"/>
 
 ---
 
 ### 🏠 Home Screen
 
-<p align="center">
-  <img src="screenshots/home1.jpeg" alt="Home Screen 1" width="300" style="margin-right: 10px;"/>
-  <img src="screenshots/home2.jpeg" alt="Home Screen 2" width="300"/>
-</p>
+<img src="screenshots/home1.jpeg" alt="Home Screen 1" width="300" style="float: left; margin-right: 20px;"/>
+<img src="screenshots/home2.jpeg" alt="Home Screen 2" width="300" style="float: left;"/>
+
+<br clear="all"/>
 
 ---
 
 ### 📋 Lists Screen
 
-<p align="center">
-  <img src="screenshots/lists.jpeg" alt="Lists Screen" width="300"/>
-</p>
+<img src="screenshots/lists.jpeg" alt="Lists Screen" width="300" style="float: left;"/>
+
+<br clear="all"/>
 
 ---
 ## 🏁 Getting Started
